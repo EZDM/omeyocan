@@ -142,7 +142,6 @@
 	// Run these cleanups only if you are not part of a frame
 	if(@$_GET['act'] != "frame"){
 		cleanup_messages();
-		cleanup_guests();
 	}
 
 	// Now before all else we have to get them logged in if they are not already
