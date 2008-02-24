@@ -96,7 +96,7 @@
 					$body.="Errore; mancano dei parametri";
 			}
 			
-			$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions WHERE usergroup <> 'Registered User'");
+			$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions");
 			$options='';
 			
 			while($row = $db->Do_Fetch_Assoc($query)){
@@ -111,7 +111,6 @@
 			<input type=\"hidden\" name=\"newboard\" value=\"1\">
 			Nome board: <input class=\"text_input\" type=\"text\" name=\"name\"><br><br>
 			Gruppo: <select class=\"button\" name=\"group\">
-				<option value=\"Registered User\">Tutti</option>
 				$options
 			</select><br>
 			Read-only <input class=\"text_input\" type=\"checkbox\" name=\"ronly\"><br><br>
@@ -369,7 +368,7 @@
 			$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");	
 		}
 		else{
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE user_group='{$x7s->user_group}' OR user_group='Registered User'");
+			$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE user_group='{$x7s->user_group}' OR user_group='Cittadino'");
 		}
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -622,7 +621,7 @@
 		
 		if(checkIfMaster())
 			return true;		
-		else if($row['user_group'] == $x7s->user_group || $row['user_group'] == 'Registered User')
+		else if($row['user_group'] == $x7s->user_group || $row['user_group'] == 'Cittadino')
 			return true;
 		else
 			return false;
