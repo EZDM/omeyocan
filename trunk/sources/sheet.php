@@ -686,8 +686,13 @@
 				<div class=\"indiv\" id=\"group\">$group</div>
 				<div class=\"indiv\" id=\"date\">$date</div>
 				<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
-				<div class=\"indiv\" id=\"avatar\"><img src=\"$row_user[avatar]\" width=200 height=200 /></div>
+				<div class=\"indiv\" id=\"avatar\">
 			";
+			
+			if($row_user['avatar']!='')
+				$body .= '<img src=\"$row_user[avatar]\" width=200 height=200 />';
+			
+			$body.='</div>';
 			
 			if(!checkIfMaster()){
 				$body.= "
