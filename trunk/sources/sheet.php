@@ -625,7 +625,7 @@
 				die("User not in Database");
 			}
 			$gender = $row_user['gender'] == 0 ? "M":"F";
-			$group = $row_user['user_group'] == "Registered User" ? "" : $row_user['user_group'];
+			$group = $row_user['user_group'];
 			$date = date("j/n/Y",$row_user['iscr']);
 			
 			$body .= '		<script language="javascript" type="text/javascript">
