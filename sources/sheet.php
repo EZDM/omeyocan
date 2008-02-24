@@ -562,27 +562,6 @@
 					
 					if($ok){
 						//Ora posso aggiornare						
-						if(!$x7s->sheet_ok || checkIfMaster()){
-							foreach($char as $cur){
-								if(!isset($_POST[$cur['id']])){
-									$ok = false;
-									break;
-								}
-								
-								$db->DoQuery("UPDATE {$prefix}usercharact
-										SET value='{$_POST[$cur['id']]}'
-										WHERE username='$pg'
-										 AND charact_id='{$cur['id']}'");
-							}
-														
-							if(!checkIfMaster()){
-								$db->DoQuery("UPDATE {$prefix}users SET sheet_ok='1' WHERE username='$pg'");
-								$x7s->sheet_ok = 1;
-							}
-							
-						}
-						
-						
 						if(isset($_POST['name']) && 
 							isset($_POST['age'])&&
 							isset($_POST['nat']) &&
@@ -611,6 +590,27 @@
 							if(isset($_POST['xp'])){
 								$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
 							}
+						}
+						
+						if(!$x7s->sheet_ok || checkIfMaster()){
+							foreach($char as $cur){
+								if(!isset($_POST[$cur['id']])){
+									$ok = false;
+									break;
+								}
+								
+								$db->DoQuery("UPDATE {$prefix}usercharact
+										SET value='{$_POST[$cur['id']]}'
+										WHERE username='$pg'
+										 AND charact_id='{$cur['id']}'");
+							}
+														
+							if(!checkIfMaster()){
+								$db->DoQuery("UPDATE {$prefix}users SET sheet_ok='1' WHERE username='$pg'");
+								$x7s->sheet_ok = 1;
+								header('Location: ./index.php');
+							}
+							
 						}
 						
 					}
