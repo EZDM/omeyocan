@@ -36,6 +36,7 @@
 		var $username;		// Holds the person's official username
 		var $sheet_ok;		// Holds if the person have build is character
 		var $user_group;	// Holds the group which the user belongs to
+		var $reg_date;		//Holds registration date of user
 		
 		// Create a new session
 		function session(){

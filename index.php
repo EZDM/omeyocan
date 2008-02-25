@@ -266,11 +266,12 @@
 		}
 	}
 	
-	$query = $db->DoQuery("SELECT sheet_ok,user_group FROM {$prefix}users WHERE username='{$x7s->username}'");
+	$query = $db->DoQuery("SELECT sheet_ok,user_group,iscr FROM {$prefix}users WHERE username='{$x7s->username}'");
 	$row = $db->Do_Fetch_Assoc($query);
 			
 	$x7s->sheet_ok = $row['sheet_ok'];
 	$x7s->user_group = $row['user_group'];
+	$x7s->reg_date = $row['iscr'];
 	
 	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout"){
 		$_GET['act']="sheet";
