@@ -108,7 +108,9 @@
 				$ip = $_SERVER['REMOTE_ADDR'];
 				$settings = $g_default_settings; // This is defined in lib/auth.php
 				$default_max_panic = 10;
-				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','{$x7c->settings['starting_xp']}','$time','$default_max_panic')");
+				$default_start_xp=$x7c->settings['starting_xp']*$x7c->settings['xp_ratio'];
+				
+				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic')");
 				
 				$query_ab = $db->DoQuery("SELECT * FROM {$prefix}ability");
 				$query_ch = $db->DoQuery("SELECT * FROM {$prefix}characteristic");

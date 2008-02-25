@@ -37,6 +37,7 @@
 		var $sheet_ok;		// Holds if the person have build is character
 		var $user_group;	// Holds the group which the user belongs to
 		var $reg_date;		//Holds registration date of user
+		var $second_mod;	//Hold if user has modificed sheet more than 1 time
 		
 		// Create a new session
 		function session(){

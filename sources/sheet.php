@@ -33,13 +33,17 @@
 		if(isset($_GET['page'])){
 			$page=$_GET['page'];
 		}
+		else{
+			$page="main";
+			$_GET['page']="main";
+		}
+		
 		if(!isset($_GET['pg'])){
 			$_GET['pg']=$x7s->username;
 		}
 		
-		if($page=='' || $page=="main"){
+		if($page=="main"){
 			$body = sheet_page_main();
-			$page = "main";
 		}
 		else if($page=="ability"){
 			$body = sheet_page_ability();
@@ -217,9 +221,19 @@
 			global $db,$x7c,$prefix,$x7s,$print;
 			$errore='';
 			$pg=$_GET['pg'];
+			$min_auth=0;
 			
 			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
 				$ok = true;
+				
+				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+				$row_user = $db->Do_Fetch_Assoc($query);
+				$xp_avail=$row_user['xp']/$x7c->settings['xp_ratio'];
+				$starting_xp = $x7c->settings['starting_xp'];
+				
+				if(!$row_user)
+					die("Users not in database");
+				
 				$query = $db->DoQuery("SELECT u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
 							FROM 	{$prefix}userability u, 
 								{$prefix}ability a
@@ -241,14 +255,20 @@
 				
 				//Controllo se le abilità non sono state abbassate o superano il massimo
 				//Il master fa quel che gli pare: niente controlli
+				
+				$tot_used=0;
+				$lvl_gained=0;
 				if(!checkIfMaster() && $ok){
 					if($x7s->sheet_ok)
 						$max_ab = $x7c->settings['max_ab'];
-					else
+					else{
 						$max_ab = $x7c->settings['max_ab_constr'];
+					}
 					
 					foreach($ability as $cur){
 						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$tot_used+= $_POST[$cur['ab_id']] - $cur['value'];
+							
 							if($cur['value'] > $_POST[$cur['ab_id']]){
 								$errore .= "Errore, non puoi abbassare le caratteristiche<br>";
 								$ok = false;
@@ -259,6 +279,23 @@
 								$ok = false;
 								break;
 							}
+						}
+					}
+					
+					if($x7s->sheet_ok)
+						$lvl_gained=$tot_used;
+					else
+						$lvl_gained=$tot_used-$starting_xp;
+					
+					if(!checkIfMaster()){
+						if($tot_used > $xp_avail){
+							$errore .= "Hai usato troppi PX<br>";
+							$ok = false;
+						}
+						
+						if($tot_used < $starting_xp && !$x7s->sheet_ok){
+							$errore .= "Non hai usato tutti i punti costruzione $tot_used<br>";
+							$ok = false;
 						}
 					}
 				
@@ -288,9 +325,21 @@
 						sheet_modification($pg,$_GET['page']);
 					}
 					
+					$newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
+					$newlvl = $row_user['lvl']+$lvl_gained;
+					
 					$db->DoQuery("UPDATE {$prefix}users 
-									SET xp='$_POST[xp]'
+									SET xp='$newxp',
+									lvl='$newlvl'
 									WHERE username='$pg'");
+									
+					if(!$x7s->sheet_ok && !checkIfMaster()){
+						$db->DoQuery("UPDATE {$prefix}users 
+									SET sheet_ok='1'
+									WHERE username='$pg'");
+						
+						header('Location: ./index.php');
+					}
 					
 					foreach($ability as $cur){
 						if($cur['value'] != $_POST[$cur['ab_id']]){
@@ -305,8 +354,8 @@
 			}
 			
 			$query = $db->DoQuery("SELECT xp FROM {$prefix}users WHERE username='$pg'");
-			$row = $db->Do_Fetch_Row($query);
-			$xp = $row[0];
+			$row = $db->Do_Fetch_Assoc($query);
+			$xp = floor($row['xp']/$x7c->settings['xp_ratio']);
 			
 			$body="<div class=\"errore_ab\">".$errore."</div>";
 			
@@ -344,6 +393,7 @@
 					
 				if(!checkIfMaster()){
 					$body .='	<script language="javascript" type="text/javascript">
+								
 								function add(ab_name){
 									var value = parseInt(document.sheet_form[ab_name].value);
 									var xp = parseInt(document.sheet_form["xp"].value);
@@ -360,7 +410,7 @@
 												document.sheet_form["xp"].value = xp - 1;
 											}
 											else{
-												alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
+												alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza http://www.google.com/avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
 											}
 										}
 										else{
@@ -406,8 +456,20 @@
 								
 								function do_form_refresh(ab_name){
 									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
-									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
-								}';
+									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;';
+									
+					if(!$x7s->sheet_ok){
+						$min_auth = $xp - $x7c->settings['starting_xp'];
+									
+						$body.='			var xp=document.sheet_form["xp"].value;
+									if(xp > '.$min_auth.'){
+										document.forms[0].elements["aggiorna"].style.visibility="hidden";
+									}
+									else{
+										document.forms[0].elements["aggiorna"].style.visibility="visible";
+									}';
+					}
+					$body.='			}';
 				}
 				//Master can everithing wothout controls
 				else{
@@ -447,10 +509,10 @@
 					if($cur['dep'] == ""){
 						$body .= "<tr>";
 						$body .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
-						<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur['ability_id']}');\">
+						<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 						<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 						<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>
-						<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add('{$cur['ability_id']}');\">
+						<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">
 						<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
 						<input type=\"hidden\" name=\"".$cur['ability_id']."_name\" value=\"{$cur['name']}\">
 						<input type=\"hidden\" name=\"".$cur['ability_id']."_dep\" value=\"{$cur['dep']}\">";
@@ -488,7 +550,11 @@
 				}
 				
 				
-				$body .= "	<tr><td><INPUT class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\"></td></tr></table>";
+				$disabled="";
+				if(!$x7s->sheet_ok && !checkIfMaster())
+					$disabled='style="visibility: hidden;"';
+				
+				$body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled></td></tr></table>";
 				
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti esperienza:<br>
@@ -610,8 +676,25 @@
 							}
 														
 							if(!checkIfMaster()){
-								$x7s->sheet_ok++;
-								$db->DoQuery("UPDATE {$prefix}users SET sheet_ok='{$x7s->sheet_ok}' WHERE username='$pg'");
+								if($x7s->sheet_ok){
+									$query = $db->DoQuery("SELECT xp FROM {$prefix}users WHERE username='$pg'");
+									$row = $db->Do_Fetch_Assoc($query);
+									
+									if(!$row)
+										die("Impossible, database incongurence while executing sheet.php");
+									
+									$xp=$row['xp']+($x7c->settings['starting_xp']*$x7c->settings['xp_ratio']);
+									
+									$db->DoQuery("UPDATE {$prefix}users SET second_mod='1',
+														sheet_ok='0',
+														xp='$xp'
+														WHERE username='$pg'");
+									
+									//We reset abilities 
+									$db->DoQuery("UPDATE {$prefix}userability SET value='0' WHERE username='$pg'");
+									$x7s->second_mod=1;
+									$x7s->sheet_ok=0;
+								}
 								header('Location: ./index.php?act=sheet&page=ability');
 							}
 							
@@ -691,7 +774,7 @@
 				
 				if(!checkIfMaster() && $x7s->sheet_ok == 1)
 					$body .= '
-							document.getElementById("errore").innerHTML = "Atenzione!!! Questa è l\'ultima modifica che puoi fare alla scheda!";
+							document.getElementById("errore").innerHTML = "Attenzione!!! Questa è l\'ultima modifica che puoi fare alla scheda!";
 					';
 				
 				$body.='					}
@@ -1167,7 +1250,7 @@
 		$time = time();
 		$month = 2592000; //A month
 		
-		return (($_GET['pg']==$x7s->username && $x7s->sheet_ok < 2 && (($time - $x7s->reg_date) < $month )) || checkIfMaster());
+		return (($_GET['pg']==$x7s->username && !$x7s->second_mod  && (($time - $x7s->reg_date) < $month )) || checkIfMaster());
 	}
 
 ?>
