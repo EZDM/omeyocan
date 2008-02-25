@@ -444,7 +444,19 @@
 				top: 640px;
 				left: 30px;
 			}
-			
+			#position{
+				position: absolute;
+				font-style: italic;
+				font-size: 10pt;
+				font-weight: bold;
+				border: 3px solid;
+				background: black;
+				padding: 5px;
+				padding-left: 10px;
+				padding-right: 10px;
+				border-style: ridge;
+				visibility: hidden;
+			}
 			#copyrigth {
 				position: absolute;
 				font-size: 7pt;
