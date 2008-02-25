@@ -1148,7 +1148,7 @@
 			#Mente{
 				position: absolute;
 				left: 360px;
-				top: 188px;
+				top: 190px;
 			}		
 			#Charme{
 				position: absolute;
@@ -1172,8 +1172,8 @@
 				top: 386px;
 			}
 			#age{
-				left: 309px;
-				top: 363px;
+				left: 312px;
+				top: 365px;
 			}
 			#nat{
 				left: 52px;

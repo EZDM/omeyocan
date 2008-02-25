@@ -119,7 +119,7 @@
 
 						function do_initial_refresh(){
 							// Create object
-							if(window.opener!=window.self){
+							if(window.self.name == 'sheet'){
 								window.self.close();
 							}
 							
