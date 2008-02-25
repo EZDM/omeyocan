@@ -382,6 +382,9 @@
 				//$x7c->edit_user_settings("default_size",$_GET['cursize']);
 				//$x7c->edit_user_settings("default_color",$_GET['curcolor']);
 
+				if(strlen($_GET['msg']) < $x7c->settings['min_post'] || strlen($_GET['msg']) > $x7c->settings['max_post'])
+					break;
+
 				// Get the styles
 				$starttags = "";
 				$endtags = "";
@@ -801,6 +804,17 @@
 								message = message.replace(/\+/gi,"%2B");
 								document.chatIn.msg.value=message;
 								
+								if(!message.match(/^@/)){
+									if(message.length < <?PHP echo $x7c->settings['min_post'];?>){
+										alert("Il post è troppo corto");
+										return false;
+									}
+									if(message.length > <?PHP echo $x7c->settings['max_post'];?>){
+										alert("Il post è troppo lungo");
+										return false;
+									}
+								}
+								
 								message = message.replace(/%2B/gi,"+");
 								if(message != ""){
 
@@ -905,6 +919,7 @@
 									document.chatIn.counter.value=document.chatIn.msgi.value.length;
 									document.getElementById('message_window').scrollTop = 65000;
 								}
+								return true;
 							}
 
 							// This function reads key presses
@@ -946,7 +961,7 @@
 					<div id="message_window"></div>
 					
 					<div style='clear: both;'></div>
-						<form name="chatIn" method="get" action="index.php" target="send" onSubmit="msgSent();">
+						<form name="chatIn" method="get" action="index.php" target="send" onSubmit="return msgSent();">
 							<div id='debug' style='display: none;'></div>
 
 							

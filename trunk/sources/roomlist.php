@@ -119,6 +119,10 @@
 
 						function do_initial_refresh(){
 							// Create object
+							if(window.opener!=window.self){
+								window.self.close();
+							}
+							
 							mapRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']; ?>');
 							do_refresh();
 							
