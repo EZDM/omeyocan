@@ -806,11 +806,11 @@
 								
 								if(!message.match(/^@/)){
 									if(message.length < <?PHP echo $x7c->settings['min_post'];?>){
-										alert("Il post è troppo corto");
+										alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
 									}
 									if(message.length > <?PHP echo $x7c->settings['max_post'];?>){
-										alert("Il post è troppo lungo");
+										alert("Il post è troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
 										return false;
 									}
 								}
