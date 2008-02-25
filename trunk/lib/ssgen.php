@@ -260,6 +260,7 @@
 				position: absolute;
 				top: 300px;
 				left: 20px;
+				width: 400px;
 			}
 			.errore_ab{
 				text-align: center;

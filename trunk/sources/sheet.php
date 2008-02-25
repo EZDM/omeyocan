@@ -115,7 +115,7 @@
 				
 				$body .= '<div class="indiv" id="master"><textarea name="master" id="master_text" class="sheet_text" autocomplete="off" disabled>'.$master.'</textarea></div>';
 				
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Aggiorna\" style=\"visibility: hidden;\"></div>
+				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
 				
 				$body .="</form>\n";
@@ -200,7 +200,7 @@
 			';
 			
 			if($pg==$x7s->username || checkIfMaster()){
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Aggiorna\" style=\"visibility: hidden;\"></div>
+				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
 			}
 			
@@ -488,7 +488,7 @@
 				}
 				
 				
-				$body .= "	<tr><td><INPUT class=\"button\" type=\"SUBMIT\" value=\"Aggiorna\"></td></tr></table>";
+				$body .= "	<tr><td><INPUT class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\"></td></tr></table>";
 				
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti esperienza:<br>
@@ -514,11 +514,11 @@
 			$char;
 			
 	
-			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
+			if(isset($_GET['settings_change']) && canModify()){
 							
 				//We are modifiyng character sheet
 				
-				if (!$x7s->sheet_ok && isset($_POST['ch']) && $_POST['ch']>0 && !checkIfMaster()){
+				if ($x7s->sheet_ok < 2 && isset($_POST['ch']) && $_POST['ch']>0 && !checkIfMaster()){
 					$errore .="Non hai usato tutti i tuoi punti caratteristica<br>";
 				}
 				else{
@@ -529,7 +529,7 @@
 						$char[$row['id']]=$row;
 					}
 					
-					if(!$x7s->sheet_ok && !checkIfMaster()){
+					if($x7s->sheet_ok < 2 && !checkIfMaster()){
 						$total_char=0;
 						//Controllo se le caratteristiche non sono state abbassate o superano il massimo
 						foreach($char as $cur){
@@ -566,7 +566,7 @@
 							isset($_POST['age'])&&
 							isset($_POST['nat']) &&
 							isset($_POST['marr']) &&
-							isset($_POST['info']) &&
+							isset($_POST['gender']) &&
 							isset($_POST['avatar_in'])
 							){
 								
@@ -581,18 +581,22 @@
 								age='$_POST[age]',
 								nat='$_POST[nat]',
 								marr='$_POST[marr]',
-								info='$_POST[info]',
+								gender='$_POST[gender]',
 								avatar='$_POST[avatar_in]'
 								WHERE username='$pg'");
 							}
 						
 						if(checkIfMaster()){
-							if(isset($_POST['xp'])){
-								$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
+							if(isset($_POST['xp']) &&
+								isset($_POST['info']) ){
+								$db->DoQuery("UPDATE {$prefix}users 
+										SET 	xp='$_POST[xp]',
+											info='$_POST[info]'
+										 WHERE username='$pg'");
 							}
 						}
 						
-						if(!$x7s->sheet_ok || checkIfMaster()){
+						if(canModify()){
 							foreach($char as $cur){
 								if(!isset($_POST[$cur['id']])){
 									$ok = false;
@@ -606,9 +610,9 @@
 							}
 														
 							if(!checkIfMaster()){
-								$db->DoQuery("UPDATE {$prefix}users SET sheet_ok='1' WHERE username='$pg'");
-								$x7s->sheet_ok = 1;
-								header('Location: ./index.php');
+								$x7s->sheet_ok++;
+								$db->DoQuery("UPDATE {$prefix}users SET sheet_ok='{$x7s->sheet_ok}' WHERE username='$pg'");
+								header('Location: ./index.php?act=sheet&page=ability');
 							}
 							
 						}
@@ -628,7 +632,8 @@
 			$group = $row_user['user_group'];
 			$date = date("j/n/Y",$row_user['iscr']);
 			
-			$body .= '		<script language="javascript" type="text/javascript">
+			if(canModify()){
+				$body .= '		<script language="javascript" type="text/javascript">
 							mod=false;
 							
 							function modify(){
@@ -638,29 +643,30 @@
 									document.forms[0].elements["age"].style.color="blue";
 									document.forms[0].elements["nat"].style.color="blue";
 									document.forms[0].elements["marr"].style.color="blue";
-									document.forms[0].elements["info"].style.color="blue";
+									document.forms[0].elements["gender"].style.color="blue";
 									document.forms[0].elements["avatar_in"].style.color="blue";
 								
 									document.forms[0].elements["name"].style.border="1px solid";
 									document.forms[0].elements["age"].style.border="1px solid";
 									document.forms[0].elements["nat"].style.border="1px solid";
 									document.forms[0].elements["marr"].style.border="1px solid";
-									document.forms[0].elements["info"].style.border="1px solid";
+									document.forms[0].elements["gender"].style.border="1px solid";
 									document.forms[0].elements["avatar_in"].style.border="1px solid";
 								
 									document.forms[0].elements["name"].style.background="white";
 									document.forms[0].elements["age"].style.background="white";
 									document.forms[0].elements["nat"].style.background="white";
 									document.forms[0].elements["marr"].style.background="white";
-									document.forms[0].elements["info"].style.background="white";
+									document.forms[0].elements["gender"].style.background="white";
 									document.forms[0].elements["avatar_in"].style.background="white";
 								
 									document.forms[0].elements["name"].disabled=false;
 									document.forms[0].elements["age"].disabled=false;
 									document.forms[0].elements["nat"].disabled=false;
 									document.forms[0].elements["marr"].disabled=false;
-									document.forms[0].elements["info"].disabled=false;
 									document.forms[0].elements["avatar_in"].disabled=false;
+									document.forms[0].elements["gender"].disabled=false;
+									document.forms[0].elements["marr"].disabled=false;
 								
 									document.forms[0].elements["avatar_in"].style.visibility="visible";
 									document.forms[0].elements["aggiorna"].style.visibility="visible";
@@ -670,19 +676,33 @@
 									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
 								';
 								
-			if(checkIfMaster())
-				$body .= '
+				if(checkIfMaster()){
+					$body .= '
+									document.forms[0].elements["info"].style.color="blue";
+									document.forms[0].elements["info"].style.border="1px solid";
+									document.forms[0].elements["info"].style.background="white";
+									document.forms[0].elements["info"].disabled=false;
+									
 									document.forms[0].elements["xp"].style.color="blue";
 									document.forms[0].elements["xp"].style.background="white";
 									document.forms[0].elements["xp"].disabled=false;
-				';
-			$body.='					}
+					';
+				}
+				
+				if(!checkIfMaster() && $x7s->sheet_ok == 1)
+					$body .= '
+							document.getElementById("errore").innerHTML = "Atenzione!!! Questa è l\'ultima modifica che puoi fare alla scheda!";
+					';
+				
+				$body.='					}
 								}
 					
 					</script>';
+			}
 			
+			//Here everithing tha is untouchable by anyone
 			$body .= "
-				<div class=\"indiv\" id=\"gender\">$gender</div>
+				<div class=\"indiv\" id=\"login\">$row_user[username]</div>
 				<div class=\"indiv\" id=\"group\">$group</div>
 				<div class=\"indiv\" id=\"date\">$date</div>
 				<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
@@ -690,12 +710,13 @@
 			";
 			
 			if($row_user['avatar']!='')
-				$body .= '<img src=\"$row_user[avatar]\" width=200 height=200 />';
+				$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
 			
 			$body.='</div>';
 			
 			if(!checkIfMaster()){
 				$body.= "
+					<div class=\"indiv\" id=\"status\">$row_user[info]</div>
 					<div class=\"indiv\" id=\"xp_point\">$row_user[xp]</div>
 				";
 			}
@@ -712,15 +733,15 @@
 					$charact[$row_ch['id']]=$row_ch;
 			}
 			
-			// Sheet_ok è falso se il pg non ha ancora settato le caratteristiche, non le abilità
-			if($pg!=$x7s->username && !checkIfMaster()){
+			
+			if(!canModify()){
 				$ability='';
 				
 				$body .="<div class=\"indiv\" id=\"name\">$row_user[name]</div>
 					<div class=\"indiv\" id=\"age\">$row_user[age]</div>
 					<div class=\"indiv\" id=\"nat\">$row_user[nat]</div>
 					<div class=\"indiv\" id=\"marr\">$row_user[marr]</div>
-					<div class=\"indiv\" id=\"status\">$row_user[info]</div>
+					<div class=\"indiv\" id=\"gender\">$gender</div>
 					";
 				
 				foreach($charact as $cur_ch){
@@ -731,7 +752,7 @@
 				
 			}
 			else{
-				if(!$x7s->sheet_ok){
+				if(canModify() && !checkIfMaster()){
 					$body .= '	
 						<script language="javascript" type="text/javascript">
 							function add_ch(ch_name){
@@ -802,18 +823,16 @@
 						
 				
 						
-				if(!$x7s->sheet_ok || checkIfMaster()){
+				if(canModify()){
 					$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
-					if(!checkIfMaster()){
+					if(!checkIfMaster() && !$x7s->sheet_ok){
 						$errore .='Prima di poter effettuare qualunque operazione, devi costruire il tuo personaggio<br>';
 					
 						$body .= '<div id="ch_point" align="center">Punti caratteristica:<br>
 							<input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="ch" value="'.$ch.'"></div>
 						';
-					}
-					
-					if(!checkIfMaster()){
+
 						foreach($charact as $cur_ch){
 							$body .= "<div id=\"{$cur_ch['name']}\">
 							<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
@@ -822,8 +841,10 @@
 							<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
 						}
 					}
-					else{
+					else{					
 						foreach($charact as $cur_ch){
+							$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
+							
 							$body .= "
 							<div id=\"{$cur_ch['name']}\">
 							<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
@@ -831,31 +852,70 @@
 							<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
 							<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
 						}
+						
+						if(!checkIfMaster())
+							$body .= '<div id="ch_point" align="center">Punti caratteristica:<br>
+								<input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled>
+								<input type="hidden" name="ch" value="'.$ch.'"></div>
+							';
 					}
 					
+				}
+				
+				if($gender=="M"){
+					$male="selected";
+					$female="";	
+					
+					if($row_user['marr']=="Celibe")
+						$marr_opt="<option value=\"Celibe\" selected>Celibe</option>
+						<option value=\"Sposato\">Sposato</option>";
+					else
+						$marr_opt="<option value=\"Celibe\">Celibe</option>
+						<option value=\"Sposato\" selected>Sposato</option>";
+				}
+				else{
+					$male="";
+					$female="selected";	
+					
+					if($row_user['marr']=="Nubile")
+						$marr_opt="<option value=\"Nubile\" selected>Nubile</option>
+							<option value=\"Sposata\">Sposata</option>";
+					else
+						$marr_opt="<option value=\"Nubile\">Nubile</option>
+							<option value=\"Sposata\" selected>Sposata</option>";
 				}
 				
 				$body .= "
 					<div class=\"indiv\" id=\"name\"><input class=\"sheet_input\" type=\"text\" name=\"name\" value=\"$row_user[name]\" size=\"10\" disabled /></div>
 					<div class=\"indiv\" id=\"age\"><input class=\"sheet_input\" type=\"text\" name=\"age\" value=\"$row_user[age]\" size=\"2\" style=\"text-align: right;\" disabled /></div>
 					<div class=\"indiv\" id=\"nat\"><input class=\"sheet_input\" type=\"text\" name=\"nat\" value=\"$row_user[nat]\" size=\"10\" disabled /></div>
-					<div class=\"indiv\" id=\"marr\"><input class=\"sheet_input\" type=\"text\" name=\"marr\" value=\"$row_user[marr]\" size=\"10\" disabled /></div>
-					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
-					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"{$row_user['avatar']}\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
+					<div class=\"indiv\" id=\"marr\">
+						<select class=\"button\" name=\"marr\" disabled>
+										$marr_opt
+						</select>
+					</div>
+					<div class=\"indiv\" id=\"gender\">
+						<select class=\"button\" name=\"gender\" disabled>
+											<option value=\"0\" $male>M</option>
+											<option value=\"1\" $female>F</option>
+						</select>
+					</div>
+					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
 					";
 					
 				//Master can everything
 				if(checkIfMaster()){
 					$body.= "
+						<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
 						<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" value=\"$row_user[xp]\" size=\"10\" disabled /></div>
 					";
 				}
 						
 				
 				
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Aggiorna\" style=\"visibility: hidden;\"></div>
+				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
-				$body.='<div class="errore" colspan="2">'.$errore.'</div>';
+				$body.='<div id="errore" class="errore" colspan="2">'.$errore.'</div>';
 		
 			}
 			
@@ -950,13 +1010,13 @@
 				top: 0px;
 				color: black;
 				font-weight: bold;
-				font-size: 12pt;
+				font-size: 11pt;
 			}
 			.sheet_input{
 				background: transparent;
 				border: 0;
 				font-weight: bold;
-				font-size: 12pt;
+				font-size: 11pt;
 				color: black;
 			}
 			.indiv{
@@ -979,7 +1039,7 @@
 			}
 			#modify{
 				position: absolute;
-				left: 100px;
+				left: 130px;
 				top: 630px;
 			}
 			#ability{
@@ -1016,6 +1076,13 @@
 				position: absolute;
 				left: 400px;
 				top: 255px;
+			}
+			#login{
+				left: 68px;
+ 				top: 276px;
+ 				width: 190px;
+ 				text-align: center;
+ 				font-size: 12pt;
 			}
 			#name{
 				left: 52px;
@@ -1092,6 +1159,15 @@
 		$value = $x7c->permissions['admin_panic'];
 		
 		return $value;
+	}
+	
+	function canModify(){
+		global $x7s;
+		
+		$time = time();
+		$month = 2592000; //A month
+		
+		return (($_GET['pg']==$x7s->username && $x7s->sheet_ok < 2 && (($time - $x7s->reg_date) < $month )) || checkIfMaster());
 	}
 
 ?>
