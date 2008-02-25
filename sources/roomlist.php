@@ -93,13 +93,14 @@
   
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   <img style="position:absolute; top:0px; left:807px;" src="./graphic/polaroid.jpg">
+  <div id="position"> </div>
   
   <!-- Pulsanti mappa -->
-	<A href="index.php?act=frame&room=Chiesa"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="this.src='./graphic/pulsante.gif'" onMouseOver="this.src='./graphic/pulsante_over.gif'" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></A>
+	<A href="index.php?act=frame&room=Chiesa"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Chiesa');" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></A>
   
-	<A href="index.php?act=frame&room=Cimitero"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="this.src='./graphic/pulsante.gif'" onMouseOver="this.src='./graphic/pulsante_over.gif'" style="position:absolute; top:520px; left:655px;" src="./graphic/pulsante.gif"></A>
+	<A href="index.php?act=frame&room=Cimitero"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Cimitero');" style="position:absolute; top:520px; left:655px;" src="./graphic/pulsante.gif"></A>
 
-	<A href="index.php?act=frame&room=Piazza"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="this.src='./graphic/pulsante.gif'" onMouseOver="this.src='./graphic/pulsante_over.gif'" style="position:absolute; top:550px; left:380px;" src="./graphic/pulsante.gif"></A>
+	<A href="index.php?act=frame&room=Piazza"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Piazza');" style="position:absolute; top:550px; left:380px;" src="./graphic/pulsante.gif"></A>
   
 
 
@@ -116,6 +117,27 @@
 						listhash = '';
 						startfrom = 0;
 						newMail = 0;
+						
+						function ShowPopup(hoveritem, locat)
+						{
+							hp = document.getElementById("position");
+		
+							// Set popup to visible
+							hp.style.top = hoveritem.offsetTop + 18;
+							hp.style.left = hoveritem.offsetLeft + 20;
+							hp.innerHTML = locat;
+
+							hp.style.visibility = "Visible";
+							hoveritem.src='./graphic/pulsante_over.gif';
+							
+						}
+
+						function HidePopup(hoveritem)
+						{
+							hp = document.getElementById("position");
+							hp.style.visibility = "Hidden";	
+							hoveritem.src='./graphic/pulsante.gif';
+						}
 
 						function do_initial_refresh(){
 							// Create object
