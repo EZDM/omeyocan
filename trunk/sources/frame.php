@@ -1080,10 +1080,6 @@
 						</form>
 
 					
-	<?PHP
-		print("<div id=\"copyrigth\">Game engine by: <a href=\"http://netgroup.polito.it/Members/niccolo_cascarano\" target=\"_blank\">Niccol&ograve; Cascarano</a> <br> Graphic by: Federico Gori<br>
-		Powered By <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Chat</a> $X7CHATVERSION <br>&copy; 2004 By The <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Group</a></div>");
-	?>
 	
 	</div>
 </div>
