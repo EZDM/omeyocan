@@ -147,9 +147,9 @@
 				isset($_POST['psico'])	
 				){
 				
-				$storia = eregi_replace("\n","<Br>",$_POST['storia']);
-				$fisici = eregi_replace("\n","<Br>",$_POST['fisici']);
-				$psico = eregi_replace("\n","<Br>",$_POST['psico']);
+				$storia = $_POST['storia'];
+				$fisici = $_POST['fisici'];
+				$psico = $_POST['psico'];
 				
 				
 				if($pg!=$x7s->username){
