@@ -1,4 +1,28 @@
 <?PHP
+/*
+
+    This file is part of X7 chat Version 2.0.5 - RPG enhanced.
+    Released March 2008. Copyright (c) 2008 by Niccolo' Cascarano.
+
+    X7 chat Version 2.0.5 - RPG enhanced is free software:
+     you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    X7 chat Version 2.0.5 - RPG enhanced is distributed 
+    in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with X7 chat Version 2.0.5 - RPG enhanced.  
+    If not, see <http://www.gnu.org/licenses/>
+
+
+*/
+
 /////////////////////////////////////////////////////////////// 
 //
 //		X7 Chat Version 2.0.4
@@ -123,6 +147,14 @@
 										<td width=\"70\">&nbsp;</td>
 									</tr>
 							";
+							
+					$body .= "		<tr valign=\"top\">
+										<td width=\"70\">&nbsp;</td>
+										<td width=\"80\" style=\"vertical-align: middle;\">Non &egrave; affetta dal panico: </td>
+										<td width=\"175\" ><input type=\"checkbox\" name=\"panic_free\" value=\"1\"></td>
+										<td width=\"70\">&nbsp;</td>
+									</tr>
+							";
 						
 				// The submit button and form close
 				$body .= "		<tr valign=\"top\">
@@ -170,11 +202,13 @@
 			
 		if($x7c->permissions['make_nexp'] != 1 || !isset($_POST['roomnexp']))
 			$_POST['roomnexp'] = 0;
+		if(!isset($_POST['panic_free']))
+			$_POST['panic_free']=0;
 			
 		if($error == ""){
 			$body = $txt[75]."<Br><Br><a href=\"./index.php\">[$txt[29]]</a>";
 			// Crate the room
-			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'],$_POST['roomnexp']);
+			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'],$_POST['roomnexp'], $_POST['panic_free']);
 		}else{
 			$body = $error."<Br><Br><a href=\"index.php?act=newroom1\">[$txt[77]]</a>";
 		}

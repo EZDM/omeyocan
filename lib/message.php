@@ -71,7 +71,7 @@
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','1','$body','$body_parsed','$room','$time')");
 			
 			//If we are in panic... do panic update
-			if($x7c->settings['panic']){
+			if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
 				update_panic();
 			}
 			
@@ -112,16 +112,13 @@
 	function update_panic(){
 		global $x7s, $db, $prefix, $x7c, $txt;
 		
-		$query = $db->DoQuery("SELECT panic, max_panic FROM {$prefix}users WHERE username='$x7s->username'");
-		if($row = $db->Do_Fetch_Assoc($query)){
-			$panic = $row['panic'];
-			$panic++;
+			$x7s->panic++;
+			$panic = $x7s->panic;
 			
 			$time = time();
 			$db->DoQuery("UPDATE {$prefix}users SET panic='$panic' WHERE username='$x7s->username'");
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','System','11','Panic update: $panic','$panic','$x7s->username','$time')");
 			
-		}
 	}
 	
 	function delete_communication($id,$room){

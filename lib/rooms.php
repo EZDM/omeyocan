@@ -1,4 +1,27 @@
 <?PHP
+/*
+
+    This file is part of X7 chat Version 2.0.5 - RPG enhanced.
+    Released March 2008. Copyright (c) 2008 by Niccolo' Cascarano.
+
+    X7 chat Version 2.0.5 - RPG enhanced is free software:
+     you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    X7 chat Version 2.0.5 - RPG enhanced is distributed 
+    in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with X7 chat Version 2.0.5 - RPG enhanced.  
+    If not, see <http://www.gnu.org/licenses/>
+
+
+*/
 /////////////////////////////////////////////////////////////// 
 //
 //		X7 Chat Version 2.0.4
@@ -43,7 +66,7 @@
 	}
 	
 	// This function creates a new room
-	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$exp){
+	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$exp,$panic_free){
 		global $prefix, $db;
 		if($exp != 1)
 			$time = time();
@@ -51,7 +74,7 @@
 			$time = 0;
 		$ops = "$uid";
 		$voice = "$uid";
-		$db->DoQuery("INSERT INTO {$prefix}rooms VALUES('0','$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','')");
+		$db->DoQuery("INSERT INTO {$prefix}rooms VALUES('0','$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free')");
 		return 1;
 	}
 	
@@ -59,7 +82,7 @@
 	// type, moderated, topic, greeting, password, max users, background image, logo image
 	function mass_change_roomsettings($room,$new_settings){
 		global $prefix, $db;
-		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]' WHERE name='$room'");
+		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]', panic_free='$new_settings[8]' WHERE name='$room'");
 	}
 	
 	// Changes a single setting (used mostly for IRC cmds I think)

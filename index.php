@@ -266,13 +266,16 @@
 		}
 	}
 	
-	$query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,second_mod FROM {$prefix}users WHERE username='{$x7s->username}'");
+	$query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,second_mod,panic,max_panic FROM {$prefix}users WHERE username='{$x7s->username}'");
 	$row = $db->Do_Fetch_Assoc($query);
 			
 	$x7s->sheet_ok = $row['sheet_ok'];
 	$x7s->user_group = $row['user_group'];
 	$x7s->reg_date = $row['iscr'];
 	$x7s->second_mod = $row['second_mod'];
+	$x7s->second_mod = $row['second_mod'];
+	$x7s->panic = $row['panic'];
+	$x7s->max_panic = $row['max_panic'];
 	
 	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout"){
 		$_GET['act']="sheet";

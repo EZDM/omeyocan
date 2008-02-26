@@ -61,7 +61,7 @@
 			$room =$_GET['room'];
 			
 		// See if the user wants the data sorted in anyway
-		$order = "";
+		$order = " ORDER BY username ASC";
 		$sort_order_1 = 1;
 		$sort_order_2 = 3;
 		if(isset($_GET['sort'])){
