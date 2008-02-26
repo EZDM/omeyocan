@@ -364,6 +364,7 @@
 			$query = $db->DoQuery("SELECT count(*) AS num FROM ${prefix}users WHERE username='$x7s->username' AND position='$x7c->room_name'");
 			$row = $db->Do_Fetch_Assoc($query);
 			
+			
 			if($row['num'] == 0)
 				break;
 				
@@ -376,6 +377,7 @@
 			
 			// Make sure the message isn't null
 			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg'])){
+			
 
 				// Save the style settings they used for next time
 				//$x7c->edit_user_settings("default_font",$_GET['curfont']);
@@ -385,6 +387,7 @@
 				if(strlen($_GET['msg']) < $x7c->settings['min_post'] || strlen($_GET['msg']) > $x7c->settings['max_post'])
 					break;
 
+				
 				// Get the styles
 				$starttags = "";
 				$endtags = "";
@@ -399,6 +402,21 @@
 				//$size = eregi_replace("<","&lt;",$size);
 				//$font = eregi_replace("<","&lt;",$font);
 				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
+
+				//If we are in panic
+				if($x7c->settings['panic']){
+					//If user is not a master and room is not panic_free
+					if(!$x7c->permissions['admin_panic'] && !$x7c->room_data['panic_free']){
+						if($x7s->panic >= $x7s->max_panic){
+							$_GET['msg']="<span style=\"color: red;\">Si piega in un angolo terrorizzato e impossibilitato a compiere qualunque azione</span>";
+						}
+						/*if($x7s->panic > $x7s->max_panic){
+							break;
+						}*/
+						
+					
+					}
+				}
 
 				$starttags .= "[color=#000000][size=10 pt][font=arial]";
 

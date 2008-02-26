@@ -86,6 +86,11 @@
 					$def['neverexpire'] = " CHECKED";
 				else
 					$def['neverexpire'] = "";
+				
+				if($x7c->room_data['panic_free'] == 1)
+					$def['panic_free'] = " CHECKED";
+				else
+					$def['panic_free'] = "";
 
 				$body = "<Br><Br><form action=\"index.php?act=roomcp&cp_page=settings&room=$_GET[room]\" method=\"post\">
 				<table align=\"center\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">
@@ -152,7 +157,11 @@
 								<td width=\"90\">$txt[71]:</td>
 								<td width=\"100\"><input type=\"checkbox\" name=\"neverexpire\" value=\"1\"{$def['neverexpire']}></td>
 							</tr>";
-
+				$body .= "<tr>
+								<td width=\"90\">Non &egrave; affetta dal panico:</td>
+								<td width=\"100\"><input type=\"checkbox\" name=\"panic_free\" value=\"1\"{$def['panic_free']}></td>
+						</tr>";
+						
 				$body .= "<tr>
 							<td width=\"190\" colspan=\"2\"><Br><div align=\"center\"><input type=\"submit\" class=\"text_input\" value=\"$txt[187]\"></div></td>
 						</tr></form></table>";
@@ -182,6 +191,9 @@
 				if($x7c->permissions['set_logo'] == 0 || $x7c->settings['enable_roomlogo'] == 0 || !isset($_POST['rm_logo']))
 					$_POST['rm_logo'] = $x7c->room_data['logo'];
 				
+				if(!isset($_POST['panic_free']))
+					$_POST['panic_free']=0;
+				
 				// Order `em up
 				$new_settings[] = $_POST['room_type'];
 				$new_settings[] = $_POST['moderated'];
@@ -191,6 +203,7 @@
 				$new_settings[] = $_POST['max_users'];
 				$new_settings[] = $_POST['rm_bg'];
 				$new_settings[] = $_POST['rm_logo'];
+				$new_settings[] = $_POST['panic_free'];
 				
 				mass_change_roomsettings($_GET['room'],$new_settings);
 				$body = $txt[210];
@@ -677,8 +690,8 @@
 		$cbody .= 				"<tr valign=\"top\">
 								<td width=\"100%\" class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br>";
 		
-		if($x7c->settings['single_room_mode'] == "")
-			$cbody .= 					"<a href=\"./index.php\">[$txt[29]]</a><Br>";
+		//if($x7c->settings['single_room_mode'] == "")
+		//	$cbody .= 					"<a href=\"./index.php\">[$txt[29]]</a><Br>";
 			
 		$cbody .= 						"<a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br>
 								</td>

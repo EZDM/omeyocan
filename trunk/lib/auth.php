@@ -38,6 +38,8 @@
 		var $user_group;	// Holds the group which the user belongs to
 		var $reg_date;		//Holds registration date of user
 		var $second_mod;	//Hold if user has modificed sheet more than 1 time
+		var $panic;
+		var $max_panic;
 		
 		// Create a new session
 		function session(){
