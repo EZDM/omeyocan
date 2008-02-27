@@ -172,6 +172,8 @@
 		$row = $db->Do_Fetch_Assoc($query);
 		
 		if($row){
+			
+			if($pg==$x7s->username || checkIfMaster()){
 			$body .= '<script language="javascript" type="text/javascript">
 					mod=false;
 					
@@ -203,9 +205,16 @@
 			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off" disabled>'.$row['psico'].'</textarea></div>
 			';
 			
-			if($pg==$x7s->username || checkIfMaster()){
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
+			$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
+			}
+			else{				
+				$body .= '<div class="indiv" id="storia">'.eregi_replace("\n","<Br>",$row['storia']).'</div>
+				';
+				$body .= '<div class="indiv" id="fisici">'.eregi_replace("\n","<Br>",$row['fisici']).'</div>
+				';
+				$body .= '<div class="indiv" id="psico">'.eregi_replace("\n","<Br>",$row['psico']).'</div>
+				';
 			}
 			
 			$body .= '</form>';
@@ -372,14 +381,31 @@
 				$ability[$row['ability_id']]=$row;
 			}
 			
+			$body .='	<script language="javascript" type="text/javascript">
+						var descr = new Array();
+					
+			
+			';
+			
+			foreach($ability as $cur){
+					$body .= "descr['$cur[ability_id]']=\"$cur[descr]\";\n";
+			}
+			
+			$body .= 'function show_desc(el){
+					document.getElementById("descr").innerHTML = descr[el];
+				}
+				
+			</script>
+			';
+			
 			if(($xp==0 || $pg!=$x7s->username) && !checkIfMaster()){
 				
 				foreach($ability as $cur){
 					if($cur['dep'] == ""){
-						$body .= $cur['name']." ".$cur['value']."<br>\n";
+						$body .= "<span onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">".$cur['name']." ".$cur['value']."</span><br>\n";
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-							$body .= "&nbsp;&nbsp;&nbsp;".$cur2['name']." ".$cur2['value']."<br>\n";
+							$body .= "<span onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">&nbsp;&nbsp;&nbsp;".$cur2['name']." ".$cur2['value']."</span><br>\n";
 							}
 						}
 					}
@@ -410,7 +436,7 @@
 												document.sheet_form["xp"].value = xp - 1;
 											}
 											else{
-												alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza http://www.google.com/avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
+												alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
 											}
 										}
 										else{
@@ -507,7 +533,7 @@
 				
 				foreach($ability as $cur){
 					if($cur['dep'] == ""){
-						$body .= "<tr>";
+						$body .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">";
 						$body .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
 						<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 						<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
@@ -529,7 +555,7 @@
 						
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-								$body .= "<tr>\n";
+								$body .= "<tr onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">\n";
 								$body .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
 									<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
 									<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
@@ -564,7 +590,7 @@
 				}
 			}
 			
-			$body.="</div>";
+			$body.="<div id=\"descr\"> </div></div>";
 			return $body;
 		
 	}
@@ -1035,7 +1061,9 @@
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
 			}
-			
+		
+		$body .= "<div id=\"descr\"> </div>";
+		
 		return $body;
 	
 	}
@@ -1056,6 +1084,9 @@
 		
 		echo '
 		<style type="text/css">
+			INPUT{
+				height: 21px;
+			}
 			#sheetmain{
 				background-image:url(./graphic/schedapgPRINC.jpg);
 			}
@@ -1072,20 +1103,21 @@
 				background-image:url(./graphic/schedapgBG.jpg);
 			}
 			#storia_text{
-				width: 430px;
-				height: 250px;
 			}
 			#storia{
 				top: 80px;
 				left: 30px;
+				width: 430px;
+				height: 250px;
 			}
 			#fisici_text{
-				width: 200px;
-				height: 250px;
+				
 			}
 			#fisici{
 				top: 370px;
 				left: 30px;
+				width: 200px;
+				height: 250px;
 			}
 			#master_text{
 				width: 400px;
@@ -1104,12 +1136,13 @@
 				overflow: auto;
 			}
 			#psico_text{
-				width: 200px;
-				height: 250px;
+				
 			}
 			#psico{
 				top: 370px;
 				left: 250px;
+				width: 200px;
+				height: 250px;
 			}
 			.sheet_text{
 				background: transparent;
