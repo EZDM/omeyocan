@@ -572,6 +572,11 @@
 			 font-size: 8pt;
 			 font-weight: bold;
 			}
+			.mastering{
+			 color: orange;
+			 font-size: 8pt;
+			 font-weight: bold;
+			}
 			.roll_neg{
 			 font-weight: bold;
 			 color: red;
