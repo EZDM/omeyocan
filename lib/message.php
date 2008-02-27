@@ -87,9 +87,6 @@
 					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$body_parsed','$user[1]','$time')");
 			}
 		}else if($sussurro == 2){
-			$body_parsed = preg_replace("/ç/i","",$body_parsed);
-			$body_parsed = "FANCUOOOOO".$body_parsed."ALTRO FANCULOOO";
-			
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','14','$body','$body_parsed','$room','$time')");
 		}
 
@@ -377,12 +374,14 @@
 				
 			}
 			
-			if($sysmsg == 1){
-				$message = "<span class=\"chatmsg\">".$message."</span>";
-			}else{
-				$message = "<span class=\"chatmsg\">".$message."</span>";
+			if(eregi("^ç",@$_GET['msg'])){
+				$message = preg_replace("/^ç/", "", $message);
+				$message = "<span class=\"mastering\">".$message."</span>";
 			}
-		//}
+			else
+				$message = "<span class=\"chatmsg\">".$message."</span>";
+			
+		
 
 		// Put new lines in
 		$message = eregi_replace("\n","<Br>",$message);
