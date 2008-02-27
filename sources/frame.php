@@ -276,7 +276,7 @@
 
 						//$toout = "<span class=\"other_persons\"><a class=\"other_persons\" onClick=\"javascript: window.open('index.php?act=pm&send_to=$row[0]','Pm$row[0]','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">$row[0]</a>$timestamp:</span> $row[2]<br>";
 						
-						$toout = "<span class=\"other_persons\">$row[0]$timestamp:</span>";
+						$toout = "<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=\"other_persons\">$row[0]$timestamp:</span></a>";
 						
 						if($x7c->permissions['admin_panic'])
 							$toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
@@ -384,7 +384,7 @@
 				//$x7c->edit_user_settings("default_size",$_GET['cursize']);
 				//$x7c->edit_user_settings("default_color",$_GET['curcolor']);
 
-				if(strlen($_GET['msg']) < $x7c->settings['min_post'] || strlen($_GET['msg']) > $x7c->settings['max_post'])
+				if(strlen(trim($_GET['msg'])) < $x7c->settings['min_post'] || strlen(trim($_GET['msg'])) > $x7c->settings['max_post'])
 					break;
 
 				
@@ -816,6 +816,10 @@
 									object.className='boldtxtover';
 								}
 							}
+							
+							function trim(str) {
+    								return str.replace(/^\s*/, "").replace(/\s*$/, "");
+							}
 
 							function msgSent(){
 								message = document.chatIn.msgi.value;
@@ -823,11 +827,11 @@
 								document.chatIn.msg.value=message;
 								
 								if(!message.match(/^@/)){
-									if(message.length < <?PHP echo $x7c->settings['min_post'];?>){
+									if(trim(message).length < <?PHP echo $x7c->settings['min_post'];?>){
 										alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
 									}
-									if(message.length > <?PHP echo $x7c->settings['max_post'];?>){
+									if(trim(message).length > <?PHP echo $x7c->settings['max_post'];?>){
 										alert("Il post è troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
 										return false;
 									}
