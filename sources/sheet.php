@@ -198,11 +198,11 @@
 			$body .= '<form action="index.php?act=sheet&page=background&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 			';
 			
-			$body .= '<div class="indiv" id="storia"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off" disabled>'.$row['storia'].'</textarea></div>
+			$body .= '<div class="indiv" id="storia"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off">'.$row['storia'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="fisici"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off" disabled>'.$row['fisici'].'</textarea></div>
+			$body .= '<div class="indiv" id="fisici"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off">'.$row['fisici'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off" disabled>'.$row['psico'].'</textarea></div>
+			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off">'.$row['psico'].'</textarea></div>
 			';
 			
 			$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
@@ -1102,6 +1102,8 @@
 				background-image:url(./graphic/schedapgBG.jpg);
 			}
 			#storia_text{
+				height: 250px;
+				width: 430px;
 			}
 			#storia{
 				top: 80px;
@@ -1110,7 +1112,10 @@
 				height: 250px;
 			}
 			#fisici_text{
-				
+				width: 200px;
+				height: 250px
+				width: 200px;
+				height: 250px;
 			}
 			#fisici{
 				top: 370px;
@@ -1125,7 +1130,6 @@
 			#master{
 				top: 60px;
 				left: 50px;
-
 			}
 			#masterdiv{
 				width: 400px;
@@ -1135,7 +1139,8 @@
 				overflow: auto;
 			}
 			#psico_text{
-				
+				width: 200px;
+				height: 250px;
 			}
 			#psico{
 				top: 370px;

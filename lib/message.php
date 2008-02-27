@@ -67,7 +67,7 @@
 		}
 
 		$body_parsed = parse_message($body);
-		if(!$sussurro){
+		if($sussurro == 0){
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','1','$body','$body_parsed','$room','$time')");
 			
 			//If we are in panic... do panic update
@@ -75,7 +75,7 @@
 				update_panic();
 			}
 			
-		}else{
+		}else if($sussurro == 1){
 			if(preg_match("/@.*@/i",$body, $user)){
 				$user[1] = preg_replace("/@/i","",$user[0]);	
 				
@@ -86,6 +86,11 @@
 				if($row['num'])
 					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$body_parsed','$user[1]','$time')");
 			}
+		}else if($sussurro == 2){
+			$body_parsed = preg_replace("/ç/i","",$body_parsed);
+			$body_parsed = "FANCUOOOOO".$body_parsed."ALTRO FANCULOOO";
+			
+			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','14','$body','$body_parsed','$room','$time')");
 		}
 
 		// Do logging if required
@@ -372,7 +377,6 @@
 				
 			}
 			
-
 			if($sysmsg == 1){
 				$message = "<span class=\"chatmsg\">".$message."</span>";
 			}else{

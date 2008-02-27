@@ -236,7 +236,7 @@
 						AND*/" (
 							(id>'$_GET[startfrom]'
 							AND (
-								(room='$_GET[room]' AND (type='1' OR type='4')) OR
+								(room='$_GET[room]' AND (type='1' OR type='4' OR type='14')) OR
 								(room='$x7s->username' AND type='3') OR
 								(type='2') OR
 								(room='$x7s->username:0' AND type='5' AND time<$pm_time) OR
@@ -285,7 +285,7 @@
 						
 						
 						
-					}elseif($row[1] == 2 || $row[1] == 3 || $row[1] == 4){
+					}elseif($row[1] == 2 || $row[1] == 3 || $row[1] == 4 ){
 						$toout = "$row[2]";
 						
 					}elseif($row[1] == 6){
@@ -312,6 +312,8 @@
 					}elseif($row[1] == 13){
 						$db->DoQuery("DELETE FROM {$prefix}messages WHERE type='13' AND room='$x7s->username'");
 						echo utf8_encode("13;$row[2]|");
+					}elseif($row[1] == 14){
+						$toout = "$row[2]<br>";
 					}
 
 					if(isset($toout)){
@@ -376,7 +378,7 @@
 			include("./lib/message.php");
 			
 			// Make sure the message isn't null
-			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg'])){
+			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^ç",@$_GET['msg'])){
 			
 
 				// Save the style settings they used for next time
@@ -465,6 +467,20 @@
 					alert_user($x7s->username,$txt[42]);
 				}
 
+			}elseif(eregi("^ç",@$_GET['msg']) && $x7c->permissions['admin_panic']){
+				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
+				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
+				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
+				$parsed_msg = $_GET['msg'];
+				
+				if($x7c->permissions['room_voice'] == 1){
+					send_message($parsed_msg,$x7c->room_name,2);
+
+				}else{
+					// The user doesn't have a voice, alert them
+					alert_user($x7s->username,$txt[42]);
+				}
+			
 			}
 
 		break;
@@ -826,7 +842,7 @@
 								message = message.replace(/\+/gi,"%2B");
 								document.chatIn.msg.value=message;
 								
-								if(!message.match(/^@/)){
+								if(!message.match(/^@/) && !message.match(/^ç/)){
 									if(trim(message).length < <?PHP echo $x7c->settings['min_post'];?>){
 										alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
