@@ -95,7 +95,7 @@
 		if($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/pjpeg"){
 		
 			$size = getimagesize($_FILES['file']['tmp_name']);
-			if($size[0] > 800){
+			if($size[0] > 650){
 				$print->normal_window("Errore","L'immagine &egrave; troppo larga");
 				return;
 			}

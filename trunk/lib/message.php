@@ -365,7 +365,6 @@
 			while(preg_match($img_regexp,$message, $img_url)){
 
 				if($x7c->permissions['admin_panic']){
-					// Can be usafull to se width max
 					$img_msg="<br><img src=\"".$img_url[1]."\" ><br>";
 				}
 					

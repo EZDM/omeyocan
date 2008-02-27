@@ -277,7 +277,7 @@
 	$x7s->panic = $row['panic'];
 	$x7s->max_panic = $row['max_panic'];
 	
-	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout"){
+	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" && !$x7c->permissions['admin_panic']){
 		$_GET['act']="sheet";
 	}
 
