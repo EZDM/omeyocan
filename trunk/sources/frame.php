@@ -1015,9 +1015,8 @@
 						
 							<?PHP 
 							if($x7c->settings['panic']){
-								$query = $db->DoQuery("SELECT panic FROM {$prefix}users WHERE username='$x7s->username'");
-								if($row = $db->Do_Fetch_Assoc($query)){
-									echo "<div id=\"panicdiv\"><img id=\"panic_img\" src=\"./graphic/panic{$x7s->panic}.jpg\" /></div>";}
+								$panic=$x7s->panic > 10 ? 10 : $x7s->panic;
+								echo "<div id=\"panicdiv\"><img id=\"panic_img\" src=\"./graphic/panic$panic.jpg\" /></div>";
 								}
 							?>
 						
