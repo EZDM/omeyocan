@@ -634,10 +634,11 @@
 											}else if(dataSubArray[0] == '11'){
 												//Panic update
 												panic_value = parseInt(dataSubArray[1]);
-												if(Math.round(panic_value*10/max_panic)  > 9)
-													panic_value=9;
+												if(Math.round(panic_value*10/max_panic)  > 10)
+													panic_value=10;
 												else
 													panic_value=Math.round(panic_value*10/max_panic);
+													
 												document.getElementById('panic_img').src='./graphic/panic'+panic_value+'.jpg';
 											}else if(dataSubArray[0] == '12'){
 												//Panic update
@@ -1016,7 +1017,7 @@
 							if($x7c->settings['panic']){
 								$query = $db->DoQuery("SELECT panic FROM {$prefix}users WHERE username='$x7s->username'");
 								if($row = $db->Do_Fetch_Assoc($query)){
-									echo "<div id=\"panicdiv\"><img id=\"panic_img\" src=\"./graphic/panic0.jpg\" /></div>";}
+									echo "<div id=\"panicdiv\"><img id=\"panic_img\" src=\"./graphic/panic{$x7s->panic}.jpg\" /></div>";}
 								}
 							?>
 						
