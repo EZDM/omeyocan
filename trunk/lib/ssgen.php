@@ -441,8 +441,8 @@
 			
 			#panicdiv {
 				position: absolute;
-				top: 640px;
-				left: 30px;
+				top: 580px;
+				left: 0px;
 			}
 			#position{
 				position: absolute;
