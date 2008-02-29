@@ -526,6 +526,7 @@
 						listhash = '';
 						startfrom = 0;
 						newMail = 0;
+						max_panic= <?PHP echo $x7s->max_panic;?>;
 
 						function do_initial_refresh(){
 							// Create object
@@ -633,7 +634,7 @@
 											}else if(dataSubArray[0] == '11'){
 												//Panic update
 												panic_value = parseInt(dataSubArray[1]);
-												document.chatIn.panic.value=panic_value;
+												document.getElementById('panic_img').src='./graphic/panic'+Math.round(panic_value*10/max_panic)+'.jpg';
 											}else if(dataSubArray[0] == '12'){
 												//Panic update
 												valore = parseInt(dataSubArray[1]);
@@ -1011,7 +1012,7 @@
 							if($x7c->settings['panic']){
 								$query = $db->DoQuery("SELECT panic FROM {$prefix}users WHERE username='$x7s->username'");
 								if($row = $db->Do_Fetch_Assoc($query)){
-									echo "<div id=\"panicdiv\">Panico: <input class=\"location\" type=\"text\" size=\"2\" style=\"text-align: right; color: white;\" value=\"".$row['panic']."\" name=\"panic\" disabled></div>";}
+									echo "<div id=\"panicdiv\"><img id=\"panic_img\" src=\"./graphic/panic0.jpg\" /></div>";}
 								}
 							?>
 						
