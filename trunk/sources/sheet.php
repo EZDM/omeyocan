@@ -398,17 +398,40 @@
 			';
 			
 			if(($xp==0 || $pg!=$x7s->username) && !checkIfMaster()){
-				
+				$body .= "<table>";
 				foreach($ability as $cur){
 					if($cur['dep'] == ""){
-						$body .= "<span onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">".$cur['name']." ".$cur['value']."</span><br>\n";
+						$body .= "<tr class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\"><td class=\"ab_text\">".$cur['name']."</td><td>";
+						for($i=0; $i<6; $i++){
+							if($i<$cur['value']){
+								$body.='<img src="./graphic/on.gif"/>';
+							}
+							else{
+								$body.='<img src="./graphic/off.gif"/>';
+							}
+						}
+						
+						$body .= "</td></tr>\n";
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-							$body .= "<span onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">&nbsp;&nbsp;&nbsp;".$cur2['name']." ".$cur2['value']."</span><br>\n";
+							$body .= "<tr class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\"><td class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
+							
+							for($i=0; $i<6; $i++){
+								if($i<$cur2['value']){
+									$body.='<img src="./graphic/on.gif"/>';
+								}
+								else{
+									$body.='<img src="./graphic/off.gif"/>';
+								}
+							}
+						
+						$body .= "</td></tr>\n";
 							}
 						}
 					}
 				}
+				
+				$body.="</table>";
 			}
 			else{
 				if($x7s->sheet_ok)
@@ -1155,6 +1178,11 @@
 				font-weight: bold;
 				color: black;
 				border: 0;
+			}
+			.ab_text{
+				font-size: 10pt;
+				font-weight: bold;
+				color: black;
 			}
 			.sheet {
 				width: 500px; 
