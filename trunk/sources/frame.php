@@ -72,7 +72,6 @@
 			include("./lib/message.php");
 			$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='{$_GET['delete']}'");
 			delete_communication($_GET['delete'],$_GET['room']);
-			//echo "<html><body onload=\"javascript= window.focus=opener; window.close(self);\"></body></html>";
 			return;
 		}
 
@@ -112,14 +111,9 @@
 				$x7c->room_data['greeting'] = preg_replace("/\|/","74ce61f75c75b155ea7280778d6e8181",$x7c->room_data['greeting']);
 				$x7c->room_data['greeting'] = preg_replace("/;/","74ce61f75c75b155ea7280778d6e8182",$x7c->room_data['greeting']);
 
-				//echo utf8_encode("8;<b><font color=\"{$x7c->settings['system_message_color']}\">{$x7c->room_data['greeting']}</font></b><br>|");
 				$x7c->room_data['greeting'] = eregi_replace("'","\\'",$x7c->room_data['greeting']);
 			}
 
-			// Include some libaries
-			//include("./lib/online.php");
-			//include("./lib/message.php");
-			// nevermind these libraries are shit reprogram them here:
 			function format_timestamp($time){
 				global $x7c;
 				$time = $time+(($x7c->settings['time_offset_hours']*3600)+($x7c->settings['time_offset_mins']*60));
@@ -231,9 +225,7 @@
 			$pm_etime = time()-4*($x7c->settings['refresh_rate']/1000);
 			$private_msgs = 0;
 
-			$query = $db->DoQuery("SELECT user,type,body_parsed,time,id,room FROM {$prefix}messages WHERE".
-						/*user<>'$x7s->username'
-						AND*/" (
+			$query = $db->DoQuery("SELECT user,type,body_parsed,time,id,room FROM {$prefix}messages WHERE (
 							(id>'$_GET[startfrom]'
 							AND (
 								(room='$_GET[room]' AND (type='1' OR type='4' OR type='14')) OR
@@ -265,7 +257,6 @@
 				if(!in_array($row[0],$x7c->profile['ignored'])){
 					if(isset($toout))
 						unset($toout);
-					//$row[2] = eregi_replace("'","\\'",$row[2]);
 
 					if($row[1] == 1){
 						// See if they want a timestamp
@@ -274,7 +265,6 @@
 						else
 							$timestamp = "";
 
-						//$toout = "<span class=\"other_persons\"><a class=\"other_persons\" onClick=\"javascript: window.open('index.php?act=pm&send_to=$row[0]','Pm$row[0]','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">$row[0]</a>$timestamp:</span> $row[2]<br>";
 						
 						$toout = "<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=\"other_persons\">$row[0]$timestamp:</span></a>";
 						
@@ -379,30 +369,13 @@
 			
 			// Make sure the message isn't null
 			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^ç",@$_GET['msg'])){
-			
-
-				// Save the style settings they used for next time
-				//$x7c->edit_user_settings("default_font",$_GET['curfont']);
-				//$x7c->edit_user_settings("default_size",$_GET['cursize']);
-				//$x7c->edit_user_settings("default_color",$_GET['curcolor']);
 
 				if(strlen(trim($_GET['msg'])) < $x7c->settings['min_post'] || strlen(trim($_GET['msg'])) > $x7c->settings['max_post'])
 					break;
 
-				
-				// Get the styles
-				$starttags = "";
-				$endtags = "";
-				//$color = $_GET['curcolor'];
-				//$size = eregi_replace(" Pt","pt",$_GET['cursize']);
-				//$font = $_GET['curfont'];
-
 				// Make sure incoming values are safe
 				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
 				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
-				//$color = eregi_replace("<","&lt;",$color);
-				//$size = eregi_replace("<","&lt;",$size);
-				//$font = eregi_replace("<","&lt;",$font);
 				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
 
 				//If we are in panic
@@ -410,33 +383,10 @@
 					//If user is not a master and room is not panic_free
 					if(!$x7c->permissions['admin_panic'] && !$x7c->room_data['panic_free']){
 						if($x7s->panic >= $x7s->max_panic){
-							$_GET['msg']="<span style=\"color: red;\">Si piega in un angolo terrorizzato e impossibilitato a compiere qualunque azione</span>";
-						}
-						/*if($x7s->panic > $x7s->max_panic){
-							break;
-						}*/
-						
-					
+							$_GET['msg']="<span style=\"color: red;\">Panico al massimo</span><br>".$_GET['msg'];
+						}					
 					}
 				}
-
-				$starttags .= "[color=#000000][size=10 pt][font=arial]";
-
-				// Add the styles
-				/*if($_GET['bold'] == 1){
-					$starttags .= "[b]";
-					$endtags .= "[/b]";
-				}
-				if($_GET['italic'] == 1){
-					$starttags .= "[i]";
-					$endtags .= "[/i]";
-				}
-				if($_GET['under'] == 1){
-					$starttags .= "[u]";
-					$endtags .= "[/u]";
-				}*/
-
-				$endtags .= "[/color][/size][/font]";
 
 				$parsed_msg = "<span class=\"locazione_display\">[".$_GET['locazione']."]</span><br>"." ".$_GET['msg'];
 
@@ -451,8 +401,6 @@
 
 			//This is a sussuro
 			}elseif(eregi("^@.*@",@$_GET['msg'])){
-				// User has done a command
-				//include("./lib/irc.php");
 				
 				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
 				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
@@ -547,9 +495,6 @@
 										//document.getElementById('debug').innerHTML = httpReq1.responseText.replace(/</g,'&lt;');
 										playSound = 0;
 										modification=0;
-										
-										
-										//document.getElementById('message_window').innerHTML += httpReq1.responseText;
 										
 
 										var dataArray = httpReq1.responseText.split("|");
@@ -745,12 +690,7 @@
 						
 					
 						<script language="javascript" type="text/javascript">
-							SelectorMenu = new Array();
-							SelectorMenu['fontselector'] = 0;
-							SelectorMenu['sizeselector'] = 0;
-							fontTimeout = "";
-							sizeTimeout = "";
-
+							
 							function action_select(sel){
 								myaction = sel.options[sel.selectedIndex].value;
 								if(myaction != ""){
@@ -759,86 +699,6 @@
 								sel.selectedIndex=0;
 								document.chatIn.msgi.focus();
 								
-							}
-							
-							function doSelect(object){
-								object.className = 'selected';
-							}
-							function doDeSelect(object){
-								object.className = '';
-							}
-
-							function ClickedSelector(menu){
-								popUpAddr = document.getElementById(menu).style
-								if(SelectorMenu[menu] == 0){
-									popUpAddr.visibility='visible';
-									SelectorMenu[menu] = 1;
-								}else{
-									popUpAddr.visibility='hidden';
-									SelectorMenu[menu] = 0;
-								}
-							}
-
-							function closeMenu(menu){
-								popUpAddr = document.getElementById(menu).style
-								popUpAddr.visibility='hidden';
-								SelectorMenu[menu] = 0;
-							}
-
-							function doClickFont(font){
-								ClickedSelector('fontselector');
-								document.chatIn.curfont.value=font;
-								document.getElementById('curfontd').innerHTML=font;
-							}
-
-							function DoClickSize(in_font){
-								ClickedSelector('sizeselector');
-
-								in_font = in_font.replace(/[a-z]*$/i,"");
-
-								if(in_font < <?PHP echo $x7c->settings['style_min_size']; ?>){
-									in_font = "<?PHP echo $x7c->settings['style_min_size']; ?>";
-								}
-
-								<?PHP
-								$max_size = $x7c->settings['style_max_size'];
-								if($max_size != 0){
-									echo "if(in_font > $max_size){\n
-										in_font = \"$max_size\";\n
-									}\n";
-								}
-								?>
-
-								document.chatIn.cursize.value=in_font+" Pt";
-								document.getElementById('cursized').innerHTML=in_font+" Pt";
-							}
-
-							function styleOut(object,name){
-								ref = "itemh = document.chatIn."+name;
-								eval(ref);
-								if(itemh.value == 0){
-									object.className='boldtxt';
-								}
-							}
-
-							function styleClicked(object,name){
-								ref = "itemh = document.chatIn."+name;
-								eval(ref);
-								if(itemh.value == 0){
-									object.className='boldtxtdown';
-									itemh.value = 1;
-								}else{
-									object.className='boldtxt';
-									itemh.value = 0;
-								}
-							}
-
-							function styleOver(object,name){
-								ref = "itemh = document.chatIn."+name;
-								eval(ref);
-								if(itemh.value == 0){
-									object.className='boldtxtover';
-								}
 							}
 							
 							function trim(str) {
@@ -956,8 +816,6 @@
 										}
 									?>
 
-									// Put it into screen
-									//document.getElementById('message_window').innerHTML += '<span class="you"><?PHP echo $x7s->username; ?>'+timestamp+':</span> '+message+'<Br>';
 
 									// Scroll the screen
 									document.chatIn.msgi.value="";
@@ -1002,7 +860,9 @@
 ?>
   		<!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   		
-  		<img style="position:absolute; top:0px; left:807px;" src="<?PHP echo $x7c->room_data['background']; ?>">
+  		<?PHP 	if($x7c->room_data['background'] != '')
+  				echo '<img style="position:absolute; top:0px; left:807px;" src="'.$x7c->room_data['background'].'" >'; 
+  		?>
   		
 					<div id="message_window"></div>
 					

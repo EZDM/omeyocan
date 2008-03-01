@@ -75,18 +75,14 @@
 				background: black;
 				margin: 0 auto;
 				padding: 0px;
-				scrollbar-face-color: #ffffff;
-				scrollbar-highlight-color: #000000;
-				scrollbar-3dlight-color: #ffffff;
-				scrollbar-shadow-color: #000000;
-				scrollbar-darkshadow-color: #ffffff;
-				scrollbar-track-color: #000000;
-				scrollbar-arrow-color: #ffffff;
 			}
 			TD {
 				color: $data[FontColor1];
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
+			}
+			INPUT{
+				height: 21px;
 			}
 			.online_list {
 				color: $data[FontColor1];
