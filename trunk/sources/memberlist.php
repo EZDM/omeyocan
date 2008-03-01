@@ -136,6 +136,10 @@
 			$head = "Lista cittadini Online";
 		else
 			$head = "Lista cittadini";
+			
+		$body .= '<script language="javascript" type="text/javascript">
+				setTimeout("window.location.reload()",10000);
+			</script>';
 					
 		$print->normal_window($head,$body);
 	}

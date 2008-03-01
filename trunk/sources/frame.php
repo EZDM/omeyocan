@@ -579,10 +579,11 @@
 											}else if(dataSubArray[0] == '11'){
 												//Panic update
 												panic_value = parseInt(dataSubArray[1]);
-												if(Math.round(panic_value*10/max_panic)  > 10)
-													panic_value=10;
+												default_max_panic=<?PHP echo $x7c->settings['default_max_panic'];?>;
+												if(Math.round(panic_value*default_max_panic/max_panic)  > default_max_panic)
+													panic_value=default_max_panic;
 												else
-													panic_value=Math.round(panic_value*10/max_panic);
+													panic_value=Math.round(panic_value*default_max_panic/max_panic);
 													
 												panic_alt=panic_value*10;
 												document.getElementById('panic_img').src='./graphic/panic'+panic_value+'.jpg';
@@ -877,8 +878,8 @@
 						
 							<?PHP 
 							if($x7c->settings['panic']){
-								$panic=$x7s->panic > 10 ? 10 : $x7s->panic;
-								$panic_alt=$panic*10;
+								$panic=$x7s->panic > $x7c->settings['default_max_panic'] ? $x7c->settings['default_max_panic'] : $x7s->panic;
+								$panic_alt=$panic*$x7c->settings['default_max_panic'];
 								echo "<div id=\"panicdiv\"><img alt=\"$panic_alt%\" id=\"panic_img\" src=\"./graphic/panic$panic.jpg\" /></div>";
 								}
 							?>
