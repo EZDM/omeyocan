@@ -618,7 +618,7 @@
 	}
 	
 	function sheet_page_main(){
-			global $db,$x7c,$prefix,$x7s,$print;
+			global $db,$x7c,$prefix,$x7s,$print, $auth_pcookie, $X7CHAT_CONFIG;
 			$pg=$_GET['pg'];
 	
 			$head = "Scheda del personaggio";
@@ -699,6 +699,24 @@
 								avatar='$_POST[avatar_in]'
 								WHERE username='$pg'");
 							}
+							
+						if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
+					
+							if($_POST['pwd1'] != $_POST['pwd2']){
+								$errore .= "Non hai digitato correttamente la password";
+							}
+							else{
+								$errore .= "Password cambiata";
+								$newpwd = md5($_POST['pwd1']);
+								if($pg==$x7s->username){
+									setcookie($auth_pcookie,$newpwd,time()+$x7c->settings['cookie_time'],$X7CHAT_CONFIG['COOKIE_PATH']);
+								}	
+									
+								$db->DoQuery("UPDATE {$prefix}users SET
+								password='$newpwd'
+								WHERE username='$pg'");	
+							}
+						}
 						
 						if(checkIfMaster()){
 							if(isset($_POST['xp']) &&
@@ -754,10 +772,26 @@
 
 			}
 			else if(isset($_GET['settings_change']) && !canModify() && !checkIfMaster() && $x7s->username==$pg){
+			
 				if(isset($_POST['avatar_in'])){
 					$db->DoQuery("UPDATE {$prefix}users SET
 						avatar='$_POST[avatar_in]'
 						WHERE username='$pg'");
+				}
+
+				if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
+					
+					if($_POST['pwd1'] != $_POST['pwd2']){
+						$errore .= "Non hai digitato correttamente la password";
+					}
+					else{
+						$errore .= "Password cambiata";
+						$newpwd = md5($_POST['pwd1']);
+						setcookie($auth_pcookie,$newpwd,time()+$x7c->settings['cookie_time'],$X7CHAT_CONFIG['COOKIE_PATH']);
+						$db->DoQuery("UPDATE {$prefix}users SET
+						password='$newpwd'
+						WHERE username='$pg'");	
+					}
 				}
 			}
 			
@@ -809,6 +843,21 @@
 									document.forms[0].elements["avatar_in"].style.visibility="visible";
 									document.forms[0].elements["aggiorna"].style.visibility="visible";
 									document.forms[0].elements["mod_button"].style.visibility="hidden";
+									
+									document.forms[0].elements["pwd1"].style.color="blue";
+									document.forms[0].elements["pwd1"].style.border="1px solid";
+									document.forms[0].elements["pwd1"].style.background="white";
+									document.forms[0].elements["pwd1"].disabled=false;
+									document.forms[0].elements["pwd1"].style.visibility="visible";
+									
+									document.forms[0].elements["pwd2"].style.color="blue";
+									document.forms[0].elements["pwd2"].style.border="1px solid";
+									document.forms[0].elements["pwd2"].style.background="white";
+									document.forms[0].elements["pwd2"].disabled=false;
+									document.forms[0].elements["pwd2"].style.visibility="visible";
+									
+									document.getElementById("pwd1").style.visibility="visible";
+									document.getElementById("pwd2").style.visibility="visible";
 									
 									
 									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
@@ -1023,6 +1072,10 @@
 							<option value=\"Sposata\" selected>Sposata</option>";
 				}
 				
+				$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+				
+				$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+				
 				$body .= "
 					<div class=\"indiv\" id=\"name\"><input class=\"sheet_input\" type=\"text\" name=\"name\" value=\"$row_user[name]\" size=\"16\" disabled /></div>
 					<div class=\"indiv\" id=\"age\"><input class=\"sheet_input\" type=\"text\" name=\"age\" value=\"$row_user[age]\" size=\"2\" style=\"text-align: right;\" disabled /></div>
@@ -1053,11 +1106,10 @@
 				
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
-				$body.='<div id="errore" class="errore" colspan="2">'.$errore.'</div>';
 		
 			}
 			
-			//Just for the avatar modification
+			//Just for the avatar and password modification
 			if(!canModify() && !checkIfMaster() && $x7s->username==$pg){
 			
 				$body .='		<script language="javascript" type="text/javascript">
@@ -1071,6 +1123,22 @@
 									document.forms[0].elements["avatar_in"].style.background="white";
 									document.forms[0].elements["avatar_in"].disabled=false;
 									document.forms[0].elements["avatar_in"].style.visibility="visible";
+									
+									document.forms[0].elements["pwd1"].style.color="blue";
+									document.forms[0].elements["pwd1"].style.border="1px solid";
+									document.forms[0].elements["pwd1"].style.background="white";
+									document.forms[0].elements["pwd1"].disabled=false;
+									document.forms[0].elements["pwd1"].style.visibility="visible";
+									
+									document.forms[0].elements["pwd2"].style.color="blue";
+									document.forms[0].elements["pwd2"].style.border="1px solid";
+									document.forms[0].elements["pwd2"].style.background="white";
+									document.forms[0].elements["pwd2"].disabled=false;
+									document.forms[0].elements["pwd2"].style.visibility="visible";
+									
+									document.getElementById("pwd1").style.visibility="visible";
+									document.getElementById("pwd2").style.visibility="visible";
+									
 									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
 									document.forms[0].elements["aggiorna"].style.visibility="visible";
 									document.forms[0].elements["mod_button"].style.visibility="hidden";
@@ -1079,12 +1147,17 @@
 							</script>';
 							
 				$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
-				$body .= "<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>";
+				$body .= "<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+				
+				$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+				$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+				
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
 			}
 		
 		$body .= "<div id=\"descr\"> </div>";
+		$body.='<div id="errore" class="errore" colspan="2">'.$errore.'</div>';
 		
 		return $body;
 	
@@ -1208,6 +1281,15 @@
 				position: absolute;
 				width: 20px; 
 				height: 20px; 
+			}
+			
+			#pwd1{
+				top: 280px;
+				left: 300px;
+			}
+			#pwd2{
+				top: 320px;
+				left: 300px;
 			}
 			#ch_point{
 				position: absolute;
