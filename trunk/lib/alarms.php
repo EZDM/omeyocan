@@ -55,5 +55,16 @@
 		
 		
 	}
+	
+	function object_assignement($owner, $obj){
+		global $x7s, $x7c, $prefix, $db;
+		
+		$msg = "<b>ASSEGNA OGGETTO</b>: l\'utente <b>{$x7s->username} </b> assegna l\'oggetto <b>$obj</b> all\'utente <b>$owner</b> <br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
+		
+		
+	}
 
 ?>

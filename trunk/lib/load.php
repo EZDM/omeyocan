@@ -327,6 +327,7 @@
 			$return['access_pw_rooms'] = $row[38];
 			$return['admin_panic']=$row[39];
 			$return['admin_alarms']=$row[40];
+			$return['admin_objects']=$row[41];
 
 			// See if they should have access to the admin panel
 			$temp = $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38];
