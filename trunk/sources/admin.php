@@ -1974,6 +1974,7 @@
 								<td>URL immagine:</td>
 								<td><input type=\"text\" name=\"image_url\" class=\"text_input\" value=\"$row[image_url]\"></td>
 							</tr>
+							<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
 							<tr>
 								<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
 							</tr>
@@ -1983,22 +1984,24 @@
 				
 				$body.="</form>";
 				
-				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\" method=\"post\">
-						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-							<tr>
-								<td>Assegna a:</td>
-								<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-							</tr>
-							<tr>
-								<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
-							</tr>
-							
-						</table>
-				";
-				
-				
-				$body.="</form>";
+				if($_GET['edit']!=-1){
+					$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\" method=\"post\">
+							<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+								<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+								<tr>
+									<td>Assegna a:</td>
+									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+								</tr>
+								<tr>
+									<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
+								</tr>
+								
+							</table>
+					";
+					
+					
+					$body.="</form>";
+				}
 				
 			
 			}

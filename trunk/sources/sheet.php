@@ -66,8 +66,110 @@
 		global $db,$x7c,$prefix,$x7s,$print;
 		$pg=$_GET['pg'];
 		$body='';
+		$errore='';
 		
 		
+		if(isset($_GET['moduse']) && checkIfMaster()){
+			if(!isset($_POST['use']) || !isset($_POST['id'])){
+				die("Bad form");
+			}
+			
+			$db->DoQuery("UPDATE {$prefix}objects SET uses='$_POST[use]' WHERE id='$_POST[id]'");
+			include('./lib/alarms.php');
+			object_uses($pg,$_POST['id'],$_POST['use']);
+			
+			
+		}
+		
+		if(isset($_GET['delete']) && ($x7s->username==$pg || checkIfMaster())){
+			$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
+		}
+		
+		if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
+				if(!isset($_POST['owner']) || !isset($_POST['id'])){
+					die("Bad form");
+				}
+				$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
+				$row = $db->Do_Fetch_Assoc($query);
+				
+				if(!$row || $row['cnt']==0){
+					$errore = "Utente non esistente";
+				}
+				
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_POST[id]' AND owner='$pg'");
+				$row = $db->Do_Fetch_Assoc($query);
+				
+				if(!$row || $row['id']==''){
+					$errore = "Oggetto non esistente";
+				}
+				
+				if($errore==''){
+					$db->DoQuery("UPDATE {$prefix}objects
+							SET owner='$_POST[owner]'
+							WHERE id='$_POST[id]' AND owner<>''"); //The last is only for protection to pattern objects
+							
+					$errore="Oggetto assegnato correttamente\n";
+					include('./lib/alarms.php');
+					object_moves($_POST['owner'],$pg,$row['name']);
+				}
+				
+			}
+		
+		$body .= "<script language=\"javascript\" type=\"text/javascript\">
+				function confirmDrop(id){
+					if(confirm(\"Vuoi davvero buttare l'oggetto?\")){
+						location.href='index.php?act=sheet&page=equip&pg=$pg&delete='+id;
+					}
+					
+				}
+			</script>";
+		
+		$body.="<div id=\"objects\">\n";
+		
+		
+		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg'");
+		
+		while($row=$db->Do_Fetch_Assoc($query)){
+			$body.= "<img width=200 height=200 src=\"$row[image_url]\">
+					<b>$row[name]</b><br>
+					$row[description]<br>";
+			
+			if($pg==$x7s->username || checkIfMaster()){
+				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
+							<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+								<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+								<tr>
+									<td>Dai a:</td>
+									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></div></td>
+									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\"></td>
+								</tr>
+								
+							</table>
+					</form>";
+			}
+			
+			if(checkIfMaster()){
+				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\" method=\"post\" name=\"object_moduse\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+									<td>Usi:</td>
+									<td><input type=\"text\" name=\"use\" class=\"text_input\" size=2 value=\"$row[uses]\"></td>
+									<td><input type=\"submit\" class=\"button\" value=\"Cambia\"></div></td>
+							</tr>
+						</table>
+					";
+				
+				$body.="</form>\n";
+			}
+				
+			$body.="<br><br>\n";
+		}
+		
+		$body.="</div>\n";
+		
+		$body.='<div id="errore_obj" class="errore">'.$errore.'</div>';
 	
 		return $body;
 	}
@@ -1158,7 +1260,7 @@
 			}
 		
 		$body .= "<div id=\"descr\"> </div>";
-		$body.='<div id="errore" class="errore" colspan="2">'.$errore.'</div>';
+		$body.='<div id="errore" class="errore">'.$errore.'</div>';
 		
 		return $body;
 	
@@ -1182,6 +1284,10 @@
 		<style type="text/css">
 			INPUT{
 				height: 21px;
+			}
+			#errore_obj{
+				top: 10px;
+				left: 50px;
 			}
 			#sheetmain{
 				background-image:url(./graphic/schedapgPRINC.jpg);
@@ -1283,7 +1389,14 @@
 				width: 20px; 
 				height: 20px; 
 			}
-			
+			#objects{
+				position: absolute;
+				overflow: auto;
+				top: 65px;
+				left: 55px;
+				width: 400px;
+				height: 530px;
+			}
 			#pwd1{
 				top: 280px;
 				left: 300px;

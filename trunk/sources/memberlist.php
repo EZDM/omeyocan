@@ -98,10 +98,10 @@
 			<tr>
 				<td width=\"100\" height=\"25\">&nbsp;<a href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
 				<td width=\"100\" height=\"25\"><a href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
-		if($room!='')
+		if($room!='' && $room!="Mappa")
 			$body.="<td width=\"100\" height=\"25\">Sussurra</td>";
 				
-		if($x7c->permissions['admin_panic'] && $room!='')
+		if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
 			$body .= "<td width=\"100\" height=\"25\">Dadi</td>";
 				
 		$body.=	"</tr>
@@ -116,13 +116,13 @@
 				$body .= "<tr>
 							<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
 							<td width=\"100\" class=\"dark_row\">{$row['position']}</td>";
-				if($room!='')
+				if($room!='' && $room!="Mappa")
 					if($row['position'] != '' && $row['position']==$room)
 						$body .= "<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
 						$body .= "<td width=\"100\" class=\"dark_row\"></td>";
 				
-				if($x7c->permissions['admin_panic'] && $room!='')
+				if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
 					$body .= "<td width=\"100\" class=\"dark_row\"height=\"25\"><a href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
 			
 				$body .= "</tr>";

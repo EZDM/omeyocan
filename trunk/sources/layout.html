@@ -18,7 +18,7 @@
   			<img style="position:absolute; top:376px; left:880px;" src="./graphic/02bacheca.jpg">
 		</a>
   		
-  		<a onClick="javascript: window.open('index.php?act=memberlist<?PHP if(isset($_GET['room'])) echo "&room=".$_GET['room'];?>','memberlist','width=800,height=620, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes');">
+  		<a onClick="javascript: window.open('index.php?act=memberlist<?PHP if(!isset($_GET['room'])) $_GET['room']="Mappa"; echo "&room=".$_GET['room'];?>','memberlist','width=800,height=620, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes');">
   		<img style="position:absolute; top:436px; left:880px;" src="./graphic/03presenti.jpg">
   		</a>
   		
