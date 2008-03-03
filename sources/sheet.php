@@ -66,7 +66,8 @@
 		global $db,$x7c,$prefix,$x7s,$print;
 		$pg=$_GET['pg'];
 		$body='';
-	
+		
+		
 	
 		return $body;
 	}

@@ -1497,6 +1497,7 @@
 				($row[38] == 1) ? $def['access_pw_rooms'] = " checked=\"true\"" : $def['access_pw_rooms'] = "";
 				($row[39] == 1) ? $def['admin_panic'] = " checked=\"true\"" : $def['admin_panic'] = "";
 				($row[40] == 1) ? $def['admin_alarms'] = " checked=\"true\"" : $def['admin_alarms'] = "";
+				($row[41] == 1) ? $def['admin_objects'] = " checked=\"true\"" : $def['admin_objects'] = "";
 				
 				$body = "$txt[424]<Br><Br><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" align=\"center\">
 					<form action=\"index.php?act=adminpanel&cp_page=groupmanager&update=$_GET[edit]\" method=\"post\">
@@ -1657,6 +1658,10 @@
 						<td width=\"50\"><input type=\"checkbox\" name=\"admin_alarms\" value=\"1\"{$def['admin_alarms']}></td>
 					</tr>	
 					<tr>
+						<td width=\"120\">Amministra gli oggetti</td>
+						<td width=\"50\"><input type=\"checkbox\" name=\"admin_objects\" value=\"1\"{$def['admin_objects']}></td>
+					</tr>	
+					<tr>
 						<td width=\"170\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
 					</tr>
 				</table><Br><Br>
@@ -1743,9 +1748,10 @@
 					!isset($_POST['access_pw_rooms']) ? $_POST['access_pw_rooms'] = 0 : "";
 					!isset($_POST['admin_panic']) ? $_POST['admin_panic'] = 0 : "";
 					!isset($_POST['admin_alarms']) ? $_POST['admin_alarms'] = 0 : "";
+					!isset($_POST['admin_objects']) ? $_POST['admin_objects'] = 0 : "";
 					
 					// Save the settings
-					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]' WHERE usergroup='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]' WHERE usergroup='$_GET[update]'");
 					// Tell user they have been updated
 					$body .= "$txt[458]<Br><br>";
 					
@@ -1868,6 +1874,180 @@
 				}
 		
 		
+		}elseif($_GET['cp_page'] == "objects"){
+			$head = "Amministrazione oggetti";
+			$navigator='';
+			$body='';
+			$error='';
+			
+			if(isset($_GET['assign'])){
+				if(!isset($_POST['owner']) || !isset($_POST['id'])){
+					die("Bad form");
+				}
+				$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
+				$row = $db->Do_Fetch_Assoc($query);
+				
+				if(!$row || $row['cnt']==0){
+					$error = "Utente non esistente";
+				}
+				
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_POST[id]'");
+				$row = $db->Do_Fetch_Assoc($query);
+				
+				if(!$row || $row['id']==''){
+					$error = "Oggetto non esistente";
+				}
+				
+				if($error==''){
+					$db->DoQuery("INSERT INTO {$prefix}objects
+							(name,description,uses,image_url,owner)
+							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]')");
+							
+					$error="Oggetto assegnato correttamente\n";
+					include('./lib/alarms.php');
+					object_assignement($_POST['owner'],$row['name']);
+				}
+				
+			}
+			
+			if(isset($_GET['modify'])){
+				if(	!isset($_POST['name']) || 
+					!isset($_POST['id']) ||
+					!isset($_POST['description']) ||
+					!isset($_POST['uses']) ||
+					!isset($_POST['image_url'])){
+					
+					die("Bad form");
+				}
+				
+				if($_POST['id']!=-1){
+					$db->DoQuery("UPDATE {$prefix}objects 
+							SET name='$_POST[name]',
+							  description='$_POST[description]',
+							  uses='$_POST[uses]',
+							  image_url='$_POST[image_url]'
+							WHERE id='$_POST[id]'");
+				}else{
+					$db->DoQuery("INSERT INTO {$prefix}objects 
+							(name, description, uses, image_url)
+							VALUES('$_POST[name]','$_POST[description]','$_POST[uses]','$_POST[image_url]')");
+				}
+					
+			}
+			
+			if(isset($_GET['delete'])){
+				$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
+			}
+					
+			if(isset($_GET['edit'])){
+				if($_GET['edit']!=-1){
+					$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_GET[edit]'");
+					$row = $db->Do_Fetch_Assoc($query);
+					if(!$row)
+						die("Error; should not die here");
+				}else{
+					$row['name']='';
+					$row['owner']='';
+					$row['description']='';
+					$row['uses']=-1;
+					$row['image_url']='';
+					$row['id']=-1;
+					
+				}
+			
+				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&modify=1\" method=\"post\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+								<td>Nome:</td>
+								<td><input type=\"text\" name=\"name\" class=\"text_input\" value=\"$row[name]\"></td>
+							</tr>
+							<tr>
+								<td>Descrizione:</td>
+								<td><textarea type=\"text\" name=\"description\" class=\"text_input\">$row[description]</textarea></td>
+							</tr>
+							<tr>
+								<td>Usi (-1 per usi infiniti):</td>
+								<td><input type=\"text\" name=\"uses\" class=\"text_input\" value=\"$row[uses]\"></td>
+							</tr>
+							<tr>
+								<td>URL immagine:</td>
+								<td><input type=\"text\" name=\"image_url\" class=\"text_input\" value=\"$row[image_url]\"></td>
+							</tr>
+							<tr>
+								<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
+							</tr>
+						</table>
+				";
+				
+				
+				$body.="</form>";
+				
+				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\" method=\"post\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+								<td>Assegna a:</td>
+								<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+							</tr>
+							<tr>
+								<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
+							</tr>
+							
+						</table>
+				";
+				
+				
+				$body.="</form>";
+				
+			
+			}
+			else{
+			
+				if(isset($_GET['startfrom'])){
+					$limit=$_GET['startfrom'];
+				}
+				else{
+					$limit=0;
+					
+					$maxmsg=20;
+					$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}objects WHERE owner=''");
+					$row = $db->Do_Fetch_Assoc($query);
+					$total = $row['total'];
+					
+					if($total > $maxmsg){
+						$i=0;
+						while($total > 0){
+							if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
+								$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
+							else
+								$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\">".($i+1)."</a> ";
+							$i++;
+							$total -= $maxmsg;
+							
+						}
+						$navigator.="<br>";
+					}
+					
+						
+					$limit_min = $limit * $maxmsg;
+					$limit_max = (($limit+1) * $maxmsg);
+					
+					$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' ORDER BY name LIMIT $limit_min, $limit_max");
+						
+					$body = $error."<br><br>";
+					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo]</a><br><br>";
+					$body .= $navigator;
+					while($row = $db->Do_Fetch_Assoc($query)){
+						$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\"><b>Oggetto: </b> $row[name]</a> <a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a><br>";
+					}
+					$body .= $navigator;
+						
+				}
+			}
+			
+					
+			
 		}elseif($_GET['cp_page'] == "users"){
 		
 			$head = $txt[310];
@@ -3279,6 +3459,7 @@
 								".printlink("help",$txt[34])."
 								".printlink("panic","Oscurit&agrave;")."
 								".printlink("alarms","Allarmi")."
+								".printlink("objects","Oggetti")."
 								<tr valign=\"top\">
 									<td width=\"100%\" class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
 								</tr>
