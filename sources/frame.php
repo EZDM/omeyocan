@@ -376,7 +376,7 @@
 				// Make sure incoming values are safe
 				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
 				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
+				$_GET['msg'] = eregi_replace("\n", "",$_GET['msg']);
 
 				//If we are in panic
 				if($x7c->settings['panic']){
@@ -475,11 +475,21 @@
 						startfrom = 0;
 						newMail = 0;
 						max_panic= <?PHP echo $x7s->max_panic;?>;
+						cur_msg='';
+						
+						//This saves from enter key when confirming an alert box
+						function Alert(msg){
+							if(cur_msg==''){
+								cur_msg=document.chatIn.msgi.value;
+							}
+							alert(msg);
+						}
 
 						function do_initial_refresh(){
 							// Create object
 							chatRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']; ?>');
 							document.chatIn.counter.value=document.chatIn.msgi.value.length;
+							document.chatIn.msgi.focus();
 							do_refresh();
 							
 							
@@ -574,7 +584,7 @@
 												// Redirect w/ error msg
 												dataSubArray[1] = restoreText(dataSubArray[1]);
 												if(dataSubArray[1] != '')
-													alert(dataSubArray[1]);
+													Alert(dataSubArray[1]);
 												document.location = dataSubArray[2];
 											}else if(dataSubArray[0] == '11'){
 												//Panic update
@@ -597,7 +607,7 @@
 												else
 													messaggio="L'oscurità se ne va";
 												
-												alert(messaggio);
+												Alert(messaggio);
 												window.location.href = window.location.href;
 											}else if(dataSubArray[0] == '13'){
 												//Delete message
@@ -683,7 +693,7 @@
 							httpReq1.onreadystatechange = requestReady_channel1;
 							httpReq1.open("GET", url, true);
 							httpReq1.send("");
-							alert("Messaggio cancellato");
+							Alert("Messaggio cancellato");
 						}
 						
 
@@ -691,6 +701,7 @@
 						
 					
 						<script language="javascript" type="text/javascript">
+							var sent=0;
 							
 							function action_select(sel){
 								myaction = sel.options[sel.selectedIndex].value;
@@ -713,11 +724,11 @@
 								
 								if(!message.match(/^@/) && !message.match(/^ç/)){
 									if(trim(message).length < <?PHP echo $x7c->settings['min_post'];?>){
-										alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
+										Alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
 									}
 									if(trim(message).length > <?PHP echo $x7c->settings['max_post'];?>){
-										alert("Il post è troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
+										Alert("Il post è troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
 										return false;
 									}
 								}
@@ -818,17 +829,19 @@
 									?>
 
 
-									// Scroll the screen
+									// Scroll the screen and empy the message area
 									document.chatIn.msgi.value="";
 									document.chatIn.msgi.focus();
 									document.chatIn.counter.value=document.chatIn.msgi.value.length;
 									document.getElementById('message_window').scrollTop = 65000;
+									sent=1;
 								}
 								return true;
 							}
 
 							// This function reads key presses
-							document.onkeyup = kp;
+							document.onkeydown = kp;
+							document.onkeyup = ku;
 							consec = -1;
 							function kp(evt){
 								if(evt)
@@ -841,10 +854,28 @@
 								document.chatIn.counter.value=document.chatIn.msgi.value.length;
 
 							}
-
 							
-							
-							
+							function ku(evt){
+								if(evt)
+									thisKey = evt.which;
+								else
+									thisKey = window.event.keyCode;
+								
+								if(thisKey == "13"){
+									if(sent){
+										document.chatIn.msgi.value='';
+										cur_msg='';
+										document.chatIn.counter.value=document.chatIn.msgi.value.length;
+										sent=0;
+									}
+									//We save from enter key
+									else{
+										document.chatIn.msgi.value=cur_msg;
+									}
+								}
+								document.chatIn.counter.value=document.chatIn.msgi.value.length;
+							}
+	
 
 						</script>
 						
@@ -886,13 +917,14 @@
 						
 							<div id="inputchatdiv">
 								<table cellspacing=0 cellpadding=0>
-									<tr><td><textarea name="msgi" class="msginput" autocomplete="off"></textarea>
-									<input type="hidden" name="msg" value=""></td></tr>
+									<tr><td>
+										<textarea name="msgi" class="msginput" autocomplete="off"></textarea>
+										<input type="hidden" name="msg" value="">
+									</td></tr>
 									
-									<tr><td><input type="text" class="location" name="locazione" value="locazione"/>
-								
-								
-									<input class ="location" type="text" style="text-align: center; color: white;" name="counter" disabled value="0" size="4"/></td></tr>
+									<tr><td align="center">
+										<input type="text" class="location" name="locazione" value="locazione"/><input class ="location" type="text" style="text-align: center; color: white;" name="counter" disabled value="0" size="4"/>
+									</td></tr>
 							
 								</table>
 							</div>
@@ -959,7 +991,7 @@
 										
 								<?PHP
 									if($x7c->permissions['admin_panic'])
-										echo "	<input name=\"img_btn\" type=\"button\" class=\"send_button\" value=\"Invia immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
+										echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Invia immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
 											
 								?>
 										<input name="button_send" type="submit" class="send_button" style="cursor: pointer;background: url(<?PHP echo $print->image_path; ?>send.gif);border: none;height: 20px;width: 55px;text-align: center;font-weight: bold;" onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'" onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">

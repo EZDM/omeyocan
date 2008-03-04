@@ -898,6 +898,11 @@
 				}
 			}
 			
+			
+			// From now own it is HELL!!!
+			// Really, the following is a complete mess!
+			// Please, forgive me... maybe I will patch a day
+			
 			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
 			$row_user = $db->Do_Fetch_Assoc($query);
 			if(!$row_user){
