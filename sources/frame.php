@@ -476,6 +476,20 @@
 						newMail = 0;
 						max_panic= <?PHP echo $x7s->max_panic;?>;
 						cur_msg='';
+						panic_value=<?PHP echo ($x7s->panic > 10 ? 10 : $x7s->panic); ?>
+						
+						var panic = new Array();
+						panic[0]="Inquietudine"
+						panic[1]="Tensione";
+						panic[2]="Irrequitezza";
+						panic[3]="Nervosismo";
+						panic[4]="Agitazione";
+						panic[5]="Ansia";
+						panic[6]="Angoscia";
+						panic[7]="Paura";
+						panic[8]="Paranoia";
+						panic[9]="Terrore cieco";
+						panic[10]="!!! Panico !!!";
 						
 						//This saves from enter key when confirming an alert box
 						function Alert(msg){
@@ -595,9 +609,11 @@
 												else
 													panic_value=Math.round(panic_value*default_max_panic/max_panic);
 													
-												panic_alt=panic_value*10;
 												document.getElementById('panic_img').src='./graphic/panic'+panic_value+'.jpg';
-												document.getElementById('panic_img').alt=panic_alt+'%';
+												document.getElementById('panic_text').innerHTML=panic[panic_value];
+												if(panic_value==10){
+													document.getElementById('panic_text').style.color='yellow';
+												}
 											}else if(dataSubArray[0] == '12'){
 												//Panic update
 												valore = parseInt(dataSubArray[1]);
@@ -910,8 +926,15 @@
 							<?PHP 
 							if($x7c->settings['panic']){
 								$panic=$x7s->panic > $x7c->settings['default_max_panic'] ? $x7c->settings['default_max_panic'] : $x7s->panic;
-								$panic_alt=$panic*$x7c->settings['default_max_panic'];
-								echo "<div id=\"panicdiv\"><img alt=\"$panic_alt%\" id=\"panic_img\" src=\"./graphic/panic$panic.jpg\" /></div>";
+								echo "<div id=\"panicwrap\"> <img id=\"panic_img\" src=\"./graphic/panic$panic.jpg\" onMouseOver=\"document.getElementById('panic_text').style.visibility='visible'; document.getElementById('panic_text').innerHTML=panic[panic_value];\"
+								onMouseOut=\"document.getElementById('panic_text').style.visibility='hidden';\"/>
+								<div id=\"panic_text\" onMouseOver=\"document.getElementById('panic_text').style.visibility='visible';\"";
+								
+								if($x7s->panic >= 10){
+									echo " style=\"color: yellow;\"";
+								}
+								
+								echo ">Prova</div></div>";
 								}
 							?>
 						

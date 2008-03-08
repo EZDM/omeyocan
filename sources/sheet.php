@@ -130,7 +130,7 @@
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg'");
 		
 		while($row=$db->Do_Fetch_Assoc($query)){
-			$body.= "<img width=200 height=200 src=\"$row[image_url]\">
+			$body.= "<img width=100 height=100 src=\"$row[image_url]\">
 					<b>$row[name]</b><br>
 					$row[description]<br>";
 			

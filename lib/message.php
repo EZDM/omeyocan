@@ -376,7 +376,7 @@
 			
 			if(eregi("^ç",@$_GET['msg'])){
 				$message = preg_replace("/^ç/", "", $message);
-				$message = "<span class=\"mastering\">".$message."</span>";
+				$message = "<div class=\"mastering\">".$message."</div>";
 			}
 			else
 				$message = "<span class=\"chatmsg\">".$message."</span>";

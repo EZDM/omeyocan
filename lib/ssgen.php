@@ -435,10 +435,28 @@
 				left: 150px;
 			}
 			
-			#panicdiv {
+			#panicwrap {
 				position: absolute;
+				align: center;
 				top: 580px;
 				left: 0px;
+			}
+			#panic_text {
+				position: absolute;
+				text-align: center;
+				top: 60px;
+				left: 10px;
+				width: 100px;
+				font-style: italic;
+				font-size: 10pt;
+				font-weight: bold;
+				border: 3px solid;
+				background: black;
+				padding: 5px;
+				padding-left: 10px;
+				padding-right: 10px;
+				border-style: ridge;
+				visibility: hidden;
 			}
 			#position{
 				position: absolute;
@@ -540,13 +558,14 @@
 			} 
 			#message_window {
 				position: absolute;
+				padding: 5px;
 				blue: blue;
 				height: 1%;
 				".//border: 1px solid $data[ChatBorder];
 				"overflow-y: scroll;
 				top: 165px;
 				left: 117px;
-				width: 650px;
+				width: 645px;
 				height: 425px;
 			}
 			span {
@@ -569,7 +588,11 @@
 			 font-weight: bold;
 			}
 			.mastering{
-			 color: orange;
+			 color: teal;
+			 border: 5px ridge purple;
+			 padding: 5px;
+			 text-align: center;
+			 font-style: italic;
 			 font-size: 8pt;
 			 font-weight: bold;
 			}
