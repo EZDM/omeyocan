@@ -73,7 +73,10 @@
 			
 		$body.='	<script language="JavaScript">
 				function putimage(url) {
-    					opener.document.chatIn.msgi.value=opener.document.chatIn.msgi.value +" £"+ url +" ";
+					if(opener.name == "admincp")
+						opener.document.forms[0].image_url.value=url;
+					else
+    						opener.document.chatIn.msgi.value=opener.document.chatIn.msgi.value +" £"+ url +" ";
     					window.close(self);
 				}
 				</script>';
