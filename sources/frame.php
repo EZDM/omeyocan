@@ -368,7 +368,7 @@
 			include("./lib/message.php");
 			
 			// Make sure the message isn't null
-			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^ç",@$_GET['msg'])){
+			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^\*",@$_GET['msg'])){
 
 				if(strlen(trim($_GET['msg'])) < $x7c->settings['min_post'] || strlen(trim($_GET['msg'])) > $x7c->settings['max_post'])
 					break;
@@ -415,7 +415,7 @@
 					alert_user($x7s->username,$txt[42]);
 				}
 
-			}elseif(eregi("^ç",@$_GET['msg']) && $x7c->permissions['admin_panic']){
+			}elseif(eregi("^\*",@$_GET['msg']) && $x7c->permissions['admin_panic']){
 				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
 				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
 				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
@@ -738,7 +738,7 @@
 								message = message.replace(/\+/gi,"%2B");
 								document.chatIn.msg.value=message;
 								
-								if(!message.match(/^@/) && !message.match(/^ç/)){
+								if(!message.match(/^@/) && !message.match(/^\*/)){
 									if(trim(message).length < <?PHP echo $x7c->settings['min_post'];?>){
 										Alert("Il post è troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
@@ -908,8 +908,8 @@
 ?>
   		<!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   		
-  		<?PHP 	if($x7c->room_data['background'] != '')
-  				echo '<img style="position:absolute; top:0px; left:807px;" src="'.$x7c->room_data['background'].'" >'; 
+  		<?PHP 	if($x7c->room_data['logo'] != '')
+  				echo '<img style="position:absolute; top:0px; left:807px;" src="'.$x7c->room_data['logo'].'" >'; 
   		?>
   		
 					<div id="message_window"></div>

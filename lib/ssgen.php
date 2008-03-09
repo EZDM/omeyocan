@@ -273,6 +273,7 @@
 	}
 	
 	function gen_chatinput($data,$skin){
+		global $x7c;
 		
 		$css = " <style type=\"text/css\">
 			.arrow_box {
@@ -408,7 +409,13 @@
 		 		margin-left: -513px;
 		 	}
 			#divchat {
-				background-image:url(./graphic/sfondo1026x723.jpg);
+				background-image:url(";
+			if($x7c->room_data['background']!='')
+				$css .= $x7c->room_data['background'];
+			else
+				$css .=	"./graphic/sfondo1026x723.jpg";
+				
+			$css.=");
 				width: 1026px; 
 				height: 723px;
 				position: absolute;
@@ -561,12 +568,12 @@
 				padding: 5px;
 				blue: blue;
 				height: 1%;
-				".//border: 1px solid $data[ChatBorder];
-				"overflow-y: scroll;
+				/*border: 1px solid $data[ChatBorder];*/
+				overflow-y: scroll;
 				top: 165px;
 				left: 117px;
-				width: 645px;
-				height: 425px;
+				width: 640px;
+				height: 415px;
 			}
 			span {
 			 position: relative;

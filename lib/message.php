@@ -374,8 +374,8 @@
 				
 			}
 			
-			if(eregi("^ç",@$_GET['msg'])){
-				$message = preg_replace("/^ç/", "", $message);
+			if(eregi("^\*",@$_GET['msg'])){
+				$message = preg_replace("/^\*/", "", $message);
 				$message = "<div class=\"mastering\">".$message."</div>";
 			}
 			else
