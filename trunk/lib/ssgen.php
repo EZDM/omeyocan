@@ -410,7 +410,7 @@
 		 	}
 			#divchat {
 				background-image:url(";
-			if($x7c->settings['panic'] && $x7c->room_data['background']!='')
+			if($x7c->settings['panic'] && isset($x7c->room_data['background']) && $x7c->room_data['background']!='')
 				$css .= $x7c->room_data['background'];
 			else
 				$css .=	"./graphic/sfondo1026x723.jpg";
