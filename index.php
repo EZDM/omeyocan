@@ -279,6 +279,7 @@
 	
 	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" && !$x7c->permissions['admin_panic']){
 		$_GET['act']="sheet";
+		//$_GET['page']="build";
 	}
 
 	// Ok let's see what's inside
@@ -558,7 +559,11 @@
 			include("./sources/sheet.php");
 			sheet_main();
 			exit;
-		break;			
+		break;	
+		case "mail":
+			include("./sources/mail.php");
+			mail_main();
+			exit;
 		default:
 			// The default action is to show the room list
 			// Clean up old rooms
