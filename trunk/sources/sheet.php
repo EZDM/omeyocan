@@ -26,9 +26,19 @@
 <?PHP
 
 	function sheet_main(){
-		global $x7s;
+		global $x7s, $db, $x7c, $prefix;
 		
 		$page='';
+		
+		if(!$x7s->sheet_ok){
+			$query = $db->DoQuery("SELECT SUM(VALUE) AS sum FROM {$prefix}usercharact WHERE username='{$x7s->username}'");
+			
+			$row = $db->Do_Fetch_Assoc($query);
+			if($row['sum'] < $x7c->settings['starting_ch'])
+				$_GET['page']="main";
+			
+		}
+		
 		$body='<div style="color: white;">Not ready yet</div>';
 		if(isset($_GET['page'])){
 			$page=$_GET['page'];
@@ -57,10 +67,18 @@
 		else if($page=="equip"){
 			$body = sheet_page_equip();
 		}
+/*		else if($page=="build"){
+			$body = sheet_build();
+		}*/
 			
 			
 		print_sheet($body,$page);
 	}
+	
+/*	function sheet_build(){
+		global $db,$x7c,$prefix,$x7s,$print;
+
+	}*/
 	
 	function sheet_page_equip(){
 		global $db,$x7c,$prefix,$x7s,$print;
@@ -169,7 +187,16 @@
 		
 		$body.="</div>\n";
 		
-		$body.='<div id="errore_obj" class="errore">'.$errore.'</div>';
+		if($errore!=''){
+			$body.='<script language="javascript" type="text/javascript">
+					function close_err(){
+						document.getElementById("errore").style.visibility="hidden";
+				}
+				</script>
+				<div id="errore" class="errore">'.$errore.'
+				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+				</div>';
+		}
 	
 		return $body;
 	}
@@ -446,7 +473,8 @@
 									
 					if(!$x7s->sheet_ok && !checkIfMaster()){
 						$db->DoQuery("UPDATE {$prefix}users 
-									SET sheet_ok='1'
+									SET sheet_ok='1',
+									second_mod='1'
 									WHERE username='$pg'");
 						
 						header('Location: ./index.php');
@@ -467,8 +495,9 @@
 			$query = $db->DoQuery("SELECT xp FROM {$prefix}users WHERE username='$pg'");
 			$row = $db->Do_Fetch_Assoc($query);
 			$xp = floor($row['xp']/$x7c->settings['xp_ratio']);
+			$body='';
 			
-			$body="<div class=\"errore_ab\">".$errore."</div>";
+
 			
 			$body.="<div id=\"ability\">\n";
 			
@@ -537,10 +566,13 @@
 				$body.="</table>";
 			}
 			else{
-				if($x7s->sheet_ok)
+				if($x7s->sheet_ok){
 					$max_ab = $x7c->settings['max_ab'];
-				else
+				}
+				else{
 					$max_ab = $x7c->settings['max_ab_constr'];
+					$errore="Ora specifica le tue abili&agrave; <br>";
+				}
 					
 				if(!checkIfMaster()){
 					$body .='	<script language="javascript" type="text/javascript">
@@ -716,6 +748,16 @@
 			}
 			
 			$body.="<div id=\"descr\"> </div></div>";
+			if($errore!=''){
+				$body.='<script language="javascript" type="text/javascript">
+					function close_err(){
+						document.getElementById("errore").style.visibility="hidden";
+}
+				</script>
+				<div id="errore" class="errore">'.$errore.'
+				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+				</div>';
+}
 			return $body;
 		
 	}
@@ -734,6 +776,34 @@
 			if(isset($_GET['settings_change']) && canModify()){
 							
 				//We are modifiyng character sheet
+				if(isset($_POST['name']) && 
+					isset($_POST['age'])&&
+					isset($_POST['nat']) &&
+					isset($_POST['marr']) &&
+					isset($_POST['gender']) &&
+					isset($_POST['avatar_in'])) {
+					
+					
+					if($_POST['name']==''){
+						$ok = false;
+						$errore .= "Non hai specificato il nome<br>";
+					}
+					if($_POST['age']=='' || $_POST['age']<16){
+						$ok = false;
+						$errore .= "Et&agrave; non valida<br>";
+					}
+					if($_POST['nat']==''){
+						$ok = false;
+						$errore .= "Non hai specificato la nazionalit&agrave;<br>";
+					}
+					
+
+				}
+				else{
+					$ok = false;
+					$errore .= "Parametri mancanti<br>";
+				}
+				
 				
 				if ($x7s->sheet_ok < 2 && isset($_POST['ch']) && $_POST['ch']>0 && !checkIfMaster()){
 					$errore .="Non hai usato tutti i tuoi punti caratteristica<br>";
@@ -911,6 +981,7 @@
 			$gender = $row_user['gender'] == 0 ? "M":"F";
 			$group = $row_user['user_group'];
 			$date = date("j/n/Y",$row_user['iscr']);
+				
 			
 			if(canModify()){
 				$body .= '		<script language="javascript" type="text/javascript">
@@ -1265,8 +1336,17 @@
 			}
 		
 		$body .= "<div id=\"descr\"> </div>";
-		$body.='<div id="errore" class="errore">'.$errore.'</div>';
-		
+		if($errore!=''){
+			$body.='<script language="javascript" type="text/javascript">
+					function close_err(){
+						document.getElementById("errore").style.visibility="hidden";
+					}
+				</script>
+				<div id="errore" class="errore">'.$errore.'
+				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+				</div>';
+		}
+			
 		return $body;
 	
 	}
@@ -1290,9 +1370,14 @@
 			INPUT{
 				height: 21px;
 			}
-			#errore_obj{
-				top: 10px;
+			#errore{
+				top: 200px;
 				left: 50px;
+				position: absolute;
+				background-color: lightyellow;
+				padding: 5px;
+				border: 3px dashed red;
+				text-decoration: none;
 			}
 			#sheetmain{
 				background-image:url(./graphic/schedapgPRINC.jpg);
@@ -1518,7 +1603,12 @@
 		</style>
 		';
 		
-		echo '</head><body>
+		$onload='';
+		if($x7s->sheet_ok == 0 && ($_GET['page']=="main" || $_GET['page']=="ability")){
+			$onload='onload="javascript: modify();"';
+		}
+		
+		echo '</head><body '.$onload.'>
  			<div class="sheet" id="sheet'.$bg.'">
  			';
  			

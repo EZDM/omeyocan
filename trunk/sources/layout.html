@@ -1,5 +1,5 @@
 <div id="debug"></div>
-<embed src="./graphic/tardis.wav" autostart=false width=0 height=0 id="tardis" enablejavascript="true" />
+<embed src="./graphic/tardis.wav" autostart="false" width=0 height=0 id="tardis" enablejavascript="true" />
 	<?PHP 
 	 	if($x7c->permissions['admin_panic'])
 	 		echo '<div id="adminbtn" style="position: absolute; top: 30px; left: 20px;"><a onClick="javascript: window.open(\'index.php?act=admincp\',\'admincp\',\'width=800,height=620, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Administration </a></div>';
@@ -26,7 +26,7 @@
   		<img style="position:absolute; top:493px; left:880px;" src="./graphic/04scheda.jpg">
   		</a>
   		
-  		<a onClick="javascript: window.open('index.php?act=userpanel&cp_page=msgcenter','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=<?PHP echo $x7c->settings['tweak_window_large_width'] ?>,height=<?PHP echo $x7c->settings['tweak_window_large_height']?> ');">
+  		<a onClick="javascript: window.open('index.php?act=mail','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650');">
   			<img id="posta" style="position:absolute; top:553px; left:880px;" src="./graphic/05postano.jpg">
 		</a>
 		
