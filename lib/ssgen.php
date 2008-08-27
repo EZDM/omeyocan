@@ -410,8 +410,8 @@
 		 	}
 			#divchat {
 				background-image:url(";
-			if($x7c->settings['panic'] && isset($x7c->room_data['background']) && $x7c->room_data['background']!='')
-				$css .= $x7c->room_data['background'];
+			if($x7c->settings['panic'])
+				$css .= "./graphic/sfondo1026x723obscure.jpg";
 			else
 				$css .=	"./graphic/sfondo1026x723.jpg";
 				
@@ -423,7 +423,13 @@
 				right: 0px;
 			}
 			#divmap {
-				background-image:url(./graphic/sfondomap1026x723.jpg);
+				background-image:url(";
+			if($x7c->settings['panic'])
+				$css .= "./graphic/sfondomap1026x723obscure.jpg";
+			else
+				$css .=	"./graphic/sfondomap1026x723.jpg";
+				
+			$css.=");
 				width: 1026px; 
 				height: 723px;
 				position: absolute;
