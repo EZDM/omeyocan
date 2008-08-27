@@ -106,10 +106,7 @@
 				// Set default values for reply form
 				$_GET['to'] = $author;
 
-				if(!eregi("^$txt[176]",$subject))
-					$_GET['subject'] = "$txt[176]$subject";
-				else
-					$_GET['subject'] = $subject;
+				$_GET['subject'] = $subject;
 
 				$replybody = remove_chattags($msgbody);
 				$replybody = eregi_replace("<br>","\n",$replybody);
@@ -117,34 +114,34 @@
 
 				$msgbody = parse_message($msgbody);
 
-				$body .= "<Br><Br><table width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-						<Tr>
-							<td class=\"col_header\">&nbsp;$subject</td>
-						</tr>
-						</table>
+				$body .= "<Br><Br>
 						<div id=\"msg_body\">
-						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">
+						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 						<Tr>
-							<td class=\"dark_row\"><B>$txt[179]: $author</b><hr><br></td>
+							<td class=\"dark_row\"><B>Mittente:</b> $author</td>
 						</tr>
 						<Tr>
-							<td class=\"dark_row\">$msgbody</td>
+							<td class=\"dark_row\"><b>Oggetto:</b> $subject</td>
+						</tr>
+						<Tr>
+							<td class=\"dark_row\"><hr><br>$msgbody</td>
 						</tr>
 						</table>
 						</div>
 						<a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject={$_GET['subject']}&to={$_GET['to']}&msg={$_GET['msg']}\">[Rispondi]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_GET['subject']}&to={$_GET['to']}&msg={$_GET['msg']}\">[Rispondi]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_GET['subject']}&msg={$_GET['msg']}\">[Inoltra]</a>
 					
 					<Br><Br><div align=\"center\">
-					<div align=\"center\">
-					<a href=\"index.php?act=mail\">[$txt[77]]</a>
+					<div align=\"left\">
+					<a href=\"index.php?act=mail\">[Elenco]</a>
 					
 					</div>";
 
 			}else if(!isset($_GET['write'])){
 				// Display a table of all messages
 
-				$body .= "<table width=\"96%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				$body .= "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 						<tr>
 							<td width=\"30\"></td>
 							<td width=\"100\">$txt[178]</td>
@@ -216,15 +213,24 @@
 				if(isset($_GET['back']))
 					$back="&read=".$_GET['back'];
 					
-				$body .= "<br><br><div align=\"center\">
+				$body .= "<div align=\"center\">
 					<form action=\"./index.php\" method=\"get\">
-					<b>$txt[181]</b><Br>
+			
+					<p style=\"text-align: center\">
 					<input type=\"hidden\" name=\"act\" value=\"mail\">
-					$txt[182]: <input class=\"text_input\" type=\"text\" name=\"to\" value=\"$_GET[to]\"><Br>
-					$txt[183]: <input class=\"text_input\" type=\"text\" name=\"subject\" value=\"$_GET[subject]\"><br><textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"7\">$_GET[msg]</textarea><Br>
+					$txt[182]: 
+					<br><input class=\"text_input\" type=\"text\" name=\"to\" value=\"$_GET[to]\">
+					<br>
+					$txt[183]: 
+					<br><input class=\"text_input\" type=\"text\" name=\"subject\" value=\"$_GET[subject]\">
+					</p>
+					
+					<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"15\">$_GET[msg]</textarea><Br>
 					<input type=\"submit\" value=\"$txt[181]\" class=\"button\">
 					</form></div>
-					<a href=\"./index.php?act=mail$back\">[Indietro]</a>
+					<p style=\"text-align: center\">
+					<a href=\"./index.php?act=mail$back\">[Elenco]</a>
+					</p>
 					";
 			}
 				
@@ -245,6 +251,14 @@
 		
 		echo '
 		<style type="text/css">
+			a{
+				color: #660000;
+				font-weight: bold;
+			}
+			a:hover{
+				color: white;
+			}
+			
 			INPUT{
 				height: 21px;
 			}
@@ -273,8 +287,8 @@
 				width: 400px; 
 				height: 380px;
 				overflow: auto;
-
 			}
+			
 			#msg_body {
 				width: 400px; 
 				height: 200px;
@@ -282,9 +296,12 @@
 			}
 			.dark_row{
 				background: transparent;
+				font-size: 10pt;
 			}
+		
 			.chatmsg{
 				color: white;
+				font-size: 11pt;
 			}
 			
 			.text_input{
