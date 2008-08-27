@@ -573,7 +573,7 @@
 				top: 165px;
 				left: 117px;
 				width: 640px;
-				height: 415px;
+				height: 405px;
 			}
 			span {
 			 position: relative;
