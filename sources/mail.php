@@ -115,22 +115,30 @@
 				$msgbody = parse_message($msgbody);
 
 				$body .= "<Br><Br>
-						<div id=\"msg_body\">
+						<div> 
 						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 						<Tr>
 							<td class=\"dark_row\"><B>Mittente:</b> $author</td>
 						</tr>
 						<Tr>
-							<td class=\"dark_row\"><b>Oggetto:</b> $subject</td>
-						</tr>
-						<Tr>
-							<td class=\"dark_row\"><hr><br>$msgbody</td>
+							<td class=\"dark_row\"><b>Oggetto:</b> $subject<hr></td>
 						</tr>
 						</table>
 						</div>
+						
+						
+						<div id=\"msg_body\">
+						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+						<Tr>
+							<td class=\"dark_row\">$msgbody</td>
+						</tr>
+						</table>
+						</div>
+						
+						<br>
 						<a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_GET['subject']}&to={$_GET['to']}&msg={$_GET['msg']}\">[Rispondi]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_GET['subject']}&msg={$_GET['msg']}\">[Inoltra]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_GET['subject']}&to={$_GET['to']}\">[Rispondi]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_GET['subject']}\">[Inoltra]</a>
 					
 					<Br><Br><div align=\"center\">
 					<div align=\"left\">
@@ -199,6 +207,7 @@
 			
 			if(isset($_GET['write'])){
 				// These three isset() things are checking for default field values
+				
 				if(!isset($_GET['subject']))
 					$_GET['subject'] = "";
 	
@@ -210,8 +219,16 @@
 	
 	
 				$back='';
-				if(isset($_GET['back']))
+				if(isset($_GET['back'])){
 					$back="&read=".$_GET['back'];
+					$nb = offline_msg_split($msgs[$_GET['back']][2]);
+					$msgbody = $nb[0];
+					$subject = $nb[1];
+					
+					$replybody = remove_chattags($msgbody);
+					$replybody = eregi_replace("<br>","\n",$replybody);
+					$replybody = "\n\n$txt[174]\n\n".$replybody;
+				}
 					
 				$body .= "<div align=\"center\">
 					<form action=\"./index.php\" method=\"get\">
@@ -225,7 +242,7 @@
 					<br><input class=\"text_input\" type=\"text\" name=\"subject\" value=\"$_GET[subject]\">
 					</p>
 					
-					<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"15\">$_GET[msg]</textarea><Br>
+					<textarea htmlconv=yes name=\"body\" class=\"text_input\" cols=\"40\" rows=\"15\">$replybody</textarea><Br>
 					<input type=\"submit\" value=\"$txt[181]\" class=\"button\">
 					</form></div>
 					<p style=\"text-align: center\">
@@ -291,7 +308,7 @@
 			
 			#msg_body {
 				width: 400px; 
-				height: 200px;
+				height: 280px;
 				overflow: auto;
 			}
 			.dark_row{
