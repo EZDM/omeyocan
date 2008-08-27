@@ -215,7 +215,7 @@
 				text-align: left;
 			}
 			.inside_table {
-				border: $data[BorderSize] $data[BorderStyle] $data[BorderColor];
+				border: 0;
 				border-top: none;
 			}
 			A {
