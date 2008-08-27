@@ -49,4 +49,4 @@
 			$log->add($x7s->username,$msg);
 		}
 	}
-?> 
+?>
