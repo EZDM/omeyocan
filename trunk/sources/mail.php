@@ -266,7 +266,12 @@
 		echo $print->ss_chatinput;
 		echo $print->ss_uc;
 		
-		echo '
+		$sfondo="./graphic/sfondoposta.jpg";
+		
+		if($x7c->settings['panic'])
+	 		$sfondo="./graphic/sfondopostaobscure.jpg";
+		
+		$mail_style = '
 		<style type="text/css">
 			a{
 				color: #660000;
@@ -288,7 +293,7 @@
 				color: black;
 				font-weight: bold;
 				font-size: 11pt;
-				background-image:url(./graphic/sfondoposta.jpg);
+				background-image:url('.$sfondo.');
 			}
 			
 			#inner_mail {
@@ -344,6 +349,8 @@
 			
 		</style>
 		';
+		
+		echo $mail_style;
 		
 		echo '</head><body>
  			<div class="mail" id="mail">
