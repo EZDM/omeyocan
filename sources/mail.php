@@ -246,7 +246,7 @@
 					<input type=\"submit\" value=\"$txt[181]\" class=\"button\">
 					</form></div>
 					<p style=\"text-align: center\">
-					<a href=\"./index.php?act=mail$back\">[Elenco]</a>
+					<a href=\"./index.php?act=mail\">[Elenco]</a>
 					</p>
 					";
 			}
