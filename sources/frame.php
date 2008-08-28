@@ -1013,8 +1013,11 @@
 										</select>
 										
 								<?PHP
-									if($x7c->permissions['admin_panic'])
+									if($x7c->permissions['admin_panic']){
 										echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Invia immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
+										
+										echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Master\" onClick=\"document.chatIn.msgi.value ='* '; document.chatIn.msgi.focus();\">";
+										}
 											
 								?>
 										<input name="button_send" type="submit" class="send_button" style="cursor: pointer;background: url(<?PHP echo $print->image_path; ?>send.gif);border: none;height: 20px;width: 55px;text-align: center;font-weight: bold;" onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'" onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">

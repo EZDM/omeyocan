@@ -54,15 +54,57 @@
 
 				// Send the msg
 				$_GET['body'] = eregi_replace("\n","<Br>",$_GET['body']);
-
-				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$_GET[to]'");
-				$row = $db->Do_Fetch_Row($query);
-				if($row[0] == "")
-					$person_error = true;
-				else
+				
+				if(!isset($_GET['group'])){
+					$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$_GET[to]'");
+					$row = $db->Do_Fetch_Row($query);
+					if($row[0] == "")
+						$person_error = true;
+					else
+						$person_error = false;
+				}
+				else{
 					$person_error = false;
+				}
+				
+				//Group send
+				if(isset($_GET['group'])){
+					if(!checkIfMaster() && $x7s->user_group != $_GET['to']){
+						$body = "<div id=\"sysmsg\">Non sei autorizzato a inviare a questo gruppo</div>";
+						$_GET['msg'] = $_GET['body'];
+					}
+					else{
+						if(!checkIfMaster() && $_GET['to'] == "all"){
+							$body = "<div id=\"sysmsg\">Non sei autorizzato a inviare a questo gruppo</div>";
+							$_GET['msg'] = $_GET['body'];
+						}
+						else{
+							if($_GET['to'] == "all")
+								$query = "SELECT username FROM {$prefix}users";
+							else
+								$query = "SELECT username FROM {$prefix}users WHERE user_group = '$_GET[to]'";
+								
+							$result = $db->DoQuery($query);
+							
+							//Do the real send
+							while($row = $db->Do_Fetch_Assoc($result)){
+								send_offline_msg($row['username'],$_GET['subject'],$_GET['body']);
+							}
+							
+							// Reset values
+							$_GET['subject'] = "";
+							$_GET['to'] = "";
+							$_GET['ok'] = 1;
+							header("Location: index.php?act=mail&ok=1");
+						
+						}
+						
+					}
 
-				if(count_offline($_GET['to']) >= $x7c->settings['max_offline_msgs'] && $x7c->settings['max_offline_msgs'] != 0){
+				}
+				
+				//Single person send
+				elseif(count_offline($_GET['to']) >= $x7c->settings['max_offline_msgs'] && $x7c->settings['max_offline_msgs'] != 0){
 					$body = "<div id=\"sysmsg\">".$txt[184]."</div>";
 					$_GET['msg'] = $_GET['body'];
 				}elseif($person_error){
@@ -199,7 +241,16 @@
 					$body .= "<Br><br>$txt[185]";
 
 				}
-				$body .= '<div id="menu"><a href="./index.php?act=mail&write">[Scrivi]</a> [Mail di gruppo]</div>';
+				$body .= '<div id="menu"><a href="./index.php?act=mail&write">[Scrivi]</a>';
+				 
+				if(checkIfMaster() || $x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
+					$body .= '<a href="./index.php?act=mail&write&group">[Mail di gruppo]</a>';
+				} 
+				else{
+					$body .= '[Mail di gruppo]';
+				}
+				 
+				 $body .= "\n</div>";
 
 			}
 
@@ -229,15 +280,45 @@
 					$replybody = eregi_replace("<br>","\n",$replybody);
 					$replybody = "\n\n$txt[174]\n\n".$replybody;
 				}
-					
-				$body .= "<div align=\"center\">
-					<form action=\"./index.php\" method=\"get\">
-			
-					<p style=\"text-align: center\">
+				
+				$to = "<p style=\"text-align: center\">
 					<input type=\"hidden\" name=\"act\" value=\"mail\">
 					$txt[182]: 
 					<br><input class=\"text_input\" type=\"text\" name=\"to\" value=\"$_GET[to]\">
-					<br>
+					<br>";
+				
+				if(isset($_GET['group'])){
+				
+					
+					if(checkIfMaster()){
+						$elenco = '<option value="all">Tutti</option>';
+						$query = "SELECT DISTINCT user_group FROM {$prefix}users";
+						$result = $db->DoQuery($query);
+						
+						while($row = $db->Do_Fetch_Assoc($result)){
+							$elenco .= "<option value=\"{$row['user_group']}\"> {$row['user_group']} </option>\n";
+						}
+						
+					}
+					else if($x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
+						$elenco .= "<option value=\"{$x7s->user_group}\"> {$x7s->user_group} </option>\n";	
+					}
+					
+					$to = "<p style=\"text-align: center\">
+					<input type=\"hidden\" name=\"act\" value=\"mail\">
+					<input type=\"hidden\" name=\"group\">
+					$txt[182]: 
+					<br><select class=\"text_input\" name=\"to\">
+						$elenco	
+					</select>
+					<br>";
+				}
+				
+				$body .= "<div align=\"center\">
+					<form action=\"./index.php\" method=\"get\">
+					
+					$to
+					
 					$txt[183]: 
 					<br><input class=\"text_input\" type=\"text\" name=\"subject\" value=\"$_GET[subject]\">
 					</p>
@@ -254,6 +335,15 @@
 			return $body;
 	}
 	
+	
+	//This function returns true if the user is an admin or a master
+	function checkIfMaster(){
+		global $x7s, $x7c;
+		
+		$value = $x7c->permissions['admin_panic'];
+		
+		return $value;
+	}
 
 	function print_sheet($body,$bg){
 		global $print,$x7c,$x7s;
