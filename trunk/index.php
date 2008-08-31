@@ -437,7 +437,7 @@
 			}else{
 				include("./sources/register.php");
 				register_user();
-				$print->dump_buffer();
+				//$print->dump_buffer();
 			}
 			exit;
 		break;
