@@ -188,7 +188,8 @@
 		}
 		
 		// Save the body to the print buffer
-		$print->normal_window($txt[18],$body);	
+		include('./sources/loginout.php');
+		print_loginout($body);
 		return 1;
 	}
 	

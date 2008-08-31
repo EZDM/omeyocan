@@ -159,12 +159,17 @@
 	}
 	
 	function logout_page(){
-		$body = "Logout eseguito";
+		$body = "<div id=\"logout\"> Logout eseguito. <a href=\"index.php\">Clicca Qui</a> per accedere nuovamente.";
+		
+		srand(time());
+		$num = rand(1,4);
+		
+		$body .= '<div id="random_img"><img src=./graphic/logout'.$num.'.jpg> </div></div>';
 	
-		print_loginout($body);
+		print_loginout($body,true);
 	}
 	
-	function print_loginout($body,$sfondo=''){
+	function print_loginout($body,$nosfondo=false){
 		global $print,$x7c,$x7s;
 		
 		
@@ -175,15 +180,17 @@
 		echo $print->ss_chatinput;
 		echo $print->ss_uc;
 		
-		if($sfondo=='')
-			$sfondo = './graphic/login01.jpg';
+		if(!$nosfondo)
+			$sfondo = 'background-image:url(./graphic/login01.jpg);';
+		else
+			$sfondo='';
 		
 		$login_style = '
 		<style type="text/css">
 			#login{
 				width: 1024px;
 				height: 700px;
-				background-image:url('.$sfondo.');
+				'.$sfondo.'
 			}
 			#inner_login{
 				position: absolute;
@@ -207,6 +214,10 @@
 			}
 			
 			.center{
+				text-align: center;
+			}
+			
+			#logout{
 				text-align: center;
 			}
 		</style>
