@@ -39,7 +39,7 @@
 		// a message telling them they failed to authenticate
 		if($failed == ""){
 			$title = $txt[0];
-			$failmsg = $txt[1];
+			$failmsg = "";
 		}elseif($failed == "invalid"){
 			$title = $txt[14];
 			$txt[23] = eregi_replace("_n","{$x7c->settings['maxchars_username']}",$txt[23]);
@@ -53,14 +53,16 @@
 		}
 				
 		// Print the login form that the user must enter username and password
-		$body = "	<form action=\"index.php\" method=\"post\" name=\"loginform\">
+		$body = "	<div class=\"center\"><img src=\"./graphic/benvenuti.jpg\"></div>
+				<div id=\"login_form\">
+					<form action=\"index.php\" method=\"post\" name=\"loginform\">
 					<input type=\"hidden\" name=\"dologin\" value=\"dologin\">
 					<table align=\"center\" border=\"0\" width=\"225\" cellspacing=\"0\" cellpadding=\"4\">
 						<tr valign=\"top\">
 							<td width=\"225\" style=\"text-align: center\" colspan=\"2\">$failmsg<Br><Br></td>
 						</tr>
 						<tr valign=\"top\">
-							<td width=\"80\">$txt[2]: </td>
+							<td width=\"80\">Username: </td>
 							<td width=\"175\"><input type=\"text\" class=\"text_input\" name=\"username\"></td>
 						</tr>
 						<tr valign=\"top\">
@@ -69,18 +71,18 @@
 						</tr>
 						<tr valign=\"top\">
 							<td width=\"225\" style=\"text-align: center\" colspan=\"2\">
-								<input type=\"submit\" value=\"$txt[4]\" class=\"button\">
+								<input type=\"submit\" value=\"Entra\" class=\"button\">
 								<Br>
 								<Br>
 								<a href=\"./index.php?act=register\">[$txt[6]]</a> &nbsp;";
 								 
 		if($x7c->settings['enable_passreminder'] == 1)
-			$body .= 			"<a href=\"./index.php?act=forgotmoipass\">[$txt[5]]</a>
+			$body .= 			"<a href=\"./index.php?act=forgotmoipass\">[Recupera password]</a>
 								</td>";
 		
 		$body .= 	"</tr>
 					</table>
-					</form>
+					</form></div>
 				";
 				
 		// See if there is any news to show
@@ -110,7 +112,7 @@
 
 
 			// Now body will hold the stats table
-			$body .= "	
+			$body .= "	<div id=\"stats\">
 						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr valign=\"top\">
 								<td width=\"175\">
@@ -134,6 +136,7 @@
 								</td>
 							</tr>
 						</table>
+					</div>
 					";
 
 		}
@@ -178,15 +181,34 @@
 		$login_style = '
 		<style type="text/css">
 			#login{
-				width: 525px;
+				width: 1024px;
 				height: 700px;
 				background-image:url('.$sfondo.');
 			}
 			#inner_login{
-				
+				position: absolute;
+				color: white;
+				margin-left: 60px;
+				margin-top: 50px;
 			}
-		
 			
+			#login_form{
+				width: 300px;
+				margin-left: 42px;
+				margin-top: -20px;
+			}
+			
+			td{
+				color: white;
+			}
+			
+			.text_input{
+				border: solid 1px white;
+			}
+			
+			.center{
+				text-align: center;
+			}
 		</style>
 		';
 		

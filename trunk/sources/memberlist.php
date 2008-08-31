@@ -155,14 +155,14 @@
 		echo $print->ss_chatinput;
 		echo $print->ss_uc;
 		
-		$sfondo = './graphic/login01.jpg';
+		$sfondo = './graphic/sfondopresenti.jpg';
 		
 		$memberlist_style = '
 		<style type="text/css">
 			#member{
-				//width: 525px;
-				//height: 700px;
-				//background-image:url('.$sfondo.');
+				width: 450px;
+				height: 500px;
+				background-image:url('.$sfondo.');
 			}
 			#inner_member{
 				
