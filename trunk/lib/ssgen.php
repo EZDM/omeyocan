@@ -444,7 +444,7 @@
 			
 			#cmddiv {
 				position: absolute;
-				top: 690px;
+				top: 680px;
 				left: 150px;
 			}
 			
@@ -487,9 +487,10 @@
 			#copyrigth {
 				position: absolute;
 				font-size: 7pt;
-				top: 670px;
-				left: 850px;
+				top: 675px;
+				left: 890px;
 				text-align: center;
+				width: 120px;
 			}
 		</style>";
 		
