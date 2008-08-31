@@ -141,7 +141,56 @@
 				setTimeout("window.location.reload()",10000);
 			</script>';
 					
-		$print->normal_window($head,$body);
+		print_memberlist($body);
+	}
+	
+	function print_memberlist($body,$sfondo=''){
+		global $print,$x7c,$x7s;
+		
+		
+		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
+		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Posta</title>";
+		echo $print->style_sheet;
+		echo $print->ss_mini;
+		echo $print->ss_chatinput;
+		echo $print->ss_uc;
+		
+		$sfondo = './graphic/login01.jpg';
+		
+		$memberlist_style = '
+		<style type="text/css">
+			#member{
+				//width: 525px;
+				//height: 700px;
+				//background-image:url('.$sfondo.');
+			}
+			#inner_member{
+				
+			}
+		
+			
+		</style>
+		';
+		
+		
+		
+		echo $memberlist_style;
+		
+		echo '</head><body>
+ 			<div class="member" id="member">
+ 				<div id="inner_member">
+ 			';
+ 			
+		
+		
+		
+		echo $body;
+		echo '
+			</div>
+		</div>
+		</body>
+			</html>';
+		
 	}
 
 ?> 
