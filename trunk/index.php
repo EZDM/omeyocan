@@ -358,7 +358,6 @@
 		case "memberlist":
 			include("./sources/memberlist.php");
 			memberlist();
-			$print->dump_buffer();
 			exit;
 		break;
 

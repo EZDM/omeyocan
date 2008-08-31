@@ -161,7 +161,7 @@
 		print_loginout($body);
 	}
 	
-	function print_loginout($body){
+	function print_loginout($body,$sfondo=''){
 		global $print,$x7c,$x7s;
 		
 		
@@ -172,7 +172,8 @@
 		echo $print->ss_chatinput;
 		echo $print->ss_uc;
 		
-		$sfondo = './graphic/login01.jpg';
+		if($sfondo=='')
+			$sfondo = './graphic/login01.jpg';
 		
 		$login_style = '
 		<style type="text/css">
