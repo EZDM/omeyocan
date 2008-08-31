@@ -82,13 +82,10 @@
 					</table>
 					</form>
 				";
-		
-		// Output login window
-		$print->normal_window($title,$body);
-		
+				
 		// See if there is any news to show
 		if($x7c->settings['news'] != "")
-			$print->normal_window($txt[262],$x7c->settings['news']);
+			$body.=$x7c->settings['news'];
 			
 		// See if the stats window should be displayed
 		if($x7c->settings['show_stats'] == 1){
@@ -113,7 +110,7 @@
 
 
 			// Now body will hold the stats table
-			$body = "	
+			$body .= "	
 						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr valign=\"top\">
 								<td width=\"175\">
@@ -139,13 +136,10 @@
 						</table>
 					";
 
-			// Output Stats Window
-			$print->normal_window($txt[7],$body);
 		}
 		
 		// See if the admin wants the upcoming events to show
 		if($x7c->settings['show_events'] == 1){
-			$body = "";
 			include("./lib/events.php");
 			
 			if($x7c->settings['events_show3day'] == 1){
@@ -155,10 +149,64 @@
 			if($x7c->settings['events_showmonth'] == 1){
 				$body .= cal_minimonth();
 			}
-		
-			// Output the Calander window
-			$print->normal_window($txt[12],$body);
 		}
+		
+		print_loginout($body);
+		
+	}
+	
+	function logout_page(){
+		$body = "Logout eseguito";
+	
+		print_loginout($body);
+	}
+	
+	function print_loginout($body){
+		global $print,$x7c,$x7s;
+		
+		
+		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
+		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Posta</title>";
+		echo $print->style_sheet;
+		echo $print->ss_mini;
+		echo $print->ss_chatinput;
+		echo $print->ss_uc;
+		
+		$sfondo = './graphic/login01.jpg';
+		
+		$login_style = '
+		<style type="text/css">
+			#login{
+				width: 525px;
+				height: 700px;
+				background-image:url('.$sfondo.');
+			}
+			#inner_login{
+				
+			}
+		
+			
+		</style>
+		';
+		
+		
+		
+		echo $login_style;
+		
+		echo '</head><body>
+ 			<div class="login" id="login">
+ 				<div id="inner_login">
+ 			';
+ 			
+		
+		
+		
+		echo $body;
+		echo '
+			</div>
+		</div>
+		</body>
+			</html>';
 		
 	}
 

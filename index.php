@@ -158,25 +158,21 @@
 		// Include controls for login and logout
 		include("./sources/loginout.php");
 		page_login();
-		$print->dump_buffer();
 		exit;
 	}elseif($x7s->loggedin == 2 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but with an incorrect pass or username
 		include("./sources/loginout.php");
 		page_login("failed");
-		$print->dump_buffer();
 		exit;
 	}elseif($x7s->loggedin == 3 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but their username was invalid
 		include("./sources/loginout.php");
 		page_login("invalid");
-		$print->dump_buffer();
 		exit;
 	}elseif($x7s->loggedin == 4 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but their username was invalid
 		include("./sources/loginout.php");
 		page_login("activated");
-		$print->dump_buffer();
 		exit;
 	}
 
@@ -296,8 +292,8 @@
 			if($to_send != ""){
 				header("Location: $to_send");
 			}else{
-				$print->normal_window($txt[16],"$txt[17]<br><Br>&nbsp; <a href=\"index.php\">[$txt[0]]</a>");
-				$print->dump_buffer();
+				include('./sources/loginout.php');
+				logout_page();
 				exit;
 			}
 		break;
