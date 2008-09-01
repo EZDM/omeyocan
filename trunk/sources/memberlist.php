@@ -149,7 +149,7 @@
 		
 		
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
-		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Posta</title>";
+		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Lista utenti</title>";
 		echo $print->style_sheet;
 		echo $print->ss_mini;
 		echo $print->ss_chatinput;
@@ -163,9 +163,6 @@
 				width: 450px;
 				height: 500px;
 				background-image:url('.$sfondo.');
-			}
-			#inner_member{
-				
 			}
 		
 			
