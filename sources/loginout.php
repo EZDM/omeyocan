@@ -188,9 +188,12 @@
 		$login_style = '
 		<style type="text/css">
 			#login{
-				width: 1024px;
 				height: 700px;
 				'.$sfondo.'
+				position: relative; 
+		 		width: 1026px; 
+		 		left: 50%; 
+		 		margin-left: -513px;
 			}
 			#inner_login{
 				position: absolute;
@@ -218,6 +221,7 @@
 			}
 			
 			#logout{
+				width: 1026px; 
 				text-align: center;
 			}
 		</style>
