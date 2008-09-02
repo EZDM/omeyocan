@@ -719,7 +719,7 @@
 			$char;
 			
 	
-			if(isset($_GET['settings_change']) && canModify()){
+			if(isset($_GET['settings_change']) && checkIfMaster()){
 							
 				//We are modifiyng character sheet
 				if(isset($_POST['name']) && 
@@ -811,9 +811,7 @@
 										info='$_POST[info]'
 									 WHERE username='$pg'");
 						}
-					}
 
-					if(canModify()){
 						foreach($char as $cur){
 							if(!isset($_POST[$cur['id']])){
 								$ok = false;
@@ -832,7 +830,7 @@
 					
 
 			}
-			else if(isset($_GET['settings_change']) && !canModify() && !checkIfMaster() && $x7s->username==$pg){
+			else if(isset($_GET['settings_change']) && !checkIfMaster() && $x7s->username==$pg){
 			
 				if(isset($_POST['avatar_in'])){
 					$db->DoQuery("UPDATE {$prefix}users SET
@@ -857,10 +855,6 @@
 			}
 			
 			
-			// From now own it is HELL!!!
-			// Really, the following is a complete mess!
-			// Please, forgive me... maybe I will patch a day
-			
 			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
 			$row_user = $db->Do_Fetch_Assoc($query);
 			if(!$row_user){
@@ -871,7 +865,7 @@
 			$date = date("j/n/Y",$row_user['iscr']);
 				
 			
-			if(canModify()){
+			if(checkIfMaster()){
 				$body .= '		<script language="javascript" type="text/javascript">
 							mod=false;
 							
@@ -985,7 +979,7 @@
 			}
 			
 			
-			if(!canModify()){
+			if(!checkIfMaster()){
 				$ability='';
 				
 				$body .="<div class=\"indiv\" id=\"name\">$row_user[name]</div>
@@ -1003,100 +997,53 @@
 				
 			}
 			else{
-				if(canModify() && !checkIfMaster()){
-					$body .= '	
-						<script language="javascript" type="text/javascript">
-							function add_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								var ch = parseInt(document.sheet_form["ch"].value);
-								
-								if (ch > 0 && value < 12){
-									document.sheet_form[ch_name].value = value + 1;
-									document.sheet_form["ch"].value = ch - 1;
-								}
-								do_ch_form_refresh(ch_name);
-							}
-							
-							function sub_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								var ch = parseInt(document.sheet_form["ch"].value);
-								
-								if (value > 4){
-									document.sheet_form[ch_name].value = value -1;
-									document.sheet_form["ch"].value = ch + 1;
-								}
-								do_ch_form_refresh(ch_name);
-							}
-							
-							function do_ch_form_refresh(ch_name){
-								document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
-								document.sheet_form["ch_display"].value = document.sheet_form["ch"].value;
-								modify();
-							}
-					
-					</script>';
-				}
-				else if(!checkIfMaster()){
-				
-					foreach($charact as $cur_ch){
-						$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
-					}
-				
+				foreach($charact as $cur_ch){
+					$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
 				}
 				
 				//Modified script for master modification that can everything
-				if(checkIfMaster()){
-					$body .= '	
-						<script language="javascript" type="text/javascript">
-							function add_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								document.sheet_form[ch_name].value = value + 1;
-								
-								do_ch_form_refresh(ch_name);
-							}
-							
-							function sub_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								document.sheet_form[ch_name].value = value -1;
-								
-								do_ch_form_refresh(ch_name);
-							}
-							
-							function do_ch_form_refresh(ch_name){
-								document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
-								modify();
-							}
-					
-					</script>';
-				}
+				
+				$body .= '
+					<script language="javascript" type="text/javascript">
+						function add_ch(ch_name){
+							var value = parseInt(document.sheet_form[ch_name].value);
+							document.sheet_form[ch_name].value = value + 1;
+
+							do_ch_form_refresh(ch_name);
+						}
+
+						function sub_ch(ch_name){
+							var value = parseInt(document.sheet_form[ch_name].value);
+							document.sheet_form[ch_name].value = value -1;
+
+							do_ch_form_refresh(ch_name);
+						}
+
+						function do_ch_form_refresh(ch_name){
+							document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
+							modify();
+						}
+
+				</script>';
+			
 				
 				$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
-						
-				
-						
-				if(canModify()){
-					$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
 
-								
-					foreach($charact as $cur_ch){
-						$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
 
-						$body .= "
-						<div id=\"{$cur_ch['name']}\">
-						<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
-						<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-						<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
-						<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
-					}
+				$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
 
-					if(!checkIfMaster())
-						$body .= '<div id="ch_point" align="center">Punti caratteristica:<br>
-							<input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled>
-							<input type="hidden" name="ch" value="'.$ch.'"></div>
-						';
 
-					
+				foreach($charact as $cur_ch){
+					$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
+
+					$body .= "
+					<div id=\"{$cur_ch['name']}\">
+					<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
+					<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+					<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
+					<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
 				}
+
 				
 				if($gender=="M"){
 					$male="selected";
@@ -1159,7 +1106,7 @@
 			}
 			
 			//Just for the avatar and password modification
-			if(!canModify() && !checkIfMaster() && $x7s->username==$pg){
+			if(!checkIfMaster() && $x7s->username==$pg){
 			
 				$body .='		<script language="javascript" type="text/javascript">
 							mod=false;
@@ -1499,13 +1446,6 @@
 		$value = $x7c->permissions['admin_panic'];
 		
 		return $value;
-	}
-	
-	function canModify(){
-		global $x7s;
-		
-
-		return (($_GET['pg']==$x7s->username) || checkIfMaster());
 	}
 
 ?>
