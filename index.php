@@ -274,8 +274,7 @@
 	$x7s->max_panic = $row['max_panic'];
 	
 	if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" && !$x7c->permissions['admin_panic']){
-		$_GET['act']="sheet";
-		//$_GET['page']="build";
+		$_GET['act']="buildpg";
 	}
 
 	// Ok let's see what's inside
@@ -555,6 +554,11 @@
 			sheet_main();
 			exit;
 		break;	
+		case "buildpg":
+			include("./sources/buildpg.php");
+			buildpg_main();
+			exit;
+		break;
 		case "mail":
 			include("./sources/mail.php");
 			mail_main();
