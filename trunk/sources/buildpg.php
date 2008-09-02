@@ -47,7 +47,6 @@
 			else{
 				
 				$max_ab = $x7c->settings['max_ab_constr'];
-				$xp = floor($x7c->settings['starting_xp']/$x7c->settings['xp_ratio']);
 
 				//Characteristics
 				$query_char = $db->DoQuery("SELECT * FROM {$prefix}characteristic");
@@ -70,6 +69,8 @@
 
 
 				//Ability
+				$xp = floor($x7c->settings['starting_xp']/$x7c->settings['xp_ratio']);
+				
 				$max_ab = $x7c->settings['max_ab_constr'];
 				
 				$query = $db->DoQuery("SELECT * FROM 	{$prefix}userability, 
@@ -166,7 +167,7 @@
 							function do_ch_form_refresh(ch_name){
 								document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
 								document.sheet_form["ch_display"].value = document.sheet_form["ch"].value;
-								modify();
+								enable_send();
 							}
 							
 								
@@ -234,10 +235,24 @@
 							function do_form_refresh(ab_name){
 								document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
 								document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
+								enable_send();
 							}
 
 							function show_desc(el){
 								document.getElementById("descr").innerHTML = descr[el];
+							}
+
+							function enable_send(){
+								var xp=document.sheet_form["xp"].value;
+								var ch=document.sheet_form["ch"].value;
+
+								if(xp > 0 || ch > 0){
+									document.forms[0].elements["aggiorna"].style.visibility="hidden";
+								}
+								else{
+									document.forms[0].elements["aggiorna"].style.visibility="visible";
+								}
+
 							}
 					
 					</script>
@@ -258,6 +273,10 @@
 						</tr>
 
 						'.$ab_fields.'
+
+						<tr>
+							<td><INPUT name="aggiorna" class="button" type="SUBMIT" value="Invia" style="visibility: hidden;"></td>
+						</tr>
 					</table>
 				</form>
 				
