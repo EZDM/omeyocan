@@ -922,25 +922,17 @@
 									
 									
 									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
-								';
-								
-				if(checkIfMaster()){
-					$body .= '
-									document.forms[0].elements["info"].style.color="blue";
-									document.forms[0].elements["info"].style.border="1px solid";
-									document.forms[0].elements["info"].style.background="white";
-									document.forms[0].elements["info"].disabled=false;
-									
-									document.forms[0].elements["xp"].style.color="blue";
-									document.forms[0].elements["xp"].style.background="white";
-									document.forms[0].elements["xp"].disabled=false;
-					';
-				}
-				
 
-				
-				$body.='					}
+								document.forms[0].elements["info"].style.color="blue";
+								document.forms[0].elements["info"].style.border="1px solid";
+								document.forms[0].elements["info"].style.background="white";
+								document.forms[0].elements["info"].disabled=false;
+
+								document.forms[0].elements["xp"].style.color="blue";
+								document.forms[0].elements["xp"].style.background="white";
+								document.forms[0].elements["xp"].disabled=false;
 								}
+							}
 					
 					</script>';
 			}
@@ -1090,13 +1082,10 @@
 					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
 					";
 					
-				//Master can everything
-				if(checkIfMaster()){
-					$body.= "
-						<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
-						<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" value=\"$row_user[xp]\" size=\"10\" disabled /></div>
-					";
-				}
+				$body.= "
+					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
+					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" value=\"$row_user[xp]\" size=\"10\" disabled /></div>
+				";
 						
 				
 				
