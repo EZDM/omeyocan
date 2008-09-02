@@ -59,7 +59,7 @@
 					<input type=\"hidden\" name=\"dologin\" value=\"dologin\">
 					<table align=\"center\" border=\"0\" width=\"225\" cellspacing=\"0\" cellpadding=\"4\">
 						<tr valign=\"top\">
-							<td width=\"225\" style=\"text-align: center\" colspan=\"2\">$failmsg<Br><Br></td>
+							<td width=\"225\" style=\"text-align: center\" colspan=\"2\" class=\"error\">$failmsg<Br><Br></td>
 						</tr>
 						<tr valign=\"top\">
 							<td width=\"80\">Username: </td>
@@ -205,7 +205,7 @@
 			#login_form{
 				width: 300px;
 				margin-left: 42px;
-				margin-top: -20px;
+				margin-top: 0px;
 			}
 			
 			td{
@@ -223,6 +223,11 @@
 			#logout{
 				width: 1026px; 
 				text-align: center;
+			}
+
+			.error{
+				color: red;
+				font-weight: bold;
 			}
 		</style>
 		';
