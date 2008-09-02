@@ -39,251 +39,501 @@
 	
 	function buildpg_mail(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
+			$errore='';
+			$ok=true;
+			$pg=$x7s->username;
 			
 			if(isset($_GET['build'])){
-			
-			}
-			
-			else{
+				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+				$row_user = $db->Do_Fetch_Assoc($query);
+
+				$starting_xp = $x7c->settings['starting_xp'];
+				$xp_avail=$starting_xp;
 				
-				$max_ab = $x7c->settings['max_ab_constr'];
-
-				//Characteristics
-				$query_char = $db->DoQuery("SELECT * FROM {$prefix}characteristic");
-								  
-				while($row_ch = $db->Do_Fetch_Assoc($query_char)){
-					$charact[$row_ch['id']]=$row_ch;
-				}
 				
-
-				$ch_fields ='';
-				foreach($charact as $cur_ch){
-					$ch_fields .= "<tr><td>{$cur_ch['name']}:</td><td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
-						<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$x7c->settings['min_ch']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-							<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$x7c->settings['min_ch']}\"/>
-							<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\">\n</td></tr>";
-				}
-
-				$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
-
-
-
-				//Ability
-				$xp = floor($x7c->settings['starting_xp']/$x7c->settings['xp_ratio']);
+				if(!$row_user)
+					die("Users not in database");
 				
-				$max_ab = $x7c->settings['max_ab_constr'];
-				
-				$query = $db->DoQuery("SELECT * FROM 	{$prefix}userability, 
-								{$prefix}ability 
+				$query = $db->DoQuery("SELECT u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+							FROM 	{$prefix}userability u, 
+								{$prefix}ability a
 							WHERE 
-								ability_id=id AND
-								username='{$x7s->username}'
-							ORDER BY dep,name");
-
-			
-				while($row = $db->Do_Fetch_Assoc($query)){
-					$ability[$row['ability_id']]=$row;
-				}
-
-				$ab_descr_vector="\n";
-				foreach($ability as $cur){
-					$ab_descr_vector .= "\t\t\t\t\t\tdescr['$cur[ability_id]']=\"$cur[descr]\";\n";
-				}
-
-				
-				$ab_fields ='';
-				foreach($ability as $cur){
-					if($cur['dep'] == ""){
-						$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">";
-						$ab_fields .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
-						<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
-						<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-						<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>
-						<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">
-						<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
-						<input type=\"hidden\" name=\"".$cur['ability_id']."_name\" value=\"{$cur['name']}\">
-						<input type=\"hidden\" name=\"".$cur['ability_id']."_dep\" value=\"{$cur['dep']}\">";
-						
-						$query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE dep='{$cur['ability_id']}' ORDER BY name");
-						$ab_fields .="
-						<input type=\"hidden\" name=\"".$cur['ability_id']."_leaf\" value=\"";
-						while($leaf = $db->Do_Fetch_Assoc($query)){
-							$ab_fields .= $leaf['id']."|";
-						}
-						$ab_fields .= "\">";
-						
-						$ab_fields .= "</td></tr>\n";
-						
-						foreach($ability as $cur2){
-							if($cur2['dep'] == $cur['ability_id']){
-								$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">\n";
-								$ab_fields .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
-									<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
-									<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-									<input type=\"hidden\" name=\"{$cur2['ability_id']}\" value=\"{$cur2['value']}\"/>
-									<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add('{$cur2['ability_id']}');\">
-									<input type=\"hidden\" name=\"".$cur2['ability_id']."_min\" value=\"{$cur2['value']}\">
-									<input type=\"hidden\" name=\"".$cur2['ability_id']."_name\" value=\"{$cur2['name']}\">
-									<input type=\"hidden\" name=\"".$cur2['ability_id']."_dep\" value=\"{$cur2['dep']}\">";
+								u.ability_id = a.id AND
+								username='$pg'
+							ORDER BY a.name");
 							
-								if($cur2['dep']!= ""){
-									$ab_fields .="
-									<input type=\"hidden\" name=\"".$cur2['ability_id']."_dep_val\" value=\"{$cur2['dep_val']}\">";
-								}
-								$ab_fields .= "</td></tr>\n";
+				$ability='';
+				while($row = $db->Do_Fetch_Assoc($query)){
+					$ability[$row['ab_id']]=$row;
+					if(!isset($_POST[$row['ab_id']])){
+						$ok = false;
+						break;
+					}
+				}
+				if(!isset($_POST['xp']))
+					$ok = false;
+
+				//Controllo se le abilità non sono state abbassate o superano il massimo
+				//Il master fa quel che gli pare: niente controlli
+				
+				$tot_used=0;
+				$lvl_gained=0;
+				if($ok){
+					$max_ab = $x7c->settings['max_ab_constr'];
+					
+					foreach($ability as $cur){
+						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$tot_used+= $_POST[$cur['ab_id']] - $cur['value'];
+							
+							if($cur['value'] > $_POST[$cur['ab_id']]){
+								$errore .= "Errore, non puoi scendere sotto il valore attuale<br>";
+								$ok = false;
+								break;
+							}
+							elseif($_POST[$cur['ab_id']] > $max_ab){
+								$errore .= "Errore, non puoi superare il valore massimo<br>";
+								$ok = false;
+								break;
 							}
 						}
 					}
+					
+					
+					if($tot_used > $xp_avail){
+						$errore .= "Hai usato troppi PX<br>";
+						$ok = false;
+					}
+						
+					if($tot_used < $starting_xp){
+						$errore .= "Non hai usato tutti i punti abilit&agrave; $tot_used/$starting_xp<br>";
+						$ok = false;
+					}
+					
+				
+				
+					if($ok){
+						//Controllo le dipendenze
+						foreach($ability as $cur){
+							if($cur['value'] != $_POST[$cur['ab_id']]){
+								if($cur['dep'] != ""){
+									if($_POST[$cur['ab_id']] > 0 && $_POST[$cur['dep']] < $cur['dep_val']){
+										$errore .= "Errore, non puoi avere gradi in <b>".$cur['name']."</b> senza vere almeno <b>".$cur['dep_val']."</b> gradi in b>".$ability[$cur['dep']]['name']."<br>";
+										$ok = false;
+										break;
+									}
+								}
+							}
+						}
+					}
+				
 				}
 
-			
-				$body ='
-				<script language="javascript" type="text/javascript">
+				if(isset($_POST['name']) && 
+					isset($_POST['age'])&&
+					isset($_POST['nat']) &&
+					isset($_POST['marr']) &&
+					isset($_POST['gender'])) {
+					
+					
+					if($_POST['name']==''){
+						$ok = false;
+						$errore .= "Non hai specificato il nome<br>";
+					}
+					if($_POST['age']=='' || $_POST['age']<16){
+						$ok = false;
+						$errore .= "Et&agrave; non valida... deve essere maggiore di 16<br>";
+					}
+					if($_POST['nat']==''){
+						$ok = false;
+						$errore .= "Non hai specificato la nazionalit&agrave;<br>";
+					}
+					
 
-							'.$ab_descr_vector.'
-							
-							function add_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								var ch = parseInt(document.sheet_form["ch"].value);
+				}
+				else{
+					$ok = false;
+					$errore .= "Parametri mancanti<br>";
+				}
+				
+				
+				if (isset($_POST['ch']) && $_POST['ch']>0){
+					$errore .="Non hai usato tutti i tuoi punti caratteristica<br>";
+				}
+				else{
+					$query = $db->DoQuery("SELECT * FROM {$prefix}characteristic ORDER BY name");
 								
-								if (ch > 0 && value < 12){
-									document.sheet_form[ch_name].value = value + 1;
-									document.sheet_form["ch"].value = ch - 1;
+					$char='';
+					while($row = $db->Do_Fetch_Assoc($query)){
+						$char[$row['id']]=$row;
+					}
+					
+					$total_char=0;
+					//Controllo se le caratteristiche non sono state abbassate o superano il massimo
+					foreach($char as $cur){
+						if(!isset($_POST[$cur['id']])){
+							$ok = false;
+							break;
+						}
+
+						$total_char+=$_POST[$cur['id']];
+						if($_POST[$cur['id']] < $x7c->settings['min_ch']){
+							$errore .= "Errore, non puoi abbassare le caratteristiche sotto il {$x7c->settings['min_ch']}<br>";
+							$ok = false;
+							break;
+						}
+						elseif($_POST[$cur['id']] > $x7c->settings['max_ch']){
+							$errore .= "Errore, le caratteristiche non possono superare il valore massimo {$x7c->settings['max_ch']}<br>";
+							$ok = false;
+							break;
+						}
+					}
+
+					if($total_char > $x7c->settings['starting_ch']){
+						$errore .= "Errore, hai usato troppi punti caratteristica<br>";
+						$ok = false;
+					}
+				}
+
+					
+				if($ok){
+					//Ora posso aggiornare
+
+					$newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
+					$newlvl = 1;
+
+					if($_POST['gender'] == 0)
+						if($_POST['marr'] == 0)
+							$marr="Libero";
+						else
+							$marr="Sposato";
+					else
+						if($_POST['marr'] == 0)
+							$marr="Libera";
+						else
+							$marr="Sposata";
+						
+
+					$db->DoQuery("UPDATE {$prefix}users SET
+								name='$_POST[name]',
+								age='$_POST[age]',
+								nat='$_POST[nat]',
+								marr='$marr',
+								gender='$_POST[gender]'
+								WHERE username='$pg'");
+
+					foreach($char as $cur){
+								if(!isset($_POST[$cur['id']])){
+									$ok = false;
+									break;
 								}
-								do_ch_form_refresh(ch_name);
+								
+								$db->DoQuery("UPDATE {$prefix}usercharact
+										SET value='{$_POST[$cur['id']]}'
+										WHERE username='$pg'
+										 AND charact_id='{$cur['id']}'");
 							}
-							
-							function sub_ch(ch_name){
-								var value = parseInt(document.sheet_form[ch_name].value);
-								var ch = parseInt(document.sheet_form["ch"].value);
-								
-								if (value > 4){
-									document.sheet_form[ch_name].value = value -1;
-									document.sheet_form["ch"].value = ch + 1;
-								}
-								do_ch_form_refresh(ch_name);
+					
+					$db->DoQuery("UPDATE {$prefix}users 
+									SET xp='$newxp',
+									lvl='$newlvl'
+									WHERE username='$pg'");
+									
+
+					foreach($ability as $cur){
+						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$db->DoQuery("UPDATE {$prefix}userability 
+									SET value='{$_POST[$cur['ab_id']]}'
+									WHERE username='$pg'
+									 AND ability_id='{$cur['ab_id']}'");
+						}
+					}
+					
+					$db->DoQuery("UPDATE {$prefix}users
+									SET sheet_ok='1',
+									second_mod='1'
+									WHERE username='$pg'");
+						
+					header('Location: ./index.php');
+					return;
+
+				}
+
+			}
+			
+				
+			$max_ab = $x7c->settings['max_ab_constr'];
+
+			//Characteristics
+			$query_char = $db->DoQuery("SELECT * FROM {$prefix}characteristic");
+         
+			while($row_ch = $db->Do_Fetch_Assoc($query_char)){
+				$charact[$row_ch['id']]=$row_ch;
+			}
+
+
+			$ch_fields ='';
+			foreach($charact as $cur_ch){
+				$ch_fields .= "<tr><td>{$cur_ch['name']}:</td><td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
+					<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$x7c->settings['min_ch']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+						<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$x7c->settings['min_ch']}\"/>
+						<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\">\n</td></tr>";
+			}
+
+			$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
+
+
+
+			//Ability
+			$xp = $x7c->settings['starting_xp'];
+
+			$max_ab = $x7c->settings['max_ab_constr'];
+
+			$query = $db->DoQuery("SELECT * FROM 	{$prefix}userability,
+							{$prefix}ability
+						WHERE
+							ability_id=id AND
+							username='{$x7s->username}'
+						ORDER BY dep,name");
+
+
+			while($row = $db->Do_Fetch_Assoc($query)){
+				$ability[$row['ability_id']]=$row;
+			}
+
+			$ab_descr_vector="\n";
+			foreach($ability as $cur){
+				$ab_descr_vector .= "\t\t\t\t\t\tdescr['$cur[ability_id]']=\"$cur[descr]\";\n";
+			}
+
+
+			$ab_fields ='';
+			foreach($ability as $cur){
+				if($cur['dep'] == ""){
+					$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">";
+					$ab_fields .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
+					<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
+					<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+					<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>
+					<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">
+					<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
+					<input type=\"hidden\" name=\"".$cur['ability_id']."_name\" value=\"{$cur['name']}\">
+					<input type=\"hidden\" name=\"".$cur['ability_id']."_dep\" value=\"{$cur['dep']}\">";
+
+					$query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE dep='{$cur['ability_id']}' ORDER BY name");
+					$ab_fields .="
+					<input type=\"hidden\" name=\"".$cur['ability_id']."_leaf\" value=\"";
+					while($leaf = $db->Do_Fetch_Assoc($query)){
+						$ab_fields .= $leaf['id']."|";
+					}
+					$ab_fields .= "\">";
+
+					$ab_fields .= "</td></tr>\n";
+
+					foreach($ability as $cur2){
+						if($cur2['dep'] == $cur['ability_id']){
+							$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">\n";
+							$ab_fields .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
+								<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
+								<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+								<input type=\"hidden\" name=\"{$cur2['ability_id']}\" value=\"{$cur2['value']}\"/>
+								<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add('{$cur2['ability_id']}');\">
+								<input type=\"hidden\" name=\"".$cur2['ability_id']."_min\" value=\"{$cur2['value']}\">
+								<input type=\"hidden\" name=\"".$cur2['ability_id']."_name\" value=\"{$cur2['name']}\">
+								<input type=\"hidden\" name=\"".$cur2['ability_id']."_dep\" value=\"{$cur2['dep']}\">";
+
+							if($cur2['dep']!= ""){
+								$ab_fields .="
+								<input type=\"hidden\" name=\"".$cur2['ability_id']."_dep_val\" value=\"{$cur2['dep_val']}\">";
 							}
-							
-							function do_ch_form_refresh(ch_name){
-								document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
-								document.sheet_form["ch_display"].value = document.sheet_form["ch"].value;
-								enable_send();
+							$ab_fields .= "</td></tr>\n";
+						}
+					}
+				}
+			}
+
+
+			$body ='
+			<script language="javascript" type="text/javascript">
+
+						'.$ab_descr_vector.'
+
+						function add_ch(ch_name){
+							var value = parseInt(document.sheet_form[ch_name].value);
+							var ch = parseInt(document.sheet_form["ch"].value);
+
+							if (ch > 0 && value < 12){
+								document.sheet_form[ch_name].value = value + 1;
+								document.sheet_form["ch"].value = ch - 1;
 							}
-							
-								
-								
-							function add(ab_name){
-								var value = parseInt(document.sheet_form[ab_name].value);
-								var xp = parseInt(document.sheet_form["xp"].value);
-								
-								if (xp > 0 && value < '.$max_ab.'){
-								
-									dep = document.sheet_form[ab_name+"_dep"].value;
-										
-									if(dep != ""){
-										dep_val = parseInt(document.sheet_form[ab_name+"_dep_val"].value);
-										dep_act_val = parseInt(document.sheet_form[dep].value);
-										if(dep_act_val >= dep_val){
-											document.sheet_form[ab_name].value = value + 1;
-											document.sheet_form["xp"].value = xp - 1;
-										}
-										else{
-											alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
-										}
-									}
-									else{
+							do_ch_form_refresh(ch_name);
+						}
+
+						function sub_ch(ch_name){
+							var value = parseInt(document.sheet_form[ch_name].value);
+							var ch = parseInt(document.sheet_form["ch"].value);
+
+							if (value > 4){
+								document.sheet_form[ch_name].value = value -1;
+								document.sheet_form["ch"].value = ch + 1;
+							}
+							do_ch_form_refresh(ch_name);
+						}
+
+						function do_ch_form_refresh(ch_name){
+							document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
+							document.sheet_form["ch_display"].value = document.sheet_form["ch"].value;
+							enable_send();
+						}
+
+
+
+						function add(ab_name){
+							var value = parseInt(document.sheet_form[ab_name].value);
+							var xp = parseInt(document.sheet_form["xp"].value);
+
+							if (xp > 0 && value < '.$max_ab.'){
+
+								dep = document.sheet_form[ab_name+"_dep"].value;
+
+								if(dep != ""){
+									dep_val = parseInt(document.sheet_form[ab_name+"_dep_val"].value);
+									dep_act_val = parseInt(document.sheet_form[dep].value);
+									if(dep_act_val >= dep_val){
 										document.sheet_form[ab_name].value = value + 1;
 										document.sheet_form["xp"].value = xp - 1;
 									}
-									
-									do_form_refresh(ab_name);
-								}								
-							}
-							
-							function sub(ab_name){
-								var value = parseInt(document.sheet_form[ab_name].value);
-								var min = parseInt(document.sheet_form[ab_name+"_min"].value);
-								
-								if (value > min){
-									document.sheet_form[ab_name].value = value - 1;
-									var xp = parseInt(document.sheet_form["xp"].value);
-									document.sheet_form["xp"].value = xp + 1;
-									leafs = "";
-									if(document.sheet_form[ab_name+"_dep"].value == ""){
-										leafs = document.sheet_form[ab_name+"_leaf"].value;
+									else{
+										alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
 									}
-									
-									if(leafs != ""){
-										splitted = leafs.split("|");
-										for (i in splitted){
-											if(splitted[i]!=""){
-												back_xp = parseInt(document.sheet_form[splitted[i]].value) - parseInt(document.sheet_form[splitted[i]+"_min"].value);
-												
-												document.sheet_form[splitted[i]].value = document.sheet_form[splitted[i]+"_min"].value;
-												xp = parseInt(document.sheet_form["xp"].value);
-												document.sheet_form["xp"].value = xp + back_xp;
-												
-												do_form_refresh(splitted[i]);
-											}
-										}
-									}
-									do_form_refresh(ab_name);
-								}
-								
-							}
-							
-							function do_form_refresh(ab_name){
-								document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
-								document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
-								enable_send();
-							}
-
-							function show_desc(el){
-								document.getElementById("descr").innerHTML = descr[el];
-							}
-
-							function enable_send(){
-								var xp=document.sheet_form["xp"].value;
-								var ch=document.sheet_form["ch"].value;
-
-								if(xp > 0 || ch > 0){
-									document.forms[0].elements["aggiorna"].style.visibility="hidden";
 								}
 								else{
-									document.forms[0].elements["aggiorna"].style.visibility="visible";
+									document.sheet_form[ab_name].value = value + 1;
+									document.sheet_form["xp"].value = xp - 1;
 								}
 
+								do_form_refresh(ab_name);
 							}
-					
-					</script>
-				
-				<form action="index.php?act=buildpg&build method="post" name="sheet_form">
-					<table>
-						<tr>
-							<td>Punti caratteristica:</td> <td><input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled> <input type="hidden" name="ch" value="'.$ch.'"> </td>
-						</tr>
-						'.$ch_fields.'
-						
-					</table>
-					
-					<table>
-						<tr>
-							<td>Punti abilit&agrave;:</td><td><input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
-							<input type="hidden" name="xp" value="'.$xp.'"></td>
-						</tr>
+						}
 
-						'.$ab_fields.'
+						function sub(ab_name){
+							var value = parseInt(document.sheet_form[ab_name].value);
+							var min = parseInt(document.sheet_form[ab_name+"_min"].value);
 
-						<tr>
-							<td><INPUT name="aggiorna" class="button" type="SUBMIT" value="Invia" style="visibility: hidden;"></td>
-						</tr>
-					</table>
-				</form>
-				
-				';
-			
-				return $body;
-			}
+							if (value > min){
+								document.sheet_form[ab_name].value = value - 1;
+								var xp = parseInt(document.sheet_form["xp"].value);
+								document.sheet_form["xp"].value = xp + 1;
+								leafs = "";
+								if(document.sheet_form[ab_name+"_dep"].value == ""){
+									leafs = document.sheet_form[ab_name+"_leaf"].value;
+								}
+
+								if(leafs != ""){
+									splitted = leafs.split("|");
+									for (i in splitted){
+										if(splitted[i]!=""){
+											back_xp = parseInt(document.sheet_form[splitted[i]].value) - parseInt(document.sheet_form[splitted[i]+"_min"].value);
+
+											document.sheet_form[splitted[i]].value = document.sheet_form[splitted[i]+"_min"].value;
+											xp = parseInt(document.sheet_form["xp"].value);
+											document.sheet_form["xp"].value = xp + back_xp;
+
+											do_form_refresh(splitted[i]);
+										}
+									}
+								}
+								do_form_refresh(ab_name);
+							}
+
+						}
+
+						function do_form_refresh(ab_name){
+							document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
+							document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
+							enable_send();
+						}
+
+						function show_desc(el){
+							document.getElementById("descr").innerHTML = descr[el];
+						}
+
+						function enable_send(){
+							var xp=document.sheet_form["xp"].value;
+							var ch=document.sheet_form["ch"].value;
+
+							if(xp > 0 || ch > 0){
+								document.forms[0].elements["aggiorna"].style.visibility="hidden";
+							}
+							else{
+								document.forms[0].elements["aggiorna"].style.visibility="visible";
+							}
+
+						}
+
+				</script>
+
+			<p>'.$errore.'</p>
+			<form action="index.php?act=buildpg&build" method="post" name="sheet_form">
+				<table>
+					<tr>
+						<td>Nome completo:</td>
+						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
+					</tr>
+
+					<tr>
+						<td>Et&agrave;</td>
+						<td><input class="sheet_input" type="text" name="age" value="16" size="2" style="text-align: right;" /></td>
+					</tr>
+
+					<tr>
+						<td>Nazionalit&agrave;</td>
+						<td><input class="sheet_input" type="text" name="nat" size="16" /></td>
+					</tr>
+					
+					</tr>
+					<tr><td>Sesso:</td>
+						<td>
+						<select class="button" name="gender">
+											<option value="0">M</option>
+											<option value="1">F</option>
+						</select>
+						</td>
+					</tr>
+
+					<tr>
+						<td>Stato civile:</td>
+						<td>
+							<select class="button" name="marr">
+								<option value="0">Libero</option>
+								<option value="1">Sposato</option>
+						</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Punti caratteristica:</td> <td><input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled> <input type="hidden" name="ch" value="'.$ch.'"> </td>
+					</tr>
+					'.$ch_fields.'
+
+				</table>
+
+				<table>
+					<tr>
+						<td>Punti abilit&agrave;:</td><td><input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
+						<input type="hidden" name="xp" value="'.$xp.'"></td>
+					</tr>
+
+					'.$ab_fields.'
+
+					<tr>
+						<td><INPUT name="aggiorna" class="button" type="SUBMIT" value="Invia" style="visibility: hidden;"></td>
+					</tr>
+				</table>
+			</form>
+
+			';
+
+			return $body;
 			
 	}
 	

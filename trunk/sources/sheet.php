@@ -470,7 +470,15 @@
 									SET xp='$newxp',
 									lvl='$newlvl'
 									WHERE username='$pg'");
-									
+					foreach($ability as $cur){
+						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$db->DoQuery("UPDATE {$prefix}userability
+									SET value='{$_POST[$cur['ab_id']]}'
+									WHERE username='$pg'
+									 AND ability_id='{$cur['ab_id']}'");
+						}
+					}
+								
 					if(!$x7s->sheet_ok && !checkIfMaster()){
 						$db->DoQuery("UPDATE {$prefix}users 
 									SET sheet_ok='1',
@@ -478,16 +486,9 @@
 									WHERE username='$pg'");
 						
 						header('Location: ./index.php');
+						return;
 					}
 					
-					foreach($ability as $cur){
-						if($cur['value'] != $_POST[$cur['ab_id']]){
-							$db->DoQuery("UPDATE {$prefix}userability 
-									SET value='{$_POST[$cur['ab_id']]}'
-									WHERE username='$pg'
-									 AND ability_id='{$cur['ab_id']}'");
-						}
-					}
 				}
 			
 			}
@@ -1233,10 +1234,10 @@
 					$female="";	
 					
 					if($row_user['marr']=="Celibe")
-						$marr_opt="<option value=\"Celibe\" selected>Celibe</option>
+						$marr_opt="<option value=\"Libero\" selected>Libero</option>
 						<option value=\"Sposato\">Sposato</option>";
 					else
-						$marr_opt="<option value=\"Celibe\">Celibe</option>
+						$marr_opt="<option value=\"Libero\">Libero</option>
 						<option value=\"Sposato\" selected>Sposato</option>";
 				}
 				else{
@@ -1244,10 +1245,10 @@
 					$female="selected";	
 					
 					if($row_user['marr']=="Nubile")
-						$marr_opt="<option value=\"Nubile\" selected>Nubile</option>
+						$marr_opt="<option value=\"Libera\" selected>Libera</option>
 							<option value=\"Sposata\">Sposata</option>";
 					else
-						$marr_opt="<option value=\"Nubile\">Nubile</option>
+						$marr_opt="<option value=\"Libera\">Libera</option>
 							<option value=\"Sposata\" selected>Sposata</option>";
 				}
 				
