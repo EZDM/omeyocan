@@ -30,15 +30,6 @@
 		
 		$page='';
 		
-		if(!$x7s->sheet_ok){
-			$query = $db->DoQuery("SELECT SUM(VALUE) AS sum FROM {$prefix}usercharact WHERE username='{$x7s->username}'");
-			
-			$row = $db->Do_Fetch_Assoc($query);
-			if($row['sum'] < $x7c->settings['starting_ch'])
-				$_GET['page']="main";
-			
-		}
-		
 		$body='<div style="color: white;">Not ready yet</div>';
 		if(isset($_GET['page'])){
 			$page=$_GET['page'];
@@ -67,18 +58,12 @@
 		else if($page=="equip"){
 			$body = sheet_page_equip();
 		}
-/*		else if($page=="build"){
-			$body = sheet_build();
-		}*/
+
 			
 			
 		print_sheet($body,$page);
 	}
 	
-/*	function sheet_build(){
-		global $db,$x7c,$prefix,$x7s,$print;
-
-	}*/
 	
 	function sheet_page_equip(){
 		global $db,$x7c,$prefix,$x7s,$print;
@@ -397,11 +382,8 @@
 				$tot_used=0;
 				$lvl_gained=0;
 				if(!checkIfMaster() && $ok){
-					if($x7s->sheet_ok)
-						$max_ab = $x7c->settings['max_ab'];
-					else{
-						$max_ab = $x7c->settings['max_ab_constr'];
-					}
+					$max_ab = $x7c->settings['max_ab'];
+
 					
 					foreach($ability as $cur){
 						if($cur['value'] != $_POST[$cur['ab_id']]){
@@ -420,19 +402,12 @@
 						}
 					}
 					
-					if($x7s->sheet_ok)
-						$lvl_gained=$tot_used;
-					else
-						$lvl_gained=$tot_used-$starting_xp;
+					$lvl_gained=$tot_used;
+
 					
 					if(!checkIfMaster()){
 						if($tot_used > $xp_avail){
 							$errore .= "Hai usato troppi PX<br>";
-							$ok = false;
-						}
-						
-						if($tot_used < $starting_xp && !$x7s->sheet_ok){
-							$errore .= "Non hai usato tutti i punti costruzione $tot_used<br>";
 							$ok = false;
 						}
 					}
@@ -477,16 +452,6 @@
 									WHERE username='$pg'
 									 AND ability_id='{$cur['ab_id']}'");
 						}
-					}
-								
-					if(!$x7s->sheet_ok && !checkIfMaster()){
-						$db->DoQuery("UPDATE {$prefix}users 
-									SET sheet_ok='1',
-									second_mod='1'
-									WHERE username='$pg'");
-						
-						header('Location: ./index.php');
-						return;
 					}
 					
 				}
@@ -567,14 +532,8 @@
 				$body.="</table>";
 			}
 			else{
-				if($x7s->sheet_ok){
-					$max_ab = $x7c->settings['max_ab'];
-				}
-				else{
-					$max_ab = $x7c->settings['max_ab_constr'];
-					$errore="Ora specifica le tue abili&agrave; <br>";
-				}
-					
+				$max_ab = $x7c->settings['max_ab'];
+				
 				if(!checkIfMaster()){
 					$body .='	<script language="javascript" type="text/javascript">
 								
@@ -640,20 +599,8 @@
 								
 								function do_form_refresh(ab_name){
 									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
-									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;';
-									
-					if(!$x7s->sheet_ok){
-						$min_auth = $xp - $x7c->settings['starting_xp'];
-									
-						$body.='			var xp=document.sheet_form["xp"].value;
-									if(xp > '.$min_auth.'){
-										document.forms[0].elements["aggiorna"].style.visibility="hidden";
-									}
-									else{
-										document.forms[0].elements["aggiorna"].style.visibility="visible";
-									}';
-					}
-					$body.='			}';
+									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
+								}';
 				}
 				//Master can everithing wothout controls
 				else{
@@ -735,8 +682,6 @@
 				
 				
 				$disabled="";
-				if(!$x7s->sheet_ok && !checkIfMaster())
-					$disabled='style="visibility: hidden;"';
 				
 				$body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled></td></tr></table>";
 				
@@ -806,143 +751,85 @@
 				}
 				
 				
-				if ($x7s->sheet_ok < 2 && isset($_POST['ch']) && $_POST['ch']>0 && !checkIfMaster()){
-					$errore .="Non hai usato tutti i tuoi punti caratteristica<br>";
+				$query = $db->DoQuery("SELECT * FROM {$prefix}characteristic ORDER BY name");
+
+				$char='';
+				while($row = $db->Do_Fetch_Assoc($query)){
+					$char[$row['id']]=$row;
 				}
-				else{
-					$query = $db->DoQuery("SELECT * FROM {$prefix}characteristic ORDER BY name");
-								
-					$char='';
-					while($row = $db->Do_Fetch_Assoc($query)){
-						$char[$row['id']]=$row;
+
+
+				if($ok){
+					//Ora posso aggiornare
+					if(isset($_POST['name']) &&
+						isset($_POST['age'])&&
+						isset($_POST['nat']) &&
+						isset($_POST['marr']) &&
+						isset($_POST['gender']) &&
+						isset($_POST['avatar_in'])
+						){
+
+
+						if($pg!=$x7s->username){
+							include('./lib/alarms.php');
+							sheet_modification($pg,$_GET['page']);
+						}
+
+						$db->DoQuery("UPDATE {$prefix}users SET
+							name='$_POST[name]',
+							age='$_POST[age]',
+							nat='$_POST[nat]',
+							marr='$_POST[marr]',
+							gender='$_POST[gender]',
+							avatar='$_POST[avatar_in]'
+							WHERE username='$pg'");
+						}
+
+					if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
+
+						if($_POST['pwd1'] != $_POST['pwd2']){
+							$errore .= "Non hai digitato correttamente la password";
+						}
+						else{
+							$errore .= "Password cambiata";
+							$newpwd = md5($_POST['pwd1']);
+							if($pg==$x7s->username){
+								setcookie($auth_pcookie,$newpwd,time()+$x7c->settings['cookie_time'],$X7CHAT_CONFIG['COOKIE_PATH']);
+							}
+
+							$db->DoQuery("UPDATE {$prefix}users SET
+							password='$newpwd'
+							WHERE username='$pg'");
+						}
 					}
-					
-					if($x7s->sheet_ok < 2 && !checkIfMaster()){
-						$total_char=0;
-						//Controllo se le caratteristiche non sono state abbassate o superano il massimo
+
+					if(checkIfMaster()){
+						if(isset($_POST['xp']) &&
+							isset($_POST['info']) ){
+							$db->DoQuery("UPDATE {$prefix}users
+									SET 	xp='$_POST[xp]',
+										info='$_POST[info]'
+									 WHERE username='$pg'");
+						}
+					}
+
+					if(canModify()){
 						foreach($char as $cur){
 							if(!isset($_POST[$cur['id']])){
 								$ok = false;
 								break;
 							}
-								
-							$total_char+=$_POST[$cur['id']];
-							if($_POST[$cur['id']] < $x7c->settings['min_ch']){
-								$errore .= "Errore, non puoi abbassare le caratteristiche sotto il {$x7c->settings['min_ch']}<br>";
-								$ok = false;
-								break;
-							}
-							elseif($_POST[$cur['id']] > $x7c->settings['max_ch']){
-								$errore .= "Errore, le caratteristiche non possono superare il valore massimo {$x7c->settings['max_ch']}<br>";
-								$ok = false;
-								break;
-							}
+
+							$db->DoQuery("UPDATE {$prefix}usercharact
+									SET value='{$_POST[$cur['id']]}'
+									WHERE username='$pg'
+									 AND charact_id='{$cur['id']}'");
 						}
-						
-						if($total_char > $x7c->settings['starting_ch']){
-							$errore .= "Errore, hai usato troppi punti caratteristica<br>";
-							$ok = false;
-						}
-						
-					
+
 					}
-					
-					
-					if($ok){
-						//Ora posso aggiornare						
-						if(isset($_POST['name']) && 
-							isset($_POST['age'])&&
-							isset($_POST['nat']) &&
-							isset($_POST['marr']) &&
-							isset($_POST['gender']) &&
-							isset($_POST['avatar_in'])
-							){
-								
-								
-							if($pg!=$x7s->username){
-								include('./lib/alarms.php');
-								sheet_modification($pg,$_GET['page']);
-							}
-							
-							$db->DoQuery("UPDATE {$prefix}users SET
-								name='$_POST[name]',
-								age='$_POST[age]',
-								nat='$_POST[nat]',
-								marr='$_POST[marr]',
-								gender='$_POST[gender]',
-								avatar='$_POST[avatar_in]'
-								WHERE username='$pg'");
-							}
-							
-						if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
-					
-							if($_POST['pwd1'] != $_POST['pwd2']){
-								$errore .= "Non hai digitato correttamente la password";
-							}
-							else{
-								$errore .= "Password cambiata";
-								$newpwd = md5($_POST['pwd1']);
-								if($pg==$x7s->username){
-									setcookie($auth_pcookie,$newpwd,time()+$x7c->settings['cookie_time'],$X7CHAT_CONFIG['COOKIE_PATH']);
-								}	
-									
-								$db->DoQuery("UPDATE {$prefix}users SET
-								password='$newpwd'
-								WHERE username='$pg'");	
-							}
-						}
-						
-						if(checkIfMaster()){
-							if(isset($_POST['xp']) &&
-								isset($_POST['info']) ){
-								$db->DoQuery("UPDATE {$prefix}users 
-										SET 	xp='$_POST[xp]',
-											info='$_POST[info]'
-										 WHERE username='$pg'");
-							}
-						}
-						
-						if(canModify()){
-							foreach($char as $cur){
-								if(!isset($_POST[$cur['id']])){
-									$ok = false;
-									break;
-								}
-								
-								$db->DoQuery("UPDATE {$prefix}usercharact
-										SET value='{$_POST[$cur['id']]}'
-										WHERE username='$pg'
-										 AND charact_id='{$cur['id']}'");
-							}
-														
-							if(!checkIfMaster()){
-								if($x7s->sheet_ok){
-									$query = $db->DoQuery("SELECT xp FROM {$prefix}users WHERE username='$pg'");
-									$row = $db->Do_Fetch_Assoc($query);
-									
-									if(!$row)
-										die("Impossible, database incongurence while executing sheet.php");
-									
-									$xp=$row['xp']+($x7c->settings['starting_xp']*$x7c->settings['xp_ratio']);
-									
-									$db->DoQuery("UPDATE {$prefix}users SET second_mod='1',
-														sheet_ok='0',
-														xp='$xp'
-														WHERE username='$pg'");
-									
-									//We reset abilities 
-									$db->DoQuery("UPDATE {$prefix}userability SET value='0' WHERE username='$pg'");
-									$x7s->second_mod=1;
-									$x7s->sheet_ok=0;
-								}
-								header('Location: ./index.php?act=sheet&page=ability');
-							}
-							
-						}
-						
-					}
-					
+
 				}
+					
 
 			}
 			else if(isset($_GET['settings_change']) && !canModify() && !checkIfMaster() && $x7s->username==$pg){
@@ -1056,10 +943,7 @@
 					';
 				}
 				
-				if(!checkIfMaster() && $x7s->sheet_ok == 1)
-					$body .= '
-							document.getElementById("errore").innerHTML = "Attenzione!!! Questa è l\'ultima modifica che puoi fare alla scheda!";
-					';
+
 				
 				$body.='					}
 								}
@@ -1192,40 +1076,25 @@
 						
 				if(canModify()){
 					$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
-					if(!checkIfMaster() && !$x7s->sheet_ok){
-						$errore .='Prima di poter effettuare qualunque operazione, devi costruire il tuo personaggio<br>';
-					
+
+								
+					foreach($charact as $cur_ch){
+						$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
+
+						$body .= "
+						<div id=\"{$cur_ch['name']}\">
+						<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
+						<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+						<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
+						<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
+					}
+
+					if(!checkIfMaster())
 						$body .= '<div id="ch_point" align="center">Punti caratteristica:<br>
 							<input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="ch" value="'.$ch.'"></div>
 						';
 
-						foreach($charact as $cur_ch){
-							$body .= "<div id=\"{$cur_ch['name']}\">
-							<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
-							<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$x7c->settings['min_ch']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-							<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$x7c->settings['min_ch']}\"/>
-							<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
-						}
-					}
-					else{					
-						foreach($charact as $cur_ch){
-							$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
-							
-							$body .= "
-							<div id=\"{$cur_ch['name']}\">
-							<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
-							<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-							<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
-							<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
-						}
-						
-						if(!checkIfMaster())
-							$body .= '<div id="ch_point" align="center">Punti caratteristica:<br>
-								<input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled>
-								<input type="hidden" name="ch" value="'.$ch.'"></div>
-							';
-					}
 					
 				}
 				
@@ -1604,12 +1473,9 @@
 		</style>
 		';
 		
-		$onload='';
-		if($x7s->sheet_ok == 0 && ($_GET['page']=="main" || $_GET['page']=="ability")){
-			$onload='onload="javascript: modify();"';
-		}
+
 		
-		echo '</head><body '.$onload.'>
+		echo '</head><body>
  			<div class="sheet" id="sheet'.$bg.'">
  			';
  			
@@ -1638,10 +1504,8 @@
 	function canModify(){
 		global $x7s;
 		
-		$time = time();
-		$month = 2592000; //A month
-		
-		return (($_GET['pg']==$x7s->username && !$x7s->second_mod  && (($time - $x7s->reg_date) < $month )) || checkIfMaster());
+
+		return (($_GET['pg']==$x7s->username) || checkIfMaster());
 	}
 
 ?>
