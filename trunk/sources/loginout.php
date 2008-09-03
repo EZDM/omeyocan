@@ -159,12 +159,13 @@
 	}
 	
 	function logout_page(){
-		$body = "<div id=\"logout\"> Logout eseguito. <a href=\"index.php\">Clicca Qui</a> per accedere nuovamente.";
-		
 		srand(time());
 		$num = rand(1,4);
 		
-		$body .= '<div id="random_img"><img src=./graphic/logout'.$num.'.jpg> </div></div>';
+		$body = '<div id="logout">
+			<img src=./graphic/logout'.$num.'.jpg><br>
+		 Logout eseguito. <a href="index.php">Clicca Qui</a> per accedere nuovamente.</div>';
+		
 	
 		print_loginout($body,true);
 	}
