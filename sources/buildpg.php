@@ -265,15 +265,18 @@
 
 			//Characteristics
 			$query_char = $db->DoQuery("SELECT * FROM {$prefix}characteristic");
-         
+
+         		$ch_descr_vector="\n";
 			while($row_ch = $db->Do_Fetch_Assoc($query_char)){
 				$charact[$row_ch['id']]=$row_ch;
+				$ch_descr_vector .= "\t\t\t\t\t\tdescr['$row_ch[id]']=\"$row_ch[descr]\";\n";
 			}
 
 
 			$ch_fields ='';
 			foreach($charact as $cur_ch){
-				$ch_fields .= "<tr><td>{$cur_ch['name']}:</td><td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
+				$ch_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur_ch['id']}');\" onMouseOut=\"javascript: hide_desc();\">
+					<td>{$cur_ch['name']}:</td><td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
 					<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$x7c->settings['min_ch']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 						<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$x7c->settings['min_ch']}\"/>
 						<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\">\n</td></tr>";
@@ -309,7 +312,7 @@
 			$ab_fields ='';
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){
-					$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">";
+					$ab_fields .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}');\" onMouseOut=\"javascript: hide_desc();\">";
 					$ab_fields .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
 					<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 					<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
@@ -354,8 +357,10 @@
 
 			$body ='
 			<script language="javascript" type="text/javascript">
-
-						'.$ab_descr_vector.'
+						var descr=Array();
+						'.$ab_descr_vector.
+						$ch_descr_vector
+						.'
 
 						function add_ch(ch_name){
 							var value = parseInt(document.sheet_form[ch_name].value);
@@ -454,7 +459,13 @@
 						}
 
 						function show_desc(el){
-							document.getElementById("descr").innerHTML = descr[el];
+							document.getElementById("help").innerHTML = descr[el];
+							document.getElementById("help").style.visibility = "visible";
+						}
+
+						function hide_desc(){
+							document.getElementById("help").style.visibility = "hidden";
+							document.getElementById("help").innerHTML = "";
 						}
 
 						function enable_send(){
@@ -530,7 +541,7 @@
 					</tr>
 				</table>
 			</form>
-
+			<div id="help">help</div>
 			';
 
 			return $body;
@@ -559,6 +570,14 @@
 		<style type="text/css">
 			td{
 				color: white;
+			}
+
+			#help{
+				position: fixed;
+				top: 10px;
+				right: 10px;
+				border: solid 1px white;
+				visibility: hidden;
 			}
 			
 		</style>
