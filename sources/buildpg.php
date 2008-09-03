@@ -473,10 +473,10 @@
 							var ch=document.sheet_form["ch"].value;
 
 							if(xp > 0 || ch > 0){
-								document.forms[0].elements["aggiorna"].style.visibility="hidden";
+								send.disabled = true;
 							}
 							else{
-								document.forms[0].elements["aggiorna"].style.visibility="visible";
+								send.disabled = false;
 							}
 
 						}
@@ -537,7 +537,7 @@
 					'.$ab_fields.'
 
 					<tr>
-						<td><INPUT name="aggiorna" class="button" type="SUBMIT" value="Invia" style="visibility: hidden;"></td>
+						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Invia" disabled></td>
 					</tr>
 				</table>
 			</form>
