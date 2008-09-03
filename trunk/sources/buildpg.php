@@ -577,6 +577,7 @@
 				top: 10px;
 				right: 10px;
 				border: solid 1px white;
+				width: 200px;
 				visibility: hidden;
 			}
 			
