@@ -1938,6 +1938,81 @@
 			if(isset($_GET['delete'])){
 				$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
 			}
+
+			if(isset($_GET['proom'])){
+				if(isset($_POST['owner']) && $_POST['owner']!=''){
+					$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
+					$row = $db->Do_Fetch_Assoc($query);
+					
+					if($row['cnt'] == 0){
+						$body.= "Errore, utente $_POST[owner] non esistente";
+					}
+					else{
+						$query_rooms = $db->DoQuery("SELECT count(*) AS cnt
+								FROM {$prefix}rooms WHERE name='$_POST[owner]'");
+
+						$query_obj_master =  $db->DoQuery("SELECT count(*) AS cnt
+								FROM {$prefix}objects WHERE name='key_$_POST[owner]' AND owner=''");
+
+						$query_obj_user =  $db->DoQuery("SELECT count(*) AS cnt
+								FROM {$prefix}objects WHERE name='key_$_POST[owner]' AND owner='$_POST[owner]'");								
+						$row_rooms = $db->Do_Fetch_Assoc($query_rooms);
+						$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
+						$row_obj_user = $db->Do_Fetch_Assoc($query_obj_user);
+
+						if($row_rooms['cnt'] == 0){
+						//Room creation
+							$db->DoQuery("INSERT INTO {$prefix}rooms
+								(name, type, maxusers, logged, logo)
+								VALUES ('$_POST[owner]', '2', '1000', '1', './graphic/private_room.jpg')");
+							$body .= "Stanza creata con successo<br>";
+
+						}
+						else
+							$body .= "Stanza gi&agrave; presente<br>";
+
+						if($row_obj_master['cnt'] == 0){
+						//Copy of the key for the master
+							$db->DoQuery("INSERT INTO {$prefix}objects
+								(name, description, uses, image_url)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg')");
+							$body .= "Copia master della chiave creata con successo<br>";
+						}
+						else
+							$body .= "Copia master della chiave gi&agrave; presente<br>";
+
+						if($row_obj_user['cnt'] == 0){
+						//Cooy of the key for the owner
+							$db->DoQuery("INSERT INTO {$prefix}objects
+								(name, description, uses, image_url, owner)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]')");
+							$body .= "Copia utente della chiave creata con successo<br>";
+						}
+						else
+							$body .= "Copia utente della chiave gi&agrave; presente<br>";
+						
+					}
+
+					$body.="<br><br><a href=\"index.php?act=adminpanel&cp_page=objects\">[Torna agli oggetti]</a>";
+				}
+
+				else{
+					$body .= "<form action=\"index.php?act=adminpanel&cp_page=objects&proom=1\" method=\"post\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<tr>
+								<td>Nome del proprietario:</td>
+								<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+							</tr>
+							<tr>
+							<td><input type=\"submit\" class=\"button\" value=\"Vai\"></td>
+							</tr>
+						</table>
+					</form>
+				";
+				
+				
+				}
+			}
 					
 			if(isset($_GET['edit'])){
 				if($_GET['edit']!=-1){
@@ -2005,7 +2080,7 @@
 				
 			
 			}
-			else{
+			else if(!isset($_GET['proom'])){
 			
 				if(isset($_GET['startfrom'])){
 					$limit=$_GET['startfrom'];
@@ -2039,7 +2114,9 @@
 					$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' ORDER BY name LIMIT $limit_min, $limit_max");
 						
 					$body = $error."<br><br>";
-					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo]</a><br><br>";
+					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo oggetto]</a><br><br>
+					<a href=\"index.php?act=adminpanel&cp_page=objects&proom=1\">[Crea stanza privata]</a><br><br>
+					";
 					$body .= $navigator;
 					while($row = $db->Do_Fetch_Assoc($query)){
 						$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\"><b>Oggetto: </b> $row[name]</a> <a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a><br>";
