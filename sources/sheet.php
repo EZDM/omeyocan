@@ -105,12 +105,25 @@
 				if(!$row || $row['id']==''){
 					$errore = "Oggetto non esistente";
 				}
-				
+
 				if($errore==''){
-					$db->DoQuery("UPDATE {$prefix}objects
+					//keys duplicates, and does not disappera from my sheet
+					if($row['name']=="key_{$x7s->username}" || ($row['name']=="key_$_GET[pg]" && checkIfMaster())){
+						if(!isset($_POST['grants']) || $_POST['grants'] <= 0 || $_POST['grants']== '')
+							$_POST['grants'] = -1;
+							
+						$db->DoQuery("INSERT INTO {$prefix}objects
+							(name, description, owner, uses, image_url)
+							VALUES ('$row[name]', '$row[description]', '$_POST[owner]','$_POST[grants]','$row[image_url]')
+						");
+					}
+					else{
+						$db->DoQuery("UPDATE {$prefix}objects
 							SET owner='$_POST[owner]'
 							WHERE id='$_POST[id]' AND owner<>''"); //The last is only for protection to pattern objects
 							
+					}
+
 					$errore="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
 					object_moves($_POST['owner'],$pg,$row['name']);
@@ -131,23 +144,54 @@
 		
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg'");
-		
+
+		$room='';
+		$more_form='';
 		while($row=$db->Do_Fetch_Assoc($query)){
-			$body.= "<img width=100 height=100 src=\"$row[image_url]\">
-					<b>$row[name]</b><br>
-					$row[description]<br>";
+			$obj_name = $row['name'];
+			$description = $row['description'];
+			
+			if(preg_match("/key_/", $row['name'])) {
+				list($pre, $name)=split("key_", $row['name']);
+				if($_GET['pg']==$x7s->username || checkIfMaster()){
+					//we make clickable only key of my sheet
+					if($row['name'] == "key_{$x7s->username}" || ($row['name']=="key_$_GET[pg]" && checkIfMaster())){
+						//This is my key
+						$more_form = '
+							<tr>
+								<td>Usi concessi (vuoto per illimitati):</td>
+								<td><input type="text" name="grants" class="text_input" size=2></td>
+							</tr>
+						';
+					}
+					else{
+						$remaining_uses = ($row['uses'] == -1) ? "illimitati" : $row['uses'];
+						$description .= "<br>(Usi rimasti: $remaining_uses)";
+					}
+					
+					$obj_name = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\' "> Stanza di '.$name.'</a>';
+					
+				}
+				else{
+					$obj_name = "Stanza di $name";
+				}
+			}
+			
+			$body.= "<table width=100%> <tr> <td class=\"obj\"> <img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
+					<b>$obj_name</b>
+					<p>$description</p> </td> </tr> </table>";
 			
 			if($pg==$x7s->username || checkIfMaster()){
 				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
-							<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-								<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+       						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 								<tr>
 									<td>Dai a:</td>
 									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
 									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></div></td>
 									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\"></td>
 								</tr>
-								
+								$more_form
 							</table>
 					</form>";
 			}
@@ -179,7 +223,7 @@
 				}
 				</script>
 				<div id="errore" class="errore">'.$errore.'
-				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err(); window.location.href=\'index.php?act=sheet&page=equip&pg='.$_GET['pg'].'\';">
 				</div>';
 		}
 	
@@ -1175,6 +1219,9 @@
 		<style type="text/css">
 			INPUT{
 				height: 21px;
+			}
+			.obj {
+				font-size: 10pt;
 			}
 			#errore{
 				top: 200px;

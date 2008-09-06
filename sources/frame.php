@@ -75,6 +75,70 @@
 			return;
 		}
 
+	//We check if we are entering a private room
+	$query = $db->DoQuery("SELECT type FROM {$prefix}rooms WHERE name='$_GET[room]'");
+	$row = $db->Do_Fetch_Assoc($query);
+
+	if($row == null)
+		die("Room {$_GET['room']} does not exist");
+
+	//If it is private
+	if($row['type'] == 2){
+		if($x7s->username != $_GET['room'] && !$x7c->permissions['admin_panic']){
+			//We are not the owner of the room or the master..
+			//To enter we must own the keyCode
+			$univoque_key='';
+			if(!isset($_GET['key_used'])){
+				if($_GET['frame']!="update" && $_GET['frame']!="send"){
+					die("Missing parameter");
+				}
+			}
+			else
+				$univoque_key = " AND id='$_GET[key_used]'";
+				
+				
+			$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE
+						owner = '{$x7s->username}' AND
+						name = 'key_$_GET[room]'
+						$univoque_key
+					");
+
+			$row = $db->Do_Fetch_Assoc($query);
+			if($row == null){
+				//We do not own the key
+				header("Location: index.php");
+				return;
+			}
+			else{
+				if($_GET['frame']!="update" &&
+					$_GET['frame']!="send" &&
+					$row['uses'] >= 0){
+					//If we have a limited access to the room whe must update the use of the keyCode
+					$remain = $row['uses'] -1;
+
+					if($remain < 0){
+						$db->DoQuery("DELETE FROM {$prefix}objects
+							WHERE
+							owner = '{$x7s->username}' AND
+							name = 'key_$_GET[room]' AND
+							id = '$_GET[key_used]'
+						");
+						header("Location: index.php");
+						return;
+					}
+					else
+						$db->DoQuery("UPDATE {$prefix}objects
+								SET uses=$remain
+								WHERE
+								owner = '{$x7s->username}' AND
+								name = 'key_$_GET[room]' AND
+								id = '$_GET[key_used]'
+						");
+				}
+			}
+		}
+	}
+
 	switch($_GET['frame']){
 		case "update":
 		
