@@ -67,7 +67,7 @@
 	if(!isset($_GET['room']))
 		die("Fatal error, room name not set.");
 
-	if($_GET['room'] == "Mappa")
+	if($_GET['room'] == "Mappa" && !isset($_GET['frame']))
 		header("Location: index.php?errore=noroom");
 	
 	if(isset($_GET['delete']))
