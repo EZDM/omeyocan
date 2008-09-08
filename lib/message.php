@@ -84,7 +84,7 @@
 				$row = $db->Do_Fetch_Assoc($query);
 				
 				if($row['num'])
-					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$body_parsed','$user[1]','$time')");
+					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$user[1]:$body_parsed','$room','$time')");
 			}
 		}else if($sussurro == 2){
 			//Mastering message
@@ -347,7 +347,7 @@
 						$obj_msg="<span class=\"break\">{Usa l\'oggetto: ".$row['name']." che diventa inutilizzabile subito dopo l\'azione}</span>";
 					}
 					else{
-						$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']." ".$result."}</span>";
+						$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']."}</span>";
 					}
 						
 					if($row['uses'] > 0){

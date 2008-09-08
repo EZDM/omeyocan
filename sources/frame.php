@@ -300,7 +300,7 @@
 								(room='$x7s->username' AND type='3') OR
 								(type='2') OR
 								(room='$x7s->username:0' AND type='5' AND time<$pm_time) OR
-								((room='$x7s->username' OR user='$x7s->username') AND type='10') OR
+								(room='$_GET[room]' AND type='10') OR
 								(room='$x7s->username' AND (type='11' OR type='12' OR type='13'))
 							)
 							)
@@ -354,11 +354,17 @@
 						$row[0] = preg_replace("/;/","74ce61f75c75b155ea7280778d6e8182",$row[0]);
 						echo utf8_encode("7;$row[0]|");
 						$db->DoQuery("UPDATE {$prefix}messages SET time='$pm_etime' WHERE id='$row[4]'");
-					}elseif($row[1] == 10){			
-						if($row[0] != $x7s->username)		
-							$toout = "<span class=\"sussurro\">[$row[0]] ti ha mandato un sussurro:".$row[2]."</span><br>";
-						else
-							$toout = "<span class=\"sussurro\">Hai inviato un sussurro a [$row[5]]:".$row[2]."</span><br>";
+					}elseif($row[1] == 10){
+						list($user,$msg) = split(":",$row[2]);
+						if($row[0] != $x7s->username){
+							//Only master and final user can have this message
+							if($x7s->username == $user || $x7c->permissions['admin_panic']){
+								$toout = "<span class=\"sussurro\">[$row[0]] ti ha mandato un sussurro:".$msg."</span><br>";
+							}
+						}
+						else{
+							$toout = "<span class=\"sussurro\">Hai inviato un sussurro a [$user]:".$msg."</span><br>";
+						}
 					}elseif($row[1] == 11){
 						//This is a panic upate
 						$db->DoQuery("DELETE FROM {$prefix}messages WHERE type='11' AND room='$x7s->username'");
@@ -557,7 +563,7 @@
 						panic[6]="Angoscia";
 						panic[7]="Paura";
 						panic[8]="Paranoia";
-						panic[9]="Terrore cieco";
+						panic[9]="Terrore";
 						panic[10]="!!! Panico !!!";
 						
 						//This saves from enter key when confirming an alert box
@@ -669,6 +675,8 @@
 												if(dataSubArray[1] != '')
 													Alert(dataSubArray[1]);
 												document.location = dataSubArray[2];
+											}else if(dataSubArray[0] == '10'){
+												startfrom = dataSubArray[1];	
 											}else if(dataSubArray[0] == '11'){
 												//Panic update
 												panic_value = parseInt(dataSubArray[1]);
