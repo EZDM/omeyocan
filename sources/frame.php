@@ -65,7 +65,10 @@
 
 	
 	if(!isset($_GET['room']))
-		die("Fatal error, room name not set.");	
+		die("Fatal error, room name not set.");
+
+	if($_GET['room'] == "Mappa")
+		header("Location: index.php?errore=noroom");
 	
 	if(isset($_GET['delete']))
 		if($x7c->permissions['admin_panic']){
@@ -79,7 +82,6 @@
 	$query = $db->DoQuery("SELECT type FROM {$prefix}rooms WHERE name='$_GET[room]'");
 	$row = $db->Do_Fetch_Assoc($query);
 
-	// if($row == null) Non necessario perche' il controllo avviene in index.php
 
 	//If it is private
 	if($row['type'] == 2){

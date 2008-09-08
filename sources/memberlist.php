@@ -113,8 +113,9 @@
 		
 			if(($room!='' && $row['position']!='')||$room==''){
 				// Output this entry
-				if($room!='' && $room!="Mappa")
-					$position = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\'; window.location.reload(); ">'.$row['position'].'</a>';
+				$position='';
+				if($row['position']!="Mappa")
+					$position = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
 				else
 					$position = "Mappa";
 				
@@ -143,7 +144,11 @@
 			$head = "Lista cittadini";
 			
 		$body .= '<script language="javascript" type="text/javascript">
-				setTimeout("window.location.reload()",10000);
+				setTimeout("update()",10000);
+				
+				function update(){
+					window.location.reload();
+				}
 			</script>';
 					
 		print_memberlist($body);
