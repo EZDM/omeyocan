@@ -488,6 +488,7 @@
 				$parsed_msg = $_GET['msg'];
 				
 				if($x7c->permissions['room_voice'] == 1){
+					//Mastering message
 					send_message($parsed_msg,$x7c->room_name,2);
 
 				}else{
