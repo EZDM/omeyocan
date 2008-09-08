@@ -87,7 +87,23 @@
 
 <?PHP 
 //This file include common layout for frame and map
-	include('./sources/layout.html'); 
+	include('./sources/layout.html');
+
+	if(isset($_GET['errore'])){
+		$errore='';
+		switch($_GET['errore']) {
+			case "nokey":
+				$errore = "Non hai la chiave per entrare in questa stanza";
+				break;
+			case "noroom":
+				$errore = "La stanza non esiste";
+				break;
+		}
+
+		echo '<div id="errore" class="errore_popup">'.$errore.'
+				<br><br><input name="ok" type="button" class="button" value="OK" onClick="javascript: document.getElementById(\'errore\').style.visibility=\'hidden\';">
+				</div>';
+	}
 
 ?>
   

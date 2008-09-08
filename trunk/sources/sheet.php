@@ -223,7 +223,7 @@
 				}
 				</script>
 				<div id="errore" class="errore">'.$errore.'
-				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err(); window.location.href=\'index.php?act=sheet&page=equip&pg='.$_GET['pg'].'\';">
+				<br><br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err(); window.location.href=\'index.php?act=sheet&page=equip&pg='.$_GET['pg'].'\';">
 				</div>';
 		}
 	

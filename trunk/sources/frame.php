@@ -79,8 +79,7 @@
 	$query = $db->DoQuery("SELECT type FROM {$prefix}rooms WHERE name='$_GET[room]'");
 	$row = $db->Do_Fetch_Assoc($query);
 
-	if($row == null)
-		die("Room {$_GET['room']} does not exist");
+	// if($row == null) Non necessario perche' il controllo avviene in index.php
 
 	//If it is private
 	if($row['type'] == 2){
@@ -88,13 +87,10 @@
 			//We are not the owner of the room or the master..
 			//To enter we must own the keyCode
 			$univoque_key='';
-			if(!isset($_GET['key_used'])){
-				if($_GET['frame']!="update" && $_GET['frame']!="send"){
-					die("Missing parameter");
-				}
-			}
-			else
+			if(isset($_GET['key_used'])){
 				$univoque_key = " AND id='$_GET[key_used]'";
+			}
+				
 				
 				
 			$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE
@@ -103,16 +99,12 @@
 						$univoque_key
 					");
 
-			$row = $db->Do_Fetch_Assoc($query);
-			if($row == null){
-				//We do not own the key
-				header("Location: index.php");
-				return;
-			}
-			else{
-				if($_GET['frame']!="update" &&
-					$_GET['frame']!="send" &&
-					$row['uses'] >= 0){
+			$ok=false;
+			while(($row = $db->Do_Fetch_Assoc($query))!=null && !$ok){
+				if($univoque_key=='')
+					$_GET['key_used'] = $row['id'];
+					
+				if($_GET['frame']!="update" &&	$_GET['frame']!="send" && $row['uses'] >= 0){
 					//If we have a limited access to the room whe must update the use of the keyCode
 					$remain = $row['uses'] -1;
 
@@ -123,10 +115,8 @@
 							name = 'key_$_GET[room]' AND
 							id = '$_GET[key_used]'
 						");
-						header("Location: index.php");
-						return;
 					}
-					else
+					else{
 						$db->DoQuery("UPDATE {$prefix}objects
 								SET uses=$remain
 								WHERE
@@ -134,8 +124,20 @@
 								name = 'key_$_GET[room]' AND
 								id = '$_GET[key_used]'
 						");
+						$ok=true;
+					}
 				}
+				else
+					$ok=true;
+
 			}
+
+			if(!$ok){
+				//We do not own a valid key
+				header("Location: index.php?errore=nokey");
+				return;
+			}
+			
 		}
 	}
 
