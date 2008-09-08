@@ -96,8 +96,8 @@
 		
 		$body = "<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\" class=\"col_header\">
 			<tr>
-				<td width=\"100\" height=\"25\">&nbsp;<a href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
-				<td width=\"100\" height=\"25\"><a href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
+				<td width=\"100\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
+				<td width=\"100\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
 		if($room!='' && $room!="Mappa")
 			$body.="<td width=\"100\" height=\"25\">Sussurra</td>";
 				
@@ -115,28 +115,28 @@
 				// Output this entry
 				$position='';
 				if($row['position']!="Mappa")
-					$position = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
+					$position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
 				else
 					$position = "Mappa";
 				
 				$body .= "<tr>
-							<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
+							<td width=\"100\" class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
 							<td width=\"100\" class=\"dark_row\">{$position}</td>";
 				if($room!='' && $room!="Mappa")
 					if($row['position'] != '' && $row['position']==$room)
-						$body .= "<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
+						$body .= "<td width=\"100\" class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
 						$body .= "<td width=\"100\" class=\"dark_row\"></td>";
 				
 				if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
-					$body .= "<td width=\"100\" class=\"dark_row\"height=\"25\"><a href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+					$body .= "<td width=\"100\" class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
 			
 				$body .= "</tr>";
 			}
 			
 		}
 		
-		$body .= "</table><p align=\"center\"><a href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></p></div>";
+		$body .= "</table><p align=\"center\"><a class=\"dark_link\" href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></p></div>";
 
 		if($room!='')
 			$head = "Lista cittadini Online";
@@ -161,9 +161,6 @@
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
 		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Lista utenti</title>";
 		echo $print->style_sheet;
-		echo $print->ss_mini;
-		echo $print->ss_chatinput;
-		echo $print->ss_uc;
 		
 		$sfondo = './graphic/sfondopresenti.jpg';
 		
@@ -174,6 +171,27 @@
 				height: 500px;
 				background-image:url('.$sfondo.');
 			}
+			.dark_row{
+				font-size: 10pt;
+				color: black;
+				background: transparent;
+			}
+
+			.dark_link{
+				font-style: italic;
+				color: black;
+			}
+
+			.col_header{
+				background: transparent;
+				margin-top: 10px;
+				border: solid 2px gray;
+			}
+
+			a:hover{
+				color: red;
+			}
+
 		
 			
 		</style>

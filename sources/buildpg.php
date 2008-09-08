@@ -362,6 +362,11 @@
 						$ch_descr_vector
 						.'
 
+						descr[\'naz\']="La Nazionalit&agrave; indica lo stato dal quale provenite. Italiana, statunitense, russa... Facile dai!";
+						descr[\'nome\']="Il nome completo del pg &egrave; inteso come il vero nome anagrafico del personaggio, quello \"legale\" ... Quindi il <b>NICK</b> è quello che appare in chat (scorpion, butterfly, volpe quel che vi pare...) ma questo &egrave; la Vera Identit&agrave; del player. Non sono quindi ammessi nomi impossibili (Leo-99 o Topolina 74) o cretini (the undead lord o Diabolik), come nemmeno nomi fantasy (Gandalf il bianco, Elandriel Blacwisdom o cose simili)... Insomma siate veritieri...";
+						descr[\'sesso\']="Sesso? Spesso e volentieri grazie... Non vi spiego cosa sia, tanto il men&ugrave; a tendina non vi permetter&agrave; grossi errori!";
+						descr[\'civile\']="Indica se siete sposati o single.";
+
 						function add_ch(ch_name){
 							var value = parseInt(document.sheet_form[ch_name].value);
 							var ch = parseInt(document.sheet_form["ch"].value);
@@ -483,10 +488,14 @@
 
 				</script>
 
-			<p>'.$errore.'</p>
+			<p>Completa la scheda del tuo personaggio<BR>
+			 Per proseguire devi completare tutti i campi e usare tutti i punti abilit&agrave; e caratteristica.
+			 </p>
+			<p class="error_msg">'.$errore.'</p>
 			<form action="index.php?act=buildpg&build" method="post" name="sheet_form">
+				<div id="all">
 				<table>
-					<tr>
+					<tr onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();">
 						<td>Nome completo:</td>
 						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
 					</tr>
@@ -496,13 +505,13 @@
 						<td><input class="sheet_input" type="text" name="age" value="16" size="2" style="text-align: right;" /></td>
 					</tr>
 
-					<tr>
+					<tr onMouseOver="javascript: show_desc(\'naz\');" onMouseOut="javascript: hide_desc();">
 						<td>Nazionalit&agrave;</td>
 						<td><input class="sheet_input" type="text" name="nat" size="16" /></td>
 					</tr>
 					
 					</tr>
-					<tr><td>Sesso:</td>
+					<tr onMouseOver="javascript: show_desc(\'sesso\');" onMouseOut="javascript: hide_desc();"><td>Sesso:</td>
 						<td>
 						<select class="button" name="gender">
 											<option value="0">M</option>
@@ -511,7 +520,7 @@
 						</td>
 					</tr>
 
-					<tr>
+					<tr onMouseOver="javascript: show_desc(\'civile\');" onMouseOut="javascript: hide_desc();">
 						<td>Stato civile:</td>
 						<td>
 							<select class="button" name="marr">
@@ -520,6 +529,8 @@
 						</select>
 						</td>
 					</tr>
+
+					<tr><td colspan=2><hr></td></tr>
 					
 					<tr>
 						<td>Punti caratteristica:</td> <td><input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled> <input type="hidden" name="ch" value="'.$ch.'"> </td>
@@ -527,7 +538,9 @@
 					'.$ch_fields.'
 
 				</table>
-
+				</div>
+				
+				<div id="ability">
 				<table>
 					<tr>
 						<td>Punti abilit&agrave;:</td><td><input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
@@ -540,6 +553,7 @@
 						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Invia" disabled></td>
 					</tr>
 				</table>
+				</div>
 			</form>
 			<div id="help">help</div>
 			';
@@ -576,9 +590,32 @@
 				position: fixed;
 				top: 10px;
 				right: 10px;
+				font-size: 8pt;
 				border: solid 1px white;
-				width: 200px;
+				width:300px;
 				visibility: hidden;
+			}
+
+			#all{
+				position: relative;
+				float: left;
+				top: 0;
+			}
+
+			#ability{
+				position: relative;
+				float: left;
+				margin-left: 20px;
+			}
+
+			p{
+				font-size: 10pt;
+				color: pink;
+			}
+
+			.error_msg{
+				color: red;
+				font-weight: bold;
 			}
 			
 		</style>
