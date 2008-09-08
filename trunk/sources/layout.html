@@ -3,9 +3,14 @@
 	<?PHP 
 	 	if($x7c->permissions['admin_panic'])
 	 		echo '<div id="adminbtn" style="position: absolute; top: 30px; left: 20px;"><a onClick="javascript: window.open(\'index.php?act=admincp\',\'admincp\',\'width=800,height=620, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Administration </a></div>';
+
+		if($x7c->settings['panic'])
+			$logout_src="./graphic/06logoutobscure.jpg";
+		else
+			$logout_src="./graphic/06logout.jpg";
 	 ?>
 	 
-	 <div id="logoutbtn" style="position: absolute; top: 50px; left: 20px;"><a href="index.php?act=logout">Logout</a> </div>
+	 <div id="logoutbtn" style="position: absolute; top: 249px; left: 875px;"><a href="index.php?act=logout"><img src="<?PHP echo $logout_src;?>" /></a> </div>
 
   
 
@@ -35,3 +40,4 @@
 			Powered By <a href="http://www.x7chat.com/" target="_blank">X7 Chat</a> 2.0.5 &copy; 2004 By The <a href="http://www.x7chat.com/" target="_blank">X7 Group</a></marquee>
 
 		</div>
+

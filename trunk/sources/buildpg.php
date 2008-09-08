@@ -587,12 +587,13 @@
 			}
 
 			#help{
-				position: fixed;
-				top: 10px;
-				right: 10px;
-				font-size: 8pt;
+				position: relative;
+				float: left;
+				font-size: 10pt;
 				border: solid 1px white;
 				width:300px;
+				margin-left: 5px;
+				padding: 5px;
 				visibility: hidden;
 			}
 
