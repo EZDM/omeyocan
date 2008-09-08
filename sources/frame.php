@@ -358,8 +358,11 @@
 						list($user,$msg) = split(":",$row[2]);
 						if($row[0] != $x7s->username){
 							//Only master and final user can have this message
-							if($x7s->username == $user || $x7c->permissions['admin_panic']){
+							if($x7s->username == $user){
 								$toout = "<span class=\"sussurro\">[$row[0]] ti ha mandato un sussurro:".$msg."</span><br>";
+							}
+							elseif($x7c->permissions['admin_panic']){
+								$toout = "<span class=\"sussurro\">[$row[0]] ha mandato un sussurro a [$user]:".$msg."</span><br>";
 							}
 						}
 						else{

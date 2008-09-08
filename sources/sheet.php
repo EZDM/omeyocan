@@ -534,8 +534,12 @@
 			
 			$body .= 'function show_desc(el){
 					document.getElementById("descr").innerHTML = descr[el];
+					document.getElementById("descr").style.visibility = "visible";
 				}
-				
+
+				function hide_desc(){
+					document.getElementById("descr").style.visibility = "hidden";
+				}
 			</script>
 			';
 			
@@ -543,7 +547,7 @@
 				$body .= "<table>";
 				foreach($ability as $cur){
 					if($cur['dep'] == ""){
-						$body .= "<tr class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\"><td class=\"ab_text\">".$cur['name']."</td><td>";
+						$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
 						for($i=0; $i<6; $i++){
 							if($i<$cur['value']){
 								$body.='<img src="./graphic/on.gif"/>';
@@ -556,7 +560,7 @@
 						$body .= "</td></tr>\n";
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-							$body .= "<tr class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\"><td class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
+							$body .= "<tr><td class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
 							
 							for($i=0; $i<6; $i++){
 								if($i<$cur2['value']){
@@ -682,8 +686,8 @@
 				
 				foreach($ability as $cur){
 					if($cur['dep'] == ""){
-						$body .= "<tr onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\">";
-						$body .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
+						$body .= "<tr>";
+						$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 						<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 						<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 						<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>
@@ -704,8 +708,8 @@
 						
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-								$body .= "<tr onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\">\n";
-								$body .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
+								$body .= "<tr>\n";
+								$body .= "<td onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
 									<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
 									<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 									<input type=\"hidden\" name=\"{$cur2['ability_id']}\" value=\"{$cur2['value']}\"/>
@@ -1452,6 +1456,18 @@
 				color: white;
 				font-size: 10pt;
 				text-align: center;
+			}
+			#descr{
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				width: 50%;
+				font-size: 10pt;
+				background-color: lightyellow;
+				padding: 5px;
+				border: 3px dashed red;
+				text-decoration: none;
+				visibility: hidden;
 			}
 		</style>
 		';
