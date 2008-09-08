@@ -113,9 +113,14 @@
 		
 			if(($room!='' && $row['position']!='')||$room==''){
 				// Output this entry
+				if($room!='' && $room!="Mappa")
+					$position = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\'; window.location.reload(); ">'.$row['position'].'</a>';
+				else
+					$position = "Mappa";
+				
 				$body .= "<tr>
 							<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
-							<td width=\"100\" class=\"dark_row\">{$row['position']}</td>";
+							<td width=\"100\" class=\"dark_row\">{$position}</td>";
 				if($room!='' && $room!="Mappa")
 					if($row['position'] != '' && $row['position']==$room)
 						$body .= "<td width=\"100\" class=\"dark_row\"><a onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
