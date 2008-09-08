@@ -258,6 +258,20 @@
 				left: 20px;
 				width: 400px;
 			}
+			.errore_popup{
+				text-align: center;
+				color: #650000;
+				font-weight: bold;
+				font-size: 10pt;
+				position: absolute;
+				top: 50%;
+				left: 25%;
+				width: 400px;
+				background-color: lightyellow;
+				padding: 5px;
+				border: 3px dashed red;
+				text-decoration: none;
+			}
 			.errore_ab{
 				text-align: center;
 				color: #650000;

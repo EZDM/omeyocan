@@ -189,8 +189,10 @@
 		$_GET['act'] = "";
 
 	// We cannot allow a user to start the frameset without choosing a room
-	if($_GET['act'] == "frame" && $x7c->room_name == "")
+	if($_GET['act'] == "frame" && $x7c->room_name == ""){
 		$_GET['act'] = "";
+		$_GET['errore'] = "noroom";
+	}
 
 	// Test to see if server is running in single room mode
 	if($x7c->settings['single_room_mode'] != ""){
