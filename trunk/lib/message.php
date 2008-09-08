@@ -87,6 +87,7 @@
 					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$body_parsed','$user[1]','$time')");
 			}
 		}else if($sussurro == 2){
+			//Mastering message
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','14','$body','$body_parsed','$room','$time')");
 		}
 
