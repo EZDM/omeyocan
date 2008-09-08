@@ -2161,6 +2161,7 @@
 					// Delete character sheet
 					$db->DoQuery("DELETE FROM {$prefix}userability WHERE username='$_GET[delete]'");
 					$db->DoQuery("DELETE FROM {$prefix}usercharact WHERE username='$_GET[delete]'");
+					$db->DoQuery("DELETE FROM {$prefix}objects WHERE username='$_GET[delete]'");
 					// Clean up logs
 					cleanup_guest_logs($_GET['delete']);
 					$body = "<div align=\"center\">$txt[462]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
