@@ -565,6 +565,10 @@
 			include("./sources/mail.php");
 			mail_main();
 			exit;
+		case "roomdesc":
+			include("./sources/roomdescr.php");
+			roomdescr_main();
+			exit;
 		default:
 			// The default action is to show the room list
 			// Clean up old rooms

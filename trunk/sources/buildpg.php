@@ -30,14 +30,14 @@
 		
 		$page='';
 		
-		$body = buildpg_mail();
+		$body = buildpg();
 			
 			
 		print_page($body);
 	}
 	
 	
-	function buildpg_mail(){
+	function buildpg(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
 			$errore='';
 			$ok=true;
