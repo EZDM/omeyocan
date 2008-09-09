@@ -537,6 +537,9 @@
 					</tr>
 					'.$ch_fields.'
 
+					<tr>
+						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Invia" disabled></td>
+					</tr>
 				</table>
 				</div>
 				
@@ -549,9 +552,6 @@
 
 					'.$ab_fields.'
 
-					<tr>
-						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Invia" disabled></td>
-					</tr>
 				</table>
 				</div>
 			</form>
@@ -587,8 +587,9 @@
 			}
 
 			#help{
-				position: relative;
-				float: left;
+				position: fixed;
+				left: 620px;
+				top: 70px;;
 				font-size: 10pt;
 				border: solid 1px white;
 				width:300px;
@@ -617,6 +618,10 @@
 			.error_msg{
 				color: red;
 				font-weight: bold;
+			}
+
+			#buildpg {
+				margin-left: 50px;
 			}
 			
 		</style>
