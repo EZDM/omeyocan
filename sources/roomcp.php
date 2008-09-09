@@ -95,8 +95,8 @@
 				$body = "<Br><Br><form action=\"index.php?act=roomcp&cp_page=settings&room=$_GET[room]\" method=\"post\">
 				<table align=\"center\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">
 					<tr>
-						<td width=\"90\">$txt[32]:</td>
-						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"topic\" value=\"{$x7c->room_data['topic']}\"></td>
+						<td width=\"90\">Descrizione:</td>
+						<td width=\"100\"><textarea class=\"text_input\" name=\"topic\">{$x7c->room_data['topic']}</textarea></td>
 					</tr>
 					<tr>
 						<td width=\"90\">$txt[66]:</td>
