@@ -691,12 +691,12 @@
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti esperienza:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
-							<input type="hidden" name="xp" value="'.$xp.'"></form></div></div>
+							<input type="hidden" name="xp" value="'.$xp.'"></form></div>
 						';
 				}
 			}
 			
-			$body.="<div id=\"descr\"> </div></div>";
+			$body.="</div><div id=\"descr\"> </div></div>";
 
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
 				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
