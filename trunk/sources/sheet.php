@@ -696,7 +696,9 @@
 				}
 			}
 			
-			$body.="</div><div id=\"descr\"> </div></div>";
+			$body.="	</div>
+						<div id=\"descr\"> </div>
+				</div>";
 
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
 				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
