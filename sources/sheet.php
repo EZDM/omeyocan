@@ -689,7 +689,7 @@
 				$body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled></td></tr></table>";
 				
 				if(!checkIfMaster()){
-					$body .='<div id="#xp" align="center">Punti esperienza:<br>
+					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="xp" value="'.$xp.'"></form></div>
 						';
