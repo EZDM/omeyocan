@@ -544,24 +544,24 @@
 			</script>
 			';
 			
-			if(($xp==0 || $pg!=$x7s->username) && !checkIfMaster()){
-				$body .= "<table>";
-				foreach($ability as $cur){
-					if($cur['dep'] == ""){
-						$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
-						for($i=0; $i<6; $i++){
-							if($i<$cur['value']){
-								$body.='<img src="./graphic/on.gif"/>';
-							}
-							else{
-								$body.='<img src="./graphic/off.gif"/>';
-							}
+			
+			$body .= "<div id=\"visual\"><table>";
+			foreach($ability as $cur){
+				if($cur['dep'] == ""){
+					$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
+					for($i=0; $i<6; $i++){
+						if($i<$cur['value']){
+							$body.='<img src="./graphic/on.gif"/>';
 						}
+						else{
+							$body.='<img src="./graphic/off.gif"/>';
+						}
+					}
 						
-						$body .= "</td></tr>\n";
+					$body .= "</td></tr>\n";
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-							$body .= "<tr><td class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
+								$body .= "<tr><td class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
 							
 							for($i=0; $i<6; $i++){
 								if($i<$cur2['value']){
@@ -573,14 +573,14 @@
 							}
 						
 						$body .= "</td></tr>\n";
-							}
 						}
 					}
 				}
-				
-				$body.="</table>";
 			}
-			else{
+				
+			$body.="</table></div>";
+			
+			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
 				$max_ab = $x7c->settings['max_ab'];
 				
 				if(!checkIfMaster()){
@@ -621,8 +621,15 @@
 				
 				}
 							
-				$body .= '	</script>
-				<form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
+				$body .= '
+								function modify(){
+									document.getElementById("visual").style.visibility="hidden";
+									document.getElementById("modifiable").style.visibility="visible";
+									document.getElementById("modify").style.visibility="hidden";
+								}
+	
+						</script>
+				<div id="modifiable"><form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 						<table align="left" border="0" cellspacing="0" cellpadding="0">';
 						
 				
@@ -679,22 +686,27 @@
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti esperienza:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
-							<input type="hidden" name="xp" value="'.$xp.'"></form></div>
+							<input type="hidden" name="xp" value="'.$xp.'"></form></div></div>
 						';
 				}
 			}
 			
 			$body.="<div id=\"descr\"> </div></div>";
+
+			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
+				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
+			}
+			
 			if($errore!=''){
 				$body.='<script language="javascript" type="text/javascript">
 					function close_err(){
 						document.getElementById("errore").style.visibility="hidden";
-}
+					}
 				</script>
 				<div id="errore" class="errore">'.$errore.'
 				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
 				</div>';
-}
+			}
 			return $body;
 		
 	}
@@ -1412,6 +1424,17 @@
 				text-decoration: none;
 				visibility: hidden;
 			}
+			#modifiable{
+				position: absolute;
+				top: 0;
+				left: 0;
+				visibility: hidden;
+			}
+			#visual{
+				posotion: absolute;
+				top: 0;
+				left:0;
+			}	
 		</style>
 		';
 		
