@@ -741,6 +741,42 @@
 							return torestore;
 						}
 
+						function speech(){
+							document.chatIn.msgi.value = document.chatIn.msgi.value+"<>";
+							document.chatIn.msgi.focus();
+
+							ctrl=document.chatIn.msgi;
+
+							var CaretPos = 0;
+							// IE Support
+							if (document.selection) {
+
+								ctrl.focus ();
+								var Sel = document.selection.createRange ();
+
+								Sel.moveStart ('character', -ctrl.value.length);
+
+								CaretPos = Sel.text.length;
+							}
+							// Firefox support
+							else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+								CaretPos = ctrl.selectionStart;
+
+							pos=CaretPos-1;
+							if(ctrl.setSelectionRange)
+							{
+								ctrl.focus();
+								ctrl.setSelectionRange(pos,pos);
+							}
+							else if (ctrl.createTextRange) {
+								var range = ctrl.createTextRange();
+								range.collapse(true);
+								range.moveEnd('character', pos);
+								range.moveStart('character', pos);
+								range.select();
+							}
+						}
+
 						function do_refresh(){
 							jd=new Date();
 							nocache = jd.getTime();
@@ -1102,6 +1138,7 @@
 										}
 											
 								?>
+										<input name="speech_btn" type="button" class="button" value="Parlato" onClick="javascript: speech();"/>
 										<input name="button_send" type="submit" class="send_button" style="cursor: pointer;background: url(<?PHP echo $print->image_path; ?>send.gif);border: none;height: 20px;width: 55px;text-align: center;font-weight: bold;" onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'" onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 									</td></tr>
 								</table>
