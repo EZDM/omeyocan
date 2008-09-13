@@ -84,7 +84,12 @@
 					
 					foreach($ability as $cur){
 						if($cur['value'] != $_POST[$cur['ab_id']]){
-							$tot_used+= $_POST[$cur['ab_id']] - $cur['value'];
+							$new_value = $_POST[$cur['ab_id']];
+
+							while($new_value > $cur['value']){
+								$tot_used+= $new_value;
+								$new_value--;
+							}
 							
 							if($cur['value'] > $_POST[$cur['ab_id']]){
 								$errore .= "Errore, non puoi scendere sotto il valore attuale<br>";
