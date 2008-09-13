@@ -389,6 +389,7 @@
 			$errore='';
 			$pg=$_GET['pg'];
 			$min_auth=0;
+			include('./lib/sheet_lib.php');
 			
 			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
 				$ok = true;
@@ -585,65 +586,7 @@
 				if(!checkIfMaster()){
 					$body .='	<script language="javascript" type="text/javascript">
 								
-								function add(ab_name){
-									var value = parseInt(document.sheet_form[ab_name].value);
-									var xp = parseInt(document.sheet_form["xp"].value);
-									
-									if (xp > 0 && value < '.$max_ab.'){
-									
-										dep = document.sheet_form[ab_name+"_dep"].value;
-											
-										if(dep != ""){
-											dep_val = parseInt(document.sheet_form[ab_name+"_dep_val"].value);
-											dep_act_val = parseInt(document.sheet_form[dep].value);
-											if(dep_act_val >= dep_val){
-												document.sheet_form[ab_name].value = value + 1;
-												document.sheet_form["xp"].value = xp - 1;
-											}
-											else{
-												alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+dep_val+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
-											}
-										}
-										else{
-											document.sheet_form[ab_name].value = value + 1;
-											document.sheet_form["xp"].value = xp - 1;
-										}
-										
-										do_form_refresh(ab_name);
-									}								
-								}
-								
-								function sub(ab_name){
-									var value = parseInt(document.sheet_form[ab_name].value);
-									var min = parseInt(document.sheet_form[ab_name+"_min"].value);
-									
-									if (value > min){
-										document.sheet_form[ab_name].value = value - 1;
-										var xp = parseInt(document.sheet_form["xp"].value);
-										document.sheet_form["xp"].value = xp + 1;
-										leafs = "";
-										if(document.sheet_form[ab_name+"_dep"].value == ""){
-											leafs = document.sheet_form[ab_name+"_leaf"].value;
-										}
-										
-										if(leafs != ""){
-											splitted = leafs.split("|");
-											for (i in splitted){
-												if(splitted[i]!=""){
-													back_xp = parseInt(document.sheet_form[splitted[i]].value) - parseInt(document.sheet_form[splitted[i]+"_min"].value);
-													
-													document.sheet_form[splitted[i]].value = document.sheet_form[splitted[i]+"_min"].value;
-													xp = parseInt(document.sheet_form["xp"].value);
-													document.sheet_form["xp"].value = xp + back_xp;
-													
-													do_form_refresh(splitted[i]);
-												}
-											}
-										}
-										do_form_refresh(ab_name);
-									}
-									
-								}
+								'.ability_script($max_ab).'
 								
 								function do_form_refresh(ab_name){
 									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
