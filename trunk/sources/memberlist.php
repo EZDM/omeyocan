@@ -94,42 +94,41 @@
 		$query = $db->DoQuery("SELECT username, position FROM {$prefix}users {$order}");
 		
 		
-		$body = "<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\" class=\"col_header\">
+		$body = "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
 			<tr>
-				<td width=\"100\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
-				<td width=\"100\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
+				<td class=\"col_header\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
+				<td class=\"col_header\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
 		if($room!='' && $room!="Mappa")
-			$body.="<td width=\"100\" height=\"25\">Sussurra</td>";
+			$body.="<td class=\"col_header\" height=\"25\">Sussurra</td>";
 				
 		if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
-			$body .= "<td width=\"100\" height=\"25\">Dadi</td>";
+			$body .= "<td class=\"col_header\" height=\"25\">Dadi</td>";
 				
-		$body.=	"</tr>
-		</table>
-		<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\" class=\"inside_table\">";
+		$body.=	"</tr>";
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			
-		
-			if(($room!='' && $row['position']!='')||$room==''){
+			if(($room!='' && $row['position']!='') ||$room==''){
 				// Output this entry
 				$position='';
-				if($row['position']!="Mappa")
+				if($row['position']!="Mappa" && $row['position']!='')
 					$position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
-				else
+				else if($row['position']=="Mappa")
 					$position = "Mappa";
+				else
+					$position = "&nbsp;";
 				
-				$body .= "<tr>
-							<td width=\"100\" class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
-							<td width=\"100\" class=\"dark_row\">{$position}</td>";
+				$body .= "\n<tr>
+							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
+							<td class=\"dark_row\">{$position}</td>";
 				if($room!='' && $room!="Mappa")
 					if($row['position'] != '' && $row['position']==$room)
-						$body .= "<td width=\"100\" class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
+						$body .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
-						$body .= "<td width=\"100\" class=\"dark_row\"></td>";
+						$body .= "<td class=\"dark_row\">&nbsp;</td>";
 				
 				if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
-					$body .= "<td width=\"100\" class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+					$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
 			
 				$body .= "</tr>";
 			}
@@ -171,10 +170,18 @@
 				height: 500px;
 				background-image:url('.$sfondo.');
 			}
+			
 			.dark_row{
 				font-size: 10pt;
 				color: black;
 				background: transparent;
+				border-bottom: solid 1px gray;
+			}
+
+			table{
+				width: 90%;
+				margin-top: 20px;
+				border: solid 2px gray;
 			}
 
 			.dark_link{
@@ -185,7 +192,9 @@
 			.col_header{
 				background: transparent;
 				margin-top: 10px;
-				border: solid 2px gray;
+    border: 0;
+				border-top: solid 2px gray;
+				border-bottom: solid 2px gray;
 			}
 
 			a:hover{
