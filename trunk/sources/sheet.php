@@ -1359,10 +1359,10 @@
 				left: 360px;
 				top: 211px;
 			}	
-			#Psiche{
+			#Intuito{
 				position: absolute;
-				left: 400px;
-				top: 255px;
+				left: 360px;
+				top: 233px;
 			}
 			#login{
 				left: 68px;
@@ -1436,11 +1436,13 @@
 				top: 0;
 				left: 0;
 				visibility: hidden;
+				width: 100%;
 			}
 			#visual{
 				posotion: absolute;
 				top: 0;
 				left:0;
+				width: 100%;
 			}	
 		</style>
 		';
