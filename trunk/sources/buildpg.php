@@ -29,7 +29,7 @@
 		global $x7s;
 		
 		$page='';
-		
+
 		if(!$x7s->sheet_ok){
 			$body = buildpg();
 		}
