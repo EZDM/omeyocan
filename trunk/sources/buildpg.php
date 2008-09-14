@@ -29,13 +29,50 @@
 		global $x7s;
 		
 		$page='';
-		
-		$body = buildpg();
-			
+
+		if(!$x7s->sheet_ok){
+			$body = buildpg();
+		}
+		else{
+			header("Location: index.php");
+		}
 			
 		print_page($body);
 	}
-	
+
+/*
+	function repair_db(){
+		global $db, $prefix;
+
+		echo "Fecthing users<br>";
+		$users = $db->DoQuery("SELECT username FROM {$prefix}users");
+		
+		echo "Fetching abilities<br>";
+		$q_abilities = $db->DoQuery("SELECT id FROM {$prefix}ability");
+		$abilities = array();
+		$i=0;
+		
+		while($row = $db->Do_Fetch_Assoc($q_abilities)){
+			$ability[$i++] = $row['id'];
+		}
+
+		echo "Repairing users<br>";
+		while($row = $db->Do_Fetch_Assoc($users)){
+			foreach($ability as $ab){
+				echo "Checking $ab for $row[username]<br>";
+				$unique = $db->DoQuery("SELECT count(*) as cnt FROM {$prefix}userability WHERE username = '$row[username]' AND ability_id = '$ab'");
+				$exist = $db->Do_Fetch_Assoc($unique);
+
+				if($exist['cnt']==0){
+					echo "Missing $ab for $row[username]<br>";
+					$db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES
+										('$ab', '$row[username]', '0')");
+				}
+			}
+		}
+		die('Done');
+	}
+*/	
 	
 	function buildpg(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
@@ -483,7 +520,7 @@
 					'.$ch_fields.'
 
 					<tr>
-						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Invia" disabled></td>
+						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Crea personaggio" disabled></td>
 					</tr>
 				</table>
 				</div>
@@ -568,6 +605,9 @@
 			#buildpg {
 				margin-left: 50px;
 			}
+
+			input[disabled]{color: #555555;}
+
 			
 		</style>
 		';

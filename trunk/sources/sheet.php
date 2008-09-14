@@ -1359,7 +1359,7 @@
 				left: 360px;
 				top: 211px;
 			}	
-			#Fortuna{
+			#Psiche{
 				position: absolute;
 				left: 400px;
 				top: 255px;
