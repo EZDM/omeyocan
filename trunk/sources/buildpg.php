@@ -40,7 +40,7 @@
 		print_page($body);
 	}
 
-/*
+
 	function repair_db(){
 		global $db, $prefix;
 
@@ -73,7 +73,7 @@
 		die('Done');
 	}
 	
-*/	
+	
 	function buildpg(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
 			$errore='';
