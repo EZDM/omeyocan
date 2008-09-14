@@ -29,7 +29,7 @@
 		global $x7s;
 		
 		$page='';
-
+		
 		if(!$x7s->sheet_ok){
 			$body = buildpg();
 		}
@@ -72,8 +72,8 @@
 		}
 		die('Done');
 	}
-*/	
 	
+*/	
 	function buildpg(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
 			$errore='';
