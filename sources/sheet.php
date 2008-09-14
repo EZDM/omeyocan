@@ -1269,7 +1269,7 @@
 				border: 0;
 			}
 			.ab_text{
-				font-size: 10pt;
+				font-size: 8pt;
 				font-weight: bold;
 				color: black;
 			}
