@@ -191,16 +191,15 @@
 			}else if(!isset($_GET['write'])){
 				// Display a table of all messages
 
-				$body .= "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
-						<tr>
-							<td width=\"30\"></td>
-							<td width=\"100\">$txt[178]</td>
-							<td width=\"100\">$txt[179]</td>
-							<td>&nbsp;</td>
-						</tr>
-						</table>
-						<div id=\"message_tbl\">
+				$body .= "<div id=\"message_tbl\">
 						<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
+						<tr>
+							<th>&nbsp;</td>
+							<th>$txt[178]</td>
+							<th>$txt[179]</td>
+							<th>&nbsp;</td>
+						</tr>
+
 						";
 
 				foreach($msgs as $id=>$val){
@@ -217,9 +216,9 @@
 						$img = "<img src=\"{$print->image_path}old_mail.gif\">";
 
 					$body .= "<tr>
-								<td width=\"30\" class=\"dark_row\">$img</td>
-								<td width=\"100\" class=\"dark_row\"><a href=\"./index.php?act=mail&read=$mid\">$subject</a></td>
-								<td width=\"100\" class=\"dark_row\">$author</td>
+								<td class=\"dark_row\">$img</td>
+								<td class=\"dark_row\"><a href=\"./index.php?act=mail&read=$mid\">$subject</a></td>
+								<td class=\"dark_row\">$author</td>
 								<td class=\"dark_row\"><a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a></td>
 							</tr>";
 				}
@@ -370,7 +369,12 @@
 			a:hover{
 				color: white;
 			}
-			
+			th{
+				color: #660000;
+				font-size: 10pt;
+				text-align: left;
+				border-bottom: solid 2px gray;
+			}
 			INPUT{
 				height: 21px;
 			}
@@ -392,7 +396,7 @@
 				position: absolute;
 				left: 45px;
 				top: 60px;
-				color: white;
+				color: #660000;
 			}
 			
 			#message_tbl {
@@ -412,12 +416,12 @@
 			}
 		
 			.chatmsg{
-				color: white;
+				color: #660000;
 				font-size: 11pt;
 			}
 			
 			.text_input{
-				color: white;
+				color: #660000;
 				font-weight: bold;
 			}
 			
