@@ -1436,7 +1436,10 @@
 				top: 0;
 				left: 0;
 				visibility: hidden;
-				width: 100%;
+				width: 400px;
+				height: 550px;
+				border: solid 1px;
+				overflow: auto;
 			}
 			#visual{
 				posotion: absolute;
