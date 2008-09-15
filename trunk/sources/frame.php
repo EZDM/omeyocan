@@ -440,9 +440,15 @@
 			//Mappa is a fake room... we exploit it for update offline message and online status of users within mtha map
 			if($_GET['room']=='Mappa')
 				break;
-				
+
 			// Include the message library
 			include("./lib/message.php");
+
+			//Check if user can talk
+			if(!$x7s->talk){
+				alert_user($x7s->username,"Non puoi parlare");
+				return;
+			}
 			
 			// Make sure the message isn't null
 			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^\*",@$_GET['msg'])){
