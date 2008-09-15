@@ -114,10 +114,10 @@
 			$body.="<td class=\"col_header\" height=\"25\">Sussurra</td>";
 				
 		if($x7c->permissions['admin_panic']){
-			$body.="<td class=\"col_header\" height=\"25\">Mute/Unmute</td>";
-
 			if($room!='' && $room!="Mappa")
 				$body .= "<td class=\"col_header\" height=\"25\">Dadi</td>";
+
+			$body.="<td class=\"col_header\" height=\"25\">Mute/Unmute</td>";
 		}
 				
 		$body.=	"</tr>";
