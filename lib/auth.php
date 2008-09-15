@@ -63,6 +63,7 @@
 		var $second_mod;	//Hold if user has modificed sheet more than 1 time
 		var $panic;
 		var $max_panic;
+		var $talk;
 		
 		// Create a new session
 		function session(){

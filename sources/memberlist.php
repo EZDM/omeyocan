@@ -77,6 +77,18 @@
 				$order = " ORDER BY position DESC";
 			}
 		}
+
+		//Toggle permission to talk
+		if((isset($_GET['mute']) || isset($_GET['unmute']))&& isset($_GET['user'])){
+			if($x7c->permissions['admin_panic']){
+				$value=1;
+				if(isset($_GET['mute']))
+					$value=0;
+
+				$db->DoQuery("UPDATE {$prefix}users SET talk='$value' WHERE username='$_GET[user]'");
+					
+			}
+		}
 		
 		//Verifica che tutti gli utenti con position settato siano veramente online
 		$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE position<>''");
@@ -91,7 +103,7 @@
 		}
 		
 		// Get the userlist and online data
-		$query = $db->DoQuery("SELECT username, position FROM {$prefix}users {$order}");
+		$query = $db->DoQuery("SELECT username, position,talk FROM {$prefix}users {$order}");
 		
 		
 		$body = "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
@@ -101,8 +113,12 @@
 		if($room!='' && $room!="Mappa")
 			$body.="<td class=\"col_header\" height=\"25\">Sussurra</td>";
 				
-		if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
-			$body .= "<td class=\"col_header\" height=\"25\">Dadi</td>";
+		if($x7c->permissions['admin_panic']){
+			$body.="<td class=\"col_header\" height=\"25\">Mute/Unmute</td>";
+
+			if($room!='' && $room!="Mappa")
+				$body .= "<td class=\"col_header\" height=\"25\">Dadi</td>";
+		}
 				
 		$body.=	"</tr>";
 		
@@ -127,8 +143,28 @@
 					else
 						$body .= "<td class=\"dark_row\">&nbsp;</td>";
 				
-				if($x7c->permissions['admin_panic'] && $room!='' && $room!="Mappa")
-					$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+				if($x7c->permissions['admin_panic']){
+					$new_state='';
+					$action='';
+					if($row['talk']){
+						$new_state="Mute";
+						$action="mute";
+					}
+					else{
+						$new_state="<span class=\"bold_red\">Unmute</span>";
+						$action="unmute";
+					}
+
+					$getstanza='';
+
+					if($room!='' && $room!="Mappa"){
+						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+
+						$getstanza="&room=$room";
+					}
+					$body.="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&$action&user={$row['username']}$getstanza\">$new_state</a></td>";
+
+				}
 			
 				$body .= "</tr>";
 			}
@@ -199,6 +235,11 @@
 
 			a:hover{
 				color: red;
+			}
+
+			.bold_red{
+				color: red;
+				font-weight: bold;
 			}
 
 		

@@ -292,8 +292,7 @@
 					}
 					
 					$db->DoQuery("UPDATE {$prefix}users
-									SET sheet_ok='1',
-									second_mod='1'
+									SET sheet_ok='1'
 									WHERE username='$pg'");
 						
 					header('Location: ./index.php');
