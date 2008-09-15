@@ -744,7 +744,7 @@
 						$ok = false;
 						$errore .= "Non hai specificato il nome<br>";
 					}
-					if($_POST['age']=='' || $_POST['age']<16){
+					if(($_POST['age']=='' || $_POST['age']<16) && !checkIfMaster()){
 						$ok = false;
 						$errore .= "Et&agrave; non valida<br>";
 					}
