@@ -1051,7 +1051,7 @@
 					$male="selected";
 					$female="";	
 					
-					if($row_user['marr']=="Celibe")
+					if($row_user['marr']=="Libero")
 						$marr_opt="<option value=\"Libero\" selected>Libero</option>
 						<option value=\"Sposato\">Sposato</option>";
 					else
@@ -1062,7 +1062,7 @@
 					$male="";
 					$female="selected";	
 					
-					if($row_user['marr']=="Nubile")
+					if($row_user['marr']=="Libera")
 						$marr_opt="<option value=\"Libera\" selected>Libera</option>
 							<option value=\"Sposata\">Sposata</option>";
 					else
