@@ -336,7 +336,7 @@
 		else
 			$body .= "<input type=\"hidden\" name=\"subject\" value=\"$subject\">";
 			
-		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"50\" rows=\"20\">$msg</textarea><Br>
+		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\">$msg</textarea><Br>
 			<input type=\"submit\" value=\"Invia\" class=\"button\">
 			</form></div>";
 		
