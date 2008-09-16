@@ -1086,15 +1086,18 @@
 										<option value="">------------------</option>
 										<?PHP
 											$query = $db->DoQuery("SELECT a.id AS id, 
-												ua.value AS value, 
-												a.name AS name 
-												FROM {$prefix}userability ua, {$prefix}ability a
+												ua.value AS value_a, 
+												a.name AS name,
+												uc.value AS value_c
+												FROM {$prefix}userability ua, {$prefix}ability a, {$prefix}usercharact uc
 												WHERE ua.ability_id=a.id
-												 AND username='$x7s->username'
+												 AND ua.username='$x7s->username'
+												 AND uc.username='$x7s->username'
+												 AND uc.charact_id=a.char
 												 ORDER BY a.name");
 												 	
 								 			while($row = $db->Do_Fetch_Assoc($query)){
-								 				$string = "<option value=\"§".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
+								 				$string = "<option value=\"§".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
 								 				echo $string;
 								 			}
 										?>
