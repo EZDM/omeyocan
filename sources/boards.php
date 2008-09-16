@@ -212,8 +212,8 @@
 		
 		
 		// In this case the user has sent a message
-		if(isset($_GET['subject']) && isset($_GET['body'])){
-			if($_GET['body']==''){
+		if(isset($_POST['subject']) && isset($_POST['body'])){
+			if($_POST['body']==''){
 				$body="Il messaggio non pu&ograve; essere vuoto";
 			
 				$head="Errore";
@@ -223,7 +223,7 @@
 		
 			$replies = 0;
 			$father = 0;
-			$msg = $_GET['body'];
+			$msg = $_POST['body'];
 			$toboard = $board['id'];
 			
 			if(isset($_GET['reply']) && $_GET['reply']!=0){
@@ -257,7 +257,7 @@
 				$_GET['message']=$msg_id;
 			}
 			else{
-				if($_GET['subject']==''){
+				if($_POST['subject']==''){
 					$body="L'oggetto non pu&ograve; essere vuoto";
 			
 					$head="Errore";
@@ -265,7 +265,7 @@
 					return;
 				}
 				
-				$subject = $_GET['subject'];
+				$subject = $_POST['subject'];
 
 			}
 			
@@ -328,11 +328,7 @@
 		
 		
 		$body .= "<div align=\"center\">
-			<form action=\"./index.php\" method=\"get\">
-
-			<input type=\"hidden\" name=\"act\" value=\"boards\">
-			<input type=\"hidden\" name=\"send\" value=\"$board[id]\">
-			<input type=\"hidden\" name=\"reply\" value=\"$reply\">";
+			<form action=\"./index.php?act=boards&send=$board[id]&reply=$reply\" method=\"post\">";
 			
 		if(!isset($_GET['reply'])){
 			$body .= "Oggetto: <input class=\"text_input\" size=40 type=\"text\" name=\"subject\" value=\"$subject\"><br>";
