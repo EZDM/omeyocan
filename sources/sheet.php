@@ -1213,30 +1213,17 @@
 			#sheetbackground{
 				background-image:url(./graphic/schedapgBG.jpg);
 			}
-			#storia_text{
-				height: 250px;
-				width: 430px;
-				overflow: auto;
-			}
 			#storia{
 				top: 80px;
 				left: 30px;
 				width: 430px;
 				height: 250px;
 			}
-			#fisici_text{
-				width: 98%;
-				height: 98%;
-			}
 			#fisici{
 				top: 370px;
 				left: 30px;
 				width: 200px;
 				height: 250px;
-			}
-			#master_text{
-				width: 98%;
-				height: 98%;
 			}
 			#master{
 				top: 60px;
@@ -1249,10 +1236,6 @@
 				left: 50px;
 				overflow: auto;
 			}
-			#psico_text{
-				width: 98%;
-				height: 98%;
-			}
 			#psico{
 				top: 370px;
 				left: 250px;
@@ -1262,10 +1245,12 @@
 			.sheet_text{
 				background: transparent;
 				overflow: auto;
-				font-size: 12pt;
+				font-size: 10pt;
 				font-weight: bold;
 				color: black;
 				border: 0;
+				width: 98%;
+				height: 98%;
 			}
 			.ab_text{
 				font-size: 8pt;
