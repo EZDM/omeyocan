@@ -473,7 +473,7 @@
 		$limit_min = $limit * $maxmsg;
 		$limit_max = (($limit+1) * $maxmsg);		
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY time LIMIT $limit_min, $limit_max");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY time DESC LIMIT $limit_min, $limit_max");
 		
 		$body.=$navigator;
 		while($row = $db->Do_Fetch_Assoc($query)){
