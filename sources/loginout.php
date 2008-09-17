@@ -201,6 +201,7 @@
 				color: white;
 				margin-left: 60px;
 				margin-top: 50px;
+				width: 400px;
 			}
 			
 			#login_form{
