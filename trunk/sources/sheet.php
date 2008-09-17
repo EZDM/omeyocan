@@ -1216,6 +1216,7 @@
 			#storia_text{
 				height: 250px;
 				width: 430px;
+				overflow: auto;
 			}
 			#storia{
 				top: 80px;
@@ -1228,6 +1229,7 @@
 				height: 250px
 				width: 200px;
 				height: 250px;
+				overflow: auto;
 			}
 			#fisici{
 				top: 370px;
@@ -1238,6 +1240,7 @@
 			#master_text{
 				width: 400px;
 				height: 550px;
+				overflow: auto;
 			}
 			#master{
 				top: 60px;
@@ -1253,6 +1256,7 @@
 			#psico_text{
 				width: 200px;
 				height: 250px;
+				overflow: auto;
 			}
 			#psico{
 				top: 370px;
