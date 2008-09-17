@@ -2275,41 +2275,6 @@
 					
 					$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 				}
-			}elseif(isset($_GET['create'])){
-				// Register a new user account
-				// Clean up incoming data
-				$_POST['pass1'] = auth_encrypt($_POST['pass1']);
-				$_POST['pass2'] = auth_encrypt($_POST['pass2']);
-				if($_POST['pass1'] == "")
-					$error = $txt[25];
-				if($_POST['pass1'] != $_POST['pass2'])
-					$error = $txt[26];
-				// Check username
-				if($_POST['username'] == "" || eregi("\.|'|,|;| |\"",$_POST['username']) || (strlen($_POST['username']) > $x7c->settings['maxchars_username'] && $x7c->settings['maxchars_username'] != 0)){
-					$txt[23] = eregi_replace("_n","{$x7c->settings['maxchars_username']}",$txt[23]);
-					$error = $txt[23];
-				}
-				// Check for unique username
-				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$_POST[username]'");
-				$row = $db->Do_Fetch_Row($query);
-				if($row[0] != "")
-					$error = $txt[27];
-				// Did any errors occur?
-				if(isset($error)){
-				// An error has occured!
-				$body = $error."<Br><Br><div align=\"center\"><a style=\"cursor: pointer;cursor:hand;\" onClick=\"javascript: history.back();\">[$txt[77]]</a></div>";
-				}else{
-					$time = time();
-					$ip = "";
-					$settings = $g_default_settings; // This is defined in lib/auth.php
-					$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,status,user_group,time,settings,hideemail,ip) VALUES('0','$_POST[username]','$_POST[pass1]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip')");
-					
-					// Create the bandwidth row for them
-					include_once("./lib/bandwidth.php");
-					bw_first_time($_POST['username']);
-					
-					$body = $txt[600]."<Br><br><a style=\"cursor: pointer;cursor:hand;\" onClick=\"javascript: history.back();\">[$txt[77]]</a>";
-				}
 			}else{
 				// Display all users
 				$body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
@@ -2374,14 +2339,6 @@
 				$body .= "</table>___page_counter___<Br><Br>";
 				
 				$body = eregi_replace("___page_counter___","$pages",$body);
-				
-				// Create new user
-				$body .= "<div align=\"center\"><b>$txt[601]</b><Br><Br>
-				<form action=\"./index.php?act=adminpanel&cp_page=users&create=1\" method=\"post\">
-				$txt[2] <input type=\"text\" name=\"username\" class=\"text_input\"><Br>
-				$txt[3] <input type=\"password\" name=\"pass1\" class=\"text_input\"><br>
-				$txt[21] <input type=\"password\" name=\"pass2\" class=\"text_input\"><br><Br>
-				<input type=\"submit\" value=\"$txt[63]\" class=\"text_input\"></div></form>";
 			
 			}
 			
