@@ -1225,11 +1225,8 @@
 				height: 250px;
 			}
 			#fisici_text{
-				width: 200px;
-				height: 250px
-				width: 200px;
-				height: 250px;
-				overflow: auto;
+				width: 98%;
+				height: 98%;
 			}
 			#fisici{
 				top: 370px;
@@ -1238,9 +1235,8 @@
 				height: 250px;
 			}
 			#master_text{
-				width: 400px;
-				height: 550px;
-				overflow: auto;
+				width: 98%;
+				height: 98%;
 			}
 			#master{
 				top: 60px;
@@ -1254,9 +1250,8 @@
 				overflow: auto;
 			}
 			#psico_text{
-				width: 200px;
-				height: 250px;
-				overflow: auto;
+				width: 98%;
+				height: 98%;
 			}
 			#psico{
 				top: 370px;
@@ -1295,7 +1290,8 @@
 				color: black;
 			}
 			.indiv{
-				position: absolute;	
+				position: absolute;
+				overflow: auto;
 			}
 			.sheetnav{
 				position: absolute;
