@@ -2190,7 +2190,7 @@
 						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">
 							<tr>
 								<td width=\"60\">$txt[2]:</td>
-								<td width=\"100\"><input type=\"text\" name=\"username\" class=\"text_input\" value=\"{$def->profile['username']}\"></td>
+								<td width=\"100\">{$def->profile['username']}</td>
 							</tr>
 							
 							<tr>
@@ -2271,7 +2271,7 @@
 						change_pass($_GET['update'],$_POST['pass1']);
 						
 					// Update the profile info
-					$db->DoQuery("UPDATE {$prefix}users SET username='$_POST[username]',email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]' WHERE username='$_GET[update]'");
 					
 					$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 				}
