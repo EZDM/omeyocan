@@ -257,8 +257,35 @@
 			$default_font = $x7c->settings['sys_default_font'];*/
 			
 			//Action parse
-			$message = preg_replace("/&gt;/i","\"</span>",$message);
-			$message = preg_replace("/&lt;/i","<span class=\"action\">\"",$message);
+			
+			
+
+			$pos = stripos($message,"&lt;");
+			$open=0;
+			while($pos){
+				if(!$open){
+					$first = substr($message, 0, $pos);
+					$last = substr($message, $pos+4);
+					$message = $first."<span class=\"action\">\"".$last;
+					$open++;
+					$pos = stripos($message,"&gt;", $pos);
+				}
+				else{
+					$first = substr($message, 0, $pos);
+					$last = substr($message, $pos+4);
+					$message = $first."\"</span>".$last;
+					$open--;
+					$pos = stripos($message,"&lt;", $pos);
+				}
+				
+			}
+
+			if($open){
+				$message.="\"</span>";
+			}
+
+			$message = preg_replace("/&gt;/i","",$message);
+			$message = preg_replace("/&lt;/i","",$message);
 			
 			//Location parse
 			//$message = preg_replace("/\]/i","]</span>",$message);
