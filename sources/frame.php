@@ -1025,7 +1025,14 @@
 
 <?PHP 
 //This file include common layout for frame and map
-	include('./sources/layout.html'); 
+	include('./sources/layout.html');
+
+	$polaroid=$x7c->room_data['logo'];
+	if($x7c->settings['panic']){
+		$pos=stripos($polaroid,".jpg");
+		$polaroid = substr($polaroid, 0, $pos);
+		$polaroid.="ob.jpg";
+	}
 
 ?>
   		<!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
@@ -1033,7 +1040,7 @@
   		<?PHP 	if($x7c->room_data['logo'] != '')
   				echo '
 				<a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=400,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
-  				<img style="position:absolute; top:0px; left:807px;" src="'.$x7c->room_data['logo'].'" ></a>'; 
+  				<img style="position:absolute; top:0px; left:807px;" src="'.$polaroid.'" ></a>'; 
   		?>
   		
 					<div id="message_window"></div>
