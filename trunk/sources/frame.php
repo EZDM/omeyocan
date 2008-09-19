@@ -451,27 +451,27 @@
 			}
 			
 			// Make sure the message isn't null
-			if(@$_GET['msg'] != "" && !eregi("^@.*@",@$_GET['msg']) && !eregi("^\*",@$_GET['msg'])){
+			if(@$_POST['msg'] != "" && !eregi("^@.*@",@$_POST['msg']) && !eregi("^\*",@$_POST['msg'])){
 
-				if(strlen(trim($_GET['msg'])) < $x7c->settings['min_post'] || strlen(trim($_GET['msg'])) > $x7c->settings['max_post'])
+				if(strlen(trim($_POST['msg'])) < $x7c->settings['min_post'] || strlen(trim($_POST['msg'])) > $x7c->settings['max_post'])
 					break;
 
 				// Make sure incoming values are safe
-				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace("\n", "",$_GET['msg']);
+				$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace(">","&gt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace("\n", "",$_POST['msg']);
 
 				//If we are in panic
 				if($x7c->settings['panic']){
 					//If user is not a master and room is not panic_free
 					if(!$x7c->permissions['admin_panic'] && !$x7c->room_data['panic_free']){
 						if($x7s->panic >= $x7s->max_panic){
-							$_GET['msg']="<span style=\"color: red;\">Panico al massimo</span><br>".$_GET['msg'];
+							$_POST['msg']="<span style=\"color: red;\">Panico al massimo</span><br>".$_POST['msg'];
 						}					
 					}
 				}
 
-				$parsed_msg = "<span class=\"locazione_display\">[".$_GET['locazione']."]</span><br>"." ".$_GET['msg'];
+				$parsed_msg = "<span class=\"locazione_display\">[".$_POST['locazione']."]</span><br>"." ".$_POST['msg'];
 
 				// Make sure the user has a voice
 				if($x7c->permissions['room_voice'] == 1){
@@ -483,12 +483,12 @@
 				}
 
 			//This is a sussuro
-			}elseif(eregi("^@.*@",@$_GET['msg'])){
+			}elseif(eregi("^@.*@",@$_POST['msg'])){
 				
-				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
-				$parsed_msg = $_GET['msg'];
+				$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace(">","&gt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace("\n", " ",$_POST['msg']);
+				$parsed_msg = $_POST['msg'];
 				
 				if($x7c->permissions['room_voice'] == 1){
 					send_message($parsed_msg,$x7c->room_name,1);
@@ -498,11 +498,11 @@
 					alert_user($x7s->username,$txt[42]);
 				}
 
-			}elseif(eregi("^\*",@$_GET['msg']) && $x7c->permissions['admin_panic']){
-				$_GET['msg'] = eregi_replace("<","&lt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace(">","&gt;",$_GET['msg']);
-				$_GET['msg'] = eregi_replace("\n", " ",$_GET['msg']);
-				$parsed_msg = $_GET['msg'];
+			}elseif(eregi("^\*",@$_POST['msg']) && $x7c->permissions['admin_panic']){
+				$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace(">","&gt;",$_POST['msg']);
+				$_POST['msg'] = eregi_replace("\n", " ",$_POST['msg']);
+				$parsed_msg = $_POST['msg'];
 				
 				if($x7c->permissions['room_voice'] == 1){
 					//Mastering message
@@ -1046,13 +1046,8 @@
 					<div id="message_window"></div>
 					
 					<div style='clear: both;'></div>
-						<form name="chatIn" method="get" action="index.php" target="send" onSubmit="return msgSent();">
+						<form name="chatIn" method="post" action="index.php?act=frame&frame=send&room=<?PHP echo $_GET['room']; ?>" target="send" onSubmit="return msgSent();">
 							<div id='debug' style='display: none;'></div>
-
-							
-							<input type="hidden" name="act" value="frame">
-							<input type="hidden" name="frame" value="send">
-							<input type="hidden" name="room" value="<?PHP echo $_GET['room']; ?>">
 						
 							<?PHP 
 							if($x7c->settings['panic']){
