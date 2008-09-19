@@ -402,7 +402,7 @@
 				
 			}
 			
-			if(eregi("^\*",@$_GET['msg'])){
+			if(eregi("^\*",@$_POST['msg'])){
 				$message = preg_replace("/^\*/", "", $message);
 				$message = "<div class=\"mastering\">".$message."</div>";
 			}
