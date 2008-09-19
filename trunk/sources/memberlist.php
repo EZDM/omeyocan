@@ -53,12 +53,15 @@
 
 	// This function displays a list of all members
 	function memberlist(){
-		global $db, $prefix, $txt, $print, $x7c;
+		global $db, $prefix, $txt, $print, $x7c, $x7s;
 		
 		$room='';
 		
-		if(isset($_GET['room']))
-			$room =$_GET['room'];
+		if(isset($_GET['room'])){
+			$query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$x7s->username'");
+			$row = $db->Do_Fetch_Assoc($query);
+			$room =$row['position'];
+		}
 			
 		// See if the user wants the data sorted in anyway
 		$order = " ORDER BY username ASC";
