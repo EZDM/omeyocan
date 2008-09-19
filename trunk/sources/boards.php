@@ -561,7 +561,7 @@
 				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">Delete</a>";
 		}
 		
-		$body.= "<br><br>".$msg."<br><br><br><br>";
+		$body.= "<br><br>".$msg."<br><br><br><br><hr>";
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -578,7 +578,7 @@
 				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">Delete</a>";
 			}
 			
-			$body.=" <br><br>".$msg."<br><br><br><br>";
+			$body.=" <br><br>".$msg."<br><br><br><br><hr>";
 		}
 		
 		if(!$board['readonly'] || checkIfMaster()){
