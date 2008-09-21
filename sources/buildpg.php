@@ -457,6 +457,7 @@
 						function enable_send(){
 							var xp=document.sheet_form["xp"].value;
 							var ch=document.sheet_form["ch"].value;
+							var send = document.getElementById("send");
 
 							if(xp > 0 || ch > 0){
 								send.disabled = true;
