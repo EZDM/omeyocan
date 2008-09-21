@@ -231,7 +231,7 @@
 			.col_header{
 				background: transparent;
 				margin-top: 10px;
-    border: 0;
+    				border: 0;
 				border-top: solid 2px gray;
 				border-bottom: solid 2px gray;
 			}
@@ -243,6 +243,12 @@
 			.bold_red{
 				color: red;
 				font-weight: bold;
+			}
+
+			#inner_member{
+				width: 99%;
+				height: 98%;
+				overflow: auto;
 			}
 
 		
