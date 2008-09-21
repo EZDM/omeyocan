@@ -504,6 +504,11 @@
 		$limit_max = (($limit+1) * $maxmsg);		
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY time DESC LIMIT $limit_min, $limit_max");
+
+		
+		if(!$board['readonly'] || checkIfMaster()){
+			$body .="<a href=./index.php?act=boards&send=".$board['id'].">Nuova comunicazione</a><br>";
+		}
 		
 		$body.=$navigator;
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -593,6 +598,11 @@
 		$unread='';
 		if($row['id']>$last_read)
 			$unread = "<b>(Nuovo)</b>";
+
+		if(!$board['readonly'] || checkIfMaster()){
+			$body .="<a href=./index.php?act=boards&send=".$board['id']."&reply=".$id.">Replica</a><br>";
+		}
+		$body.="<a href=\"index.php?act=boards&board=".$board['id']."\">Torna alla board</a><br>";
 		
 		$body .= $navigator;
 		$head="Board ".$board['name']." messaggio: ".$object;
