@@ -149,6 +149,10 @@
 
 						function do_initial_refresh(){
 							// Create object
+							if(window.self.name == ''){
+								hndl = window.open('/engine','main','width=1024,height=723, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();
+								window.self.location.href='/courtesy.html';
+							}
 							if(window.self.name == 'sheet'){
 								window.self.close();
 							}
