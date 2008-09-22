@@ -1941,10 +1941,10 @@
 
 			if(isset($_GET['proom'])){
 				if(isset($_POST['owner']) && $_POST['owner']!=''){
-					$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
+					$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE username='$_POST[owner]'");
 					$row = $db->Do_Fetch_Assoc($query);
 					
-					if($row['cnt'] == 0){
+					if($row==null || $row['username']!=$_POST['owner']){
 						$body.= "Errore, utente $_POST[owner] non esistente";
 					}
 					else{
