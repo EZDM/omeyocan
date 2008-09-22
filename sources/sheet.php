@@ -169,7 +169,7 @@
 						$description .= "<br>(Usi rimasti: $remaining_uses)";
 					}
 					
-					$obj_name = '<a onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); "> Stanza di '.$name.'</a>';
+					$obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.'</a>';
 					
 				}
 				else{
