@@ -153,9 +153,9 @@
 			
 			if(preg_match("/key_/", $row['name'])) {
 				list($pre, $name)=split("key_", $row['name']);
-				if($_GET['pg']==$x7s->username || checkIfMaster()){
+				if(strcasecmp($_GET['pg'], $x7s->username) == 0 || checkIfMaster()){
 					//we make clickable only key of my sheet
-					if($row['name'] == "key_{$x7s->username}" || ($row['name']=="key_$_GET[pg]" && checkIfMaster())){
+					if(strcasecmp($row['name'], "key_{$x7s->username}") == 0 || (strcasecmp($row['name'], "key_$_GET[pg]") == 0 && checkIfMaster())){
 						//This is my key
 						$more_form = '
 							<tr>
