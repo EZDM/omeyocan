@@ -120,7 +120,7 @@
 			if($room!='' && $room!="Mappa")
 				$body .= "<td class=\"col_header\" height=\"25\">Dadi</td>";
 
-			$body.="<td class=\"col_header\" height=\"25\">Mute/Unmute</td>";
+			$body.="<td class=\"col_header\" height=\"25\">Mute / Unmute</td>";
 		}
 				
 		$body.=	"</tr>";
@@ -162,9 +162,11 @@
 
 					if($room!='' && $room!="Mappa"){
 						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
-
-						$getstanza="&room=$room";
 					}
+
+					if($room!='')
+						$getstanza="&room";
+						
 					$body.="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&$action&user={$row['username']}$getstanza\">$new_state</a></td>";
 
 				}
