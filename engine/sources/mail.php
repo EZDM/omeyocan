@@ -269,6 +269,7 @@
 	
 	
 				$back='';
+				$replybody='';
 				if(isset($_GET['back'])){
 					$back="&read=".$_GET['back'];
 					$nb = offline_msg_split($msgs[$_GET['back']][2]);
