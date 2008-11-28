@@ -79,8 +79,17 @@
 		if($x7c->settings['enable_passreminder'] == 1)
 			$body .= 			"<a href=\"./index.php?act=forgotmoipass\">[Recupera password]</a>
 								</td>";
-		
+
+		include('sources/disclaimer.txt');
 		$body .= 	"</tr>
+
+				<tr>
+					<td colspan=2>
+						<div id=\"disclaimer\">".
+							$disc	
+						."</div>
+					</td>
+				</tr>
 					</table>
 					</form></div>
 				";
@@ -230,6 +239,12 @@
 			.error{
 				color: red;
 				font-weight: bold;
+			}
+
+			#disclaimer{
+				width: 300px;
+				height: 200px;
+				overflow: auto;
 			}
 		</style>
 		';
