@@ -146,8 +146,8 @@
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg'");
 
 		$room='';
-		$more_form='';
 		while($row=$db->Do_Fetch_Assoc($query)){
+			$more_form='';
 			$obj_name = $row['name'];
 			$description = $row['description'];
 			
