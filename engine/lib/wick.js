@@ -411,7 +411,7 @@ function activateCurrentSmartInputMatch() {
 	baseValue = getUserInputBase();
 	if ((selIndex = getCurrentlySelectedSmartInputItem()) != null) {
 		addedValue = siw.matchCollection[selIndex].cleanValue;
-		theString = (baseValue ? baseValue : "") + addedValue + ", ";
+		theString = (baseValue ? baseValue : "") + addedValue;
 		siw.inputBox.value = theString;
 		runMatchingLogic(addedValue, true);
 	}
