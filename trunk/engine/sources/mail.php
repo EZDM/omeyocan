@@ -284,7 +284,7 @@
 				$to = "<p style=\"text-align: center\">
 					<input type=\"hidden\" name=\"act\" value=\"mail\">
 					$txt[182]: 
-					<br><input class=\"text_input\" type=\"text\" name=\"to\" value=\"$_GET[to]\">
+					<br><input class=\"wickEnabled\" type=\"text\" name=\"to\" autocomplete=\"off\" value=\"$_GET[to]\">
 					<br>";
 				
 				if(isset($_GET['group'])){
@@ -313,8 +313,27 @@
 					</select>
 					<br>";
 				}
+
+				$accounts='';
+				$query = "SELECT username FROM {$prefix}users";
+				$result = $db->DoQuery($query);
+
+				while($row = $db->Do_Fetch_Assoc($result)){
+					$accounts .="'$row[username]',";
+				}
+				$accounts.="''";
 				
-				$body .= "<div align=\"center\">
+				$body .= "
+					<script type=\"text/javascript\" language=\"JavaScript\">
+					collection =
+					[".
+						$accounts
+					."
+					];
+					</script>
+					<script type=\"text/javascript\" language=\"JavaScript\" src=\"./lib/wick.js\"></script>
+					
+					<div align=\"center\">
 					<form action=\"./index.php\" method=\"get\">
 					
 					$to
@@ -363,6 +382,61 @@
 		
 		$mail_style = '
 		<style type="text/css">
+
+			/*
+			WICK: Web Input Completion Kit
+			http://wick.sourceforge.net/
+			Copyright (c) 2004, Christopher T. Holland,
+			All rights reserved.
+
+			Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+			Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+			Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+			Neither the name of the Christopher T. Holland, nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+			THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+					*/
+
+			.floater {
+			position: absolute;
+			z-index:2;
+			left: 110px;
+			top: 60px;
+			margin-top: 0;
+			margin-left: 0;
+			display:none;
+			padding:0;
+			}
+
+			.floater {
+			font-family: Gill, Helvetica, sans-serif;
+			background-color:white;
+			border:1px inset #979797;
+			color:black;
+			}
+
+			.matchedSmartInputItem {
+			font-size:0.8em;
+			padding: 5px 10px 1px 5px;
+			margin:0;
+			cursor:pointer;
+			}
+
+			.selectedSmartInputItem {
+			color:white;
+			background-color:#3875D7;
+			}
+
+			#smartInputResults {
+			padding:0;margin:0;
+			}
+
+			.siwCredit {
+			margin:0;padding:0;margin-top:10px;font-size:0.7em;color:black;
+			}
+
+
 			a{
 				color: #660000;
 				font-weight: bold;
@@ -421,9 +495,11 @@
 				font-size: 11pt;
 			}
 			
-			.text_input{
+			.text_input, .wickEnabled{
 				color: #660000;
 				font-weight: bold;
+				background: transparent;
+				border: 1px solid black;
 			}
 			
 			.indiv{
