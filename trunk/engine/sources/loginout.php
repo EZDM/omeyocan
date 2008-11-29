@@ -82,7 +82,8 @@
 
 		include('sources/disclaimer.txt');
 		$body .= 	"</tr>
-
+				<tr><td>&nbsp;</td></tr>
+				<tr><td>&nbsp;</td></tr>
 				<tr>
 					<td colspan=2>
 						<div id=\"disclaimer\">".
