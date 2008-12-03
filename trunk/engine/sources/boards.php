@@ -144,13 +144,15 @@
 	
 	function delete_message($msgid){
 		global $print, $x7s, $db, $prefix;
+		$indice=0;
 		$msgid = $_GET['delete'];
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$msgid'");
 			
 		$row = $db->Do_Fetch_Assoc($query);
 		
 		if(!$row){
-			$body="La conversazione richiesta non esiste";
+			$body="La conversazione richiesta non esiste<br>
+				<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 		
 			$head="Errore";
 			$print->board_window($head,$body,$indice);
@@ -204,13 +206,15 @@
 	
 	function new_communication($bid, $last_read){
 		global $print, $x7s, $db, $prefix;
+		$indice=0;
 		
 		$body='';
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE id='{$bid}'");
 		$row = $db->Do_Fetch_Assoc($query);
 		
 		if(!$row){
-			$body="La board richiesta non esiste";
+			$body="La board richiesta non esiste
+				<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 			$head="Errore";
 			$print->board_window($head,$body,$indice);
@@ -230,7 +234,8 @@
 		// In this case the user has sent a message
 		if(isset($_POST['subject']) && isset($_POST['body'])){
 			if($_POST['body']==''){
-				$body="Il messaggio non pu&ograve; essere vuoto";
+				$body="Il messaggio non pu&ograve; essere vuoto
+					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
@@ -248,7 +253,8 @@
 				$row = $db->Do_Fetch_Assoc($query);
 			
 				if(!$row){
-					$body="La conversazione non esiste";
+					$body="La conversazione non esiste
+						<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 					$head="Errore";
 					$print->board_window($head,$body,$indice);
@@ -274,7 +280,8 @@
 			}
 			else{
 				if($_POST['subject']==''){
-					$body="L'oggetto non pu&ograve; essere vuoto";
+					$body="L'oggetto non pu&ograve; essere vuoto
+						<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 					$head="Errore";
 					$print->board_window($head,$body,$indice);
@@ -298,7 +305,8 @@
 					$db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
 			}
 			else{
-				$body="Operazione non permessa";
+				$body="Operazione non permessa
+					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
@@ -326,7 +334,8 @@
 			$row = $db->Do_Fetch_Assoc($query);
 			
 			if(!$row){
-				$body="La conversazione non esiste";
+				$body="La conversazione non esiste
+					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
@@ -424,12 +433,14 @@
 	//and also check user permission
 	function show_board($bid, $last_read){
 		global $print, $x7s, $db, $prefix;
+		$indice=0;
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE id='{$bid}'");
 		$row = $db->Do_Fetch_Assoc($query);
 		
 		if(!$row){
-			$body="La board richiesta non esiste";
+			$body="La board richiesta non esiste
+				<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 			$head="Errore";
 			$print->board_window($head,$body,$indice);
@@ -447,7 +458,8 @@
 		
 
 		if(!checkAuth($bid)){
-			$body="Non sei autorizzato a vedere questa board";
+			$body="Non sei autorizzato a vedere questa board
+				<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
 			$print->board_window($head,$body,$indice);
 			return;
@@ -586,7 +598,18 @@
 		$limit_min = $limit * $maxmsg;
 		$limit_max = (($limit+1) * $maxmsg);
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='{$id}' OR father='{$id}' ORDER BY time LIMIT $limit_min, $limit_max");
+		$query = $db->DoQuery("SELECT 	b.id AS id,
+						b.father AS father,
+						b.user AS user,
+						b.body AS body,
+						b.board AS board,
+						b.time AS time,
+						b.replies AS replies,
+						u.avatar AS avatar
+					FROM {$prefix}boardmsg b, {$prefix}users u
+					WHERE	b.user = u.username AND
+						(b.id='{$id}' OR father='{$id}')
+						ORDER BY time LIMIT $limit_min, $limit_max");
 		
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
@@ -606,18 +629,31 @@
 		
 		$body .= $navigator;
 		$head="Board ".$board['name']." messaggio: ".$object;
-		$body.="<b>Utente:</b> ".$row['user']." <b>Oggetto:</b> ".$object." ".$unread;
+
+		$body .="<table width=\"100%\" cellspacing=0>";
+
+		$avatar='';
+		if($row['avatar']!=''){
+			$avatar="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
+		}
+		
+		$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 		$msgid=$row['id'];
 		$user=$row['user'];
 			
 		if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
-				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">Delete</a>";
+				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 		}
 		
-		$body.= "<br><br>".$msg."<br><br><br><br><hr>";
+		$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
+			$avatar='';
+			if($row['avatar']!=''){
+				$avatar="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
+			}
+			
 			$unread='';
 			if($row['id']>$last_read)
 				$unread = "<b>(Nuovo)</b>";
@@ -629,13 +665,15 @@
 			$msgid=$row['id'];
 			$user=$row['user'];
 			
-			$body.="<b>Utente:</b> ".$row['user']." <b>Oggetto:</b> ".$object." ".$unread;
+			$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
-				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">Delete</a>";
+				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 			}
 			
-			$body.=" <br><br>".$msg."<br><br><br><br><hr>";
+			$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
 		}
+
+		$body .= "</table>";
 		
 		if(!$board['readonly'] || checkIfMaster()){
 			$body .="<br><br><a href=./index.php?act=boards&send=".$board['id']."&reply=".$id.">Replica</a><br>";

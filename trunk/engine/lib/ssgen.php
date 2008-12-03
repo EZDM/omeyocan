@@ -77,7 +77,7 @@
 				padding: 0px;
 			}
 			TD {
-				color: $data[FontColor1];
+				color: white;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 			}
@@ -280,6 +280,12 @@
 				position: absolute;
 				top: 10px;
 				left: 20px;
+			}
+
+			.msg_row{
+				border-bottom: 1px solid white;
+				vertical-align: top;
+				padding: 5px;
 			}
 		</style>";
 		
