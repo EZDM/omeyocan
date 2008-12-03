@@ -568,7 +568,7 @@
 		$body='';
 		$indice=indice_board($last_read);
 		$maxmsg=5;
-		$navigator='';;
+		$navigator='';
 		
 		if(isset($_GET['startfrom'])){
 			$limit=$_GET['startfrom'];
@@ -579,6 +579,8 @@
 		$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}boardmsg WHERE id='{$id}' OR father='{$id}'");
 		$row = $db->Do_Fetch_Assoc($query);
 		$total = $row['total'];
+
+		
 		
 		if($total > $maxmsg){
 			$i=0;
@@ -609,7 +611,7 @@
 					FROM {$prefix}boardmsg b, {$prefix}users u
 					WHERE	b.user = u.username AND
 						(b.id='{$id}' OR father='{$id}')
-						ORDER BY time LIMIT $limit_min, $limit_max");
+						ORDER BY time LIMIT $limit_min, $maxmsg");
 		
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
@@ -722,8 +724,10 @@
 		$return[0] = preg_replace("/^(.+?)::/i","",$body);
 
 		// 1 is the subject
-		preg_match("/^(.+?)::/i",$body,$match);
-		$return[1] = $match[1];
+		if(preg_match("/^(.+?)::/i",$body,$match))
+			$return[1] = $match[1];
+		else
+			$return[1] = '';
 
 		return $return;
 	}
