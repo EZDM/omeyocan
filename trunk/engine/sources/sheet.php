@@ -953,13 +953,13 @@
 				<div class=\"indiv\" id=\"group\">$group</div>
 				<div class=\"indiv\" id=\"date\">$date</div>
 				<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
-				<div class=\"indiv\" id=\"avatar\">
+				<div class=\"indiv\" id=\"avatar\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">
 			";
 			
 			if($row_user['avatar']!='')
 				$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
 			
-			$body.='</div>';
+			$body.='</a></div>';
 			
 			if(!checkIfMaster()){
 				$body.= "
