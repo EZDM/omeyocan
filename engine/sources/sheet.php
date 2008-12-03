@@ -949,7 +949,7 @@
 			
 			//Here everithing tha is untouchable by anyone
 			$body .= "
-				<div class=\"indiv\" id=\"login\">$row_user[username]</div>
+				<div class=\"indiv\" id=\"login\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">$row_user[username]</a></div>
 				<div class=\"indiv\" id=\"group\">$group</div>
 				<div class=\"indiv\" id=\"date\">$date</div>
 				<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
@@ -1431,7 +1431,15 @@
 				top: 0;
 				left:0;
 				width: 100%;
-			}	
+			}
+
+			.dark_link{
+				color: black;
+			}
+
+			a:hover{
+				color: red;
+			}
 		</style>
 		';
 		
@@ -1448,8 +1456,8 @@
 		<a href="./index.php?act=sheet&page=main&pg='.$pg.'"><div class="sheetnav" style="left: 345px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=ability&pg='.$pg.'"><div class="sheetnav" style="left: 370px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 398px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 428px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 456px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 428px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 456px; top: 638px;"></div></a>
 		</div>
 		</body>
 			</html>';
