@@ -62,7 +62,7 @@
 
 		$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='{$x7s->username}'");
 
-		board_list($last_msg['id']);
+		board_list();
 	}
 	
 	function delete_board($id){
@@ -756,21 +756,26 @@
 		$row = $db->Do_Fetch_Assoc($query);
 		$last_read = $row['last_board_id'];
 		
-		$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg WHERE id>'$last_read'");
-		$new_msg = $db->Do_Fetch_Assoc($q_new);
-
-		if($new_msg['cnt']>0){
-			//We create the list of new messages
-			$query = $db->DoQuery("SELECT id FROM {$prefix}boardmsg WHERE id>'$last_read'");
-			$lastid=0;
-			while($new_msg=$db->Do_Fetch_Assoc($query)){
-				if($lastid<$new_msg['id'])
-					$lastid=$new_msg['id'];
-					
-				$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
-				$db->DoQuery("UPDATE {$prefix}users SET last_board_id='$lastid' WHERE username='{$x7s->username}'");
-			}
+		//We create the list of new messages
+		if(checkIfMaster()){
+			$query = $db->DoQuery("SELECT id FROM {$prefix}boardmsg msg WHERE id>'$last_read' AND user<>'{$x7s->username}'");
 		}
+		else{
+			$query = $db->DoQuery("SELECT msg.id FROM {$prefix}boardmsg msg, {$prefix}boards brd
+ 					WHERE msg.board=brd.id
+ 					AND (user_group='{$x7s->user_group}' OR user_group='Cittadino')
+ 					AND msg.id>'$last_read' AND user<>'{$x7s->username}'");
+		}
+		
+		$lastid=0;
+		while($new_msg=$db->Do_Fetch_Assoc($query)){
+			if($lastid<$new_msg['id'])
+				$lastid=$new_msg['id'];
+				
+			$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
+		}
+
+		$db->DoQuery("UPDATE {$prefix}users SET last_board_id=(SELECT MAX(id) FROM {$prefix}boardmsg) WHERE username='{$x7s->username}'");
 	}
 
 	function get_unread(){
