@@ -352,7 +352,7 @@
 			$subject = $nb[1];
 			
 			$head = "Risposta alla comunicazione: ".$subject;
-			$msg = "\n\n-----\nMessaggio originale:\n\n".$msg;
+			//$msg = "\n\n-----\nMessaggio originale:\n\n".$msg;
 		}	
 		
 		
@@ -365,7 +365,7 @@
 		else
 			$body .= "<input type=\"hidden\" name=\"subject\" value=\"$subject\">";
 			
-		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\">$msg</textarea><Br>
+		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\"></textarea><Br>
 			<input type=\"submit\" value=\"Invia\" class=\"button\">
 			</form></div>";
 		
@@ -649,9 +649,9 @@
 
 		$body .="<table width=\"100%\" cellspacing=0>";
 
-		$avatar='';
+		$avatar="<br>".date("j/n/Y G:i", $row['time']);
 		if($row['avatar']!=''){
-			$avatar="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
+			$avatar.="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
 		}
 		
 		$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
