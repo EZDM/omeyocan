@@ -30,17 +30,17 @@
 	function board_main(){
 		global $x7c, $x7s, $db, $prefix;
 
-		$query = $db->DoQuery("SELECT last_board_id FROM {$prefix}users WHERE username='{$x7s->username}'");
-		$row = $db->Do_Fetch_Assoc($query);
+
+		udpate_unread();
 		
 		if(isset($_GET['newboard'])){
 			create_board();
 		}
 		else if(isset($_GET['board'])){
-			show_board($_GET['board'],$row['last_board_id']);
+			show_board($_GET['board']);
 		}
 		else if(isset($_GET['send'])){
-			new_communication($_GET['send'], $row['last_board_id']);
+			new_communication($_GET['send']);
 		}
 		else if(isset($_GET['delete'])){
 			delete_message($_GET['delete']);
@@ -52,17 +52,15 @@
 			read_all();
 		}
 		else 
-			board_list($row['last_board_id']);
+			board_list();
 			
 		
 	}
 
 	function read_all(){
 		global $x7s, $db, $prefix;
-		$q_max = $db->DoQuery("SELECT MAX(id) AS id FROM {$prefix}boardmsg");
-		$last_msg = $db->Do_Fetch_Assoc($q_max);
 
-		$db->DoQuery("UPDATE {$prefix}users SET last_board_id='$last_msg[id]' WHERE username='{$x7s->username}'");
+		$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='{$x7s->username}'");
 
 		board_list($last_msg['id']);
 	}
@@ -76,8 +74,12 @@
 		if(checkIfMaster()){
 		
 			if(isset($_GET['confirm'])){
+				$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id IN
+						(SELECT id FROM {$prefix}boardmsg WHERE board='$id')");
+				
 				$db->DoQuery("DELETE FROM {$prefix}boards WHERE id='$id'");
 				$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE board='$id'");
+				
 				$body.='Board cancellata<br>
 					<a href="./index.php?act=boards">Torna alle boards';
 			}
@@ -189,6 +191,8 @@
 				$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE id='$msgid' OR father='$msgid'");
 			else
 				$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE id='$msgid'");
+
+			$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id='$msgid'");
 		}
 		else{
 			$body="Operazione non permessa";
@@ -204,7 +208,7 @@
 		
 	}
 	
-	function new_communication($bid, $last_read){
+	function new_communication($bid){
 		global $print, $x7s, $db, $prefix;
 		$indice=0;
 		
@@ -365,19 +369,20 @@
 			<input type=\"submit\" value=\"Invia\" class=\"button\">
 			</form></div>";
 		
-		$indice = indice_board($last_read);
+		$indice = indice_board();
 		$print->board_window($head,$body, $indice);
 	}
 	
 	//This function show the list of all board you are atuhorized to see
-	function board_list($last_read){
+	function board_list(){
 		global $print, $x7s, $db, $prefix;
 		$head = "";
 		$body='';
 		
-		$indice = indice_board($last_read);
+		$indice = indice_board();
 
-		$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg WHERE id>'$last_read'");
+
+		$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardunread WHERE user='{$x7s->username}'");
 		$new_msg = $db->Do_Fetch_Assoc($q_new);
 
 		$body="<b>Ci sono $new_msg[cnt] messaggi nuovi</b>";
@@ -386,7 +391,7 @@
 		
 	}
 	
-	function indice_board($last_read){
+	function indice_board(){
 		global $print, $x7s, $db, $prefix;
 		$body='	<table width=100% align="center" style="border-collapse: collapse;">';
 		
@@ -398,7 +403,10 @@
 		}
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
-			$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg WHERE id>'$last_read' AND board='$row[id]'");
+			$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg msg, {$prefix}boardunread un
+								WHERE msg.id=un.id
+ 								AND board='$row[id]'
+								AND un.user='{$x7s->username}'");
 			$new_msg = $db->Do_Fetch_Assoc($q_new);
 
 			$new_cnt='';
@@ -431,7 +439,7 @@
 	
 	//This function check if you want to see all the messages of a board or a single conversation
 	//and also check user permission
-	function show_board($bid, $last_read){
+	function show_board($bid){
 		global $print, $x7s, $db, $prefix;
 		$indice=0;
 		
@@ -466,10 +474,10 @@
 		}
 		
 		if(!isset($_GET['message'])){
-			show_all_messages($board, $last_read);
+			show_all_messages($board);
 		}
 		else{
-			show_single_message($_GET['message'],$board, $last_read);
+			show_single_message($_GET['message'],$board);
 		}
 		
 		
@@ -477,12 +485,12 @@
 	
 	
 	//This function show all messages of a board
-	function show_all_messages($board, $last_read){
+	function show_all_messages($board){
 		global $print, $x7s, $db, $prefix;
 
 		$head="Board ".$board['name'];
 		$body='';
-		$indice = indice_board($last_read);
+		$indice = indice_board();
 		
 		$maxmsg=10;
 		$navigator='<p style="text-align: center;">';;
@@ -523,12 +531,16 @@
 		}
 		
 		$body.=$navigator;
+		$unreads = get_unread();
 		while($row = $db->Do_Fetch_Assoc($query)){
-			$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='$row[id]' AND id>'$last_read'");
+			$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg msg, {$prefix}boardunread un
+						WHERE	msg.id=un.id
+						AND un.user='{$x7s->username}'
+						AND board='{$board['id']}' AND father='$row[id]'");
 			$new_replies = $db->Do_Fetch_Assoc($q_new);
 			
 			$unread='';
-			if($row['id']>$last_read)
+			if(isset($unreads[$row['id']]))
 				$unread = "<b>(Nuovo) </b>";
 
 			if($new_replies['cnt']>0){
@@ -563,10 +575,10 @@
 	
 	
 	//This function show a conversation
-	function show_single_message($id, $board, $last_read){
+	function show_single_message($id, $board){
 		global $print, $x7s, $db, $prefix;
 		$body='';
-		$indice=indice_board($last_read);
+		$indice=indice_board();
 		$maxmsg=5;
 		$navigator='';
 		
@@ -621,8 +633,11 @@
 		$object = $nb[1];
 
 		$unread='';
-		if($row['id']>$last_read)
+		$unreads = get_unread();
+		if(isset($unreads[$row['id']])){
 			$unread = "<b>(Nuovo)</b>";
+			$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id='{$row['id']}' AND user='{$x7s->username}'");
+		}
 
 		if(!$board['readonly'] || checkIfMaster()){
 			$body .="<a href=./index.php?act=boards&send=".$board['id']."&reply=".$id.">Replica</a><br>";
@@ -657,8 +672,10 @@
 			}
 			
 			$unread='';
-			if($row['id']>$last_read)
+			if(isset($unreads[$row['id']])){
 				$unread = "<b>(Nuovo)</b>";
+				$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id='{$row['id']}' AND user='{$x7s->username}'");
+			}
 			
 			$nb = offline_msg_split($row['body']);
 			$msg = $nb[0];
@@ -730,6 +747,42 @@
 			$return[1] = '';
 
 		return $return;
+	}
+
+	function udpate_unread(){
+		global $print, $x7s, $db, $prefix;
+
+		$query = $db->DoQuery("SELECT last_board_id FROM {$prefix}users WHERE username='{$x7s->username}'");
+		$row = $db->Do_Fetch_Assoc($query);
+		$last_read = $row['last_board_id'];
+		
+		$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg WHERE id>'$last_read'");
+		$new_msg = $db->Do_Fetch_Assoc($q_new);
+
+		if($new_msg['cnt']>0){
+			//We create the list of new messages
+			$query = $db->DoQuery("SELECT id FROM {$prefix}boardmsg WHERE id>'$last_read'");
+			$lastid=0;
+			while($new_msg=$db->Do_Fetch_Assoc($query)){
+				if($lastid<$new_msg['id'])
+					$lastid=$new_msg['id'];
+					
+				$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
+				$db->DoQuery("UPDATE {$prefix}users SET last_board_id='$lastid' WHERE username='{$x7s->username}'");
+			}
+		}
+	}
+
+	function get_unread(){
+		global $print, $x7s, $db, $prefix;
+		$unreads = array();
+		$query = $db->DoQuery("SELECT id FROM {$prefix}boardunread WHERE user='{$x7s->username}'");
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$unreads[$row['id']]=1;
+		}
+
+		return $unreads;
+		
 	}
 
 ?>
