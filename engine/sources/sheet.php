@@ -1228,6 +1228,8 @@
 			#master{
 				top: 60px;
 				left: 50px;
+				width: 400px;
+				height: 550px;
 			}
 			#masterdiv{
 				width: 400px;
