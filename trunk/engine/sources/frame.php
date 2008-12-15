@@ -293,20 +293,23 @@
 			$pm_etime = time()-4*($x7c->settings['refresh_rate']/1000);
 			$private_msgs = 0;
 
-			$query = $db->DoQuery("SELECT user,type,body_parsed,time,id,room FROM {$prefix}messages WHERE (
-							(id>'$_GET[startfrom]'
-							AND (
-								(room='$_GET[room]' AND (type='1' OR type='4' OR type='14')) OR
-								(room='$x7s->username' AND type='3') OR
-								(type='2') OR
-								(room='$x7s->username:0' AND type='5' AND time<$pm_time) OR
-								(room='$_GET[room]' AND type='10') OR
-								(room='$x7s->username' AND (type='11' OR type='12' OR type='13'))
+			$query = $db->DoQuery("SELECT user,type,body_parsed,m.time,m.id,room,gender FROM {$prefix}messages m, {$prefix}users u WHERE
+						m.user=u.username AND
+						(
+							
+							(m.id>'$_GET[startfrom]'
+								AND (
+									(room='$_GET[room]' AND (type='1' OR type='4' OR type='14')) OR
+									(room='$x7s->username' AND type='3') OR
+									(type='2') OR
+									(room='$x7s->username:0' AND type='5' AND m.time<$pm_time) OR
+									(room='$_GET[room]' AND type='10') OR
+									(room='$x7s->username' AND (type='11' OR type='12' OR type='13'))
+								)
 							)
-							)
-							OR (room='$x7s->username' AND type='6' AND time='0')
+							OR (room='$x7s->username' AND type='6' AND m.time='0')
 						)
-						ORDER BY id ASC");
+						ORDER BY m.id ASC");
 
 			if($db->error == 4){
 				$query = eregi_replace("'","\\'",$query);
@@ -333,8 +336,13 @@
 						else
 							$timestamp = "";
 
+						$gender='';
+						if($row[6] == 0)
+							$gender='"male"';
+						else
+							$gender='"female"';
 						
-						$toout = "<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=\"other_persons\">$row[0] $timestamp:</span></a>";
+						$toout = "<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$row[0] $timestamp:</span></a>";
 						
 						if($x7c->permissions['admin_panic'])
 							$toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
