@@ -581,8 +581,13 @@
 	function gen_mini($data,$skin){
 		
 		$css = "<style type=\"text/css\">
-			.other_persons {
-				color: red;
+			.male {
+				color: #0ca4e3;
+				font-weight: bold;
+				font-size: 8pt;
+			}
+			.female {
+				color: pink;
 				font-weight: bold;
 				font-size: 8pt;
 			}
