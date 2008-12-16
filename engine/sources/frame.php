@@ -73,8 +73,14 @@
 	if(isset($_GET['delete']))
 		if($x7c->permissions['admin_panic']){
 			include("./lib/message.php");
-			$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='{$_GET['delete']}'");
-			delete_communication($_GET['delete'],$_GET['room']);
+			if($_GET['delete']!="all"){
+				$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='{$_GET['delete']}'");
+				delete_communication($_GET['delete'],$_GET['room']);
+			}
+			else{
+				$db->DoQuery("DELETE FROM {$prefix}messages WHERE room='{$_GET[room]}'");
+				delete_communication('all',$_GET['room']);
+			}
 			return;
 		}
 
@@ -293,11 +299,8 @@
 			$pm_etime = time()-4*($x7c->settings['refresh_rate']/1000);
 			$private_msgs = 0;
 
-			$query = $db->DoQuery("SELECT user,type,body_parsed,m.time,m.id,room,gender FROM {$prefix}messages m, {$prefix}users u WHERE
-						m.user=u.username AND
-						(
-							
-							(m.id>'$_GET[startfrom]'
+			$query = $db->DoQuery("SELECT user,type,body_parsed,m.time,m.id,room FROM {$prefix}messages m WHERE
+						(m.id>'$_GET[startfrom]'
 								AND (
 									(room='$_GET[room]' AND (type='1' OR type='4' OR type='14')) OR
 									(room='$x7s->username' AND type='3') OR
@@ -308,7 +311,6 @@
 								)
 							)
 							OR (room='$x7s->username' AND type='6' AND m.time='0')
-						)
 						ORDER BY m.id ASC");
 
 			if($db->error == 4){
@@ -317,6 +319,12 @@
 				echo "9;;./index.php?act=panic&dump=$query&source=/sources/frame.php:155";
 			}
 
+			$query_gender = $db->DoQuery("SELECT gender, username FROM {$prefix}users");
+
+			$genders='';
+			while($row = $db->Do_Fetch_Assoc($query_gender)){
+				$genders[$row['username']]=$row['gender'];
+			}
 			while($row = $db->Do_Fetch_Row($query)){
 
 				if($row[1]!=6)
@@ -337,7 +345,7 @@
 							$timestamp = "";
 
 						$gender='';
-						if($row[6] == 0)
+						if($genders[$row[0]] == 0)
 							$gender='"male"';
 						else
 							$gender='"female"';
@@ -626,7 +634,6 @@
 														dataSubArray2[x2] = restoreText(dataSubArray2[x2]);
 													}
 												}
-
 												playSound = 2;
 
 											}else if(dataSubArray[0] == '3'){
@@ -819,7 +826,12 @@
 						function do_delete(msgid){
 							jd=new Date();
 							nocache = jd.getTime();
-							url = './index.php?act=frame&delete='+msgid+'&room=<?PHP echo $x7c->room_name; ?>';		if(window.XMLHttpRequest){
+							url = './index.php?act=frame&delete='+msgid+'&room=<?PHP echo $x7c->room_name; ?>';
+							if(msgid == 'all'){
+								if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+									return;
+							}
+							if(window.XMLHttpRequest){
 								try {
 									httpReq1 = new XMLHttpRequest();
 								} catch(e) {
@@ -1040,6 +1052,10 @@
 		$pos=stripos($polaroid,".jpg");
 		$polaroid = substr($polaroid, 0, $pos);
 		$polaroid.="ob.jpg";
+	}
+
+	if($x7c->permissions['admin_panic']){
+		echo '<div id="clean_chat"><a onClick="javascript: do_delete(\'all\')">[Pulisci chats]</a></div>';
 	}
 
 ?>

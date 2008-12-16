@@ -461,6 +461,11 @@
 				top: 590px;
 				left: 190px;
 			}
+			#clean_chat{
+				position: absolute;
+				top: 70px;
+				left: 20px;
+			}
 			
 			#cmddiv {
 				position: absolute;
