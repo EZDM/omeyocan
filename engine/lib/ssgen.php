@@ -587,7 +587,7 @@
 				font-size: 8pt;
 			}
 			.female {
-				color: pink;
+				color: #ff6dbc;
 				font-weight: bold;
 				font-size: 8pt;
 			}
