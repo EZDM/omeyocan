@@ -342,10 +342,12 @@
 			 
 				if($row = $db->Do_Fetch_Assoc($query)){					
 					$roll = rand(1,14);
-					$result = floor($row['ch_value'] - $roll);
+					$result = floor($row['ch_value'] - $roll) + 16;
 					
-					if($result < 0)
+					if($result < 10)
 						$charact_msg="<span class=\"roll_neg\">{".$row['ch_name']." ".$result."}</span>";
+					else if($result < 20)
+						$charact_msg="<span class=\"roll_avg\">{".$row['ch_name']." ".$result."}</span>";
 					else
 						$charact_msg="<span class=\"roll_pos\">{".$row['ch_name']." ".$result."}</span>";
 					
