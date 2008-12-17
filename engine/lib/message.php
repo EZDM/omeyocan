@@ -313,10 +313,12 @@
 					$roll = rand(1,6);
 					$roll += rand(1,6);
 					$roll += rand(1,6);
-					$result = floor($row['ab_value']*2 + $row['char_value']/2 - $roll);
+					$result = floor($row['ab_value']*2 + $row['char_value']/2 - $roll) + 16;
 					
-					if($result < 0)
+					if($result < 11)
 						$action_msg="<span class=\"roll_neg\">{".$row['ab_name']." ".$result."}</span>";
+					else if($result < 21)
+						$action_msg="<span class=\"roll_avg\">{".$row['ab_name']." ".$result."}</span>";
 					else
 						$action_msg="<span class=\"roll_pos\">{".$row['ab_name']." ".$result."}</span>";
 					
@@ -342,11 +344,11 @@
 			 
 				if($row = $db->Do_Fetch_Assoc($query)){					
 					$roll = rand(1,14);
-					$result = floor($row['ch_value'] - $roll) + 16;
+					$result = floor($row['ch_value'] - $roll) + 10;
 					
-					if($result < 10)
+					if($result < 7)
 						$charact_msg="<span class=\"roll_neg\">{".$row['ch_name']." ".$result."}</span>";
-					else if($result < 20)
+					else if($result < 14)
 						$charact_msg="<span class=\"roll_avg\">{".$row['ch_name']." ".$result."}</span>";
 					else
 						$charact_msg="<span class=\"roll_pos\">{".$row['ch_name']." ".$result."}</span>";
