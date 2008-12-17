@@ -644,7 +644,7 @@
 			 font-weight: bold;
 			 color: red;
 			}
-			.roll_neg{
+			.roll_avg{
 			 font-weight: bold;
 			 color: orange;
 			}
