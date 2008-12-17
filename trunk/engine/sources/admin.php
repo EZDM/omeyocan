@@ -2162,6 +2162,9 @@
 					$db->DoQuery("DELETE FROM {$prefix}userability WHERE username='$_GET[delete]'");
 					$db->DoQuery("DELETE FROM {$prefix}usercharact WHERE username='$_GET[delete]'");
 					$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner='$_GET[delete]'");
+					$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE user='$_GET[delete]'");
+					$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='$_GET[delete]'");
+					$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$_GET[delete]'");
 					// Clean up logs
 					cleanup_guest_logs($_GET['delete']);
 					$body = "<div align=\"center\">$txt[462]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
@@ -2190,7 +2193,7 @@
 						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">
 							<tr>
 								<td width=\"60\">$txt[2]:</td>
-								<td width=\"100\">{$def->profile['username']}</td>
+								<td width=\"100\"><input type=\"text\" name=\"username\" class=\"text_input\" value=\"{$def->profile['username']}\"></td>
 							</tr>
 							
 							<tr>
@@ -2271,7 +2274,15 @@
 						change_pass($_GET['update'],$_POST['pass1']);
 						
 					// Update the profile info
-					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]' WHERE username='$_GET[update]'");
+
+					$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}usercharact SET username='$_POST[username]' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}objects SET owner='$_POST[username]' WHERE owner='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}boardmsg SET user='$_POST[username]' WHERE user='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}boardunread SET user='$_POST[username]' WHERE user='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}messages SET user='$_POST[username]' WHERE user='$_GET[update]'");
 					
 					$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 				}
