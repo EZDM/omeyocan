@@ -644,6 +644,10 @@
 			 font-weight: bold;
 			 color: red;
 			}
+			.roll_neg{
+			 font-weight: bold;
+			 color: orange;
+			}
 			.roll_pos{
 			 font-weight: bold;
 			 color: #05bf01;
