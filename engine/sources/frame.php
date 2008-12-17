@@ -323,7 +323,7 @@
 
 			$genders='';
 			while($row = $db->Do_Fetch_Assoc($query_gender)){
-				$genders[$row['username']]=$row['gender'];
+				$genders[strtolower($row['username'])]=$row['gender'];
 			}
 			while($row = $db->Do_Fetch_Row($query)){
 
@@ -345,10 +345,14 @@
 							$timestamp = "";
 
 						$gender='';
-						if($genders[$row[0]] == 0)
-							$gender='"male"';
+						if(isset($genders[strtolower($row[0])])){
+							if($genders[strtolower($row[0])] == 0)
+								$gender='"male"';
+							else
+								$gender='"female"';
+						}
 						else
-							$gender='"female"';
+							$gender	= '"none> <span> Gender_undefined_error </span"';
 						
 						$toout = "<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$row[0] $timestamp:</span></a>";
 						
