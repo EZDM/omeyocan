@@ -38,23 +38,23 @@
 	function cleanup_messages(){
 		global $db,$prefix,$x7c;
 		if($x7c->settings['expire_messages'] != 0){
-			//Here I keep max_room_messages for type 1 messages
+			//Here I keep max_room_messages for type 1 (normal) and 14 (mastering) messages
 			$exptime = $x7c->settings['max_room_messages'];
 			$room_query = $db->DoQuery("SELECT name FROM ${prefix}rooms");
 			
 			while($room = $db->Do_Fetch_Row($room_query)){
-				$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}messages WHERE type='1' AND room='$room[0]'");
+				$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}messages WHERE (type='1' OR type='14') AND room='$room[0]'");
 				$row = $db->Do_Fetch_Assoc($query);
 			
 				if($row['num'] > $exptime){
 	                        	$toDelete = $row['num'] - $exptime;
-                        		$db->DoQuery("DELETE FROM {$prefix}messages WHERE type='1' AND room='$room[0]' ORDER BY time LIMIT $toDelete");
+                        		$db->DoQuery("DELETE FROM {$prefix}messages WHERE (type='1' OR type='14') AND room='$room[0]' ORDER BY time LIMIT $toDelete");
 				}
 			}
 			
 			//Here I delete all other messages
 			$exptime = time()-$x7c->settings['expire_messages'];
-			$db->DoQuery("DELETE FROM {$prefix}messages WHERE time<$exptime AND type<>'6' AND type<>'1'");
+			$db->DoQuery("DELETE FROM {$prefix}messages WHERE time<$exptime AND type<>'6' AND type<>'1' AND type<>'14'");
 		}
 	}
 	
