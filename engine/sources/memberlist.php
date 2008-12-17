@@ -61,6 +61,12 @@
 			$query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$x7s->username'");
 			$row = $db->Do_Fetch_Assoc($query);
 			$room =$row['position'];
+
+			//Se sono qui devo per forza essere in land... per lo meno in mappa
+			//Non dovrebbe mai essere vero il branch che segue
+			if($room==''){
+				$room='Mappa';
+			}
 		}
 			
 		// See if the user wants the data sorted in anyway
