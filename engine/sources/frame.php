@@ -1107,8 +1107,8 @@
 							</div>
 							
 							<div id="cmddiv">
-								<table cellspacing=3 cellpadding=0>
-									<tr><td>
+								<table cellspacing=3 cellpadding=0 style="width: 100%">
+									<tr><td style="width: 100%; text-align: center;">
 											
 									
 										<select class="button" name="action" onChange="javascript: return action_select(this);">
@@ -1177,6 +1177,7 @@
 										}
 											
 								?>
+										<input name="whisper_all_btn" type="button" class="button" value="Sussurra a tutti" onClick="document.chatIn.msgi.value ='@_all_@ '; document.chatIn.msgi.focus();"/>
 										<input name="speech_btn" type="button" class="button" value="Parlato" onClick="javascript: speech();"/>
 										<input name="button_send" type="submit" class="send_button" style="cursor: pointer;background: url(<?PHP echo $print->image_path; ?>send.gif);border: none;height: 20px;width: 55px;text-align: center;font-weight: bold;" onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'" onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 									</td></tr>

@@ -77,14 +77,26 @@
 			
 		}else if($sussurro == 1){
 			if(preg_match("/@.*@/i",$body, $user)){
-				$user[1] = preg_replace("/@/i","",$user[0]);	
+				$user[1] = preg_replace("/@/i","",$user[0]);
+
+				//Check if whisper is for everybody					
+				if($user[1] == "_all_"){
+					$query = $db->DoQuery("SELECT name FROM {$prefix}online WHERE room='$room'");
+
+					while($row = $db->Do_Fetch_Assoc($query)){
+						if($row['name'] != $x7s->username){
+							$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$row[name]:$body_parsed','$room','$time')");
+						}
+					}
+					
+				}else{
+					//Check if users are in the same chatroom
+					$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}online WHERE name='{$user[1]}' AND room='$room'");
+					$row = $db->Do_Fetch_Assoc($query);
 				
-				//Check if users are in the same chatroom
-				$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}online WHERE name='{$user[1]}' AND room='$room'");
-				$row = $db->Do_Fetch_Assoc($query);
-				
-				if($row['num'])
-					$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$user[1]:$body_parsed','$room','$time')");
+					if($row['num'])
+						$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$user[1]:$body_parsed','$room','$time')");
+				}
 			}
 		}else if($sussurro == 2){
 			//Mastering message
