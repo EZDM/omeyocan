@@ -470,7 +470,9 @@
 			#cmddiv {
 				position: absolute;
 				top: 680px;
-				left: 150px;
+				left: 0px;
+				width: 870px;
+				text-align: center;
 			}
 			
 			#panicwrap {
