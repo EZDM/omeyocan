@@ -666,9 +666,9 @@
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
-			$avatar='';
+			$avatar="<br>".date("j/n/Y G:i", $row['time']);
 			if($row['avatar']!=''){
-				$avatar="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
+				$avatar.="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
 			}
 			
 			$unread='';
