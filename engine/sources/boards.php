@@ -579,7 +579,7 @@
 		global $print, $x7s, $db, $prefix;
 		$body='';
 		$indice=indice_board();
-		$maxmsg=5;
+		$maxmsg=10;
 		$navigator='';
 		
 		if(isset($_GET['startfrom'])){
@@ -623,7 +623,7 @@
 					FROM {$prefix}boardmsg b, {$prefix}users u
 					WHERE	b.user = u.username AND
 						(b.id='{$id}' OR father='{$id}')
-						ORDER BY time LIMIT $limit_min, $maxmsg");
+						ORDER BY time DESC LIMIT $limit_min, $maxmsg");
 		
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
