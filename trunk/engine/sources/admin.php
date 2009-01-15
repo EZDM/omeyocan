@@ -2051,7 +2051,7 @@
 							</tr>
 							<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
 							<tr>
-								<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
+								<td><input type=\"submit\" class=\"button\" value=\"Crea-Modifica\"></div></td>
 							</tr>
 						</table>
 				";
@@ -2068,7 +2068,7 @@
 									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
 								</tr>
 								<tr>
-									<td><input type=\"submit\" class=\"button\" value=\"Vai\"></div></td>
+									<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div></td>
 								</tr>
 								
 							</table>
