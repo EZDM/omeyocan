@@ -145,8 +145,8 @@
 	function file_upload($path){
 		global $print;
 
-                if(eregi(" ",$_FILES['file']['name'])){
-                        $print->normal_window("Errore", "Il nome del file non puo' avere spazi");
+                if(eregi("[^a-zA-Z0-9\-_\. ]",$_FILES['file']['name'])){
+                        $print->normal_window("Errore", "Il nome del file non puo' avere spazi o caratteri speciali");
                         return;
                 }
                 
