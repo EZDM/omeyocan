@@ -1661,6 +1661,10 @@
 						<td width=\"120\">Amministra gli oggetti</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"admin_objects\" value=\"1\"{$def['admin_objects']}></td>
 					</tr>	
+                                        <tr>
+						<td width=\"120\">Logo</td>
+						<td width=\"50\"><input type=\"text\" name=\"logo\" value=\"$row[42]\"></td>
+					</tr>
 					<tr>
 						<td width=\"170\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
 					</tr>
@@ -1749,9 +1753,10 @@
 					!isset($_POST['admin_panic']) ? $_POST['admin_panic'] = 0 : "";
 					!isset($_POST['admin_alarms']) ? $_POST['admin_alarms'] = 0 : "";
 					!isset($_POST['admin_objects']) ? $_POST['admin_objects'] = 0 : "";
+					!isset($_POST['logo']) ? $_POST['logo'] = 0 : "";
 					
 					// Save the settings
-					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]' WHERE usergroup='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]' WHERE usergroup='$_GET[update]'");
 					// Tell user they have been updated
 					$body .= "$txt[458]<Br><br>";
 					
@@ -1774,7 +1779,12 @@
 					foreach($_POST as $key=>$val){
 						if(eregi("^ug_",$key) && $val == 1){
 							$key = eregi_replace("^ug_","",$key);
-							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]' WHERE username='$key'");
+							
+							$gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[new_g]'");
+                                              		$row=$db->Do_Fetch_Assoc($gif_query);
+                                              		$gif=$row['logo'];
+
+							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]', bio='$gif' WHERE username='$key'");
 						}
 					}
 					
@@ -2227,8 +2237,8 @@
 							</tr>
 							
 							<tr>
-								<td width=\"60\">$txt[124]:</td>
-								<td width=\"100\"><textarea class=\"text_input\" name=\"bio\" cols=\"18\">{$def->profile['bio']}</textarea></td>
+								<td width=\"60\">Logo:</td>
+								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"bio\" cols=\"18\" value=\"{$def->profile['bio']}\">Override group gif <input type=\"checkbox\" name=\"override\" value=\"1\"></td>
 							</tr>
 							
 							<tr>
@@ -2274,6 +2284,13 @@
 						change_pass($_GET['update'],$_POST['pass1']);
 						
 					// Update the profile info
+					if(!isset($_POST['override'])){
+                                            $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[usergroup]'");
+                                            $row=$db->Do_Fetch_Assoc($gif_query);
+                                            $_POST['bio']=$row['logo'];
+                                        }
+                                        
+					
 					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]' WHERE username='$_GET[update]'");
 
 					$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
