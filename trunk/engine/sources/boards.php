@@ -298,15 +298,41 @@
 			
 			//Do the real send (master can always send and modify even if readonly)
 			if((checkAuth($board['id']) && !$board['readonly']) || checkIfMaster()){
-				$time = time();
-				
-				$msg = eregi_replace("\n","<Br>",$msg);
-				$msg = eregi_replace("\\\\n","<Br>",$msg);
-				
-				$db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies)
-						VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0')");
-				if(isset($_GET['reply']))
-					$db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
+                                if(isset($_GET['modify'])){
+                                      $query = $db->DoQuery("SELECT user FROM {$prefix}boardmsg WHERE id='{$_GET['modify']}'");
+                                      $row = $db->Do_Fetch_Assoc($query);
+
+                                      if(!$row){
+                                            $body="La conversaizone non esiste
+					           <A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
+			
+                                            $head="Errore";
+                                            $print->board_window($head,$body,$indice);
+                                            return;
+                                      }
+                                      elseif(!checkIfMaster() && $row['user']!=$x7s->username){
+                                            $body="Operazione non permessa
+					           <A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
+			
+                                            $head="Errore";
+                                            $print->board_window($head,$body,$indice);
+                                            return;
+
+                                      }
+                                      $msg = eregi_replace("\n","<Br>",$msg);
+                                      $db->DoQuery("UPDATE {$prefix}boardmsg SET body='$subject::$msg' WHERE id='{$_GET['modify']}'");
+                                      
+                                }
+                                else{
+                                            $time = time();
+                                            
+                                            $msg = eregi_replace("\n","<Br>",$msg);
+                                            
+                                            $db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies)
+                                                            VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0')");
+                                            if(isset($_GET['reply']))
+                                                    $db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
+                              }
 			}
 			else{
 				$body="Operazione non permessa
@@ -314,7 +340,7 @@
 			
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
-			return;
+		        	return;
 			}
 		
 			//We return to board or conversation
@@ -328,16 +354,30 @@
 		}
 		
 		//In this case the user want to send a message
-		
-		if(!isset($_GET['reply'])){
+		$old_msg="";
+		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$head = "Nuova comunicazione su ".$board['name'];
+			$body .= "<div align=\"center\">
+			                 <form action=\"./index.php?act=boards&send=$board[id]\" method=\"post\">";
 		}
 		else{
-			$reply=$_GET['reply'];
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$reply'");
-			$row = $db->Do_Fetch_Assoc($query);
-			
-			if(!$row){
+		        if(isset($_GET['modify'])){
+		              $modify = $_GET['modify'];
+		              $head = "Modifica alla comunicazione: ";
+		              $body .= "<div align=\"center\">
+			                 <form action=\"./index.php?act=boards&send=$board[id]&modify=$modify\" method=\"post\">";
+                        }
+                        else{
+                              $modify = $_GET['reply'];
+                              $head = "Risposta alla comunicazione: ";
+                              $body .= "<div align=\"center\">
+			                 <form action=\"./index.php?act=boards&send=$board[id]&reply=$modify\" method=\"post\">";
+                        }
+
+                        
+                        $query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$modify'");
+                        $row = $db->Do_Fetch_Assoc($query);
+                        if(!$row){
 				$body="La conversazione non esiste
 					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 			
@@ -350,22 +390,23 @@
 			$nb = offline_msg_split($rawtext);
 			$msg = $nb[0];
 			$subject = $nb[1];
+			$head.=$subject;
+
+			if(isset($_GET['modify'])){
+                                $old_msg = eregi_replace("<Br>","\n",$msg);
+                        }
 			
-			$head = "Risposta alla comunicazione: ".$subject;
-			//$msg = "\n\n-----\nMessaggio originale:\n\n".$msg;
-		}	
+                }
 		
 		
-		$body .= "<div align=\"center\">
-			<form action=\"./index.php?act=boards&send=$board[id]&reply=$reply\" method=\"post\">";
 			
-		if(!isset($_GET['reply'])){
+		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$body .= "Oggetto: <input class=\"text_input\" size=40 type=\"text\" name=\"subject\" value=\"$subject\"><br>";
 		}
 		else
 			$body .= "<input type=\"hidden\" name=\"subject\" value=\"$subject\">";
 			
-		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\"></textarea><Br>
+		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\">$old_msg</textarea><Br>
 			<input type=\"submit\" value=\"Invia\" class=\"button\">
 			</form></div>";
 		
@@ -659,7 +700,8 @@
 		$user=$row['user'];
 			
 		if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
-				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
+                        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
+                        $body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 		}
 		
 		$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
@@ -686,6 +728,7 @@
 			
 			$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
+			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
 				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 			}
 			
