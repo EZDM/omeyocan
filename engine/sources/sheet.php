@@ -1411,7 +1411,7 @@
 				top: 0px;
 				right: 0px;
 				width: 50%;
-				font-size: 10pt;
+				font-size: 6pt;
 				background-color: lightyellow;
 				padding: 5px;
 				border: 3px dashed red;
