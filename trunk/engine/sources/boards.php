@@ -248,7 +248,7 @@
 		
 			$replies = 0;
 			$father = 0;
-			$msg = $_POST['body'];
+			
 			$toboard = $board['id'];
 			
 			if(isset($_GET['reply']) && $_GET['reply']!=0){
@@ -355,23 +355,24 @@
 		
 		//In this case the user want to send a message
 		$old_msg="";
+		$onsubmit=" onSubmit=\"document.msg.body.value=document.msg.body.value.replace(/\+/gi,'%2B'); \"";
 		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$head = "Nuova comunicazione su ".$board['name'];
 			$body .= "<div align=\"center\">
-			                 <form action=\"./index.php?act=boards&send=$board[id]\" method=\"post\">";
+			                 <form name=\"msg\" action=\"./index.php?act=boards&send=$board[id]\" method=\"post\" $onsubmit>";
 		}
 		else{
 		        if(isset($_GET['modify'])){
 		              $modify = $_GET['modify'];
 		              $head = "Modifica alla comunicazione: ";
 		              $body .= "<div align=\"center\">
-			                 <form action=\"./index.php?act=boards&send=$board[id]&modify=$modify\" method=\"post\">";
+			                 <form name =\"msg\" action=\"./index.php?act=boards&send=$board[id]&modify=$modify\" method=\"post\" $onsubmit>";
                         }
                         else{
                               $modify = $_GET['reply'];
                               $head = "Risposta alla comunicazione: ";
                               $body .= "<div align=\"center\">
-			                 <form action=\"./index.php?act=boards&send=$board[id]&reply=$modify\" method=\"post\">";
+			                 <form name=\"msg\"  action=\"./index.php?act=boards&send=$board[id]&reply=$modify\" method=\"post\" $onsubmit>";
                         }
 
                         
