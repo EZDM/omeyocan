@@ -39,12 +39,14 @@
 	
 	function auth_getpass($auth_ucookie){
 		GLOBAL $db,$prefix,$ACTIVATION_ERROR;
-		$query = $db->DoQuery("SELECT password,activated FROM {$prefix}users WHERE username='$_COOKIE[$auth_ucookie]'");
+		$query = $db->DoQuery("SELECT password,activated,username FROM {$prefix}users WHERE username='$_COOKIE[$auth_ucookie]'");
 		$password = $db->Do_Fetch_Row($query);
 		
 		if($password[1] != 1 && $password[0] != "")
 			$ACTIVATION_ERROR = 1;
 		
+            //Set the name using the one sotred in DB since for case sensitive matters
+		$_COOKIE[$auth_ucookie]=$password[2];
 		return $password[0];
 	}
 	

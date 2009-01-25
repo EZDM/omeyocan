@@ -359,7 +359,7 @@
 
                                                 $gif="";
                                                 if(isset($gifs[strtolower($row[0])]) && $gifs[strtolower($row[0])]!=""){
-                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: middle\">";
+                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: middle\"> ";
                                                 }
 						
 						$toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$row[0] $timestamp:</span></a>";
@@ -383,10 +383,13 @@
 						echo utf8_encode("7;$row[0]|");
 						$db->DoQuery("UPDATE {$prefix}messages SET time='$pm_etime' WHERE id='$row[4]'");
 					}elseif($row[1] == 10){
-						list($user,$msg) = split(":",$row[2]);
+						$pos = strpos($row[2],':');
+						$user = substr($row[2],0,$pos);
+						$msg = substr($row[2],$pos+1);
+
 						if($row[0] != $x7s->username){
 							//Only master and final user can have this message
-							if($x7s->username == $user){
+							if(strtolower($x7s->username) == strtolower($user)){
 								$toout = "<span class=\"sussurro\">[$row[0]] ti ha mandato un sussurro:".$msg."</span><br>";
 							}
 							elseif($x7c->permissions['admin_panic']){

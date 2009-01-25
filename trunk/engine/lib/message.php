@@ -76,8 +76,8 @@
 			}
 			
 		}else if($sussurro == 1){
-			if(preg_match("/@.*@/i",$body, $user)){
-				$user[1] = preg_replace("/@/i","",$user[0]);
+			if(preg_match("/@.*@/",$body, $user)){
+				$user[1] = preg_replace("/@/","",$user[0]);
 
 				//Check if whisper is for everybody					
 				if($user[1] == "_all_"){
