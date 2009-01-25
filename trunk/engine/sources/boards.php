@@ -248,6 +248,7 @@
 		
 			$replies = 0;
 			$father = 0;
+			$msg=$_POST['body'];
 			
 			$toboard = $board['id'];
 			
