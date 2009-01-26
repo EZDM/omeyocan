@@ -19,6 +19,8 @@ function secret_main(){
       $row = $db->Do_Fetch_Assoc($query);
 
       $body="<img src=\"graphic/Smarrirsi-nei-boschi.jpg\">";
+      $row['secrets']++;
+
       
 
       if($row['secrets'] > 2){
@@ -26,9 +28,10 @@ function secret_main(){
         echo  header("Location: index.php?act=logout&secret");
         return;
       }
-      
-      $row['secrets']++;
+
       $db->DoQuery("UPDATE {$prefix}users SET secrets='{$row['secrets']}' WHERE username='{$x7s->username}'");
+      
+
       print_sheet($body);
     }
 }
