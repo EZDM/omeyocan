@@ -18,12 +18,12 @@ function secret_main(){
       $query = $db->DoQuery("SELECT secrets FROM {$prefix}users WHERE username='{$x7s->username}'");
       $row = $db->Do_Fetch_Assoc($query);
 
-      $body="Non dovresti girare nei boschi... potrebbero succedere cose brutte";
+      $body="<img src=\"graphic/Smarrirsi-nei-boschi.jpg\">";
       
 
-      if($row['secrets'] >= 3){
+      if($row['secrets'] > 2){
         $db->DoQuery("UPDATE {$prefix}users SET secrets='0' WHERE username='{$x7s->username}'");
-        echo  header("Location: index.php?act=logout");
+        echo  header("Location: index.php?act=logout&secret");
         return;
       }
       
