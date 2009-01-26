@@ -82,7 +82,7 @@
                 echo '
 		<style type="text/css">
                   #secret{
-                      background-color: green;
+                      background-color: transparent;
                       position: absolute;
                   }
 
