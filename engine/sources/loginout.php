@@ -171,10 +171,21 @@
 	function logout_page(){
 		srand(time());
 		$num = rand(1,4);
-		
-		$body = '<div id="logout">
+
+
+		if(isset($_GET['secret'])){
+                  $body = "<div id=\"logout_secret\"><img src=\"graphic/LOGOUTLOST.jpg\"></div>
+                                <script language=\"javascript\" type=\"text/javascript\">
+                                    opener.location.href='index.php';
+                                </script>
+
+                                  ";
+                }
+		else{
+		  $body = '<div id="logout">
 			<img src=./graphic/logout'.$num.'.jpg><br>
 		 Logout eseguito. <a href="index.php">Clicca Qui</a> per accedere nuovamente.</div>';
+                }
 		
 	
 		print_loginout($body,true);
@@ -236,6 +247,14 @@
 				width: 1026px; 
 				text-align: center;
 			}
+                        #logout_secret{
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 600;
+                                height: 440;
+				text-align: center;
+                        }
 
 			.error{
 				color: red;
@@ -253,21 +272,38 @@
 		
 		
 		echo $login_style;
-		
-		echo '</head><body>
- 			<div class="login" id="login">
- 				<div id="inner_login">
- 			';
- 			
-		
-		
-		
-		echo $body;
-		echo '
-			</div>
-		</div>
-		</body>
-			</html>';
+
+		if(!$nosfondo){
+                        echo '</head><body>
+                                <div class="login" id="login">
+                                        <div id="inner_login">
+                                ';
+                                
+                        
+                        
+                        
+                        echo $body;
+                        echo '
+                                </div>
+                        </div>
+                        </body>
+                                </html>';
+                }
+                else{
+                        echo '</head><body>
+
+                                ';
+                                
+                        
+                        
+                        
+                        echo $body;
+                        echo '
+
+                        </body>
+                                </html>';
+                }
+                
 		
 	}
 
