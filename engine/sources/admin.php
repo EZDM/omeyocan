@@ -2449,7 +2449,7 @@
 					// Put it into the $body variable
 					$body .= "
 							<tr>
-								<td width=\"160\" class=\"dark_row\">&nbsp;<a href=\"index.php?act=frame&room=$link_url\">$room_info[0]</a>$lock</td>
+								<td width=\"160\" class=\"dark_row\">&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[0]</a>$lock</td>
 								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a></td>
 							</tr>
 					";
