@@ -1,6 +1,7 @@
 <?PHP
 
 function secret_main(){
+    global $print,$x7c,$x7s,$prefix,$db;
     if(isset($_GET['code']) && $_GET['code']=="2621"){
         $body = '<img src="graphic/Giardino_dei_Suicidi.jpg">
                   <a onClick="javascript: opener.location.href=\'index.php?act=frame&room=Giardino\'; window.close(self); ">
@@ -14,7 +15,20 @@ function secret_main(){
     }
 
     else{
+      $query = $db->DoQuery("SELECT secrets FROM {$prefix}users WHERE username='{$x7s->username}'");
+      $row = $db->Do_Fetch_Assoc($query);
+
       $body="Non dovresti girare nei boschi... potrebbero succedere cose brutte";
+      
+
+      if($row['secrets'] >= 3){
+        $db->DoQuery("UPDATE {$prefix}users SET secrets='0' WHERE username='{$x7s->username}'");
+        echo  header("Location: index.php?act=logout");
+        return;
+      }
+      
+      $row['secrets']++;
+      $db->DoQuery("UPDATE {$prefix}users SET secrets='{$row['secrets']}' WHERE username='{$x7s->username}'");
       print_sheet($body);
     }
 }
