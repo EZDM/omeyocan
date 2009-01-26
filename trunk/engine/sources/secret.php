@@ -3,6 +3,7 @@
 function secret_main(){
     global $print,$x7c,$x7s,$prefix,$db;
     if(isset($_GET['code']) && $_GET['code']=="2621"){
+        $db->DoQuery("UPDATE {$prefix}users SET secrets='0' WHERE username='{$x7s->username}'");
         $body = '<img src="graphic/Giardino_dei_Suicidi.jpg">
                   <a onClick="javascript: opener.location.href=\'index.php?act=frame&room=Giardino\'; window.close(self); ">
                   
