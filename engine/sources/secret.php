@@ -1,7 +1,7 @@
 <?PHP
 
 function secret_main(){
-    if(isset($_GET['code']) && $_GET['code']=="garden"){
+    if(isset($_GET['code']) && $_GET['code']=="2621"){
         $body = '<img src="graphic/Giardino_dei_Suicidi.jpg">
                   <a onClick="javascript: opener.location.href=\'index.php?act=frame&room=Giardino\'; window.close(self); ">
                   
@@ -10,7 +10,12 @@ function secret_main(){
                   </a>
         ';
 
-        print_sheet($body );
+        print_sheet($body);
+    }
+
+    else{
+      $body="Non dovresti girare nei boschi... potrebbero succedere cose brutte";
+      print_sheet($body);
     }
 }
 
