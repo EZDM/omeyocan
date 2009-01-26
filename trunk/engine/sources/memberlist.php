@@ -137,7 +137,10 @@
 				// Output this entry
 				$position='';
 				if($row['position']!="Mappa" && $row['position']!='')
-					$position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
+                                        if($x7c->permissions['admin_panic'])
+                                          $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
+                                        else
+					   $position = $row['position'];
 				else if($row['position']=="Mappa")
 					$position = "Mappa";
 				else
