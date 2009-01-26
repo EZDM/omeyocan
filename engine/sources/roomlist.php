@@ -123,6 +123,8 @@
 	<A href="index.php?act=frame&room=Auto"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Cimitero delle auto');" style="position:absolute; top:635px; left:490px;" src="./graphic/pulsante.gif"></A>
 
 	<A href="index.php?act=frame&room=Teatro"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Teatro');" style="position:absolute; top:496px; left:380px;" src="./graphic/pulsante.gif"></A>
+
+	<a href="javascript: hndl = window.open('index.php?act=secret&code=garden','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div style="width: 3px; height: 3px; background-color: transparent; top: 160px; left: 230px; position: absolute;"></div></a>
   
 
 
