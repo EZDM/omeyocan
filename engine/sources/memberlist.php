@@ -112,7 +112,10 @@
 		}
 		
 		// Get the userlist and online data
-		$query = $db->DoQuery("SELECT username, position,talk FROM {$prefix}users {$order}");
+		$query = $db->DoQuery("SELECT username, position,talk,long_name FROM {$prefix}users u,
+                                            {$prefix}rooms r
+                                            WHERE r.name = u.position
+                                            {$order}");
 		
 		
 		$body = "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
@@ -133,15 +136,15 @@
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			
-			if(($room!='' && $row['position']!='') ||$room==''){
+			if(($room!='' && $row['long_name']!='') ||$room==''){
 				// Output this entry
 				$position='';
-				if($row['position']!="Mappa" && $row['position']!='')
+				if($row['long_name']!="Mappa" && $row['long_name']!='')
                                         if($x7c->permissions['admin_panic'])
-                                          $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['position'].'</a>';
+                                          $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
                                         else
-					   $position = $row['position'];
-				else if($row['position']=="Mappa")
+					   $position = $row['long_name'];
+				else if($row['long_name']=="Mappa")
 					$position = "Mappa";
 				else
 					$position = "&nbsp;";
@@ -150,7 +153,7 @@
 							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
 							<td class=\"dark_row\">{$position}</td>";
 				if($room!='' && $room!="Mappa")
-					if($row['position'] != '' && $row['position']==$room)
+					if($row['long_name'] != '' && $row['long_name']==$room)
 						$body .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
 						$body .= "<td class=\"dark_row\">&nbsp;</td>";
@@ -170,7 +173,7 @@
 					$getstanza='';
 
 					if($room!='' && $room!="Mappa"){
-						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['long_name']}\">Tira un dado</a></td>";
 					}
 
 					if($room!='')
