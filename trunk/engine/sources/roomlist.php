@@ -82,7 +82,7 @@
                 echo '
 		<style type="text/css">
                   #secret{
-                      background-color: green;
+                      background-color: transparent;
                       position: absolute;
                   }
 
@@ -184,7 +184,7 @@
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=23430','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 236; left: 220;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=6069','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 185; left: 200;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=22371','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 140; left: 233;"></div></a>
-<a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=6254','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 143; left: 231; background:red;"></div></a>
+<a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=6254','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 143; left: 231;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=4128','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 178; left: 237;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=6743','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 226; left: 227;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=26366','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 179; left: 219;"></div></a>
