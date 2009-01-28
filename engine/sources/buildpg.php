@@ -475,7 +475,7 @@
 			 </p>
 			<p class="error_msg">'.$errore.'</p>
 			<form action="index.php?act=buildpg&build" method="post" name="sheet_form">
-				<div id="all">
+				<div class="overflow" id="all">
 				<table>
 					<tr onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();">
 						<td>Nome completo:</td>
@@ -525,7 +525,7 @@
 				</table>
 				</div>
 				
-				<div id="ability">
+				<div class="overflow" id="ability">
 				<table>
 					<tr>
 						<td>Punti abilit&agrave;:</td><td><input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
@@ -604,7 +604,12 @@
 
 			#buildpg {
 				margin-left: 50px;
+				overflow: auto;
+				height: 100%;
 			}
+                        .overflow {
+				overflow: auto;
+                        }
 
 			input[disabled]{color: #555555;}
 
