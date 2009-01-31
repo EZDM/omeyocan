@@ -112,9 +112,11 @@
 		}
 		
 		// Get the userlist and online data
+		// we force a fake join with Mappa
 		$query = $db->DoQuery("SELECT username, position,talk,long_name FROM {$prefix}users u,
                                             {$prefix}rooms r
                                             WHERE r.name = u.position
+                                            OR (u.position='' AND r.name='Mappa')
                                             {$order}");
 		
 		
@@ -136,15 +138,18 @@
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			
-			if(($room!='' && $row['long_name']!='') ||$room==''){
+			if(($room!='' && $row['position']!='') ||$room==''){
 				// Output this entry
 				$position='';
-				if($row['long_name']!="Mappa" && $row['long_name']!='')
-                                        if($x7c->permissions['admin_panic'])
+				if($row['long_name']!="Mappa" && $row['long_name']!=''){
+                                        if($x7c->permissions['admin_panic']){
                                           $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
-                                        else
+                                          }
+                                        else{
 					   $position = $row['long_name'];
-				else if($row['long_name']=="Mappa")
+                                        }
+                                }
+				else if($row['position']=="Mappa")
 					$position = "Mappa";
 				else
 					$position = "&nbsp;";
