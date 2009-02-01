@@ -109,7 +109,10 @@
 					<tr>
 						<td width=\"90\">$txt[67]:</td>
 						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"max_users\" value=\"{$x7c->room_data['maxusers']}\"></td>
-					</tr>";
+					</tr>
+                                        <td width=\"90\">Nome lungo:</td>
+								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"long_name\" value=\"{$x7c->room_data['long_name']}\"></td>
+					";
 				
 				if($x7c->permissions['set_background'] == 1 && $x7c->settings['enable_roombgs'] == 1){
 					
@@ -204,6 +207,7 @@
 				$new_settings[] = $_POST['rm_bg'];
 				$new_settings[] = $_POST['rm_logo'];
 				$new_settings[] = $_POST['panic_free'];
+				$new_settings[] = $_POST['long_name'];
 				
 				mass_change_roomsettings($_GET['room'],$new_settings);
 				$body = $txt[210];
