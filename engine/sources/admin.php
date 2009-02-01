@@ -2097,43 +2097,44 @@
 				}
 				else{
 					$limit=0;
+                                }
 					
-					$maxmsg=20;
-					$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}objects WHERE owner=''");
-					$row = $db->Do_Fetch_Assoc($query);
-					$total = $row['total'];
+				$maxmsg=20;
+				$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}objects WHERE owner=''");
+				$row = $db->Do_Fetch_Assoc($query);
+				$total = $row['total'];
 					
-					if($total > $maxmsg){
-						$i=0;
-						while($total > 0){
-							if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
-								$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
-							else
-								$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\">".($i+1)."</a> ";
-							$i++;
-							$total -= $maxmsg;
+				if($total > $maxmsg){
+					$i=0;
+					while($total > 0){
+						if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
+							$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
+						else
+							$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\">".($i+1)."</a> ";
+						$i++;
+						$total -= $maxmsg;
 							
-						}
-						$navigator.="<br>";
 					}
-					
-						
-					$limit_min = $limit * $maxmsg;
-					$limit_max = (($limit+1) * $maxmsg);
-					
-					$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' ORDER BY name LIMIT $limit_min, $limit_max");
-						
-					$body = $error."<br><br>";
-					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo oggetto]</a><br><br>
-					<a href=\"index.php?act=adminpanel&cp_page=objects&proom=1\">[Crea stanza privata]</a><br><br>
-					";
-					$body .= $navigator;
-					while($row = $db->Do_Fetch_Assoc($query)){
-						$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\"><b>Oggetto: </b> $row[name]</a> <a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a><br>";
-					}
-					$body .= $navigator;
-						
+					$navigator.="<br>";
 				}
+					
+						
+				$limit_min = $limit * $maxmsg;
+				$limit_max = (($limit+1) * $maxmsg);
+					
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' ORDER BY name LIMIT $limit_min, $limit_max");
+						
+				$body = $error."<br><br>";
+				$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo oggetto]</a><br><br>
+				<a href=\"index.php?act=adminpanel&cp_page=objects&proom=1\">[Crea stanza privata]</a><br><br>
+				";
+				$body .= $navigator;
+                                while($row = $db->Do_Fetch_Assoc($query)){
+					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\"><b>Oggetto: </b> $row[name]</a> <a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a><br>";
+				}
+				$body .= $navigator;
+						
+				
 			}
 			
 					
