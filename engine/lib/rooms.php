@@ -82,7 +82,7 @@
 	// type, moderated, topic, greeting, password, max users, background image, logo image
 	function mass_change_roomsettings($room,$new_settings){
 		global $prefix, $db;
-		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]', panic_free='$new_settings[8]' WHERE name='$room'");
+		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]', panic_free='$new_settings[8]', long_name='$new_settings[9]' WHERE name='$room'");
 	}
 	
 	// Changes a single setting (used mostly for IRC cmds I think)
