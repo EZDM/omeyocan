@@ -74,7 +74,7 @@
 			$time = 0;
 		$ops = "$uid";
 		$voice = "$uid";
-		$db->DoQuery("INSERT INTO {$prefix}rooms VALUES('0','$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free')");
+		$db->DoQuery("INSERT INTO {$prefix}rooms VALUES('0','$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free','$name')");
 		return 1;
 	}
 	
