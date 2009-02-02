@@ -362,8 +362,11 @@
 												//Panic update
 												valore = parseInt(dataSubArray[1]);
 												var messaggio;
-												if(valore)
-													messaggio="Arriva l'oscurità";
+                                                                                                if(valore){
+                                                                                                        var bell = document.getElementById('bell');
+                                                                                                        bell.Play();
+                                                                                                        messaggio="Arriva l'oscurità";
+                                                                                                }
 												else
 													messaggio="L'oscurità se ne va";
 												
