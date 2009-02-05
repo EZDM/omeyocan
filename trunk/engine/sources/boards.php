@@ -329,8 +329,11 @@
                                             
                                             $msg = eregi_replace("\n","<Br>",$msg);
                                             
-                                            $db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies)
-                                                            VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0')");
+                                            $db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies,last_update)
+                                                            VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0','$time')");
+
+                                            $db->DoQuery("UPDATE {$prefix}boardmsg SET last_update='$time' WHERE id='$father'");
+                                            
                                             if(isset($_GET['reply']))
                                                     $db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
                               }
@@ -439,10 +442,10 @@
 		$body='	<table width=100% align="center" style="border-collapse: collapse;">';
 		
 		if(checkIfMaster()){
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");	
+			$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");
 		}
 		else{
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE user_group='{$x7s->user_group}' OR user_group='Cittadino'");
+			$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE user_group='{$x7s->user_group}' OR user_group='Cittadino' ORDER BY id");
 		}
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -566,7 +569,7 @@
 		$limit_min = $limit * $maxmsg;
 		$limit_max = (($limit+1) * $maxmsg);		
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY time DESC LIMIT $limit_min, $limit_max");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY last_update DESC LIMIT $limit_min, $limit_max");
 
 		
 		if(!$board['readonly'] || checkIfMaster()){
@@ -666,7 +669,7 @@
 					FROM {$prefix}boardmsg b, {$prefix}users u
 					WHERE	b.user = u.username AND
 						(b.id='{$id}' OR father='{$id}')
-						ORDER BY time DESC LIMIT $limit_min, $maxmsg");
+						ORDER BY last_update DESC LIMIT $limit_min, $maxmsg");
 		
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
