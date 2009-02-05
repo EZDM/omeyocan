@@ -196,6 +196,10 @@
 				
 				if(!isset($_POST['panic_free']))
 					$_POST['panic_free']=0;
+
+                                //We enable html formatting for the topic field
+                                $_POST['topic'] = preg_replace("/&lt;/i","<",$_POST['topic']);
+                                $_POST['topic'] = preg_replace("/&gt;/i",">",$_POST['topic']);
 				
 				// Order `em up
 				$new_settings[] = $_POST['room_type'];
@@ -208,6 +212,8 @@
 				$new_settings[] = $_POST['rm_logo'];
 				$new_settings[] = $_POST['panic_free'];
 				$new_settings[] = $_POST['long_name'];
+
+				
 				
 				mass_change_roomsettings($_GET['room'],$new_settings);
 				$body = $txt[210];
