@@ -669,7 +669,7 @@
 					FROM {$prefix}boardmsg b, {$prefix}users u
 					WHERE	b.user = u.username AND
 						(b.id='{$id}' OR father='{$id}')
-						ORDER BY last_update DESC LIMIT $limit_min, $maxmsg");
+						ORDER BY time DESC LIMIT $limit_min, $maxmsg");
 		
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
