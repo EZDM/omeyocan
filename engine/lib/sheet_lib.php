@@ -11,12 +11,15 @@
 
 					if(dep != ""){
 						dep_act_val = parseInt(document.sheet_form[dep].value);
-						if(dep_act_val > value){
+						if(2*dep_act_val > value){
 							document.sheet_form[ab_name].value = value + 1;
 							document.sheet_form["xp"].value = xp - (value + 1);
 						}
 						else{
-							alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno pari gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
+						        right_value=2*dep_act_val;
+						        if(right_value==0)
+						            right_value=1;
+							alert("Non puoi alzare \""+document.sheet_form[ab_name+"_name"].value+"\" senza avere almeno "+right_value+" gradi in \""+document.sheet_form[dep+"_name"].value+"\"");
 						}
 					}
 					else{
