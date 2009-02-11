@@ -468,8 +468,9 @@
 						foreach($ability as $cur){
 							if($cur['value'] != $_POST[$cur['ab_id']]){
 								if($cur['dep'] != ""){
-									if($_POST[$cur['ab_id']] > 0 && $_POST[$cur['dep']] < $_POST[$cur['ab_id']]){
-										$errore .= "Errore, non puoi avere gradi in <b>".$cur['name']."</b> senza vere almeno pari gradi in b>".$ability[$cur['dep']]['name']."<br>";
+									if($_POST[$cur['ab_id']] > 0 && 2*$_POST[$cur['dep']] < $_POST[$cur['ab_id']]){
+                                                                                $right_value=(2*$_POST[$cur['dep']])>0 ? 2*$_POST[$cur['dep']] : 1;
+										$errore .= "Errore, non puoi avere ".$_POST[$cur['ab_id']]." gradi in <b>".$cur['name']."</b> senza vere almeno ".$right_value." gradi in b>".$ability[$cur['dep']]['name']."<br>";
 										$ok = false;
 										break;
 									}
