@@ -2413,7 +2413,44 @@
 					@unlink("{$x7c->settings['logs_path']}/$_GET[delete].log");
 					
 				}
-			}else{
+			}
+                        else if(isset($_GET['invite'])){
+                                if(isset($_POST['host'])){
+                                        include("./lib/message.php");
+                                        $query = $db->DoQuery("SELECT count(*) AS count FROM {$prefix}users WHERE username='{$_POST['host']}'");
+                                        $row = $db->Do_Fetch_Assoc($query);
+                                        if($row['count']!=1){
+                                                $body='Utente non esistente. <a href="index.php?act=admincp&cp_page=rooms">Torna indietro</a>';
+                                        }
+                                        else{
+                                                
+                                                $query = $db->DoQuery("SELECT long_name FROM {$prefix}rooms WHERE name='{$_GET['invite']}'");
+                                                $row = $db->Do_Fetch_Assoc($query);
+                                                if(!$row)
+                                                  die("Stanza non esistente");
+
+                                                $text="Sei stati invitato ad entrare nella stanza <a onClick=\"opener.location.href=\'index.php?act=frame&room={$_GET['invite']}\'\">$row[long_name]</a></td>";
+                                                send_offline_msg($_POST['host'],"Invito per una stanza",$text);
+
+                                                $body='Invito inviato correttamente. <a href="index.php?act=admincp&cp_page=rooms">Torna indietro</a>';
+          
+                                        }
+
+                                        //TODO redirect e controllo utente esistente
+                                }
+                                else{
+                                        $body="<form action=\"index.php?act=admincp&cp_page=rooms&invite={$_GET['invite']}\" method=\"post\" name=\"room_invite\">
+       						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+								<tr>
+									<td>Invitato:</td>
+									<td><input type=\"text\" name=\"host\" class=\"text_input\"></td>
+									<td><input type=\"submit\" class=\"button\" value=\"Ok\"></div></td>
+								</tr>
+                                                </table>
+					</form>";
+                                }
+                        }
+                        else{
 				// Display a list of all rooms and give a link to edit them
 				// Remove old records
 				include_once("./lib/online.php");
@@ -2451,7 +2488,9 @@
 					$body .= "
 							<tr>
 								<td width=\"160\" class=\"dark_row\">&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
-								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a></td>
+								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
+                                                                <a href=\"index.php?act=adminpanel&cp_page=rooms&invite=$link_url\">[Invita]</a>
+                                                                </td>
 							</tr>
 					";
 				}
