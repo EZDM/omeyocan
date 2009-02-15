@@ -1910,8 +1910,8 @@
 				
 				if($error==''){
 					$db->DoQuery("INSERT INTO {$prefix}objects
-							(name,description,uses,image_url,owner)
-							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]')");
+							(name,description,uses,image_url,owner,equipped)
+							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]','1')");
 							
 					$error="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
@@ -1939,8 +1939,8 @@
 							WHERE id='$_POST[id]'");
 				}else{
 					$db->DoQuery("INSERT INTO {$prefix}objects 
-							(name, description, uses, image_url)
-							VALUES('$_POST[name]','$_POST[description]','$_POST[uses]','$_POST[image_url]')");
+							(name, description, uses, image_url,equipped)
+							VALUES('$_POST[name]','$_POST[description]','$_POST[uses]','$_POST[image_url]','1')");
 				}
 					
 			}
@@ -1984,8 +1984,8 @@
 						if($row_obj_master['cnt'] == 0){
 						//Copy of the key for the master
 							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg')");
+								(name, description, uses, image_url,equipped)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1')");
 							$body .= "Copia master della chiave creata con successo<br>";
 						}
 						else
@@ -1994,8 +1994,8 @@
 						if($row_obj_user['cnt'] == 0){
 						//Cooy of the key for the owner
 							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url, owner)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]')");
+								(name, description, uses, image_url, owner,equipped)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1')");
 							$body .= "Copia utente della chiave creata con successo<br>";
 						}
 						else

@@ -1174,6 +1174,7 @@
 											$query = $db->DoQuery("SELECT id, name 
 													FROM {$prefix}objects
 													WHERE owner='$x7s->username'
+                                                                                                            AND equipped='1'
 												 	ORDER BY name");
 												 	
 								 			while($row = $db->Do_Fetch_Assoc($query)){

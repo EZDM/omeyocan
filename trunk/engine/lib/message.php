@@ -377,26 +377,31 @@
 			while(preg_match($obj_regexp,$message, $obj)){
 									
 				$obj_msg="";
-				$query = $db->DoQuery("SELECT name, uses
+				$query = $db->DoQuery("SELECT name, uses, equipped
 							FROM {$prefix}objects
 							WHERE id='$obj[1]'
 							 AND owner='$x7s->username'");
 			 
-				if($row = $db->Do_Fetch_Assoc($query)){					
-					if($row['uses'] > 1 || $row['uses'] == -1){
-						$obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".$row['name']."}</span>";
-					}
-					else if($row['uses'] == 1){
-						$obj_msg="<span class=\"break\">{Usa l\'oggetto: ".$row['name']." che diventa inutilizzabile subito dopo l\'azione}</span>";
-					}
-					else{
-						$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']."}</span>";
-					}
-						
-					if($row['uses'] > 0){
-						$newusage = $row['uses'] - 1;
-						$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' WHERE id='{$obj[1]}'");
-					}
+				if($row = $db->Do_Fetch_Assoc($query)){
+				        if(!$row['equipped']){
+				                $obj_msg="<span class=\"break\">{L\'oggetto ".$row['name']." non &egrave; equipaggiato}</span>";
+				        }
+				        else{
+                                                if($row['uses'] > 1 || $row['uses'] == -1){
+                                                        $obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".$row['name']."}</span>";
+                                                }
+                                                else if($row['uses'] == 1){
+                                                        $obj_msg="<span class=\"break\">{Usa l\'oggetto ".$row['name']." che diventa inutilizzabile subito dopo l\'azione}</span>";
+                                                }
+                                                else{
+                                                        $obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']."}</span>";
+                                                }
+                                                        
+                                                if($row['uses'] > 0){
+                                                        $newusage = $row['uses'] - 1;
+                                                        $db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' WHERE id='{$obj[1]}'");
+                                                }
+                                        }
 					
 					
 				}
