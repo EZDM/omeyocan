@@ -109,13 +109,14 @@
 				$settings = $g_default_settings; // This is defined in lib/auth.php
 				$default_max_panic = $x7c->settings['default_max_panic'];
 				$default_start_xp=$x7c->settings['starting_xp']*$x7c->settings['xp_ratio'];
+				$default_spazio=$x7c->settings['default_spazio'];
 
                                 $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
 
                                 $row = $db->Do_Fetch_Assoc($gif_query);
                                 $gif=$row['logo'];
 				
-				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic,bio) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic','$gif')");
+				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic,bio,spazio) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic','$gif','$default_spazio')");
 				
 				$query_ab = $db->DoQuery("SELECT * FROM {$prefix}ability");
 				$query_ch = $db->DoQuery("SELECT * FROM {$prefix}characteristic");

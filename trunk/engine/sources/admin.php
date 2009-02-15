@@ -1894,10 +1894,10 @@
 				if(!isset($_POST['owner']) || !isset($_POST['id'])){
 					die("Bad form");
 				}
-				$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
-				$row = $db->Do_Fetch_Assoc($query);
+				$query = $db->DoQuery("SELECT spazio FROM {$prefix}users WHERE username='$_POST[owner]'");
+				$row_usr = $db->Do_Fetch_Assoc($query);
 				
-				if(!$row || $row['cnt']==0){
+				if(!$row_usr){
 					$error = "Utente non esistente";
 				}
 				
@@ -1907,11 +1907,17 @@
 				if(!$row || $row['id']==''){
 					$error = "Oggetto non esistente";
 				}
+
+                                $residuo=$row_usr['spazio'] - $row['size'];
+				if($residuo<0)
+				        $error = "L'utente non pu&ograve; trasportare l'oggetto";
 				
 				if($error==''){
+                                        $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$_POST[owner]'");
+
 					$db->DoQuery("INSERT INTO {$prefix}objects
-							(name,description,uses,image_url,owner,equipped)
-							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]','1')");
+							(name,description,uses,image_url,owner,equipped,size)
+							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]','1','$row[size]')");
 							
 					$error="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
@@ -1925,7 +1931,8 @@
 					!isset($_POST['id']) ||
 					!isset($_POST['description']) ||
 					!isset($_POST['uses']) ||
-					!isset($_POST['image_url'])){
+					!isset($_POST['image_url'])||
+                                        !isset($_POST['size'])){
 					
 					die("Bad form");
 				}
@@ -1935,12 +1942,13 @@
 							SET name='$_POST[name]',
 							  description='$_POST[description]',
 							  uses='$_POST[uses]',
-							  image_url='$_POST[image_url]'
+							  image_url='$_POST[image_url]',
+							  size='$_POST[size]'
 							WHERE id='$_POST[id]'");
 				}else{
 					$db->DoQuery("INSERT INTO {$prefix}objects 
-							(name, description, uses, image_url,equipped)
-							VALUES('$_POST[name]','$_POST[description]','$_POST[uses]','$_POST[image_url]','1')");
+							(name, description, uses, image_url,equipped,size)
+							VALUES('$_POST[name]','$_POST[description]','$_POST[uses]','$_POST[image_url]','1','$_POST[size]')");
 				}
 					
 			}
@@ -1984,8 +1992,8 @@
 						if($row_obj_master['cnt'] == 0){
 						//Copy of the key for the master
 							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url,equipped)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1')");
+								(name, description, uses, image_url,equipped,size)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1','0')");
 							$body .= "Copia master della chiave creata con successo<br>";
 						}
 						else
@@ -1994,8 +2002,8 @@
 						if($row_obj_user['cnt'] == 0){
 						//Cooy of the key for the owner
 							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url, owner,equipped)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1')");
+								(name, description, uses, image_url, owner,equipped,size)
+								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1','0')");
 							$body .= "Copia utente della chiave creata con successo<br>";
 						}
 						else
@@ -2037,9 +2045,23 @@
 					$row['uses']=-1;
 					$row['image_url']='';
 					$row['id']=-1;
+					$row['size']=0;
 					
 				}
-			
+                                $minuscolo="";
+                                $piccolo="";
+                                $medio="";
+                                $grande="";
+                                
+                                if($row['size']==0)
+                                        $minuscolo="selected";
+                                if($row['size']==1)
+                                        $piccolo="selected";
+                                if($row['size']==2)
+                                        $medio="selected";
+                                if($row['size']==5)
+                                        $grande="selected";
+                                        
 				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&modify=1\" method=\"post\">
 						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
@@ -2058,6 +2080,16 @@
 							<tr>
 								<td>URL immagine:</td>
 								<td><input type=\"text\" name=\"image_url\" class=\"text_input\" value=\"$row[image_url]\"></td>
+							</tr>
+							<tr>
+							       <td>Dimesione:</td>
+							       <td><select class=\"button\" name=\"size\">
+                                                                        <option value=\"0\" $minuscolo>Minuscolo</option>
+                                                                        <option value=\"1\" $piccolo>Piccolo</option>
+                                                                        <option value=\"2\" $medio>Medio</option>
+                                                                        <option value=\"5\" $grande>Grande</option>
+                                                                  </select>
+                                                                </td>
 							</tr>
 							<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
 							<tr>
@@ -2435,8 +2467,6 @@
                                                 $body='Invito inviato correttamente. <a href="index.php?act=admincp&cp_page=rooms">Torna indietro</a>';
           
                                         }
-
-                                        //TODO redirect e controllo utente esistente
                                 }
                                 else{
                                         $body="<form action=\"index.php?act=admincp&cp_page=rooms&invite={$_GET['invite']}\" method=\"post\" name=\"room_invite\">
