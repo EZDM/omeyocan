@@ -89,33 +89,55 @@
 		}
 
 		if(isset($_GET['equiptgl']) && ($x7s->username==$pg || checkIfMaster())){
-			$query = $db->DoQuery("SELECT equipped,name FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
+			$query = $db->DoQuery("SELECT equipped,name,size FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
 			$row = $db->Do_Fetch_Assoc($query);
 			if(!$row)
 			     $errore = "Oggetto non esistente";
                         else{
                               $valore=0;
                               $azione="depositato";
+                              $action_ok=true;
+                              $query = $db->DoQuery("SELECT position,spazio FROM {$prefix}users WHERE username='$pg'");
+                              $row_msg=$db->Do_Fetch_Assoc($query);
+                              
                               if(!$row['equipped']){
                                   $valore=1;
                                   $azione="equipaggiato";
+
+                                  if(!$row_msg)
+                                            die("Utente non esistente");
+
+                                  if($row_msg['spazio']<$row['size']){
+                                            $errore="Spazio insufficiente per equipaggiare l'oggetto";
+                                            $action_ok=false;
+                                  }
+                                  else{
+                                            $residuo=$row_msg['spazio']-$row['size'];
+                                            $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
+                                  }
+                              }
+                              else{
+                                      $residuo=$row_msg['spazio']+$row['size'];
+                                      $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
                               }
 
-                              $db->DoQuery("UPDATE {$prefix}objects SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
+                              if($action_ok){
 
-                              $query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$pg'");
-                              $row_msg=$db->Do_Fetch_Assoc($query);
-                              if($row_msg && $row_msg['position']!="Mappa" && $row_msg['position']!=""){
-                                        include("./lib/message.php");
-                                        $txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
-                                        alert_room($row_msg['position'], $txt);
+                                      $db->DoQuery("UPDATE {$prefix}objects SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
+
+
+                                      if($row_msg['position']!="Mappa" && $row_msg['position']!=""){
+                                                include("./lib/message.php");
+                                                $txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
+                                                alert_room($row_msg['position'], $txt);
+                                      }
+                                      
+                                      header("location: index.php?act=sheet&page=equip&pg=$pg");
                               }
-                              
-                              header("location: index.php?act=sheet&page=equip&pg=$pg");
                               
                         }
 		}
-		
+
 		if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
 				if(!isset($_POST['owner']) || !isset($_POST['id'])){
 					die("Bad form");
@@ -132,6 +154,9 @@
 				
 				if(!$row || $row['id']==''){
 					$errore = "Oggetto non esistente";
+				}
+				if(!$row['equipped']){
+                                        $errore = "Non puoi consegnare un oggetto che non trasporti";
 				}
 
 				if($errore==''){
@@ -178,6 +203,18 @@
 			$more_form='';
 			$obj_name = $row['name'];
 			$description = $row['description'];
+			$dimensione="";
+			$disabled="";
+			if(!$row['equipped'])
+			       $disabled="style=\"color: #aeaeae;\"";
+			if($row['size']==0)
+			       $dimensione="Minuscolo";
+			if($row['size']==1)
+			       $dimensione="Piccolo";
+			if($row['size']==2)
+			       $dimensione="Medio";
+			if($row['size']==5)
+			       $dimensione="Grande";
 			
 			if(preg_match("/key_/", $row['name'])) {
 				list($pre, $name)=split("key_", $row['name']);
@@ -206,8 +243,11 @@
 			}
 			
 			$body.= "<table width=100%> <tr> <td class=\"obj\"> <img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
+                                        <div $disabled>
 					<b>$obj_name</b>
-					<p>$description</p> </td> </tr> </table>";
+					<br>Dimensione: $dimensione
+					<p>$description</p>
+					</div> </td> </tr> </table>";
 			
 			if($pg==$x7s->username || checkIfMaster()){
                                 $equip_text="Deposita";
