@@ -87,6 +87,34 @@
 		if(isset($_GET['delete']) && ($x7s->username==$pg || checkIfMaster())){
 			$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
 		}
+
+		if(isset($_GET['equiptgl']) && ($x7s->username==$pg || checkIfMaster())){
+			$query = $db->DoQuery("SELECT equipped,name FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
+			$row = $db->Do_Fetch_Assoc($query);
+			if(!$row)
+			     $errore = "Oggetto non esistente";
+                        else{
+                              $valore=0;
+                              $azione="depositato";
+                              if(!$row['equipped']){
+                                  $valore=1;
+                                  $azione="equipaggiato";
+                              }
+
+                              $db->DoQuery("UPDATE {$prefix}objects SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
+
+                              $query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$pg'");
+                              $row_msg=$db->Do_Fetch_Assoc($query);
+                              if($row_msg && $row_msg['position']!="Mappa" && $row_msg['position']!=""){
+                                        include("./lib/message.php");
+                                        $txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
+                                        alert_room($row_msg['position'], $txt);
+                              }
+                              
+                              header("location: index.php?act=sheet&page=equip&pg=$pg");
+                              
+                        }
+		}
 		
 		if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
 				if(!isset($_POST['owner']) || !isset($_POST['id'])){
@@ -143,7 +171,7 @@
 		$body.="<div id=\"objects\">\n";
 		
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg'");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg' ORDER BY equipped DESC");
 
 		$room='';
 		while($row=$db->Do_Fetch_Assoc($query)){
@@ -182,6 +210,10 @@
 					<p>$description</p> </td> </tr> </table>";
 			
 			if($pg==$x7s->username || checkIfMaster()){
+                                $equip_text="Deposita";
+                                if(!$row['equipped']){
+                                    $equip_text="Equipaggia";
+                                }
 				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
 						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
        						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -190,6 +222,7 @@
 									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
 									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></div></td>
 									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\"></td>
+									<td><input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
 								</tr>
 								$more_form
 							</table>
