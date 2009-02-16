@@ -178,7 +178,7 @@
 					$getstanza='';
 
 					if($room!='' && $room!="Mappa"){
-						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['long_name']}\">Tira un dado</a></td>";
+						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
 					}
 
 					if($room!='')

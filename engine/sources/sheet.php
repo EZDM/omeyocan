@@ -260,11 +260,14 @@
 								<tr>
 									<td>Dai a:</td>
 									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></div></td>
-									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\"></td>
-									<td><input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
+									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
+                                                                </tr>
+                                                                $more_form
+                                                                <tr>
+									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\">
+									<input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
 								</tr>
-								$more_form
+								
 							</table>
 					</form>";
 			}
