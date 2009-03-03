@@ -411,7 +411,7 @@
 			}			
 			
 			//Perform image
-			$img_regexp = "/£([^[:space:]]+)/i";
+			$img_regexp = "/ï¿½([^[:space:]]+)/i";
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
@@ -556,7 +556,7 @@
 		$endtags = "[/color][/size][/font]";
 
 		//$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$starttags$msg$endtags','parsed_body','$to','0')");
-		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$msg','parsed_body','$to','0')");
+		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$time::$msg','parsed_body','$to','0')");
 	}
 
 	// This function gets a list of all offline messages
@@ -574,12 +574,16 @@
 	// SInce the subject is stored in the body field we need a function to split the body and subject
 	// A seconardy function of this isi it parses the message styles
 	function offline_msg_split($body){
+	       global $x7c;
 		// 0 is the body
-		$return[0] = preg_replace("/^(.+?)::/i","",$body);
+		$return[0] = preg_replace("/^(.+?)::(.+?)::/i","",$body);
 
 		// 1 is the subject
 		preg_match("/^(.+?)::/i",$body,$match);
 		$return[1] = $match[1];
+		$tmp=preg_replace("/^(.+?)::/i","",$body);
+		preg_match("/^(.+?)::/i",$tmp,$match);
+		$return[2] = date($x7c->settings['date_format_full'], $match[1]);
 
 		return $return;
 	}

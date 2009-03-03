@@ -118,7 +118,7 @@
 				
 				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic,bio,spazio) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic','$gif','$default_spazio')");
 				
-				$query_ab = $db->DoQuery("SELECT * FROM {$prefix}ability");
+				$query_ab = $db->DoQuery("SELECT * FROM {$prefix}ability WHERE corp=''");
 				$query_ch = $db->DoQuery("SELECT * FROM {$prefix}characteristic");
 				
 				//We must create an empty character sheet

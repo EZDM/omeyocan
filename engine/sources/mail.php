@@ -144,6 +144,7 @@
 				$nb = offline_msg_split($msgs[$mid][2]);
 				$msgbody = $nb[0];
 				$subject = $nb[1];
+				$time = $nb[2];
 
 				// Set default values for reply form
 				$_GET['to'] = $author;
@@ -163,7 +164,10 @@
 							<td class=\"dark_row\"><B>Mittente:</b> $author</td>
 						</tr>
 						<Tr>
-							<td class=\"dark_row\"><b>Oggetto:</b> $subject<hr></td>
+							<td class=\"dark_row\"><b>Oggetto:</b> $subject</td>
+						</tr>
+						<Tr>
+							<td class=\"dark_row\"><b>Data ricezione:</b> $time<hr></td>
 						</tr>
 						</table>
 						</div>
@@ -197,6 +201,7 @@
 							<th>&nbsp;</td>
 							<th>$txt[178]</td>
 							<th>$txt[179]</td>
+							<th>Data</td>
 							<th>&nbsp;</td>
 						</tr>
 
@@ -209,6 +214,7 @@
 					$nb = offline_msg_split($val[2]);
 					$msgbody = $nb[0];
 					$subject = $nb[1];
+					$time = $nb[2];
 
 					if($val[3] == 0)
 						$img = "<img src=\"{$print->image_path}new_mail.gif\">";
@@ -219,6 +225,7 @@
 								<td class=\"dark_row\">$img</td>
 								<td class=\"dark_row\"><a href=\"./index.php?act=mail&read=$mid\">$subject</a></td>
 								<td class=\"dark_row\">$author</td>
+								<td class=\"dark_row\">$time</td>
 								<td class=\"dark_row\"><a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a></td>
 							</tr>";
 				}

@@ -60,7 +60,7 @@
 		while($row = $db->Do_Fetch_Assoc($users)){
 			foreach($ability as $ab){
 				echo "Checking $ab for $row[username]<br>";
-				$unique = $db->DoQuery("SELECT count(*) as cnt FROM {$prefix}userability WHERE username = '$row[username]' AND ability_id = '$ab'");
+				$unique = $db->DoQuery("SELECT count(*) as cnt FROM {$prefix}userability u, {$prefix}ability a WHERE  u.ability_id=a.id AND username = '$row[username]' AND ability_id = '$ab' AND corp=''");
 				$exist = $db->Do_Fetch_Assoc($unique);
 
 				if($exist['cnt']==0){
@@ -97,7 +97,8 @@
 								{$prefix}ability a
 							WHERE 
 								u.ability_id = a.id AND
-								username='$pg'
+								username='$pg' AND
+								corp=''
 							ORDER BY a.name");
 							
 				$ability='';
