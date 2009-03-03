@@ -366,7 +366,9 @@
 												var messaggio;
                                                                                                 if(valore){
                                                                                                         var bell = document.getElementById('bell');
-                                                                                                        bell.Play();
+                                                                                                        if(typeof bell.Play == 'function')
+                                                                                                            bell.Play();
+                                                                                                       
                                                                                                         messaggio="Arriva l'oscurità";
                                                                                                 }
 												else
