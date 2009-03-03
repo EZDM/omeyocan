@@ -1,5 +1,55 @@
 <?PHP
-
+    function build_ability_javascript($max_ab){
+        $body='';
+        if(!checkIfMaster()){
+					$body .='	<script language="javascript" type="text/javascript">
+								
+								'.ability_script($max_ab).'
+								
+								function do_form_refresh(ab_name){
+									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
+									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
+								}';
+				}
+				//Master can everithing wothout controls
+				else{
+					$body .='	<script language="javascript" type="text/javascript">
+								function add(ab_name){
+									var value = parseInt(document.sheet_form[ab_name].value);
+									
+									document.sheet_form[ab_name].value = value + 1;
+										
+									do_form_refresh(ab_name);
+								}								
+								
+								
+								function sub(ab_name){
+									var value = parseInt(document.sheet_form[ab_name].value);
+									
+									document.sheet_form[ab_name].value = value - 1;
+									
+									do_form_refresh(ab_name);
+									
+									
+								}
+								
+								function do_form_refresh(ab_name){
+									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
+								}';
+				
+				}
+							
+				$body .= '
+								function modify(){
+									document.getElementById("visual").style.visibility="hidden";
+									document.getElementById("modifiable").style.visibility="visible";
+									document.getElementById("modify").style.visibility="hidden";
+								}
+	
+						</script>';
+        return $body;
+        }
+                
 	function ability_script($max_ab){
 		$body = 'function add(ab_name){
 				var value = parseInt(document.sheet_form[ab_name].value);

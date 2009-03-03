@@ -58,6 +58,9 @@
 		else if($page=="equip"){
 			$body = sheet_page_equip();
 		}
+		else if($page=="corp"){
+			$body = sheet_page_corp();
+		}
 
 			
 			
@@ -478,12 +481,13 @@
 				if(!$row_user)
 					die("Users not in database");
 				
-				$query = $db->DoQuery("SELECT u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+				$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
 							FROM 	{$prefix}userability u, 
 								{$prefix}ability a
 							WHERE 
 								u.ability_id = a.id AND
-								username='$pg'
+								username='$pg' AND
+								corp=''
 							ORDER BY a.name");
 							
 				$ability='';
@@ -507,6 +511,9 @@
 
 					
 					foreach($ability as $cur){
+                                                if($cur['corp']!=""){
+                                                        die("Fatal: attempt to modify corp ability from normal form");
+                                                }
 						if($cur['value'] != $_POST[$cur['ab_id']]){
 							$new_value = $_POST[$cur['ab_id']];
 
@@ -598,7 +605,8 @@
 								{$prefix}ability 
 							WHERE 
 								ability_id=id AND
-								username='$pg'
+								username='$pg' AND
+								corp=''
 							ORDER BY dep,name");
 			
 			while($row = $db->Do_Fetch_Assoc($query)){
@@ -625,7 +633,7 @@
 				}
 			</script>
 			';
-			
+                      
 			
 			$body .= "<div id=\"visual\"><table>";
 			foreach($ability as $cur){
@@ -664,54 +672,10 @@
 			
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
 				$max_ab = $x7c->settings['max_ab'];
+
+				$body.=build_ability_javascript($max_ab);
 				
-				if(!checkIfMaster()){
-					$body .='	<script language="javascript" type="text/javascript">
-								
-								'.ability_script($max_ab).'
-								
-								function do_form_refresh(ab_name){
-									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
-									document.sheet_form["xp_display"].value = document.sheet_form["xp"].value;
-								}';
-				}
-				//Master can everithing wothout controls
-				else{
-					$body .='	<script language="javascript" type="text/javascript">
-								function add(ab_name){
-									var value = parseInt(document.sheet_form[ab_name].value);
-									
-									document.sheet_form[ab_name].value = value + 1;
-										
-									do_form_refresh(ab_name);
-								}								
-								
-								
-								function sub(ab_name){
-									var value = parseInt(document.sheet_form[ab_name].value);
-									
-									document.sheet_form[ab_name].value = value - 1;
-									
-									do_form_refresh(ab_name);
-									
-									
-								}
-								
-								function do_form_refresh(ab_name){
-									document.sheet_form[ab_name+"_display"].value = document.sheet_form[ab_name].value;
-								}';
-				
-				}
-							
-				$body .= '
-								function modify(){
-									document.getElementById("visual").style.visibility="hidden";
-									document.getElementById("modifiable").style.visibility="visible";
-									document.getElementById("modify").style.visibility="hidden";
-								}
-	
-						</script>
-				<div id="modifiable"><form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
+				$body .= '<div id="modifiable"><form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 						<table align="left" border="0" cellspacing="0" cellpadding="0">';
 						
 				
@@ -729,8 +693,7 @@
 						<input type=\"hidden\" name=\"".$cur['ability_id']."_dep\" value=\"{$cur['dep']}\">";
 						
 						$query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE dep='{$cur['ability_id']}' ORDER BY name");
-						$body .="
-						<input type=\"hidden\" name=\"".$cur['ability_id']."_leaf\" value=\"";
+						$body .="<input type=\"hidden\" name=\"".$cur['ability_id']."_leaf\" value=\"";
 						while($leaf = $db->Do_Fetch_Assoc($query)){
 							$body .= $leaf['id']."|";
 						}
@@ -1244,6 +1207,222 @@
 	
 	}
 
+	function sheet_page_corp(){
+		global $db,$x7c,$prefix,$x7s,$print;
+		$pg=$_GET['pg'];
+		$body='';
+		$errore='';
+
+		$query = $db->DoQuery("SELECT corp_xp FROM {$prefix}users WHERE username='$pg'");
+                $row_user = $db->Do_Fetch_Assoc($query);
+
+                if(!$row_user)
+                        die("Fatal: error fetching user");
+                
+		$xp=floor($row_user['corp_xp']/$x7c->settings['xp_ratio']);
+		
+		$max_ab = $x7c->settings['max_ab'];
+
+			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
+				$ok = true;
+				
+				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+				$row_user = $db->Do_Fetch_Assoc($query);
+				
+				$xp_avail=$row_user['corp_xp']/$x7c->settings['xp_ratio'];
+				
+				if(!$row_user)
+					die("Users not in database");
+				
+				$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+							FROM 	{$prefix}userability u, 
+								{$prefix}ability a
+							WHERE 
+								u.ability_id = a.id AND
+								username='$pg' AND
+								corp<>''
+							ORDER BY a.name");
+							
+				$ability='';
+				while($row = $db->Do_Fetch_Assoc($query)){
+					$ability[$row['ab_id']]=$row;
+					if(!isset($_POST[$row['ab_id']])){
+						$ok = false;
+						break;
+					}
+				}
+				if(!checkIfMaster() && !isset($_POST['xp']))
+					$ok = false;
+				
+				//Controllo se le abilità non sono state abbassate o superano il massimo
+				//Il master fa quel che gli pare: niente controlli
+				
+				$tot_used=0;
+				$lvl_gained=0;
+				if(!checkIfMaster() && $ok){
+					$max_ab = $x7c->settings['max_ab'];
+
+					
+					foreach($ability as $cur){
+                                                if($cur['corp']!=$x7s->user_group){
+                                                        $ok=false;
+                                                        $errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
+                                                }
+                                                
+						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$new_value = $_POST[$cur['ab_id']];
+
+							while($new_value > $cur['value']){
+								$tot_used+= $new_value;
+								$new_value--;
+							}
+							
+							if($cur['value'] > $_POST[$cur['ab_id']]){
+								$errore .= "Errore, non puoi abbassare le caratteristiche<br>";
+								$ok = false;
+								break;
+							}
+							elseif($_POST[$cur['ab_id']] > $max_ab){
+								$errore .= "Errore, non puoi superare il valore massimo<br>";
+								$ok = false;
+								break;
+							}
+						}
+					}
+
+					
+					if(!checkIfMaster()){
+						if($tot_used > $xp_avail){
+							$errore .= "Hai usato troppi PX<br>";
+							$ok = false;
+						}
+					}
+				
+				}
+					
+				if($ok){
+					//Ora posso aggiornare
+					
+					if($pg!=$x7s->username){
+						include('./lib/alarms.php');
+						sheet_modification($pg,$_GET['page']);
+					}
+					
+					$newxp = $row_user['corp_xp']-($tot_used * $x7c->settings['xp_ratio']);
+					
+					$db->DoQuery("UPDATE {$prefix}users 
+									SET corp_xp='$newxp'
+									WHERE username='$pg'");
+					foreach($ability as $cur){
+						if($cur['value'] != $_POST[$cur['ab_id']]){
+							$db->DoQuery("UPDATE {$prefix}userability
+									SET value='{$_POST[$cur['ab_id']]}'
+									WHERE username='$pg'
+									 AND ability_id='{$cur['ab_id']}'");
+						}
+					}
+					
+				}
+			
+			}
+
+
+
+                $query=$db->DoQuery("SELECT * FROM {$prefix}ability ab, {$prefix}userability ua
+                                      WHERE ab.id=ua.ability_id
+                                        AND ua.username='$pg' AND ab.corp<>''");
+
+                
+
+                while($row = $db->Do_Fetch_Assoc($query)){
+                      $ability[$row['ability_id']]=$row;
+                }
+
+                $body.="<div id=\"corp\">\n";
+                $body .= "<div id=\"visual\"><table>";
+			foreach($ability as $cur){
+				if($cur['dep'] == ""){
+					$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
+					for($i=0; $i<6; $i++){
+						if($i<$cur['value']){
+							$body.='<img src="./graphic/on.gif"/>';
+						}
+						else{
+							$body.='<img src="./graphic/off.gif"/>';
+						}
+					}
+						
+					$body .= "</td></tr>\n";
+				}
+			}
+                $body.="</table></div>";
+                
+                include('./lib/sheet_lib.php');
+                $body .= build_ability_javascript($max_ab);
+
+                $body .= '<div id="modifiable"><form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
+						<table align="left" border="0" cellspacing="0" cellpadding="0">';
+                foreach($ability as $cur){
+				$body .= "<tr>";
+				$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
+				<td>";
+
+                                if($cur['corp']==$x7s->user_group)
+                                        $body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
+
+				$body .= "<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>";
+				$body .= "<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>";
+
+                                if($cur['corp']==$x7s->user_group)
+				        $body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
+
+				$body .= "<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
+				<input type=\"hidden\" name=\"".$cur['ability_id']."_name\" value=\"{$cur['name']}\">
+				<input type=\"hidden\" name=\"".$cur['ability_id']."_dep\" value=\"{$cur['dep']}\">";
+				
+				$query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE dep='{$cur['ability_id']}' ORDER BY name");
+						$body .="<input type=\"hidden\" name=\"".$cur['ability_id']."_leaf\" value=\"";
+						while($leaf = $db->Do_Fetch_Assoc($query)){
+							$body .= $leaf['id']."|";
+						}
+						$body .= "\">";
+				
+				$body .= "</td></tr>\n";
+		}
+
+                $body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\"></td></tr></table>";
+
+                if(!checkIfMaster()){
+					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
+							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
+							<input type="hidden" name="xp" value="'.$xp.'"></div>
+						';
+				}
+                $body.= '</form></div>';
+
+                $body.="</div>";
+
+                if($errore!=''){
+			$body.='<script language="javascript" type="text/javascript">
+				function close_err(){
+					document.getElementById("errore").style.visibility="hidden";
+				}
+			</script>
+			<div id="errore" class="errore">'.$errore.'
+			<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+			</div>';
+		}
+
+		
+                if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
+				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
+                }
+                
+                
+		return $body;
+
+        }
+
 	function print_sheet($body,$bg){
 		global $print,$x7c,$x7s;
 		if(!isset($_GET['pg'])){
@@ -1289,6 +1468,9 @@
 			}
 			#sheetbackground{
 				background-image:url(./graphic/schedapgBG.jpg);
+			}
+			#sheetcorp{
+				background-image:url(./graphic/schedapgCORP.jpg);
 			}
 			#storia{
 				top: 80px;
@@ -1343,6 +1525,7 @@
 				left: 0px;
 				top: 0px;
 				color: black;
+				background: white;
 				font-weight: bold;
 				font-size: 11pt;
 			}
@@ -1394,6 +1577,11 @@
 				top: 630px;
 			}
 			#ability{
+				position: absolute;
+				left: 50px;
+				top: 70px;
+			}
+			#corp{
 				position: absolute;
 				left: 50px;
 				top: 70px;
@@ -1537,6 +1725,7 @@
 		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 398px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 428px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 456px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 426px; top: 638px;">CORP</div></a>
 		</div>
 		</body>
 			</html>';
