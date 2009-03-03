@@ -736,11 +736,12 @@
 												var messaggio;
 												if(valore){
                                                                                                         var bell = document.getElementById('bell');
-                                                                                                        bell.Play();
-													messaggio="Arriva l'oscurità";
+                                                                                                        if(typeof bell.Play == 'function')
+                                                                                                              bell.Play();
+													messaggio="Arriva l'oscurita'";
                                                                                                 }
 												else
-													messaggio="L'oscurità se ne va";
+													messaggio="L'oscurita' se ne va";
 												
 												Alert(messaggio);
 												window.location.href = window.location.href;
