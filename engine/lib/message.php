@@ -411,7 +411,7 @@
 			}			
 			
 			//Perform image
-			$img_regexp = "/ï¿½([^[:space:]]+)/i";
+			$img_regexp = "/£([^[:space:]]+)/i";
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
