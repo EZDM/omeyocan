@@ -114,13 +114,14 @@
 		// Get the userlist and online data
 		// we force a fake join with Mappa
 		$more_query="";
-                if(isset($_GET['dead']))
+                if(isset($_GET['dead'])){
                     $more_query = " AND u.info='Morto'";
+                }
 		
 		$query = $db->DoQuery("SELECT username, position,talk,long_name FROM {$prefix}users u,
                                             {$prefix}rooms r
-                                            WHERE r.name = u.position
-                                            OR (u.position='' AND r.name='Mappa')
+                                            WHERE (r.name = u.position
+                                            OR (u.position='' AND r.name='Mappa'))
                                             {$more_query}
                                             {$order}");
 		
@@ -200,12 +201,13 @@
 		
 		$body .= "</table><p align=\"center\"><a class=\"dark_link\" href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></p></div>";
 
+                $title='';
 		if($room!='')
-			$head = "Lista cittadini Online";
+			$title = "Lista cittadini Online";
                 else if(isset($_GET['dead']))
-                        $head = "Lista deceduti";
+                        $title = "Lista deceduti";
 		else
-			$head = "Lista cittadini";
+			$title = "Lista cittadini";
 			
 		$body .= '<script language="javascript" type="text/javascript">
 				setTimeout("update()",10000);
@@ -214,16 +216,17 @@
 					window.location.reload();
 				}
 			</script>';
-					
-		print_memberlist($body);
+
+
+		print_memberlist($body,'', $title);
 	}
 	
-	function print_memberlist($body,$sfondo=''){
+	function print_memberlist($body,$sfondo='',$myhead=''){
 		global $print,$x7c,$x7s;
 		
-		
+                
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
-		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- Lista utenti</title>";
+		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- $myhead</title>";
 		echo $print->style_sheet;
 		
 		$sfondo = './graphic/sfondopresenti.jpg';
