@@ -597,7 +597,10 @@
 	// This function deletes an offline message
 	function offline_delete($mid){
 		global $x7s, $db, $prefix;
-		$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='$mid' AND room='$x7s->username'");
+		if($mid=="_all_")
+                      $db->DoQuery("DELETE FROM {$prefix}messages WHERE type='6' AND room='$x7s->username'");
+                else
+		      $db->DoQuery("DELETE FROM {$prefix}messages WHERE id='$mid' AND room='$x7s->username'");
 	}
 
 	// Counts a users offline messages
