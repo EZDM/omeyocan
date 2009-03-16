@@ -767,7 +767,49 @@
 			$errore="";
 			$ok = true;
 			$char;
-			
+
+			if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
+			       $pg=$_GET['pg'];
+                                
+                               if($_GET['toggle_death']){
+                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto' WHERE username='$pg'");
+
+                                        $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
+                                        $row = $db->Do_Fetch_Assoc($query);
+                                        $cnt = $row['cnt'];
+
+                                        if($cnt > 0){
+
+                                                  $query = $db->DoQuery("SELECT * FROM {$prefix}userability u, {$prefix}ability a WHERE u.ability_id=a.id AND username='$pg' AND value>'0' ORDER BY ability_id");
+                                                  srand(time()+microtime());
+                                                  $roll=floor(rand(1,$cnt));
+                                                  $i=0;
+                                                  $row=0;
+
+                                                  while($i<$roll){
+                                                            $row = $db->Do_Fetch_Assoc($query);
+                                                            $i++;
+                                                  }
+                                                  $new_value=$row['value']-1;
+
+                                                  
+                                                  $db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
+
+                                                  include("./lib/message.php");
+                                                  send_offline_msg($pg,"Morte","Sei morto e hai perso un punto in $row[name]");
+                                                  $errore = "Ucciso e perso un punto in $row[name]";
+                                        }
+                                        else{
+                                        //TODO mortissimo!!
+                                                ;
+                                        }
+                                        
+                                }
+                                else{
+                                        $errore = "Resuscitato";
+                                        $db->DoQuery("UPDATE {$prefix}users SET talk='1', info='' WHERE username='$pg'");
+                                }
+			}
 	
 			if(isset($_GET['settings_change']) && checkIfMaster()){
 							
@@ -1140,7 +1182,16 @@
 				
 				
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
-				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
+				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">";
+
+				if($row_user['info']!="Morto"){
+				        $body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg'\" style=\"visibility: visible;\">";
+				}
+				else{
+				        $body .= "<INPUT name=\"ress_button\" class=\"button\" type=\"button\" value=\"Resuscita\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg'\" style=\"visibility: visible;\">";
+				}
+				
+				$body .="</div></form>";
 		
 			}
 			
