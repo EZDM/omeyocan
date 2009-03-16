@@ -501,7 +501,7 @@
 				if(!checkIfMaster() && !isset($_POST['xp']))
 					$ok = false;
 				
-				//Controllo se le abilità non sono state abbassate o superano il massimo
+				//Controllo se le abilitï¿½ non sono state abbassate o superano il massimo
 				//Il master fa quel che gli pare: niente controlli
 				
 				$tot_used=0;
@@ -1254,7 +1254,7 @@
 				if(!checkIfMaster() && !isset($_POST['xp']))
 					$ok = false;
 				
-				//Controllo se le abilità non sono state abbassate o superano il massimo
+				//Controllo se le abilitï¿½ non sono state abbassate o superano il massimo
 				//Il master fa quel che gli pare: niente controlli
 				
 				$tot_used=0;
@@ -1725,7 +1725,7 @@
 		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 398px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 428px; top: 638px;"></div></a>
 		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 456px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 426px; top: 638px;">CORP</div></a>
+		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 426px; top: 658px;">CORP</div></a>
 		</div>
 		</body>
 			</html>';
