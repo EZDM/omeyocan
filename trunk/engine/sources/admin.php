@@ -1785,6 +1785,9 @@
                                               		$gif=$row['logo'];
 
 							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]', bio='$gif' WHERE username='$key'");
+
+                                                        include('./lib/sheet_lib.php');
+							join_corp($key, $_POST['new_g']);
 						}
 					}
 					
@@ -2295,6 +2298,10 @@
 								<td width=\"60\">$txt[309]: </td>
 								<td width=\"100\"><select name=\"usergroup\" class=\"text_input\">{$group_options}</select></td>
 							</tr>
+							<tr>
+                                                                <td width=\"60\">Corp master? </td>
+                                                                <td width=\"100\"><input type=\"checkbox\" name=\"corp_master\" value=\"1\" ";$body .= ($def->profile['corp_master'] == 1) ? "checked":"";$body .= "></td>
+							</tr>
 							
 							<tr>
 								<td width=\"160\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" value=\"$txt[187]\" class=\"button\"></div></td>
@@ -2322,9 +2329,15 @@
                                             $row=$db->Do_Fetch_Assoc($gif_query);
                                             $_POST['bio']=$row['logo'];
                                         }
+
+                                        $corp_master=0;
+                                        if(isset($_POST['corp_master']))
+                                            $corp_master=1;
                                         
 					
-					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
+					include('./lib/sheet_lib.php');
+					join_corp($_GET['update'], $_POST['usergroup']);
 
 					$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
 					$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
