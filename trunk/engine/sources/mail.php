@@ -195,7 +195,17 @@
 			}else if(!isset($_GET['write'])){
 				// Display a table of all messages
 
-				$body .= "<div id=\"message_tbl\">
+				$body .= "
+                                        <script>
+                                        function do_delete(){
+							url = './index.php?act=mail&delete=_all_';
+							if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+									return;
+                                                        window.location.href=url;
+                                        }
+                                        </script>
+                                        
+                                        <div id=\"message_tbl\">
 						<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
 						<tr>
 							<th>&nbsp;</td>
@@ -255,6 +265,7 @@
 				else{
 					$body .= '[Mail di gruppo]';
 				}
+				$body .= '<a href="#" onClick="do_delete()">[Cancella tutti]</a>';
 				 
 				 $body .= "\n</div>";
 

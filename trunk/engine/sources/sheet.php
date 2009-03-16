@@ -1367,13 +1367,13 @@
 				$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
 
-                                if($cur['corp']==$x7s->user_group)
+                                if($cur['corp']==$x7s->user_group || checkIfMaster())
                                         $body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
 
 				$body .= "<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>";
 				$body .= "<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>";
 
-                                if($cur['corp']==$x7s->user_group)
+                                if($cur['corp']==$x7s->user_group || checkIfMaster())
 				        $body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
 
 				$body .= "<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
