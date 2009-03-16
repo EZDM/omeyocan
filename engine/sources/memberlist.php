@@ -113,10 +113,15 @@
 		
 		// Get the userlist and online data
 		// we force a fake join with Mappa
+		$more_query="";
+                if(isset($_GET['dead']))
+                    $more_query = " AND u.info='Morto'";
+		
 		$query = $db->DoQuery("SELECT username, position,talk,long_name FROM {$prefix}users u,
                                             {$prefix}rooms r
                                             WHERE r.name = u.position
                                             OR (u.position='' AND r.name='Mappa')
+                                            {$more_query}
                                             {$order}");
 		
 		
@@ -197,6 +202,8 @@
 
 		if($room!='')
 			$head = "Lista cittadini Online";
+                else if(isset($_GET['dead']))
+                        $head = "Lista deceduti";
 		else
 			$head = "Lista cittadini";
 			
