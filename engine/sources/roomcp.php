@@ -100,11 +100,11 @@
 					</tr>
 					<tr>
 						<td width=\"90\">$txt[66]:</td>
-						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\"></td>
+						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\" autocomplete=\"off\"></td>
 					</tr>
 					<tr>
 						<td width=\"90\">$txt[3]:</td>
-						<td width=\"100\"><input type=\"password\" class=\"text_input\" name=\"password\" value=\"{$x7c->room_data['password']}\"></td>
+						<td width=\"100\"><input type=\"password\" class=\"text_input\" name=\"password\" autocomplete=\"off\" value=\"{$x7c->room_data['password']}\"></td>
 					</tr>
 					<tr>
 						<td width=\"90\">$txt[67]:</td>
