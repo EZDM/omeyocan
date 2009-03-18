@@ -91,6 +91,19 @@
 						."</div>
 					</td>
 				</tr>
+				<tr>
+				        <td colspan=2 style=\"text-align: center;\">
+				                <img src=\"../layout/111.gif\">
+				                <img src=\"../layout/112.gif\">
+				                <img src=\"../layout/113.gif\">
+				                <img src=\"../layout/114.gif\">
+				                <img src=\"../layout/115.gif\">
+				                <img src=\"../layout/116.gif\">
+				                <img src=\"../layout/117.gif\">
+				                <img src=\"../layout/156.gif\">
+				                <img src=\"../layout/237.gif\">
+				        </td>
+				</tr>
 					</table>
 					</form></div>
 				";
