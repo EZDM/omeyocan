@@ -68,6 +68,20 @@
 			alert_room(@$_GET['room'],$txt[512]);
 		}
 	}
+
+        function new_ban2($user,$length,$reason,$room){
+		global $db,$prefix, $txt;
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason')");
+	
+		// Alert the room if this isn't a server ban and if the user isn't an IP or E-Mail
+// 		if($room != "*" && !eregi("\.",$user)){
+// 			$txt[512] = eregi_replace("_u","$user",$txt[512]);
+// 			$txt[512] = eregi_replace("_r","$reason",$txt[512]);
+// 			include_once("./lib/message.php");
+// 			alert_room(@$_GET['room'],$txt[512]);
+// 		}
+	}
 	
 	function remove_ban($id,$room){
 		global $db,$prefix,$txt;

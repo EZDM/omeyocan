@@ -52,7 +52,10 @@
 				$body .= '
 								function modify(){
 									document.getElementById("visual").style.visibility="hidden";
-									document.getElementById("modifiable").style.visibility="visible";
+									if(document.getElementById("modifiable"))
+									       document.getElementById("modifiable").style.visibility="visible";
+									if(document.getElementById("modifiable2"))
+									       document.getElementById("modifiable2").style.visibility="visible";
 									document.getElementById("modify").style.visibility="hidden";
 								}
 	

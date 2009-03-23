@@ -1264,11 +1264,15 @@
 		$body='';
 		$errore='';
 
-		$query = $db->DoQuery("SELECT corp_xp FROM {$prefix}users WHERE username='$pg'");
+		$query = $db->DoQuery("SELECT corp_xp,corp_master FROM {$prefix}users WHERE username='$pg'");
                 $row_user = $db->Do_Fetch_Assoc($query);
 
                 if(!$row_user)
                         die("Fatal: error fetching user");
+
+                $corp_master=false;
+                if($row_user['corp_master'] && $x7s->user_group!='Cittadino')
+                        $corp_master=true;
                 
 		$xp=floor($row_user['corp_xp']/$x7c->settings['xp_ratio']);
 		
@@ -1390,7 +1394,12 @@
                 }
 
                 $body.="<div id=\"corp\">\n";
-                $body .= "<div id=\"visual\"><table>";
+
+                if(!$corp_master)
+                        $body .= "<div id=\"visual\"><table>";
+                else
+                        $body .= "<div id=\"visual\"><table>";
+                        
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){
 					$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
@@ -1411,7 +1420,12 @@
                 include('./lib/sheet_lib.php');
                 $body .= build_ability_javascript($max_ab);
 
-                $body .= '<div id="modifiable"><form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
+                if(!$corp_master)
+                        $body .= '<div id="modifiable">';
+                else
+                        $body .= '<div id="modifiable2">';
+
+                $body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 						<table align="left" border="0" cellspacing="0" cellpadding="0">';
                 foreach($ability as $cur){
 				$body .= "<tr>";
@@ -1451,6 +1465,30 @@
 				}
                 $body.= '</form></div>';
 
+                if($corp_master){
+                        $body.="<div id=\"corp_mgmt\">
+                                Gestione gremios
+                                <form action=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=add\" method=\"post\" name=\"corp_mgmt_form\">
+                                    <table>
+                                    <tr><td>Nuovo membro:<input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+                                    <td><input type=\"submit\" class=\"button\" value=\"Inserisci\"></td></tr>
+                                    </table>
+                                </form>
+                                  <table>";
+
+                        $query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE username<>'{$x7s->username}' AND user_group='{$x7s->user_group}'");
+
+                        while($row=$db->Do_Fetch_Assoc($query)){
+                            $body.="<tr>
+                                        <td>$row[username]</td>
+                                        <td>[Cancella]</td>
+                                        <td>[Rendi capo]</td>
+                                    </tr>";
+                        }
+
+                        $body.="</table></div>";
+                }
+                
                 $body.="</div>";
 
                 if($errore!=''){
@@ -1744,10 +1782,36 @@
 				border: solid 1px;
 				overflow: auto;
 			}
+                        #modifiable2{
+				position: absolute;
+				top: 0;
+				left: 0;
+				visibility: hidden;
+				width: 400px;
+				height: 200px;
+				border: solid 1px;
+				overflow: auto;
+                        }
+                        #corp_mgmt{
+				position: absolute;
+				top: 220px;
+				left: 0;
+				width: 400px;
+				height: 200px;
+				border: solid 1px;
+				overflow: auto;
+                        }
 			#visual{
 				posotion: absolute;
 				top: 0;
 				left:0;
+				width: 100%;
+			}
+			#visual2{
+				posotion: absolute;
+				top: 0;
+				left:0;
+				height: 200px;
 				width: 100%;
 			}
 

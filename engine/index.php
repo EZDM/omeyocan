@@ -255,7 +255,8 @@
 
 	foreach($bans as $key=>$row){
 		if($row[1] == "*" && ((@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') && (@$_GET['pmf'] != "update" || $_GET['act'] != "pm"))){	// The reason we see if they are getting the update frame is cuz if they are we need to let them so it'll remove them from the room they are in now
-			$_GET['act'] = "sbanned";
+                        if($_GET['act']!="logout")
+                                $_GET['act'] = "sbanned";
 			$ban_reason = $row[5];
 
 			// Remove them from all online lists
