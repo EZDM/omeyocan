@@ -118,7 +118,7 @@
                     $more_query = " AND u.info='Morto'";
                 }
 		
-		$query = $db->DoQuery("SELECT username, position,talk,long_name FROM {$prefix}users u,
+		$query = $db->DoQuery("SELECT username, position,talk,long_name,type FROM {$prefix}users u,
                                             {$prefix}rooms r
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
@@ -151,8 +151,11 @@
                                         if($x7c->permissions['admin_panic']){
                                           $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
                                           }
-                                        else{
+                                        else if($row['type']!=2 || $row['username']==$x7s->username){//We do not show position in private chat
 					   $position = $row['long_name'];
+                                        }
+                                        else{
+                                            $position = "Mappa";
                                         }
                                 }
 				else if($row['position']=="Mappa")
