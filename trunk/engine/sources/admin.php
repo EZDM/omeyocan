@@ -2501,7 +2501,7 @@
 			
 				// Prepare header
 				$rooms = array();
-				$query = $db->DoQuery("SELECT name,topic,password,maxusers,logged,long_name FROM {$prefix}rooms");
+				$query = $db->DoQuery("SELECT name,topic,password,maxusers,logged,long_name FROM {$prefix}rooms ORDER BY long_name");
 				while($row = $db->Do_Fetch_Row($query)){
 					$rooms[] = $row;
 				}
