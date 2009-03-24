@@ -1984,8 +1984,8 @@
 						if($row_rooms['cnt'] == 0){
 						//Room creation
 							$db->DoQuery("INSERT INTO {$prefix}rooms
-								(name, type, maxusers, logged, logo)
-								VALUES ('$_POST[owner]', '2', '1000', '1', './graphic/private_room.jpg')");
+								(name, type, maxusers, logged, logo, long_name)
+								VALUES ('$_POST[owner]', '2', '1000', '1', './graphic/private_room.jpg','Stanza di $_POST[owner]')");
 							$body .= "Stanza creata con successo<br>";
 
 						}
