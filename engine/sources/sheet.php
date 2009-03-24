@@ -1388,7 +1388,7 @@
                                         AND ua.username='$pg' AND ab.corp<>''");
 
                 
-
+                $ability=array();
                 while($row = $db->Do_Fetch_Assoc($query)){
                       $ability[$row['ability_id']]=$row;
                 }
