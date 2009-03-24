@@ -1398,7 +1398,7 @@
                 if(!$corp_master)
                         $body .= "<div id=\"visual\"><table>";
                 else
-                        $body .= "<div id=\"visual\"><table>";
+                        $body .= "<div id=\"visual2\"><table>";
                         
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){

@@ -51,7 +51,10 @@
 							
 				$body .= '
 								function modify(){
-									document.getElementById("visual").style.visibility="hidden";
+								        if(document.getElementById("visual"))
+									       document.getElementById("visual").style.visibility="hidden";
+                                                                        if(document.getElementById("visual2"))
+                                                                              document.getElementById("visual2").style.visibility="hidden";
 									if(document.getElementById("modifiable"))
 									       document.getElementById("modifiable").style.visibility="visible";
 									if(document.getElementById("modifiable2"))
