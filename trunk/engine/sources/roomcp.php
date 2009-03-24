@@ -117,7 +117,7 @@
 				if($x7c->permissions['set_background'] == 1 && $x7c->settings['enable_roombgs'] == 1){
 					
 					$body .= "<tr>
-								<td width=\"90\">Immagine di sfondo per il panico:</font></td>
+								<td width=\"90\">Immagine per la descrizione:</font></td>
 								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"rm_bg\" value=\"{$x7c->room_data['background']}\"></td>
 							</tr>";
 					

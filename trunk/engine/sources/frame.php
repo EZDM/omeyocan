@@ -1082,7 +1082,7 @@
   		
   		<?PHP 	if($x7c->room_data['logo'] != '')
   				echo '
-				<a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=400,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
+				<a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
   				<img style="position:absolute; top:0px; left:807px;" src="'.$polaroid.'" ></a>'; 
   		?>
   		

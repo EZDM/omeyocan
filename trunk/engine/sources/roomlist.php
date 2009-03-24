@@ -119,7 +119,7 @@
 ?>
   
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
-  <a onClick="javascript: hndl = window.open('index.php?act=roomdesc&room=Mappa','roomdesc','width=400,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();">
+  <a onClick="javascript: hndl = window.open('index.php?act=roomdesc&room=Mappa','roomdesc','width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();">
       <img style="position:absolute; top:0px; left:807px;" src="./graphic/polaroid.jpg">
   </a>
   <div id="position"> </div>
