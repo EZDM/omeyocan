@@ -213,7 +213,7 @@
 			$title = "Lista cittadini";
 			
 		$body .= '<script language="javascript" type="text/javascript">
-				setTimeout("update()",10000);
+				setTimeout("update()",60000);
 				
 				function update(){
 					window.location.reload();
