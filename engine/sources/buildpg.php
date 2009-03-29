@@ -112,7 +112,7 @@
 				if(!isset($_POST['xp']))
 					$ok = false;
 
-				//Controllo se le abilità non sono state abbassate o superano il massimo
+				//Controllo se le abilitï¿½ non sono state abbassate o superano il massimo
 				//Il master fa quel che gli pare: niente controlli
 				
 				$tot_used=0;
@@ -184,6 +184,10 @@
 						$ok = false;
 						$errore .= "Non hai specificato il nome<br>";
 					}
+					if($_POST['surname']==''){
+						$ok = false;
+						$errore .= "Non hai specificato il cognome<br>";
+                                        } 
 					if($_POST['age']=='' || $_POST['age']<16){
 						$ok = false;
 						$errore .= "Et&agrave; non valida... deve essere maggiore di 16<br>";
@@ -259,7 +263,7 @@
 						
 
 					$db->DoQuery("UPDATE {$prefix}users SET
-								name='$_POST[name]',
+								name='$_POST[name] $_POST[surname]',
 								age='$_POST[age]',
 								nat='$_POST[nat]',
 								marr='$marr',
@@ -407,7 +411,7 @@
 						.'
 
 						descr[\'naz\']="La Nazionalit&agrave; indica lo stato dal quale provenite. Italiana, statunitense, russa... Facile dai!";
-						descr[\'nome\']="Il nome completo del pg &egrave; inteso come il vero nome anagrafico del personaggio, quello \"legale\" ... Quindi il <b>NICK</b> è quello che appare in chat (scorpion, butterfly, volpe quel che vi pare...) ma questo &egrave; la Vera Identit&agrave; del player. Non sono quindi ammessi nomi impossibili (Leo-99 o Topolina 74) o cretini (the undead lord o Diabolik), come nemmeno nomi fantasy (Gandalf il bianco, Elandriel Blacwisdom o cose simili)... Insomma siate veritieri...";
+						descr[\'nome\']="Il nome completo del pg &egrave; inteso come il vero nome anagrafico del personaggio, quello \"legale\" ... Quindi il <b>NICK</b> ï¿½ quello che appare in chat (scorpion, butterfly, volpe quel che vi pare...) ma questo &egrave; la Vera Identit&agrave; del player. Non sono quindi ammessi nomi impossibili (Leo-99 o Topolina 74) o cretini (the undead lord o Diabolik), come nemmeno nomi fantasy (Gandalf il bianco, Elandriel Blacwisdom o cose simili)... Insomma siate veritieri...";
 						descr[\'sesso\']="Sesso? Spesso e volentieri grazie... Non vi spiego cosa sia, tanto il men&ugrave; a tendina non vi permetter&agrave; grossi errori!";
 						descr[\'civile\']="Indica se siete sposati o single.";
 
@@ -480,8 +484,13 @@
 				<div class="overflow" id="all">
 				<table>
 					<tr onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();">
-						<td>Nome completo:</td>
+						<td>Nome:</td>
 						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
+					</tr>
+					
+					<tr onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();">
+						<td>Cognome:</td>
+						<td><input class="sheet_input" type="text" name="surname" size="16" /></td>
 					</tr>
 
 					<tr>

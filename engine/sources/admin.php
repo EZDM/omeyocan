@@ -1913,14 +1913,15 @@
 
                                 $residuo=$row_usr['spazio'] - $row['size'];
 				if($residuo<0)
-				        $error = "L'utente non pu&ograve; trasportare l'oggetto";
+				        $error = "L'utente non pu&ograve; trasportare l'oggetto; ha solo spazio: $row_usr[spazio] e l'oggetto occupa $row[size]";
 				
 				if($error==''){
-                                        $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$_POST[owner]'");
-
-					$db->DoQuery("INSERT INTO {$prefix}objects
+                                        $db->DoQuery("INSERT INTO {$prefix}objects
 							(name,description,uses,image_url,owner,equipped,size)
 							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]','1','$row[size]')");
+
+                                        include('./lib/sheet_lib.php');
+                                        recalculate_space($_POST['owner']);
 							
 					$error="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
