@@ -3591,6 +3591,34 @@
 						<td width=\"25%\" height=\"100%\">
 							<table class=\"ucp_table2\" height=\"100%\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
 								".printlink("main",$txt[137])."
+								".printlink("settings",$txt[139])."
+								".printlink("groupmanager",$txt[309])."
+								".printlink("users",$txt[310])."
+								".printlink("rooms",$txt[311])."
+								".printlink("ban",$txt[312])."
+								".printlink("logs",$txt[314])."
+								".printlink("events",$txt[315])."
+								".printlink("mail",$txt[316])."
+								".printlink("panic","Oscurit&agrave;")."
+								".printlink("alarms","Allarmi")."
+								".printlink("objects","Oggetti")."
+								<tr valign=\"top\">
+									<td width=\"100%\" class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
+								</tr>
+							</table>
+						</td>
+						<Td width=\"5\" class=\"ucp_divider\">&nbsp;</td>
+						<td width=\"75%\" class=\"ucp_bodycell\">$body</td>
+					</tr>
+				</table>
+				</div>";
+		}
+
+		/*
+
+                OLD MENU
+
+                                                                  ".printlink("main",$txt[137])."
 								".printlink("news",$txt[307])."
 								".printlink("settings",$txt[139])."
 								".printlink("themes",$txt[308])."
@@ -3610,17 +3638,8 @@
 								".printlink("panic","Oscurit&agrave;")."
 								".printlink("alarms","Allarmi")."
 								".printlink("objects","Oggetti")."
-								<tr valign=\"top\">
-									<td width=\"100%\" class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
-								</tr>
-							</table>
-						</td>
-						<Td width=\"5\" class=\"ucp_divider\">&nbsp;</td>
-						<td width=\"75%\" class=\"ucp_bodycell\">$body</td>
-					</tr>
-				</table>
-				</div>";
-		}
+
+                */
 
 		$print->normal_window($head,$print->ss_ucp.$cbody);
 		
