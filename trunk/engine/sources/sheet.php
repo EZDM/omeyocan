@@ -73,6 +73,7 @@
 		$pg=$_GET['pg'];
 		$body='';
 		$errore='';
+		include('./lib/sheet_lib.php');
 		
 		
 		if(isset($_GET['moduse']) && checkIfMaster()){
@@ -89,6 +90,7 @@
 		
 		if(isset($_GET['delete']) && ($x7s->username==$pg || checkIfMaster())){
 			$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
+			recalculate_space($pg);
 		}
 
 		if(isset($_GET['equiptgl']) && ($x7s->username==$pg || checkIfMaster())){
@@ -116,17 +118,18 @@
                                   }
                                   else{
                                             $residuo=$row_msg['spazio']-$row['size'];
-                                            $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
+                                            //$db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
                                   }
                               }
-                              else{
+                              /*else{
                                       $residuo=$row_msg['spazio']+$row['size'];
-                                      $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
-                              }
+                                      //$db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
+                              }*/
 
                               if($action_ok){
 
                                       $db->DoQuery("UPDATE {$prefix}objects SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
+                                      recalculate_space($pg);
 
 
                                       if($row_msg['position']!="Mappa" && $row_msg['position']!=""){

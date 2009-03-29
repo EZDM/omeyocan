@@ -45,18 +45,18 @@
 
 			if(isset($_GET['ok']))
 				$body = "<div id=\"sysmsg\">Messaggio inviato</div>";
-			elseif(isset($_GET['to']) && isset($_GET['subject']) && isset($_GET['body'])){
+			elseif(isset($_POST['to']) && isset($_POST['subject']) && isset($_POST['body'])){
 				
 
 				// Make sure the subject isn't null
-				if($_GET['subject'] == "")
-					$_GET['subject'] = $txt[173];
+				if($_POST['subject'] == "")
+					$_POST['subject'] = $txt[173];
 
 				// Send the msg
-				$_GET['body'] = eregi_replace("\n","<Br>",$_GET['body']);
+				$_POST['body'] = eregi_replace("\n","<Br>",$_POST['body']);
 				
-				if(!isset($_GET['group'])){
-					$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$_GET[to]'");
+				if(!isset($_POST['group'])){
+					$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$_POST[to]'");
 					$row = $db->Do_Fetch_Row($query);
 					if($row[0] == "")
 						$person_error = true;
@@ -68,32 +68,32 @@
 				}
 				
 				//Group send
-				if(isset($_GET['group'])){
-					if(!checkIfMaster() && $x7s->user_group != $_GET['to']){
+				if(isset($_POST['group'])){
+					if(!checkIfMaster() && $x7s->user_group != $_POST['to']){
 						$body = "<div id=\"sysmsg\">Non sei autorizzato a inviare a questo gruppo</div>";
-						$_GET['msg'] = $_GET['body'];
+						$_POST['msg'] = $_POST['body'];
 					}
 					else{
-						if(!checkIfMaster() && $_GET['to'] == "all"){
+						if(!checkIfMaster() && $_POST['to'] == "all"){
 							$body = "<div id=\"sysmsg\">Non sei autorizzato a inviare a questo gruppo</div>";
-							$_GET['msg'] = $_GET['body'];
+							$_POST['msg'] = $_POST['body'];
 						}
 						else{
-							if($_GET['to'] == "all")
+							if($_POST['to'] == "all")
 								$query = "SELECT username FROM {$prefix}users";
 							else
-								$query = "SELECT username FROM {$prefix}users WHERE user_group = '$_GET[to]'";
+								$query = "SELECT username FROM {$prefix}users WHERE user_group = '$_POST[to]'";
 								
 							$result = $db->DoQuery($query);
 							
 							//Do the real send
 							while($row = $db->Do_Fetch_Assoc($result)){
-								send_offline_msg($row['username'],$_GET['subject'],$_GET['body']);
+								send_offline_msg($row['username'],$_POST['subject'],$_POST['body']);
 							}
 							
 							// Reset values
-							$_GET['subject'] = "";
-							$_GET['to'] = "";
+							$_POST['subject'] = "";
+							$_POST['to'] = "";
 							$_GET['ok'] = 1;
 							header("Location: index.php?act=mail&ok=1");
 						
@@ -104,25 +104,25 @@
 				}
 				
 				//Single person send
-				elseif(count_offline($_GET['to']) >= $x7c->settings['max_offline_msgs'] && $x7c->settings['max_offline_msgs'] != 0){
+				elseif(count_offline($_POST['to']) >= $x7c->settings['max_offline_msgs'] && $x7c->settings['max_offline_msgs'] != 0){
 					$body = "<div id=\"sysmsg\">".$txt[184]."</div>";
-					$_GET['msg'] = $_GET['body'];
+					$_POST['msg'] = $_POST['body'];
 				}elseif($person_error){
 					// Person doesn't exist
 					$body = "<div id=\"sysmsg\">".$txt[610]."</div>";
-					$_GET['msg'] = $_GET['body'];
+					$_POST['msg'] = $_POST['body'];
 				}else{
-					send_offline_msg($_GET['to'],$_GET['subject'],$_GET['body']);
+					send_offline_msg($_POST['to'],$_POST['subject'],$_POST['body']);
 					// Reset values
-					$_GET['subject'] = "";
-					$_GET['to'] = "";
+					$_POST['subject'] = "";
+					$_POST['to'] = "";
 					$_GET['ok'] = 1;
 					header("Location: index.php?act=mail&ok=1");
 					
 				}
 
-				if(isset($_GET['msg']))
-					$_GET['msg'] = eregi_replace("<Br>","\n",$_GET['msg']);
+				if(isset($_POST['msg']))
+					$_POST['msg'] = eregi_replace("<Br>","\n",$_POST['msg']);
 
 			}elseif(isset($_GET['delete'])){
 				$body = "<div id=\"sysmsg\">Messaggio cancellato</div>";
@@ -147,13 +147,13 @@
 				$time = $nb[2];
 
 				// Set default values for reply form
-				$_GET['to'] = $author;
+				$_POST['to'] = $author;
 
-				$_GET['subject'] = $subject;
+				$_POST['subject'] = $subject;
 
 				$replybody = remove_chattags($msgbody);
 				$replybody = eregi_replace("<br>","\n",$replybody);
-				$_GET['msg'] = "\n\n$txt[174]\n\n".$replybody;
+				$_POST['msg'] = "\n\n$txt[174]\n\n".$replybody;
 
 				$msgbody = parse_message($msgbody);
 
@@ -183,8 +183,8 @@
 						
 						<br>
 						<a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_GET['subject']}&to={$_GET['to']}\">[Rispondi]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_GET['subject']}\">[Inoltra]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_POST['subject']}&to={$_POST['to']}\">[Rispondi]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_POST['subject']}\">[Inoltra]</a>
 					
 					<Br><Br><div align=\"center\">
 					<div align=\"left\">
@@ -282,8 +282,8 @@
 				if(!isset($_GET['to']))
 					$_GET['to'] = "";
 	
-				if(!isset($_GET['msg']))
-					$_GET['msg'] = "";
+				if(!isset($_POST['msg']))
+					$_POST['msg'] = "";
 	
 	
 				$back='';
@@ -305,7 +305,7 @@
 					<br><input class=\"wickEnabled\" type=\"text\" name=\"to\" autocomplete=\"off\" value=\"$_GET[to]\">
 					<br>";
 				
-				if(isset($_GET['group'])){
+				if(isset($_POST['group'])){
 				
 					
 					if(checkIfMaster()){
@@ -352,7 +352,7 @@
 					<script type=\"text/javascript\" language=\"JavaScript\" src=\"./lib/wick.js\"></script>
 					
 					<div align=\"center\">
-					<form action=\"./index.php\" method=\"get\">
+					<form action=\"./index.php?act=mail\" method=\"post\">
 					
 					$to
 					
