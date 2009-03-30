@@ -2395,10 +2395,12 @@
 				while(($row = $db->Do_Fetch_Row($query))){
 					if($i >= $_GET['start'] && $i < $end)
 						$body .= "<tr>
-								<td width=\"100\" class=\"dark_row\">&nbsp; $row[1]</td>
+								<td width=\"100\" class=\"dark_row\"><a href=\"#\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">$row[1]</a></td>
 								<td width=\"100\" class=\"dark_row\">$row[10]</td>
 								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
-							</tr>";
+								
+							</tr>
+                                                        <tr><td class=\"dark_row\" colspan=\"3\"><hr></td></tr>";
 					$i++;
 				}
 				
