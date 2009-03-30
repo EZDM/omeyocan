@@ -56,6 +56,7 @@
 		global $db, $prefix, $txt, $print, $x7c, $x7s;
 		
 		$room='';
+		$letter='';
 		
 		if(isset($_GET['room'])){
 			$query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$x7s->username'");
@@ -68,6 +69,10 @@
 				$room='Mappa';
 			}
 		}
+
+		if(isset($_GET['letter'])){
+                        $letter=$_GET['letter'];
+                }
 			
 		// See if the user wants the data sorted in anyway
 		$order = " ORDER BY username ASC";
@@ -117,6 +122,15 @@
                 if(isset($_GET['dead'])){
                     $more_query = " AND u.info='Morto'";
                 }
+
+                if($letter!=''){
+                    $more_query .= " AND username LIKE '$letter%' ";
+                }
+
+                $get_room='';
+                if($room!='')
+                    $get_room="&room=$room";
+                    
 		
 		$query = $db->DoQuery("SELECT username, position,talk,long_name,type FROM {$prefix}users u,
                                             {$prefix}rooms r
@@ -125,11 +139,44 @@
                                             {$more_query}
                                             {$order}");
 		
-		
-		$body = "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
+		$body = "<div id=\"navigator\">
+                      <a href=\"index.php?act=memberlist$get_room\">[Tutti]</a><br>
+                      <a href=\"index.php?act=memberlist&letter=a$get_room\">[a]</a>
+                      <a href=\"index.php?act=memberlist&letter=b$get_room\">[b]</a>
+                      <a href=\"index.php?act=memberlist&letter=c$get_room\">[c]</a>
+                      <a href=\"index.php?act=memberlist&letter=d$get_room\">[d]</a>
+                      <a href=\"index.php?act=memberlist&letter=e$get_room\">[e]</a>
+                      <a href=\"index.php?act=memberlist&letter=f$get_room\">[f]</a>
+                      <a href=\"index.php?act=memberlist&letter=g$get_room\">[g]</a>
+                      <a href=\"index.php?act=memberlist&letter=h$get_room\">[h]</a>
+                      <a href=\"index.php?act=memberlist&letter=i$get_room\">[i]</a>
+                      <a href=\"index.php?act=memberlist&letter=j$get_room\">[j]</a>
+                      <a href=\"index.php?act=memberlist&letter=k$get_room\">[k]</a>
+                      <a href=\"index.php?act=memberlist&letter=l$get_room\">[l]</a>
+                      <a href=\"index.php?act=memberlist&letter=m$get_room\">[m]</a><br>
+                      <a href=\"index.php?act=memberlist&letter=n$get_room\">[n]</a>
+                      <a href=\"index.php?act=memberlist&letter=o$get_room\">[o]</a>
+                      <a href=\"index.php?act=memberlist&letter=p$get_room\">[p]</a>
+                      <a href=\"index.php?act=memberlist&letter=q$get_room\">[q]</a>
+                      <a href=\"index.php?act=memberlist&letter=r$get_room\">[r]</a>
+                      <a href=\"index.php?act=memberlist&letter=s$get_room\">[s]</a>
+                      <a href=\"index.php?act=memberlist&letter=t$get_room\">[t]</a>
+                      <a href=\"index.php?act=memberlist&letter=u$get_room\">[u]</a>
+                      <a href=\"index.php?act=memberlist&letter=v$get_room\">[v]</a>
+                      <a href=\"index.php?act=memberlist&letter=w$get_room\">[w]</a>
+                      <a href=\"index.php?act=memberlist&letter=x$get_room\">[x]</a>
+                      <a href=\"index.php?act=memberlist&letter=y$get_room\">[y]</a>
+                      <a href=\"index.php?act=memberlist&letter=z$get_room\">[z]</a>
+                    </div>";
+
+                $get_letter ='';
+                if($letter != 0)
+                  $get_letter = "&letter=$letter";
+                  
+		$body .= "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
 			<tr>
-				<td class=\"col_header\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}&room=$room\">$txt[2]</a></td>
-				<td class=\"col_header\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}&room=$room\">$txt[560]</td>";
+				<td class=\"col_header\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}$get_room$get_letter\">$txt[2]</a></td>
+				<td class=\"col_header\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}$get_room$get_letter\">$txt[560]</td>";
 		if($room!='' && $room!="Mappa")
 			$body.="<td class=\"col_header\" height=\"25\">Sussurra</td>";
 				
@@ -241,6 +288,18 @@
 				height: 500px;
 				background-image:url('.$sfondo.');
 			}
+                        #navigator{
+                                position: relative;
+                                top: 10px;
+                                width: 100%;
+                                text-align: center;
+                                font-weight: bold;
+                                color: black;
+                        }
+
+                        #navigator a{
+                                color: black;
+                        }
 			
 			.dark_row{
 				font-size: 10pt;
