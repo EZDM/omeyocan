@@ -3597,7 +3597,6 @@
 								".printlink("rooms",$txt[311])."
 								".printlink("ban",$txt[312])."
 								".printlink("logs",$txt[314])."
-								".printlink("events",$txt[315])."
 								".printlink("mail",$txt[316])."
 								".printlink("panic","Oscurit&agrave;")."
 								".printlink("alarms","Allarmi")."
