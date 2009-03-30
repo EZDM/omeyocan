@@ -139,6 +139,8 @@
 
 	<A href="index.php?act=frame&room=Teatro"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Teatro');" style="position:absolute; top:496px; left:380px;" src="./graphic/pulsante.gif"></A>
 
+	<A href="index.php?act=frame&room=Montague"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Montague Chambers');" style="position:absolute; top:458px; left:310px;" src="./graphic/pulsante.gif"></A>
+
 
 	
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=1011','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 175; left: 205;"></div></a>
@@ -260,6 +262,7 @@
 							// Set popup to visible
 							hp.style.top = hoveritem.offsetTop + 18;
 							hp.style.left = hoveritem.offsetLeft + 20;
+                                                        hp.style.zIndex = 1;
 							hp.innerHTML = locat;
 
 							hp.style.visibility = "Visible";
