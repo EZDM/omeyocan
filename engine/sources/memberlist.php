@@ -132,10 +132,11 @@
                     $get_room="&room=$room";
                     
 		
-		$query = $db->DoQuery("SELECT username, position,talk,long_name,type FROM {$prefix}users u,
-                                            {$prefix}rooms r
+		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic FROM {$prefix}users u,
+                                            {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
+                                            AND p.usergroup = u.user_group
                                             {$more_query}
                                             {$order}");
 		
@@ -197,7 +198,7 @@
 				if($row['long_name']!="Mappa" && $row['long_name']!=''){
                                         if($x7c->permissions['admin_panic']){
                                           $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
-                                          }
+                                        }
                                         else if($row['type']!=2 || $row['username']==$x7s->username){//We do not show position in private chat
 					   $position = $row['long_name'];
                                         }
@@ -209,16 +210,22 @@
 					$position = "Mappa";
 				else
 					$position = "&nbsp;";
+
+                                //For Quest buster
+                                if($row['admin_panic'] && !$x7c->permissions['admin_panic']){
+                                            $position = "Ovunque";
+                                }
 				
 				$body .= "\n<tr>
 							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
 							<td class=\"dark_row\">{$position}</td>";
-				if($room!='' && $room!="Mappa")
+				if($room!='' && $room!="Mappa" && $room!="Ovunque")
 					if($row['long_name'] != '' && $row['long_name']==$room)
 						$body .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
 						$body .= "<td class=\"dark_row\">&nbsp;</td>";
-				
+
+                                //Adding more controle for admins
 				if($x7c->permissions['admin_panic']){
 					$new_state='';
 					$action='';
