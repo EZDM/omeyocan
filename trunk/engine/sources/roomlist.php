@@ -287,7 +287,7 @@
 								window.self.close();
 							}
 							
-							mapRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']; ?>');
+							mapRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']*5; ?>');
 							do_refresh();
 							
 							
