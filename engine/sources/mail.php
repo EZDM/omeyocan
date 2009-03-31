@@ -155,7 +155,7 @@
 				$replybody = eregi_replace("<br>","\n",$replybody);
 				$_POST['msg'] = "\n\n$txt[174]\n\n".$replybody;
 
-				$msgbody = parse_message($msgbody);
+				//$msgbody = parse_message($msgbody);
 
 				$body .= "<Br><Br>
 						<div> 
@@ -176,7 +176,7 @@
 						<div id=\"msg_body\">
 						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 						<Tr>
-							<td class=\"dark_row\">$msgbody</td>
+							<td class=\"msg_txt\">$msgbody</td>
 						</tr>
 						</table>
 						</div>
@@ -503,6 +503,10 @@
 				height: 280px;
 				overflow: auto;
 			}
+                        .msg_txt{
+                                color: #660000;
+                                font-size: 11pt;
+                        }
 			.dark_row{
 				background: transparent;
 				font-size: 10pt;

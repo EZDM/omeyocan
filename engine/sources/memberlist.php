@@ -219,8 +219,8 @@
 				$body .= "\n<tr>
 							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
 							<td class=\"dark_row\">{$position}</td>";
-				if($room!='' && $room!="Mappa" && $room!="Ovunque")
-					if($row['long_name'] != '' && $row['long_name']==$room)
+				if($room!='' && $room!="Mappa" && $position!="Ovunque")
+					if($row['position'] != '' && $row['position']==$room)
 						$body .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
 						$body .= "<td class=\"dark_row\">&nbsp;</td>";
