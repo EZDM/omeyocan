@@ -1,6 +1,6 @@
 <?PHP
     function join_corp($pg, $corp, $from_sheet=0){
-        global $db, $prefix;
+        global $db, $prefix, $x7s, $x7c;
         $query = $db->DoQuery("SELECT * FROM {$prefix}corpab WHERE corp='$corp'");
 
         while($row = $db->Do_Fetch_Assoc($query)){
@@ -9,6 +9,18 @@
         }
 
         if($from_sheet){
+                
+                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$corp'");
+                $row_perm = $db->Do_Fetch_Assoc($perm_query);
+
+                if($row_perm==null)
+                        return "Gruppo $corp non esistente";
+
+                //Only admin can make admin and masters
+                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                        return "Non sei autorizzato a gestire questo gremios";
+                }
+                
                 $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$corp'");
                 $row=$db->Do_Fetch_Assoc($gif_query);
                 $gif=$row['logo'];
@@ -24,12 +36,25 @@
 
         //We can remove only members that belong to our corp
         if($row['user_group']==$x7s->user_group || checkIfMaster()){
+                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[user_group]'");
+                $row_perm = $db->Do_Fetch_Assoc($perm_query);
+
+                if($row_perm==null)
+                        return "Gruppo $corp non esistente";
+
+                //Only admin can make admin and masters
+                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                        return "Non sei autorizzato a gestire questo gremios";
+                }
+                
                 $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
                 $row=$db->Do_Fetch_Assoc($gif_query);
                 $gif=$row['logo'];
         
                 $db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}', corp_master='0', bio='$gif' WHERE username='$target'");
         }
+        else
+                return "Non sei autorizzato a gestire questo gremios";
 
     }
 
@@ -40,8 +65,22 @@
         
 
         //We can remove only members that belong to our corp
-        if($row['user_group']==$x7s->user_group || checkIfMaster())
+        if($row['user_group']==$x7s->user_group || checkIfMaster()){
+                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[user_group]'");
+                $row_perm = $db->Do_Fetch_Assoc($perm_query);
+
+                if($row_perm==null)
+                        return "Gruppo $corp non esistente";
+
+                //Only admin can make admin and masters
+                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                        return "Non sei autorizzato a gestire questo gremios";
+                }
+                
                 $db->DoQuery("UPDATE {$prefix}users SET corp_master='$status' WHERE username='$target'");
+        }
+        else
+                return "Non sei autorizzato a gestire questo gremios";
 
     }
 

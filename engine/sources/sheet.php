@@ -1298,19 +1298,19 @@
 		                        include_once('./lib/sheet_lib.php');
                                         if($_GET['mgmt']=='add'){
                                                 if($row['user_group']==$x7c->settings['usergroup_default'])
-                                                      join_corp($target, $row_user['user_group'], 1);
+                                                      $errore=join_corp($target, $row_user['user_group'], 1);
                                                 else{
                                                       $errore="$target fa gia' parte di un altro Gremios";
                                                 }
                                         }
                                         else if($_GET['mgmt']=='del'){
-                                                leave_corp($target);
+                                                $errore=leave_corp($target);
                                         }
                                         else if($_GET['mgmt']=='admin'){
-                                                admin_corp($target,true);
+                                                $errore=admin_corp($target,true);
                                         }
                                         else if($_GET['mgmt']=='notadmin'){
-                                                admin_corp($target,false);
+                                                $errore=admin_corp($target,false);
                                         }
 
                                 }
