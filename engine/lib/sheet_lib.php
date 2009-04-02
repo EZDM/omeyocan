@@ -1,5 +1,5 @@
 <?PHP
-    function join_corp($pg, $corp){
+    function join_corp($pg, $corp, $from_sheet=0){
         global $db, $prefix;
         $query = $db->DoQuery("SELECT * FROM {$prefix}corpab WHERE corp='$corp'");
 
@@ -7,6 +7,42 @@
             $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[ability]', '$pg', '0')
                           ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
         }
+
+        if($from_sheet){
+                $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$corp'");
+                $row=$db->Do_Fetch_Assoc($gif_query);
+                $gif=$row['logo'];
+                
+                $db->DoQuery("UPDATE {$prefix}users SET user_group='$corp', corp_master='0', bio='$gif' WHERE username='$pg'");
+        }
+    }
+
+    function leave_corp($target){
+        global $db, $prefix, $x7s, $x7c;
+        $query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$target'");
+        $row = $db->Do_Fetch_Assoc($query);
+
+        //We can remove only members that belong to our corp
+        if($row['user_group']==$x7s->user_group || checkIfMaster()){
+                $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
+                $row=$db->Do_Fetch_Assoc($gif_query);
+                $gif=$row['logo'];
+        
+                $db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}', corp_master='0', bio='$gif' WHERE username='$target'");
+        }
+
+    }
+
+    function admin_corp($target, $status){
+        global $db, $prefix, $x7s, $x7c;
+        $query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$target'");
+        $row = $db->Do_Fetch_Assoc($query);
+        
+
+        //We can remove only members that belong to our corp
+        if($row['user_group']==$x7s->user_group || checkIfMaster())
+                $db->DoQuery("UPDATE {$prefix}users SET corp_master='$status' WHERE username='$target'");
+
     }
 
     function build_ability_javascript($max_ab){
@@ -59,7 +95,12 @@
 									       document.getElementById("modifiable").style.visibility="visible";
 									if(document.getElementById("modifiable2"))
 									       document.getElementById("modifiable2").style.visibility="visible";
-									document.getElementById("modify").style.visibility="hidden";
+                                                                        if(document.getElementById("modify"))
+									       document.getElementById("modify").style.visibility="hidden";
+									if(document.getElementById("modify2"))
+									       document.getElementById("modify2").style.visibility="hidden";
+									if(document.getElementById("aggiorna"))
+									       document.getElementById("aggiorna").style.visibility="visible";
 								}
 	
 						</script>';

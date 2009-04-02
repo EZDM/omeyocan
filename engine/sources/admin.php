@@ -1784,9 +1784,9 @@
                                               		$row=$db->Do_Fetch_Assoc($gif_query);
                                               		$gif=$row['logo'];
 
-							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]', bio='$gif' WHERE username='$key'");
+							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]', bio='$gif', corp_master='0' WHERE username='$key'");
 
-                                                        include('./lib/sheet_lib.php');
+                                                        include_once('./lib/sheet_lib.php');
 							join_corp($key, $_POST['new_g']);
 						}
 					}

@@ -73,7 +73,7 @@
 		$pg=$_GET['pg'];
 		$body='';
 		$errore='';
-		include('./lib/sheet_lib.php');
+		include_once('./lib/sheet_lib.php');
 		
 		
 		if(isset($_GET['moduse']) && checkIfMaster()){
@@ -471,7 +471,7 @@
 			$errore='';
 			$pg=$_GET['pg'];
 			$min_auth=0;
-			include('./lib/sheet_lib.php');
+			include_once('./lib/sheet_lib.php');
 			
 			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
 				$ok = true;
@@ -729,7 +729,7 @@
 				
 				$disabled="";
 				
-				$body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled></td></tr></table>";
+				$body .= "	</table>";
 				
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
@@ -744,7 +744,10 @@
 				</div>";
 
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
-				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
+				$body .= "<div id=\"modify\">
+                                                    <INPUT id=\"aggiorna\" style=\"visibility: hidden;\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled>
+				                    <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
+				          </div>";
 			}
 			
 			if($errore!=''){
@@ -1267,32 +1270,69 @@
 		$body='';
 		$errore='';
 
-		$query = $db->DoQuery("SELECT corp_xp,corp_master FROM {$prefix}users WHERE username='$pg'");
+		$query = $db->DoQuery("SELECT corp_xp,corp_master,user_group FROM {$prefix}users WHERE username='$pg'");
                 $row_user = $db->Do_Fetch_Assoc($query);
 
                 if(!$row_user)
                         die("Fatal: error fetching user");
 
                 $corp_master=false;
-                if($row_user['corp_master'] && $x7s->user_group!='Cittadino')
+                if($row_user['corp_master'] && $row_user['user_group']!=$x7c->settings['usergroup_default'])
                         $corp_master=true;
                 
 		$xp=floor($row_user['corp_xp']/$x7c->settings['xp_ratio']);
 		
 		$max_ab = $x7c->settings['max_ab'];
 
-			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
-				$ok = true;
-				
-				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
-				$row_user = $db->Do_Fetch_Assoc($query);
-				
-				$xp_avail=$row_user['corp_xp']/$x7c->settings['xp_ratio'];
-				
-				if(!$row_user)
-					die("Users not in database");
-				
-				$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+		if(isset($_GET['mgmt']) && ($corp_master || checkIfMaster())){
+		        if(isset($_GET['target']) || isset($_POST['target'])){
+  		                if(isset($_GET['target']))
+  		                    $target = $_GET['target'];
+  		                if(isset($_POST['target']))
+  		                    $target=$_POST['target'];
+  		                    
+		                $query=$db->DoQuery("SELECT username, user_group FROM {$prefix}users WHERE username='$target'");
+		                $row = $db->Do_Fetch_Assoc($query);
+
+		                if($row && $row['username']!=null){
+		                        include_once('./lib/sheet_lib.php');
+                                        if($_GET['mgmt']=='add'){
+                                                if($row['user_group']==$x7c->settings['usergroup_default'])
+                                                      join_corp($target, $row_user['user_group'], 1);
+                                                else{
+                                                      $errore="$target fa gia' parte di un altro Gremios";
+                                                }
+                                        }
+                                        else if($_GET['mgmt']=='del'){
+                                                leave_corp($target);
+                                        }
+                                        else if($_GET['mgmt']=='admin'){
+                                                admin_corp($target,true);
+                                        }
+                                        else if($_GET['mgmt']=='notadmin'){
+                                                admin_corp($target,false);
+                                        }
+
+                                }
+                                else{
+                                        $errore="Utente $target non esistente";
+                                }
+
+                          }
+		}
+
+		if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
+			$ok = true;
+			
+			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+			$row_user = $db->Do_Fetch_Assoc($query);
+			
+			$xp_avail=$row_user['corp_xp']/$x7c->settings['xp_ratio'];
+			
+			if(!$row_user)
+				die("Users not in database");
+			
+			$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
 							FROM 	{$prefix}userability u, 
 								{$prefix}ability a
 							WHERE 
@@ -1301,88 +1341,87 @@
 								corp<>''
 							ORDER BY a.name");
 							
-				$ability='';
-				while($row = $db->Do_Fetch_Assoc($query)){
-					$ability[$row['ab_id']]=$row;
-					if(!isset($_POST[$row['ab_id']])){
-						$ok = false;
-						break;
-					}
-				}
-				if(!checkIfMaster() && !isset($_POST['xp']))
+			$ability='';
+			while($row = $db->Do_Fetch_Assoc($query)){
+				$ability[$row['ab_id']]=$row;
+				if(!isset($_POST[$row['ab_id']])){
 					$ok = false;
-				
-				//Controllo se le abilit� non sono state abbassate o superano il massimo
-				//Il master fa quel che gli pare: niente controlli
-				
-				$tot_used=0;
-				$lvl_gained=0;
-				if(!checkIfMaster() && $ok){
-					$max_ab = $x7c->settings['max_ab'];
-
-					
-					foreach($ability as $cur){
-                                                if($cur['corp']!=$x7s->user_group){
-                                                        $ok=false;
-                                                        $errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
-                                                }
-                                                
-						if($cur['value'] != $_POST[$cur['ab_id']]){
-							$new_value = $_POST[$cur['ab_id']];
-
-							while($new_value > $cur['value']){
-								$tot_used+= $new_value;
-								$new_value--;
-							}
-							
-							if($cur['value'] > $_POST[$cur['ab_id']]){
-								$errore .= "Errore, non puoi abbassare le caratteristiche<br>";
-								$ok = false;
-								break;
-							}
-							elseif($_POST[$cur['ab_id']] > $max_ab){
-								$errore .= "Errore, non puoi superare il valore massimo<br>";
-								$ok = false;
-								break;
-							}
-						}
-					}
-
-					
-					if(!checkIfMaster()){
-						if($tot_used > $xp_avail){
-							$errore .= "Hai usato troppi PX<br>";
-							$ok = false;
-						}
-					}
-				
+					break;
 				}
-					
-				if($ok){
-					//Ora posso aggiornare
-					
-					if($pg!=$x7s->username){
-						include('./lib/alarms.php');
-						sheet_modification($pg,$_GET['page']);
-					}
-					
-					$newxp = $row_user['corp_xp']-($tot_used * $x7c->settings['xp_ratio']);
-					
-					$db->DoQuery("UPDATE {$prefix}users 
-									SET corp_xp='$newxp'
-									WHERE username='$pg'");
-					foreach($ability as $cur){
-						if($cur['value'] != $_POST[$cur['ab_id']]){
-							$db->DoQuery("UPDATE {$prefix}userability
-									SET value='{$_POST[$cur['ab_id']]}'
-									WHERE username='$pg'
-									 AND ability_id='{$cur['ab_id']}'");
-						}
-					}
-					
-				}
-			
 			}
+			if(!checkIfMaster() && !isset($_POST['xp']))
+				$ok = false;
+				
+			//Controllo se le abilit� non sono state abbassate o superano il massimo
+			//Il master fa quel che gli pare: niente controlli
+				
+			$tot_used=0;
+			$lvl_gained=0;
+			if(!checkIfMaster() && $ok){
+				$max_ab = $x7c->settings['max_ab'];
+
+					
+				foreach($ability as $cur){
+                                        if($cur['corp']!=$x7s->user_group){
+                                              $ok=false;
+                                               $errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
+                                        }
+                                                
+                                if($cur['value'] != $_POST[$cur['ab_id']]){
+                                        $new_value = $_POST[$cur['ab_id']];
+                                        while($new_value > $cur['value']){
+                                                $tot_used+= $new_value;
+                                                $new_value--;
+                                        }
+
+                                        if($cur['value'] > $_POST[$cur['ab_id']]){
+                                                $errore .= "Errore, non puoi abbassare le caratteristiche<br>";
+                                                $ok = false;
+                                                break;
+                                        }
+                                        elseif($_POST[$cur['ab_id']] > $max_ab){
+                                                        $errore .= "Errore, non puoi superare il valore massimo<br>";
+                                                        $ok = false;
+                                                        break;
+                                                }
+                                        }
+                                }
+
+
+                                if(!checkIfMaster()){
+                                        if($tot_used > $xp_avail){
+                                                $errore .= "Hai usato troppi PX<br>";
+                                                $ok = false;
+                                        }
+                                }
+
+                        }
+
+                        if($ok){
+                                //Ora posso aggiornare
+
+                                if($pg!=$x7s->username){
+                                        include('./lib/alarms.php');
+                                        sheet_modification($pg,$_GET['page']);
+                                }
+
+                                $newxp = $row_user['corp_xp']-($tot_used * $x7c->settings['xp_ratio']);
+
+                                $db->DoQuery("UPDATE {$prefix}users
+                                                                SET corp_xp='$newxp'
+                                                                WHERE username='$pg'");
+                                foreach($ability as $cur){
+                                        if($cur['value'] != $_POST[$cur['ab_id']]){
+                                                $db->DoQuery("UPDATE {$prefix}userability
+                                                                SET value='{$_POST[$cur['ab_id']]}'
+                                                                WHERE username='$pg'
+                                                                  AND ability_id='{$cur['ab_id']}'");
+                                        }
+                                }
+
+                        }
+
+                }
 
 
 
@@ -1398,7 +1437,7 @@
 
                 $body.="<div id=\"corp\">\n";
 
-                if(!$corp_master)
+                if(!$corp_master && !checkIfMaster())
                         $body .= "<div id=\"visual\"><table>";
                 else
                         $body .= "<div id=\"visual2\"><table>";
@@ -1420,10 +1459,10 @@
 			}
                 $body.="</table></div>";
                 
-                include('./lib/sheet_lib.php');
+                include_once('./lib/sheet_lib.php');
                 $body .= build_ability_javascript($max_ab);
 
-                if(!$corp_master)
+                if(!$corp_master && !checkIfMaster())
                         $body .= '<div id="modifiable">';
                 else
                         $body .= '<div id="modifiable2">';
@@ -1458,7 +1497,7 @@
 				$body .= "</td></tr>\n";
 		}
 
-                $body .= "	<tr><td><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\"></td></tr></table>";
+                $body .= "	</table>";
 
                 if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
@@ -1468,31 +1507,40 @@
 				}
                 $body.= '</form></div>';
 
-                if($corp_master){
+                if(($corp_master && $pg==$x7s->username) || (checkIfMaster() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
                         $body.="<div id=\"corp_mgmt\">
-                                Gestione gremios
+                                <div>
+                                Gestione gremios {$row_user['user_group']}
                                 <form action=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=add\" method=\"post\" name=\"corp_mgmt_form\">
                                     <table>
-                                    <tr><td>Nuovo membro:<input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+                                    <tr><td>Nuovo membro:<input type=\"text\" name=\"target\" class=\"text_input\"></td>
                                     <td><input type=\"submit\" class=\"button\" value=\"Inserisci\"></td></tr>
                                     </table>
                                 </form>
-                                  <table>";
+                                  </div>
+                                  <div id=\"people\"><table>";
 
-                        $query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE username<>'{$x7s->username}' AND user_group='{$x7s->user_group}'");
+                        $query = $db->DoQuery("SELECT username,corp_master FROM {$prefix}users WHERE username<>'{$x7s->username}' AND user_group='{$row_user['user_group']}'");
 
                         while($row=$db->Do_Fetch_Assoc($query)){
+
+                            if($row['corp_master']){
+                                  $admin="<td><a href=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=notadmin&target=$row[username]\">[Destituisci capo]</a></td>";
+                            }
+                            else{
+                                  $admin="<td><a href=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=admin&target=$row[username]\">[Rendi capo]</a></td>";
+                            }
                             $body.="<tr>
                                         <td>$row[username]</td>
-                                        <td>[Cancella]</td>
-                                        <td>[Rendi capo]</td>
+                                        <td><a href=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=del&target=$row[username]\">[Cancella]</a></td>
+                                        $admin
                                     </tr>";
                         }
 
                         $body.="</table></div>";
                 }
                 
-                $body.="</div>";
+                $body.="</div></div>";
 
                 if($errore!=''){
 			$body.='<script language="javascript" type="text/javascript">
@@ -1507,7 +1555,13 @@
 
 		
                 if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
-				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
+                                if($corp_master || checkIfMaster())
+				        $body .= "<div id=\"modify2\">";
+				else
+				        $body .= "<div id=\"modify\">";
+      
+				$body .="     <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
+				              <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
                 }
                 
                 
@@ -1665,8 +1719,13 @@
 			}
 			#modify{
 				position: absolute;
-				left: 130px;
+				left: 60px;
 				top: 630px;
+			}
+                        #modify2{
+				position: absolute;
+				left: 60px;
+				top: 260px;
 			}
 			#ability{
 				position: absolute;
@@ -1791,7 +1850,7 @@
 				left: 0;
 				visibility: hidden;
 				width: 400px;
-				height: 200px;
+				height: 180px;
 				border: solid 1px;
 				overflow: auto;
                         }
@@ -1800,22 +1859,29 @@
 				top: 220px;
 				left: 0;
 				width: 400px;
-				height: 200px;
+				height: 300px;
 				border: solid 1px;
-				overflow: auto;
+				
                         }
 			#visual{
-				posotion: absolute;
+				position: absolute;
 				top: 0;
 				left:0;
-				width: 100%;
+				width: 400px;
 			}
 			#visual2{
-				posotion: absolute;
+				position: absolute;
 				top: 0;
 				left:0;
-				height: 200px;
-				width: 100%;
+				height: 180px;
+				width: 400px;
+				
+			}
+			
+			#people{
+                                overflow: auto;
+                                height: 233px;
+                                width:400px;
 			}
 
 			.dark_link{
