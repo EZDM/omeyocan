@@ -16,6 +16,17 @@
 			$logout_src="./graphic/06logoutobscure.jpg";
 		else
 			$logout_src="./graphic/06logout.jpg";
+
+                if($x7s->status=="Morto"){
+                        echo '<div id="resurgo">Risorgerai tra:<br><div class="CountDownPanel" id="CountDownPanel" time_format="%d days, %h:%m:%s"></div></div>
+                              <script type="text/javascript" src="sources/AdvancedCountDown.js"> </script>
+                              <script type="text/javascript">
+
+                                      ActivateCountDown("CountDownPanel", '.$x7s->resurgo.', null);
+                              
+                              
+                              </script>';
+                }
 	 ?>
 	 
 	 <div id="logoutbtn" style="position: absolute; top: 249px; left: 875px;"><a onClick="javascript: window.location.href='index.php?act=logout';"><img src="<?PHP echo $logout_src;?>" /></a> </div>

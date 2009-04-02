@@ -519,6 +519,16 @@
 				text-align: center;
 				width: 120px;
 			}
+			#resurgo{
+                                color: #c88b07;
+                                position: absolute;
+                                top: 53px;
+                                left:333px;
+                                text-align:center;
+                                width: 200px;
+                                font-weight: bold;
+                                font-size: 10pt;
+			}
 		</style>";
 		
 		return $css;

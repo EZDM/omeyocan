@@ -98,5 +98,12 @@
 		if(@$x7s->username != "")
 			$db->DoQuery("UPDATE {$prefix}users SET time='$time' WHERE username='$x7s->username'");
 	}
+
+	function resurgo(){
+              global $db, $prefix;
+              $time = time();
+              $db->DoQuery("UPDATE {$prefix}users SET resurgo='0', talk='1', info='' WHERE resurgo<'$time' AND info='Morto'");
+              
+	}
 	
 ?>

@@ -778,7 +778,10 @@
 			       $pg=$_GET['pg'];
                                 
                                if($_GET['toggle_death']){
-                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto' WHERE username='$pg'");
+                                        //Morto per 5 giorni
+                                        $death_day=5;
+                                        $resurgo = time() + $death_day*24*3600;
+                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', resurgo='$resurgo' WHERE username='$pg'");
 
                                         $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
                                         $row = $db->Do_Fetch_Assoc($query);
@@ -798,7 +801,7 @@
                                                   }
                                                   $new_value=$row['value']-1;
 
-                                                  
+
                                                   $db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
 
                                                   include("./lib/message.php");
