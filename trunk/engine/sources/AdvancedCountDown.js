@@ -200,12 +200,12 @@ function _cdt_ApplyCountdownText(strContainerID)
 		hours = (hours % 24);
 		
 		//need to add zero?
-		if (!blnCustomFormat)
-		{
+		//if (!blnCustomFormat)
+		//{
 			hours = AddZero(hours);
 			minutes = AddZero(minutes);
 			seconds = AddZero(seconds);
-		}
+		//}
 		strText = strFormat.replace("%d", days + "").replace("%h", hours + "").replace("%m", minutes + "").replace("%s", seconds + "");
 	}
 	
