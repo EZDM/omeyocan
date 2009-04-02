@@ -64,6 +64,8 @@
 		var $panic;
 		var $max_panic;
 		var $talk;
+		var $resurgo;
+		var $status;
 		
 		// Create a new session
 		function session(){
