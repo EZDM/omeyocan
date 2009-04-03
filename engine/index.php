@@ -578,6 +578,10 @@
 			include("./sources/secret.php");
 			secret_main();
 			exit;
+                case "resurgo":
+			include("./sources/resurgo.php");
+			resurgo_main();
+			exit;
 		default:
 			// The default action is to show the room list
 			// Clean up old rooms

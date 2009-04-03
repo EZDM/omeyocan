@@ -18,11 +18,11 @@
 			$logout_src="./graphic/06logout.jpg";
 
                 if($x7s->status=="Morto"){
-                        echo '<div id="resurgo">Risorgerai tra:<br><div class="CountDownPanel" id="CountDownPanel" time_format="%dd, %h:%m:%s"></div></div>
-                              <script type="text/javascript" src="sources/AdvancedCountDown.js"> </script>
+                        echo '
                               <script type="text/javascript">
 
-                                      ActivateCountDown("CountDownPanel", '.$x7s->resurgo.', null);
+                                      hndl_res = window.open(\'index.php?act=resurgo\',\'resurgo\',\'width=500,height=150, toolbar=no, status=no, location=no, menubar=no, resizable=no, status=no\');
+                                      hndl_res.focus();
                               
                               
                               </script>';
