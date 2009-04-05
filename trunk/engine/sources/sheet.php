@@ -1722,7 +1722,7 @@
 			}
 			#modify{
 				position: absolute;
-				left: 60px;
+				left: 150px;
 				top: 630px;
 			}
                         #modify2{
