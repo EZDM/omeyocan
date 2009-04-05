@@ -678,7 +678,7 @@
 
 				$body.=build_ability_javascript($max_ab);
 				
-				$body .= '<div id="modifiable"><form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
+				$body .= '<form action="index.php?act=sheet&page=ability&settings_change=1&pg='.$pg.'" method="post" name="sheet_form"><div id="modifiable">
 						<table align="left" border="0" cellspacing="0" cellpadding="0">';
 						
 				
@@ -734,7 +734,7 @@
 				if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
-							<input type="hidden" name="xp" value="'.$xp.'"></form></div>
+							<input type="hidden" name="xp" value="'.$xp.'"></div>
 						';
 				}
 			}
@@ -747,7 +747,7 @@
 				$body .= "<div id=\"modify\">
                                                     <INPUT id=\"aggiorna\" style=\"visibility: hidden;\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled>
 				                    <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
-				          </div>";
+				          </div></form>";
 			}
 			
 			if($errore!=''){
