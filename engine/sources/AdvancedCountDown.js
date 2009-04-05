@@ -194,10 +194,10 @@ function _cdt_ApplyCountdownText(strContainerID)
 		minutes = (minutes % 60);
 		
 		//get days:
-		var days = parseInt(hours / 24);
+		//var days = parseInt(hours / 24);
 	
 		//shrink:
-		hours = (hours % 24);
+		//hours = (hours % 24);
 		
 		//need to add zero?
 		//if (!blnCustomFormat)
@@ -206,7 +206,7 @@ function _cdt_ApplyCountdownText(strContainerID)
 			minutes = AddZero(minutes);
 			seconds = AddZero(seconds);
 		//}
-		strText = strFormat.replace("%d", days + "").replace("%h", hours + "").replace("%m", minutes + "").replace("%s", seconds + "");
+		strText = strFormat.replace("%h", hours + "").replace("%m", minutes + "").replace("%s", seconds + "");
 	}
 	
 	//apply:

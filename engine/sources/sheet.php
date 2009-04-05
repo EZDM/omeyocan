@@ -1465,13 +1465,14 @@
                 include_once('./lib/sheet_lib.php');
                 $body .= build_ability_javascript($max_ab);
 
+                $body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
+
                 if(!$corp_master && !checkIfMaster())
                         $body .= '<div id="modifiable">';
                 else
                         $body .= '<div id="modifiable2">';
 
-                $body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
-						<table align="left" border="0" cellspacing="0" cellpadding="0">';
+                $body.='<table align="left" border="0" cellspacing="0" cellpadding="0">';
                 foreach($ability as $cur){
 				$body .= "<tr>";
 				$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
@@ -1500,7 +1501,7 @@
 				$body .= "</td></tr>\n";
 		}
 
-                $body .= "	</table>";
+                $body .= "	</table></div>";
 
                 if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
@@ -1508,7 +1509,19 @@
 							<input type="hidden" name="xp" value="'.$xp.'"></div>
 						';
 				}
-                $body.= '</form></div>';
+
+                if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
+                                if($corp_master || checkIfMaster())
+				        $body .= "<div id=\"modify2\">";
+				else
+				        $body .= "<div id=\"modify\">";
+      
+				$body .="<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
+                                              <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
+				</div>";
+                }
+                
+                $body.= '</form>';
 
                 if(($corp_master && $pg==$x7s->username) || (checkIfMaster() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
                         $body.="<div id=\"corp_mgmt\">
@@ -1556,16 +1569,6 @@
 			</div>';
 		}
 
-		
-                if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
-                                if($corp_master || checkIfMaster())
-				        $body .= "<div id=\"modify2\">";
-				else
-				        $body .= "<div id=\"modify\">";
-      
-				$body .="     <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
-				              <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\"></div>";
-                }
                 
                 
 		return $body;
@@ -1724,11 +1727,13 @@
 				position: absolute;
 				left: 150px;
 				top: 630px;
+				width: 200px;
 			}
                         #modify2{
 				position: absolute;
-				left: 60px;
-				top: 260px;
+				left: 0px;
+				top: 160px;
+				width: 200px;
 			}
 			#ability{
 				position: absolute;
@@ -1853,7 +1858,7 @@
 				left: 0;
 				visibility: hidden;
 				width: 400px;
-				height: 180px;
+				height: 150px;
 				border: solid 1px;
 				overflow: auto;
                         }
