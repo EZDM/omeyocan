@@ -590,6 +590,7 @@
 									 AND ability_id='{$cur['ab_id']}'");
 						}
 					}
+					header("location: index.php?act=sheet&page=ability&pg=$pg");
 					
 				}
 			
@@ -737,10 +738,11 @@
 							<input type="hidden" name="xp" value="'.$xp.'"></div>
 						';
 				}
+
+				$body.="</div>";
 			}
 			
-			$body.="	</div>
-						<div id=\"descr\"> </div>
+			$body.="<div id=\"descr\"> </div>
 				</div>";
 
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
@@ -1273,7 +1275,7 @@
 		$body='';
 		$errore='';
 
-		$query = $db->DoQuery("SELECT corp_xp,corp_master,user_group FROM {$prefix}users WHERE username='$pg'");
+		$query = $db->DoQuery("SELECT xp,corp_master,user_group FROM {$prefix}users WHERE username='$pg'");
                 $row_user = $db->Do_Fetch_Assoc($query);
 
                 if(!$row_user)
@@ -1283,7 +1285,7 @@
                 if($row_user['corp_master'] && $row_user['user_group']!=$x7c->settings['usergroup_default'])
                         $corp_master=true;
                 
-		$xp=floor($row_user['corp_xp']/$x7c->settings['xp_ratio']);
+		$xp=floor($row_user['xp']/$x7c->settings['xp_ratio']);
 		
 		$max_ab = $x7c->settings['max_ab'];
 
@@ -1330,7 +1332,7 @@
 			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
 			$row_user = $db->Do_Fetch_Assoc($query);
 			
-			$xp_avail=$row_user['corp_xp']/$x7c->settings['xp_ratio'];
+			$xp_avail=$row_user['xp']/$x7c->settings['xp_ratio'];
 			
 			if(!$row_user)
 				die("Users not in database");
@@ -1408,10 +1410,10 @@
                                         sheet_modification($pg,$_GET['page']);
                                 }
 
-                                $newxp = $row_user['corp_xp']-($tot_used * $x7c->settings['xp_ratio']);
+                                $newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
 
                                 $db->DoQuery("UPDATE {$prefix}users
-                                                                SET corp_xp='$newxp'
+                                                                SET xp='$newxp'
                                                                 WHERE username='$pg'");
                                 foreach($ability as $cur){
                                         if($cur['value'] != $_POST[$cur['ab_id']]){
@@ -1421,6 +1423,7 @@
                                                                   AND ability_id='{$cur['ab_id']}'");
                                         }
                                 }
+                                header("location: index.php?act=sheet&page=corp&pg=$pg");
 
                         }
 
@@ -1501,7 +1504,7 @@
 				$body .= "</td></tr>\n";
 		}
 
-                $body .= "	</table></div>";
+                $body .= "	</table>";
 
                 if(!checkIfMaster()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
@@ -1510,11 +1513,13 @@
 						';
 				}
 
+                $body.="</div>";
+
                 if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
                                 if($corp_master || checkIfMaster())
 				        $body .= "<div id=\"modify2\">";
 				else
-				        $body .= "<div id=\"modify\">";
+				        $body .= "<div id=\"modify3\">";
       
 				$body .="<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
                                               <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
@@ -1553,10 +1558,10 @@
                                     </tr>";
                         }
 
-                        $body.="</table></div>";
+                        $body.="</table></div></div>";
                 }
                 
-                $body.="</div></div>";
+                $body.="</div>";
 
                 if($errore!=''){
 			$body.='<script language="javascript" type="text/javascript">
@@ -1725,7 +1730,7 @@
 			}
 			#modify{
 				position: absolute;
-				left: 150px;
+				left: 50px;
 				top: 630px;
 				width: 200px;
 			}
@@ -1733,6 +1738,12 @@
 				position: absolute;
 				left: 0px;
 				top: 160px;
+				width: 200px;
+			}
+			#modify3{
+				position: absolute;
+				left: 50px;
+				top: 560px;
 				width: 200px;
 			}
 			#ability{
