@@ -1725,14 +1725,13 @@
 			}
 			#submit{
 				position: absolute;
-				left: 30px;
+				left: 130px;
 				top: 630px;
 			}
 			#modify{
 				position: absolute;
 				left: 50px;
 				top: 630px;
-				width: 200px;
 			}
                         #modify2{
 				position: absolute;
