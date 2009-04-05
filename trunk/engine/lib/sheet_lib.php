@@ -138,6 +138,8 @@
 									       document.getElementById("modify").style.visibility="hidden";
 									if(document.getElementById("modify2"))
 									       document.getElementById("modify2").style.visibility="hidden";
+                                                                        if(document.getElementById("modify3"))
+									       document.getElementById("modify3").style.visibility="hidden";
 									if(document.getElementById("aggiorna"))
 									       document.getElementById("aggiorna").style.visibility="visible";
 								}
