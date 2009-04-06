@@ -506,6 +506,7 @@
                         .msg_txt{
                                 color: #660000;
                                 font-size: 8pt;
+                                font-weight: bold;
                         }
 			.dark_row{
 				background: transparent;
