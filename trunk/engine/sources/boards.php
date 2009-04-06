@@ -296,6 +296,8 @@
 				$subject = $_POST['subject'];
 
 			}
+			$msg = eregi_replace("\n","<Br>",$msg);
+				
 			
 			//Do the real send (master can always send and modify even if readonly)
 			if((checkAuth($board['id']) && !$board['readonly']) || checkIfMaster()){
@@ -320,14 +322,14 @@
                                             return;
 
                                       }
-                                      $msg = eregi_replace("\n","<Br>",$msg);
+                                      
                                       $db->DoQuery("UPDATE {$prefix}boardmsg SET body='$subject::$msg' WHERE id='{$_GET['modify']}'");
                                       
                                 }
                                 else{
                                             $time = time();
                                             
-                                            $msg = eregi_replace("\n","<Br>",$msg);
+                                            
                                             
                                             $db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies,last_update)
                                                             VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0','$time')");
@@ -708,7 +710,9 @@
                         $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
                         $body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 		}
-		
+
+		$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
+		$msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);
 		$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
 		
 		
