@@ -574,7 +574,7 @@
 				
 			//Here we start with HTML
 			echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
-			echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} -- $_GET[room]</title>";
+			echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']} Chat</title>";
 			echo $print->style_sheet;
 			echo $print->ss_mini;
 			echo $print->ss_chatinput;

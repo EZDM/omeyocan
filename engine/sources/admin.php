@@ -2179,16 +2179,6 @@
 		
 			$head = $txt[310];
 		
-			// This is the manage users screen.  Show the admin all the users
-			// and allow him/her to delete or edit the user
-			
-			// See if quick edit was used
-			if(isset($_POST['user']) && isset($_POST['action'])){
-				if($_POST['action'] == "delete")
-					$_GET['delete'] = $_POST['user'];
-				else
-					$_GET['edit'] = $_POST['user'];
-			}
 			
 			if(isset($_GET['delete'])){
 			
@@ -2352,71 +2342,82 @@
 				}
 			}else{
 				// Display all users
-				$body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
+                                $body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
 						<form action=\"index.php?act=adminpanel&cp_page=users\" method=\"post\" name=\"quicke\">
 						<table width=\"200\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
 								<td>$txt[2]: </td>
 								<td><input type=\"text\" name=\"user\" class=\"text_input\"></td>
-							</tr>
-							<Tr>
-								<td>$txt[459]</td>
-								<td> <input type=\"radio\" name=\"actionr\" value=\"edit\" checked=\"true\" style=\"position: relative;z-index: 2;\"> </td>
-							</tr>
-							<Tr>
-								<td>$txt[175]</td>
-								<td> <input type=\"radio\" name=\"actionr\" value=\"delete\" style=\"position: relative;z-index: 2;\"> </td>
-							</tr>
-							<Tr>
-								<td colspan=\"2\"><div align=\"center\" style=\"position: relative; top: -24px;left: 30px;z-index: 1;\"><input type=\"submit\" value=\"$txt[187]\" class=\"button\"></div></td>
+								<td><div align=\"center\"><input type=\"submit\" value=\"Cerca\" class=\"button\"></div></td>
 							</tr>
 						</table>
 						</form>
-						<Br>
-						___page_counter___<Br>
-						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+						<Br>";
+
+                                $body .= "  <a href=\"index.php?act=adminpanel&cp_page=users&letter=a\">[a]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=b\">[b]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=c\">[c]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=d\">[d]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=e\">[e]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=f\">[f]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=g\">[g]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=h\">[h]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=i\">[i]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=j\">[j]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=k\">[k]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=l\">[l]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=m\">[m]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=n\">[n]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=o\">[o]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=p\">[p]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=q\">[q]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=r\">[r]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=s\">[s]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=t\">[t]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=u\">[u]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=v\">[v]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=w\">[w]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=x\">[x]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=y\">[y]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=z\">[z]</a>
+                                          ";
+				
+				$body.="		<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 							<tr>
 								<td width=\"100\" height=\"25\">&nbsp;$txt[2]</td>
 								<td width=\"100\" height=\"25\">$txt[123]</td>
 								<td width=\"100\" height=\"25\">$txt[86]</td>
 							</tr>
-						</table>
-						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
+						</table>";
+
+                                $search='';
+
+                                if(isset($_GET['letter']))
+                                        $search="$_GET[letter]%";
+
+                                if(isset($_POST['user']))
+                                        $search="%$_POST[user]%";
+                                        
+				$body.= "<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
 				// Pages
 				
 				
-				$query = $db->DoQuery("SELECT * FROM {$prefix}users ORDER BY username ASC");
-				$i = 0;
+				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username LIKE '$search' ORDER BY username ASC");
 				
-				if(!isset($_GET['start']))
-					$_GET['start'] = 0;
-				$end = $_GET['start']+25;
 				
 				while(($row = $db->Do_Fetch_Row($query))){
-					if($i >= $_GET['start'] && $i < $end)
-						$body .= "<tr>
-								<td width=\"100\" class=\"dark_row\"><a href=\"#\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">$row[1]</a></td>
-								<td width=\"100\" class=\"dark_row\">$row[10]</td>
-								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
-								
-							</tr>
-                                                        <tr><td class=\"dark_row\" colspan=\"3\"><hr></td></tr>";
-					$i++;
+				
+					$body .= "<tr>
+							<td width=\"100\"><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
+							<td width=\"100\">$row[10]</td>
+							<td width=\"100\"><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
+							
+						</tr>
+                                                <tr><td colspan=\"3\"><hr></td></tr>";
+				
 				}
 				
-				// The actual page counter
-				$page_count = ceil($i/25);
-				$pages = "";
-				while($page_count > 0){
-					$start = $page_count*25-25;
-					$pages = "<a href=\"./index.php?act=adminpanel&cp_page=users&start=$start\">[$page_count]</a>".$pages;
-					$page_count--;	
-				}
-								
-				$body .= "</table>___page_counter___<Br><Br>";
-				
-				$body = eregi_replace("___page_counter___","$pages",$body);
-			
+				$body .= "</table>";			
 			}
 			
 		
@@ -2888,9 +2889,9 @@
 					// Put it into the $body variable
 					$body .= "
 							<tr>
-								<td width=\"120\" class=\"dark_row\">&nbsp;<a href=\"index.php?act=frame&room=$link_url\">$room_info[0]</a></td>
-								<td width=\"70\" class=\"dark_row\">$log</td>
-								<td width=\"80\" class=\"dark_row\"><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
+								<td width=\"120\">&nbsp;<a href=\"#\" onClick=\"javascript: window.opener.location.href='index.php?act=frame&room=$link_url'; window.opener.focus();\">$room_info[5]</a></td>
+								<td width=\"70\">$log</td>
+								<td width=\"80\"><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
 							</tr>
 					";
 				}

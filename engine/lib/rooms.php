@@ -58,7 +58,7 @@
 		
 		// Get the rooms from the database
 		$return = array();
-		$query = $db->DoQuery("SELECT name,topic,password,maxusers,logged FROM {$prefix}rooms WHERE type='1'");
+		$query = $db->DoQuery("SELECT name,topic,password,maxusers,logged,long_name FROM {$prefix}rooms WHERE type='1' ORDER BY long_name");
 		while($row = $db->Do_Fetch_Row($query)){
 			$return[] = $row;
 		}
