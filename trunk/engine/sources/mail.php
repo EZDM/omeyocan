@@ -464,7 +464,7 @@
 			}
 			th{
 				color: #660000;
-				font-size: 10pt;
+				font-size: 8pt;
 				text-align: left;
 				border-bottom: solid 2px gray;
 			}
@@ -479,7 +479,7 @@
 				top: 0px;
 				color: black;
 				font-weight: bold;
-				font-size: 11pt;
+				font-size: 8pt;
 				background-image:url('.$sfondo.');
 			}
 			
@@ -505,16 +505,16 @@
 			}
                         .msg_txt{
                                 color: #660000;
-                                font-size: 11pt;
+                                font-size: 8pt;
                         }
 			.dark_row{
 				background: transparent;
-				font-size: 10pt;
+				font-size: 8pt;
 			}
 		
 			.chatmsg{
 				color: #660000;
-				font-size: 11pt;
+				font-size: 8pt;
 			}
 			
 			.text_input, .wickEnabled{
