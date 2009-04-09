@@ -1725,7 +1725,7 @@
 			}
 			#submit{
 				position: absolute;
-				left: 130px;
+				left: 200px;
 				top: 630px;
 			}
 			#modify{
