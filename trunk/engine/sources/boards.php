@@ -51,10 +51,54 @@
 		else if(isset($_GET['readall'])){
 			read_all();
 		}
+		else if(isset($_GET['move'])){
+                        move_msg();
+		}
 		else 
 			board_list();
 			
 		
+	}
+
+	function move_msg(){
+                global $print, $x7s, $db, $prefix;
+
+                //You cannot do anything if you are not master
+                if(!checkIfMaster()){
+                        $body="Non sei autorizzato a compiere questa operazione";
+                        $print->board_window("Non autorizzato",$body, indice_board());
+                        return;
+                }
+
+                //Do the move
+                if(isset($_GET['dest'])){
+                        $db->DoQuery("UPDATE {$prefix}boardmsg SET board='$_GET[dest]' WHERE id='$_GET[move]' OR father='$_GET[move]'");
+                        show_board($_GET['dest']);
+                        return;
+                }
+
+
+                $query = $db->DoQuery("SELECT name, id FROM {$prefix}boards ORDER BY name");
+
+                //Move form
+                $body="<form action=\"./index.php\" method=\"get\">
+
+			<input type=\"hidden\" name=\"act\" value=\"boards\">
+			<input type=\"hidden\" name=\"move\" value=\"$_GET[move]\">
+
+                          Board di destinazione
+
+                          <select class=\"button\" name=\"dest\">";
+
+                while($row = $db->Do_Fetch_Assoc($query)){
+                          $body.="<option value=\"$row[id]\">$row[name]</option>";
+                }
+
+                $body.="</select>
+                        <br><br><input type=\"submit\" value=\"Sposta\" class=\"button\">
+                      </form>";
+
+                $print->board_window("Sposta messaggio", $body, indice_board());
 	}
 
 	function read_all(){
@@ -106,7 +150,12 @@
 						$ronly=1;
 					else
 						$ronly=0;
-					$db->DoQuery("INSERT INTO {$prefix}boards (name, user_group, readonly)  VALUES ('{$_GET['name']}','{$_GET['group']}','$ronly')");
+                                        if(isset($_GET['offgame']))
+                                                $offgame=1;
+                                        else
+                                                $offgame=0;
+                                                
+					$db->DoQuery("INSERT INTO {$prefix}boards (name, user_group, readonly, offgame)  VALUES ('{$_GET['name']}','{$_GET['group']}','$ronly','$offgame')");
 					
 					$body.="Board {$_GET['name']} creata correttamente<br>";
 				}
@@ -131,7 +180,8 @@
 			Gruppo: <select class=\"button\" name=\"group\">
 				$options
 			</select><br>
-			Read-only <input class=\"text_input\" type=\"checkbox\" name=\"ronly\"><br><br>
+			Read-only <input class=\"text_input\" type=\"checkbox\" name=\"ronly\"><br>
+			Off-game <input class=\"text_input\" type=\"checkbox\" name=\"offgame\"><br><br>
 			<input type=\"submit\" value=\"Crea\" class=\"button\">
 			<br><a href=\"index.php?act=boards\">Torna all'indice</a>";
 			
@@ -442,6 +492,7 @@
 	function indice_board(){
 		global $print, $x7s, $db, $prefix;
 		$body='	<table width=100% align="center" style="border-collapse: collapse;">';
+		$body_offgame='<table width=100% align="center" style="border-collapse: collapse;">';
 		
 		if(checkIfMaster()){
 			$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");
@@ -461,27 +512,45 @@
 			if($new_msg['cnt']>0){
 				$new_cnt="<b>($new_msg[cnt])</b>";
 			}
-			
-			$body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
-			
-			if(checkIfMaster()){
-				$body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+
+			if(!$row['offgame']){
+                                $body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+                                
+                                if(checkIfMaster()){
+                                        $body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+                                }
+                                
+                                $body.="</td></tr>";
+
 			}
-			
-			$body.="</td></tr>";
+
+			else{
+                                $body_offgame.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+                                
+                                if(checkIfMaster()){
+                                        $body_offgame.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+                                }
+                                
+                                $body_offgame.="</td></tr>";
+			}
 		
 		}
+		$body.="</table>";
+		$body_offgame.="</table>";
 
-		$body.='<tr><td align="center"><a href="./index.php?act=boards&readall">Segna come letti</a></td></tr>';
+		$body_menu='<table width=100% align="center" style="border-collapse: collapse;">';
+
+		$body_menu.='<tr><td align="center"><a href="./index.php?act=boards&readall">Segna come letti</a></td></tr>';
 		
 		if(checkIfMaster()){
-			$body.='<tr><td align="center"><a href="./index.php?act=boards&newboard=0">Nuova board</a></td></tr>';
+			$body_menu.='<tr><td align="center"><a href="./index.php?act=boards&newboard=0">Nuova board</a></td></tr>';
 		}
 		
-		$body.="<tr><td align=\"center\"><a href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></td></tr>
-		</table>";
+		$body_menu.="<tr><td align=\"center\"><a href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></td></tr></table>";
+
+		$total_body="$body<br><br>$body_menu<br><br>$body_offgame";
 		
-		return $body;
+		return $total_body;
 	
 	}
 	
@@ -604,8 +673,10 @@
 			$body.="<p>".$row['user']."<br><a href=./index.php?act=boards&board=".$board['id']."&message=".$row['id'].">
 				 <b>".$object."</b> ".$unread."</a>";
 				
-			if($user == $x7s->username || checkIfMaster())
-				$body.=" <a href=./index.php?act=boards&delete=$msgid>Delete</a>";
+			if($user == $x7s->username || checkIfMaster()){
+				$body.=" <a href=./index.php?act=boards&delete=$msgid>[Delete]</a>";
+				$body.=" <a href=./index.php?act=boards&move=$msgid>[Sposta]</a>";
+                        }
 			
 			$body.="</p><hr>";
 		
