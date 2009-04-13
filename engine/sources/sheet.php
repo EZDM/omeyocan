@@ -206,94 +206,97 @@
 
 		$room='';
 		while($row=$db->Do_Fetch_Assoc($query)){
-			$more_form='';
-			$obj_name = $row['name'];
-			$description = $row['description'];
-			$dimensione="";
-			$disabled="";
-			if(!$row['equipped'])
-			       $disabled="style=\"color: #aeaeae;\"";
-			if($row['size']==0)
-			       $dimensione="Minuscolo";
-			if($row['size']==1)
-			       $dimensione="Piccolo";
-			if($row['size']==2)
-			       $dimensione="Medio";
-			if($row['size']==5)
-			       $dimensione="Grande";
-			
-			if(preg_match("/key_/", $row['name'])) {
-				list($pre, $name)=split("key_", $row['name']);
-				if(strcasecmp($_GET['pg'], $x7s->username) == 0 || checkIfMaster()){
-					//we make clickable only key of my sheet
-					if(strcasecmp($row['name'], "key_{$x7s->username}") == 0 || (strcasecmp($row['name'], "key_$_GET[pg]") == 0 && checkIfMaster())){
-						//This is my key
-						$more_form = '
-							<tr>
-								<td>Usi concessi (vuoto per illimitati):</td>
-								<td><input type="text" name="grants" class="text_input" size=2></td>
-							</tr>
-						';
-					}
-					else{
-						$remaining_uses = ($row['uses'] == -1) ? "illimitati" : $row['uses'];
-						$description .= "<br>(Usi rimasti: $remaining_uses)";
-					}
-					
-					$obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.'</a>';
-					
-				}
-				else{
-					$obj_name = "Stanza di $name";
-				}
-			}
-			
-			$body.= "<table width=100%> <tr> <td class=\"obj\"> <img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
-                                        <div $disabled>
-					<b>$obj_name</b>
-					<br>Dimensione: $dimensione
-					<p>$description</p>
-					</div> </td> </tr> </table>";
-			
-			if($pg==$x7s->username || checkIfMaster()){
-                                $equip_text="Deposita";
-                                if(!$row['equipped']){
-                                    $equip_text="Equipaggia";
-                                }
-				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
-						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-       						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-								<tr>
-									<td>Dai a:</td>
-									<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-									<td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
-                                                                </tr>
-                                                                $more_form
+
+		        if(($pg!=$x7s->username && $row['equipped']) || ($pg==$x7s->username) || checkIfMaster()){
+                                $more_form='';
+                                $obj_name = $row['name'];
+                                $description = $row['description'];
+                                $dimensione="";
+                                $disabled="";
+                                if(!$row['equipped'])
+                                      $disabled="style=\"color: #aeaeae;\"";
+                                if($row['size']==0)
+                                      $dimensione="Minuscolo";
+                                if($row['size']==1)
+                                      $dimensione="Piccolo";
+                                if($row['size']==2)
+                                      $dimensione="Medio";
+                                if($row['size']==5)
+                                      $dimensione="Grande";
+                                
+                                if(preg_match("/key_/", $row['name'])) {
+                                        list($pre, $name)=split("key_", $row['name']);
+                                        if(strcasecmp($_GET['pg'], $x7s->username) == 0 || checkIfMaster()){
+                                                //we make clickable only key of my sheet
+                                                if(strcasecmp($row['name'], "key_{$x7s->username}") == 0 || (strcasecmp($row['name'], "key_$_GET[pg]") == 0 && checkIfMaster())){
+                                                        //This is my key
+                                                        $more_form = '
                                                                 <tr>
-									<td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\">
-									<input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
-								</tr>
-								
-							</table>
-					</form>";
+                                                                        <td>Usi concessi (vuoto per illimitati):</td>
+                                                                        <td><input type="text" name="grants" class="text_input" size=2></td>
+                                                                </tr>
+                                                        ';
+                                                }
+                                                else{
+                                                        $remaining_uses = ($row['uses'] == -1) ? "illimitati" : $row['uses'];
+                                                        $description .= "<br>(Usi rimasti: $remaining_uses)";
+                                                }
+                                                
+                                                $obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.'</a>';
+                                                
+                                        }
+                                        else{
+                                                $obj_name = "Stanza di $name";
+                                        }
+                                }
+                                
+                                $body.= "<table width=100%> <tr> <td class=\"obj\"> <img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
+                                                <div $disabled>
+                                                <b>$obj_name</b>
+                                                <br>Dimensione: $dimensione
+                                                <p>$description</p>
+                                                </div> </td> </tr> </table>";
+                                
+                                if($pg==$x7s->username || checkIfMaster()){
+                                        $equip_text="Deposita";
+                                        if(!$row['equipped']){
+                                            $equip_text="Equipaggia";
+                                        }
+                                        $body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
+                                                        <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+                                                        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+                                                                        <tr>
+                                                                                <td>Dai a:</td>
+                                                                                <td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+                                                                                <td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
+                                                                        </tr>
+                                                                        $more_form
+                                                                        <tr>
+                                                                                <td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\">
+                                                                                <input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
+                                                                        </tr>
+                                                                        
+                                                                </table>
+                                                </form>";
+                                }
+                                
+                                if(checkIfMaster()){
+                                        $body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\" method=\"post\" name=\"object_moduse\">
+                                                        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+                                                                <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+                                                                <tr>
+                                                                                <td>Usi:</td>
+                                                                                <td><input type=\"text\" name=\"use\" class=\"text_input\" size=2 value=\"$row[uses]\"></td>
+                                                                                <td><input type=\"submit\" class=\"button\" value=\"Cambia\"></div></td>
+                                                                </tr>
+                                                        </table>
+                                                ";
+                                        
+                                        $body.="</form>\n";
+                                }
+                                        
+                                $body.="<br><br>\n";
 			}
-			
-			if(checkIfMaster()){
-				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\" method=\"post\" name=\"object_moduse\">
-						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-							<tr>
-									<td>Usi:</td>
-									<td><input type=\"text\" name=\"use\" class=\"text_input\" size=2 value=\"$row[uses]\"></td>
-									<td><input type=\"submit\" class=\"button\" value=\"Cambia\"></div></td>
-							</tr>
-						</table>
-					";
-				
-				$body.="</form>\n";
-			}
-				
-			$body.="<br><br>\n";
 		}
 		
 		$body.="</div>\n";
