@@ -811,7 +811,8 @@
 			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
 				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
 			}
-			
+
+		        $msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);	
 			$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
 		}
 
