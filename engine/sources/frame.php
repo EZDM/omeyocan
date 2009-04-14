@@ -381,9 +381,6 @@
 						        $toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$long_name $timestamp:</span></a>";
                                                 }
 						
-						if($x7c->permissions['admin_panic'])
-							
-						
 						$toout.="$row[2]<br>";;
 						
 						
