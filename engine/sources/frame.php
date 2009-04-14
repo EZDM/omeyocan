@@ -78,7 +78,7 @@
 				delete_communication($_GET['delete'],$_GET['room']);
 			}
 			else{
-				$db->DoQuery("DELETE FROM {$prefix}messages WHERE room='{$_GET[room]}'");
+				$db->DoQuery("DELETE FROM {$prefix}messages WHERE room='{$_GET[room]}' AND type<>'6'");
 				delete_communication('all',$_GET['room']);
 			}
 			return;
@@ -319,14 +319,16 @@
 				echo "9;;./index.php?act=panic&dump=$query&source=/sources/frame.php:155";
 			}
 
-			$query_gender = $db->DoQuery("SELECT gender, bio, username FROM {$prefix}users
+			$query_gender = $db->DoQuery("SELECT gender, bio, username, name FROM {$prefix}users
                                                       WHERE username IN (SELECT user FROM {$prefix}messages WHERE room='$_GET[room]')");
 
 			$genders='';
 			$gifs='';
+			$long_names='';
 			while($row = $db->Do_Fetch_Assoc($query_gender)){
 				$genders[strtolower($row['username'])]=$row['gender'];
 				$gifs[strtolower($row['username'])]=$row['bio'];
+				$long_names[strtolower($row['username'])]=$row['name'];
 			}
 			while($row = $db->Do_Fetch_Row($query)){
 
@@ -357,15 +359,30 @@
 						else
 							$gender	= '"none> <span> Gender_undefined_error </span"';
 
+                                                $long_name='';
+						if(isset($long_names[strtolower($row[0])])){
+							$long_name=$long_names[strtolower($row[0])];
+                                                }
+						else{
+							$long_name = $row[0];
+                                                }
+
                                                 $gif="";
                                                 if(isset($gifs[strtolower($row[0])]) && $gifs[strtolower($row[0])]!=""){
                                                     $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: middle\"> ";
                                                 }
-						
-						$toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$row[0] $timestamp:</span></a>";
+
+                                                $toout='';
+						if($x7c->permissions['admin_panic']){
+						        $toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$long_name ($row[0]) $timestamp:</span></a>";
+						        $toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
+                                                }
+                                                else{
+						        $toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$long_name $timestamp:</span></a>";
+                                                }
 						
 						if($x7c->permissions['admin_panic'])
-							$toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
+							
 						
 						$toout.="$row[2]<br>";;
 						
