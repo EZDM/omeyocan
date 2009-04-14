@@ -1859,19 +1859,19 @@
 								</tr>
 							</table>
 						</form><Br><Br>
-						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 							<tr>
-								<td width=\"100\" height=\"25\">&nbsp;$txt[123]</td>
-								<td width=\"160\" height=\"25\">$txt[86]</td>
+								<td height=\"25\">&nbsp;$txt[123]</td>
+								<td height=\"25\">$txt[86]</td>
 							</tr>
 						</table>
-						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
+						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
 						
 					// Display a table of groups with actions
 					foreach($groups as $key=>$group){
 						$body .= "<Tr>
-									<td width=\"100\" class=\"dark_row\">&nbsp;$group</td>
-									<td width=\"160\" class=\"dark_row\">
+									<td class=\"dark_row\">&nbsp;$group</td>
+									<td class=\"dark_row\">
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&view=$group\">[$txt[413]]</a>
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&delete=$group\">[$txt[175]]</a>
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&edit=$group\">[$txt[139]]</a>
@@ -1924,7 +1924,7 @@
                                         recalculate_space($_POST['owner']);
 							
 					$error="Oggetto assegnato correttamente\n";
-					include('./lib/alarms.php');
+					include_once('./lib/alarms.php');
 					object_assignement($_POST['owner'],$row['name']);
 				}
 				
@@ -2009,6 +2009,8 @@
 								(name, description, uses, image_url, owner,equipped,size)
 								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1','0')");
 							$body .= "Copia utente della chiave creata con successo<br>";
+							include_once('./lib/alarms.php');
+							object_assignement($_POST['owner'],"Chiave della stanza di $_POST[owner]");
 						}
 						else
 							$body .= "Copia utente della chiave gi&agrave; presente<br>";
@@ -2344,7 +2346,7 @@
 				// Display all users
                                 $body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
 						<form action=\"index.php?act=adminpanel&cp_page=users\" method=\"post\" name=\"quicke\">
-						<table width=\"200\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
 								<td>$txt[2]: </td>
 								<td><input type=\"text\" name=\"user\" class=\"text_input\"></td>
@@ -2382,11 +2384,11 @@
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=z\">[z]</a>
                                           ";
 				
-				$body.="		<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				$body.="		<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 							<tr>
-								<td width=\"100\" height=\"25\">&nbsp;$txt[2]</td>
-								<td width=\"100\" height=\"25\">$txt[123]</td>
-								<td width=\"100\" height=\"25\">$txt[86]</td>
+								<td height=\"25\">&nbsp;$txt[2]</td>
+								<td height=\"25\">$txt[123]</td>
+								<td height=\"25\">$txt[86]</td>
 							</tr>
 						</table>";
 
@@ -2398,7 +2400,7 @@
                                 if(isset($_POST['user']))
                                         $search="%$_POST[user]%";
                                         
-				$body.= "<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
+				$body.= "<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
 				// Pages
 				
 				
@@ -2408,9 +2410,9 @@
 				while(($row = $db->Do_Fetch_Row($query))){
 				
 					$body .= "<tr>
-							<td width=\"100\"><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
-							<td width=\"100\">$row[10]</td>
-							<td width=\"100\"><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
+							<td><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
+							<td>$row[10]</td>
+							<td><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
 							
 						</tr>
                                                 <tr><td colspan=\"3\"><hr></td></tr>";
@@ -2510,13 +2512,13 @@
 					$rooms[] = $row;
 				}
 				$body = "<Br>
-							<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+							<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 								<tr>
-									<td width=\"160\" height=\"25\">&nbsp;$txt[31]</td>
-									<td width=\"100\" height=\"25\">&nbsp;$txt[86]</td>
+									<td height=\"25\">&nbsp;$txt[31]</td>
+									<td height=\"25\">&nbsp;$txt[86]</td>
 								</tr>
 							</table>
-							<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
+							<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
 				";
 				
 				// LIST!
@@ -2534,8 +2536,8 @@
 					// Put it into the $body variable
 					$body .= "
 							<tr>
-								<td width=\"160\" class=\"dark_row\">&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
-								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
+								<td class=\"dark_row\">&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
+								<td class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
                                                                 <a href=\"index.php?act=adminpanel&cp_page=rooms&invite=$link_url\">[Invita]</a>
                                                                 </td>
 							</tr>
@@ -2585,14 +2587,14 @@
 			}
 				
 			
-				$body .= "$txt[233]<Br><Br><table border=\"0\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"col_header\">
+				$body .= "$txt[233]<Br><Br><table width=\"95%\" border=\"0\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"col_header\">
 						<tr>
-							<td width=\"100\">$txt[224]</td>
-							<td width=\"110\">$txt[223]</td>
-							<td width=\"50\">$txt[225]</td>
+							<td >$txt[224]</td>
+							<td >$txt[223]</td>
+							<td >$txt[225]</td>
 						</tr>
 						</table>
-						<table border=\"0\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"inside_table\">";
+						<table border=\"0\" width=\"95%\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"inside_table\">";
 				
 				// Get the ban records
 				$query = $db->DoQuery("SELECT * FROM {$prefix}banned WHERE room='*'");
@@ -2605,9 +2607,9 @@
 					
 				
 					$body .= "<tr>
-								<td width=\"100\" class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=ban&subact=unban&banid=$row[0]\">$row[2]</a></td>
-								<td width=\"110\" class=\"dark_row\">$row[5]</td>
-								<td width=\"50\" class=\"dark_row\" style=\"text-align: center\">$length</td>
+								<td class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=ban&subact=unban&banid=$row[0]\">$row[2]</a></td>
+								<td class=\"dark_row\">$row[5]</td>
+								<td class=\"dark_row\" style=\"text-align: center\">$length</td>
 							</tr>";
 				}
 							
@@ -2863,14 +2865,14 @@
 				include("./lib/rooms.php");
 				$rooms = list_rooms();
 				$body .= "<Br>
-							<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+							<table align=\"center\"  width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 								<tr>
-									<td width=\"120\" height=\"25\">&nbsp;$txt[31]</td>
-									<td width=\"70\" height=\"25\">$txt[482]</td>
-									<td width=\"80\" height=\"25\">$txt[86]</td>
+									<td height=\"25\">&nbsp;$txt[31]</td>
+									<td height=\"25\">$txt[482]</td>
+									<td height=\"25\">$txt[86]</td>
 								</tr>
 							</table>
-							<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
+							<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
 				";
 
 				// LIST!
@@ -2889,9 +2891,9 @@
 					// Put it into the $body variable
 					$body .= "
 							<tr>
-								<td width=\"120\">&nbsp;<a href=\"#\" onClick=\"javascript: window.opener.location.href='index.php?act=frame&room=$link_url'; window.opener.focus();\">$room_info[5]</a></td>
-								<td width=\"70\">$log</td>
-								<td width=\"80\"><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
+								<td>&nbsp;<a href=\"#\" onClick=\"javascript: window.opener.location.href='index.php?act=frame&room=$link_url'; window.opener.focus();\">$room_info[5]</a></td>
+								<td>$log</td>
+								<td><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
 							</tr>
 					";
 				}
@@ -2972,14 +2974,14 @@
 			// Show all events
 			$query = $db->DoQuery("SELECT * FROM {$prefix}events");
 			$body .= "<Br>
-					<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\" class=\"col_header\">
+					<table align=\"center\" width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\" class=\"col_header\">
 						<tr>
-							<td width=\"135\" height=\"25\">&nbsp;$txt[488]</td>
-							<td width=\"70\" height=\"25\">$txt[180]</td>
-							<td width=\"70\" height=\"25\">$txt[86]</td>
+							<td height=\"25\">&nbsp;$txt[488]</td>
+							<td height=\"25\">$txt[180]</td>
+							<td height=\"25\">$txt[86]</td>
 						</tr>
 					</table>
-					<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\" class=\"inside_table\">";
+					<table align=\"center\" width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\" class=\"inside_table\">";
 			while($row = $db->Do_Fetch_Row($query)){
 			
 				// Only display a preview of the actual event
@@ -2990,9 +2992,9 @@
 				$time = mktime(0,0,0,date("m",$row[1]),date("d",$row[1]),date("Y",$row[1]));
 					
 				$body .= "<tr>
-							<td class=\"dark_row\" width=\"135\"><a href=\"#\" onClick=\"javascript: window.open('./index.php?act=sm_window&page=event&day=$time','','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_small_width']},height={$x7c->settings['tweak_window_small_height']}');\">$row[2]</a></td>
-							<td class=\"dark_row\" width=\"70\">".date($x7c->settings['date_format_full'],$row[1])."</td>
-							<td class=\"dark_row\" width=\"70\"><a href=\"index.php?act=adminpanel&cp_page=events&delete=$row[0]\">[$txt[175]]</a><Br><a href=\"index.php?act=adminpanel&cp_page=events&edit=$row[0]\">[$txt[459]]</a></td>
+							<td class=\"dark_row\"><a href=\"#\" onClick=\"javascript: window.open('./index.php?act=sm_window&page=event&day=$time','','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_small_width']},height={$x7c->settings['tweak_window_small_height']}');\">$row[2]</a></td>
+							<td class=\"dark_row\">".date($x7c->settings['date_format_full'],$row[1])."</td>
+							<td class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=events&delete=$row[0]\">[$txt[175]]</a><Br><a href=\"index.php?act=adminpanel&cp_page=events&edit=$row[0]\">[$txt[459]]</a></td>
 						</tr>";
 			
 			}
@@ -3610,7 +3612,7 @@
 							</table>
 						</td>
 						<Td width=\"5\" class=\"ucp_divider\">&nbsp;</td>
-						<td width=\"75%\" class=\"ucp_bodycell\">$body</td>
+						<td width=\"100%\" class=\"ucp_bodycell\">$body</td>
 					</tr>
 				</table>
 				</div>";
