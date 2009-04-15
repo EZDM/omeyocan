@@ -55,7 +55,7 @@
 		global $X7CHATVERSION, $x7p, $x7s, $print, $db, $txt, $x7c, $prefix, $X7CHAT_CONFIG, $g_default_settings;
 
 		$head = $txt[37];
-		$body = $txt[306]."<Br><Br><div align=\"center\"><a href=\"http://x7chat.com/download.php\"><img border=\"0\" src=\"http://x7chat.com/rss/updates.php?version=$X7CHATVERSION\"></a></div>";
+		$body = "<h2 style=\"text-align: center;\">Pannello di amministrazione</h2>";
 
 		// Set these so it doesn't complain, all admins have access to these pages
 		$x7c->permissions["admin_main"] = 1;
@@ -1862,7 +1862,7 @@
 						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 							<tr>
 								<td height=\"25\">&nbsp;$txt[123]</td>
-								<td height=\"25\">$txt[86]</td>
+								<td width=\"33%\" height=\"25\">$txt[86]</td>
 							</tr>
 						</table>
 						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
@@ -1870,13 +1870,15 @@
 					// Display a table of groups with actions
 					foreach($groups as $key=>$group){
 						$body .= "<Tr>
-									<td class=\"dark_row\">&nbsp;$group</td>
-									<td class=\"dark_row\">
+									<td>&nbsp;$group</td>
+									<td width=\"33%\">
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&view=$group\">[$txt[413]]</a>
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&delete=$group\">[$txt[175]]</a>
 									<a href=\"index.php?act=adminpanel&cp_page=groupmanager&edit=$group\">[$txt[139]]</a>
 									</td>
-								</tr>";
+								</tr>
+                                                          <tr><td colspan=\"2\"><hr></tr>
+                                                                ";
 					}
 						
 					$body .= "</table><Br><br>
@@ -2346,7 +2348,7 @@
 				// Display all users
                                 $body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
 						<form action=\"index.php?act=adminpanel&cp_page=users\" method=\"post\" name=\"quicke\">
-						<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
 								<td>$txt[2]: </td>
 								<td><input type=\"text\" name=\"user\" class=\"text_input\"></td>
@@ -2356,7 +2358,8 @@
 						</form>
 						<Br>";
 
-                                $body .= "  <a href=\"index.php?act=adminpanel&cp_page=users&letter=a\">[a]</a>
+                                $body .= " <p style=\"text-align: center;\">
+                                            <a href=\"index.php?act=adminpanel&cp_page=users&letter=a\">[a]</a>
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=b\">[b]</a>
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=c\">[c]</a>
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=d\">[d]</a>
@@ -2382,12 +2385,13 @@
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=x\">[x]</a>
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=y\">[y]</a>
                                             <a href=\"index.php?act=adminpanel&cp_page=users&letter=z\">[z]</a>
+                                          </p>
                                           ";
 				
 				$body.="		<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 							<tr>
-								<td height=\"25\">&nbsp;$txt[2]</td>
-								<td height=\"25\">$txt[123]</td>
+								<td width=\"33%\" height=\"25\">&nbsp;$txt[2]</td>
+								<td width=\"33%\" height=\"25\">$txt[123]</td>
 								<td height=\"25\">$txt[86]</td>
 							</tr>
 						</table>";
@@ -2410,8 +2414,8 @@
 				while(($row = $db->Do_Fetch_Row($query))){
 				
 					$body .= "<tr>
-							<td><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
-							<td>$row[10]</td>
+							<td width=\"33%\" ><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
+							<td width=\"33%\">$row[10]</td>
 							<td><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
 							
 						</tr>
@@ -2515,7 +2519,7 @@
 							<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 								<tr>
 									<td height=\"25\">&nbsp;$txt[31]</td>
-									<td height=\"25\">&nbsp;$txt[86]</td>
+									<td width=\"33%\" height=\"25\">&nbsp;$txt[86]</td>
 								</tr>
 							</table>
 							<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
@@ -2536,11 +2540,12 @@
 					// Put it into the $body variable
 					$body .= "
 							<tr>
-								<td class=\"dark_row\">&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
-								<td class=\"dark_row\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
+								<td>&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
+								<td width=\"33%\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
                                                                 <a href=\"index.php?act=adminpanel&cp_page=rooms&invite=$link_url\">[Invita]</a>
                                                                 </td>
 							</tr>
+							<tr><td colspan=\"3\"><hr></td></tr>
 					";
 				}
 				
@@ -2868,8 +2873,8 @@
 							<table align=\"center\"  width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 								<tr>
 									<td height=\"25\">&nbsp;$txt[31]</td>
-									<td height=\"25\">$txt[482]</td>
-									<td height=\"25\">$txt[86]</td>
+									<td width=\"33%\" height=\"25\">$txt[482]</td>
+									<td width=\"33%\" height=\"25\">$txt[86]</td>
 								</tr>
 							</table>
 							<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
@@ -2892,9 +2897,10 @@
 					$body .= "
 							<tr>
 								<td>&nbsp;<a href=\"#\" onClick=\"javascript: window.opener.location.href='index.php?act=frame&room=$link_url'; window.opener.focus();\">$room_info[5]</a></td>
-								<td>$log</td>
-								<td><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
+								<td width=\"33%\">$log</td>
+								<td width=\"33%\"><a href=\"index.php?act=roomcp&cp_page=logs&room=$link_url\">$txt[483]</a></td>
 							</tr>
+							<tr><td colspan=\"3\"><hr></td></tr>
 					";
 				}
 
@@ -3579,11 +3585,11 @@
 
 					if($_GET['cp_page'] == $id)
 						return "<tr>
-									<td width=\"100%\" class=\"ucp_sell\">$txt</td>
+									<td class=\"ucp_sell\">$txt</td>
 								</tr>";
 					else
 						return  "<tr>
-									<td width=\"100%\" class=\"ucp_cell\" onMouseOver=\"javascript: this.className='ucp_sell'\" onMouseOut=\"javascript: this.className='ucp_cell'\"  onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=$id'\">$txt</td>
+									<td class=\"ucp_cell\" onMouseOver=\"javascript: this.className='ucp_sell'\" onMouseOut=\"javascript: this.className='ucp_cell'\"  onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=$id'\">$txt</td>
 								</tr>";
 				}
 
@@ -3593,8 +3599,8 @@
 			$cbody = "<div align=\"center\">
 				<table border=\"0\" width=\"95%\" class=\"ucp_table\" cellspacing=\"0\" cellpadding=\"0\">
 					<tr valign=\"top\">
-						<td width=\"25%\" height=\"100%\">
-							<table class=\"ucp_table2\" height=\"100%\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
+						<td width=\"20%\" height=\"100%\">
+							<table width=\"100%\" class=\"ucp_table2\" height=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 								".printlink("main",$txt[137])."
 								".printlink("settings",$txt[139])."
 								".printlink("groupmanager",$txt[309])."
@@ -3607,12 +3613,12 @@
 								".printlink("alarms","Allarmi")."
 								".printlink("objects","Oggetti")."
 								<tr valign=\"top\">
-									<td width=\"100%\" class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
+									<td class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
 								</tr>
 							</table>
 						</td>
 						<Td width=\"5\" class=\"ucp_divider\">&nbsp;</td>
-						<td width=\"100%\" class=\"ucp_bodycell\">$body</td>
+						<td class=\"ucp_bodycell\">$body</td>
 					</tr>
 				</table>
 				</div>";

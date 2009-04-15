@@ -70,6 +70,8 @@
 		if($_GET['cp_page'] == "main"){
 			// The main CP -- hmm, duh
 			// Nothing needs done here
+
+			$body="<a href=\"index.php?act=admincp\">Vai al pannello di amministrazione generale</a>";
 		}elseif($_GET['cp_page'] == "settings"){
 		
 			$head = $txt[218];
@@ -93,32 +95,32 @@
 					$def['panic_free'] = "";
 
 				$body = "<Br><Br><form action=\"index.php?act=roomcp&cp_page=settings&room=$_GET[room]\" method=\"post\">
-				<table align=\"center\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">
+				<table width=\"100%\" align=\"center\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">
 					<tr>
-						<td width=\"90\">Descrizione:</td>
-						<td width=\"100\"><textarea class=\"text_input\" name=\"topic\">{$x7c->room_data['topic']}</textarea></td>
+						<td width=\"33%\">Descrizione:</td>
+ 						<td ><textarea class=\"text_input\" name=\"topic\" style=\"width: 100%; height: 200px\">{$x7c->room_data['topic']}</textarea></td>
 					</tr>
 					<tr>
-						<td width=\"90\">$txt[66]:</td>
-						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\" autocomplete=\"off\"></td>
+						<td>$txt[66]:</td>
+						<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\" autocomplete=\"off\"></td>
 					</tr>
 					<tr>
-						<td width=\"90\">$txt[3]:</td>
-						<td width=\"100\"><input type=\"password\" class=\"text_input\" name=\"password\" autocomplete=\"off\" value=\"{$x7c->room_data['password']}\"></td>
+						<td>$txt[3]:</td>
+						<td><input type=\"password\" class=\"text_input\" style=\"width: 100%;\"  name=\"password\" autocomplete=\"off\" value=\"{$x7c->room_data['password']}\"></td>
 					</tr>
 					<tr>
-						<td width=\"90\">$txt[67]:</td>
-						<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"max_users\" value=\"{$x7c->room_data['maxusers']}\"></td>
+						<td>$txt[67]:</td>
+						<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\" name=\"max_users\" value=\"{$x7c->room_data['maxusers']}\"></td>
 					</tr>
-                                        <td width=\"90\">Nome lungo:</td>
-								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"long_name\" value=\"{$x7c->room_data['long_name']}\"></td>
+                                        <td>Nome lungo:</td>
+								<td width=\"100\"><input type=\"text\" style=\"width: 100%;\" class=\"text_input\" name=\"long_name\" value=\"{$x7c->room_data['long_name']}\"></td>
 					";
 				
 				if($x7c->permissions['set_background'] == 1 && $x7c->settings['enable_roombgs'] == 1){
 					
 					$body .= "<tr>
-								<td width=\"90\">Immagine per la descrizione:</font></td>
-								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"rm_bg\" value=\"{$x7c->room_data['background']}\"></td>
+								<td>Immagine per la descrizione:</font></td>
+								<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\"  name=\"rm_bg\" value=\"{$x7c->room_data['background']}\"></td>
 							</tr>";
 					
 				}
@@ -126,8 +128,8 @@
 				if($x7c->permissions['set_logo'] == 1 && $x7c->settings['enable_roomlogo'] == 1){
 					
 					$body .= "<tr>
-								<td width=\"90\">Immagine polaroid:</td>
-								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"rm_logo\" value=\"{$x7c->room_data['logo']}\"></td>
+								<td>Immagine polaroid:</td>
+								<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\"  name=\"rm_logo\" value=\"{$x7c->room_data['logo']}\"></td>
 							</tr>";
 					
 				}
@@ -145,28 +147,28 @@
 					$type_options .= "<option value=\"2\"$def[private]>$txt[69]</option>";
 
 				$body .= "<tr>
-							<td width=\"90\">$txt[64]:</td>
-							<td width=\"100\"><select class=\"text_input\" style=\"width: 100px;\" name=\"room_type\">$type_options</select></td>
+							<td>$txt[64]:</td>
+							<td><select class=\"text_input\" style=\"width: 100px;\" name=\"room_type\">$type_options</select></td>
 						</tr>";
 
 				if($x7c->permissions['make_mod'] == 1)
 					$body .= "<tr>
-								<td width=\"90\">$txt[70]:</td>
-								<td width=\"100\"><input type=\"checkbox\" name=\"moderated\" value=\"1\"{$def['moderated']}></td>
+								<td>$txt[70]:</td>
+								<td><input type=\"checkbox\" name=\"moderated\" value=\"1\"{$def['moderated']}></td>
 							</tr>";
 
 				if($x7c->permissions['make_nexp'] == 1)
 					$body .= "<tr>
-								<td width=\"90\">$txt[71]:</td>
-								<td width=\"100\"><input type=\"checkbox\" name=\"neverexpire\" value=\"1\"{$def['neverexpire']}></td>
+								<td>$txt[71]:</td>
+								<td><input type=\"checkbox\" name=\"neverexpire\" value=\"1\"{$def['neverexpire']}></td>
 							</tr>";
 				$body .= "<tr>
-								<td width=\"90\">Non &egrave; affetta dal panico:</td>
-								<td width=\"100\"><input type=\"checkbox\" name=\"panic_free\" value=\"1\"{$def['panic_free']}></td>
+								<td>Non &egrave; affetta dal panico:</td>
+								<td><input type=\"checkbox\" name=\"panic_free\" value=\"1\"{$def['panic_free']}></td>
 						</tr>";
 						
 				$body .= "<tr>
-							<td width=\"190\" colspan=\"2\"><Br><div align=\"center\"><input type=\"submit\" class=\"text_input\" value=\"$txt[187]\"></div></td>
+							<td colspan=\"2\"><Br><div align=\"center\"><input type=\"submit\" class=\"text_input\" value=\"$txt[187]\"></div></td>
 						</tr></form></table>";
 
 			}else{
@@ -664,22 +666,27 @@
 		$cbody = "<div align=\"center\">
 			<table border=\"0\" width=\"95%\" class=\"ucp_table\" cellspacing=\"0\" cellpadding=\"0\">
 				<tr valign=\"top\">
-					<td width=\"25%\" height=\"100%\">
+					<td width=\"20%\" height=\"100%\">
 						<table class=\"ucp_table2\" height=\"100%\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
 								<td width=\"100%\"".whatsmyclass("main").">$txt[137]</td>
 							</tr>
 							<tr>
 								<td width=\"100%\"".whatsmyclass("settings").">$txt[218]</td>
-							</tr>
+							</tr>";
+
+							/*
+
 							<tr>
 								<td width=\"100%\"".whatsmyclass("blocklist").">$txt[141]</td>
 							</tr>
 							<tr>
 								<td width=\"100%\"".whatsmyclass("filter").">$txt[143]</td>
-							</tr>";
+							</tr>
+
+							*/
 							
-			if($x7c->permissions['use_keywords'] == 1)
+			/*if($x7c->permissions['use_keywords'] == 1)
 				$cbody .= "<tr>
 								<td width=\"100%\"".whatsmyclass("kwds").">$txt[144]</td>
 							</tr>";
@@ -692,7 +699,7 @@
 							<tr>
 								<td width=\"100%\"".whatsmyclass("mutes").">$txt[221]</td>
 							</tr>";
-							
+			*/				
 		if($x7c->permissions['access_room_logs'] == 1)
 			$cbody .= "			<tr>
 									<td width=\"100%\"".whatsmyclass("logs").">$txt[240]</td>
@@ -712,7 +719,7 @@
 						"</table>
 					</td>
 					<Td width=\"5\" class=\"ucp_divider\">&nbsp;</td>
-					<td width=\"75%\" class=\"ucp_bodycell\">$body</td>
+					<td class=\"ucp_bodycell\">$body</td>
 				</tr>
 			</table>
 			</div>";
