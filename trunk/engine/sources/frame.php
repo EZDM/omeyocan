@@ -369,7 +369,7 @@
 
                                                 $gif="";
                                                 if(isset($gifs[strtolower($row[0])]) && $gifs[strtolower($row[0])]!=""){
-                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: middle\"> ";
+                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: bottom\"> ";
                                                 }
 
                                                 $toout='';
