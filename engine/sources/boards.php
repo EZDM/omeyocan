@@ -832,7 +832,7 @@
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
 			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
                         }
-                        if(checkIfMaster())
+                        if(checkIfMaster()){
 				$body .=" <a href=\"\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=".$msgid."')\">[Delete]</a>";
 			}
 
