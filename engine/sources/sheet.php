@@ -1200,7 +1200,7 @@
 				if($row_user['info']!="Morto"){
 				        $body .= "<script language=\"javascript\" type=\"text/javascript\">
                                                     function do_kill(){
-                                                          if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+                                                          if(!confirm('vuoi davvero uccidere il personaggio?'))
                                                                   return;
                                                           window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg';
                                                     }

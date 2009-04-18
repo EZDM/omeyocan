@@ -234,7 +234,10 @@
 		$board['readonly']=$row['readonly'];
 				
 		//Master can delete all messages... other can delete only their own messages
-		if((checkAuth($board['id']) && !$board['readonly'] && $x7s->username == $user )|| checkIfMaster()){
+		//if((checkAuth($board['id']) && !$board['readonly'] && $x7s->username == $user )|| checkIfMaster()){
+
+		//Only master cann delete
+		if(checkIfMaster()){
 			
 			//All the conversation.. we are deleting the head message
 			if($father==0)
@@ -606,7 +609,15 @@
 		global $print, $x7s, $db, $prefix;
 
 		$head="Board ".$board['name'];
-		$body='';
+		$body="<script language=\"javascript\" type=\"text/javascript\">
+                            function do_delete(url){
+                                  if(!confirm('Vuoi davvero cancellare il messaggio?'))
+                                        return;
+
+                                  window.location.href=url;
+                            }
+                      </script>
+		";
 		$indice = indice_board();
 		
 		$maxmsg=10;
@@ -673,8 +684,9 @@
 			$body.="<p>".$row['user']."<br><a href=./index.php?act=boards&board=".$board['id']."&message=".$row['id'].">
 				 <b>".$object."</b> ".$unread."</a>";
 				
-			if($user == $x7s->username || checkIfMaster()){
-				$body.=" <a href=./index.php?act=boards&delete=$msgid>[Delete]</a>";
+			//if($user == $x7s->username || checkIfMaster()){
+			if(checkIfMaster()){
+				$body.=" <a href=\"#\" onClick=\"javascript: do_delete(\'./index.php?act=boards&delete=$msgid')\">[Delete]</a>";
 				$body.=" <a href=./index.php?act=boards&move=$msgid>[Sposta]</a>";
                         }
 			
