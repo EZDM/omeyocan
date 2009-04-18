@@ -708,7 +708,15 @@
 	//This function show a conversation
 	function show_single_message($id, $board){
 		global $print, $x7s, $db, $prefix;
-		$body='';
+		$body="<script language=\"javascript\" type=\"text/javascript\">
+                            function do_delete(url){
+                                  if(!confirm('Vuoi davvero cancellare il messaggio?'))
+                                        return;
+
+                                  window.location.href=url;
+                            }
+                      </script>
+		";
 		$indice=indice_board();
 		$maxmsg=10;
 		$navigator='';
@@ -791,7 +799,9 @@
 			
 		if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
                         $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
-                        $body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
+                }
+                if(checkIfMaster()){
+                        $body .=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=".$msgid."')\">[Delete]</a>";
 		}
 
 		$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
@@ -821,7 +831,9 @@
 			$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
 			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
-				$body .=" <a href=./index.php?act=boards&delete=".$msgid.">[Delete]</a>";
+                        }
+                        if(checkIfMaster())
+				$body .=" <a href=\"\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=".$msgid."')\">[Delete]</a>";
 			}
 
 		        $msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);	
