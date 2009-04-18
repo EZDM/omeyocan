@@ -466,6 +466,12 @@
 				top: 70px;
 				left: 20px;
 			}
+
+			#invisible_master{
+				position: absolute;
+				top: 90px;
+				left: 20px;
+			}
 			
 			#cmddiv {
 				position: absolute;

@@ -66,6 +66,7 @@
 		var $talk;
 		var $resurgo;
 		var $status;
+		var $invisible;
 		
 		// Create a new session
 		function session(){
