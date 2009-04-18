@@ -200,11 +200,8 @@
                                         if($x7c->permissions['admin_panic']){
                                           $position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
                                         }
-                                        else if($row['type']!=2 || $row['username']==$x7s->username){//We do not show position in private chat
-					   $position = $row['long_name'];
-                                        }
                                         else{
-                                            $position = "Mappa";
+					   $position = $row['long_name'];
                                         }
                                 }
 				else if($row['position']=="Mappa")
