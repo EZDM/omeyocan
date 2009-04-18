@@ -215,7 +215,7 @@
 			if($x7c->permissions['c_invisible'] == 1)
 				$invis = "";
 			else
-				$invis = "AND invisible<>'1' ";
+				$invis = "AND o.invisible<>'1' ";
 
 			// Force online_time to be above the max refresh rate
 			if($x7c->settings['online_time']*1000 < $x7c->settings['max_refresh'])
@@ -583,7 +583,7 @@
 			if($x7c->permissions['c_invisible'] == 1)
 				$invis = "";
 			else
-				$invis = "AND invisible<>'1' ";
+				$invis = "AND o.invisible<>'1' ";
 			
 			$total = 0;	
 			$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}online o, {$prefix}users u WHERE o.room='$_GET[room]' AND u.username=o.name {$invis}ORDER BY o.name ASC");
