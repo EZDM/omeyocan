@@ -150,6 +150,23 @@
 	}
 
 	switch($_GET['frame']){
+                case "invisibility":
+                        header("Content-type: text/plain; charset=UTF-8");
+			header("Cache-Control: no-cache");
+			header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
+
+                        if($x7c->permissions['admin_panic']){
+                                $query=$db->DoQuery("SELECT invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
+                                $row=$db->Do_Fetch_Assoc($query);
+
+                                if(!$row)
+                                    die('Invisibility: Inconsistenza');
+
+                                $new_invisible=!$row['invisible'];
+
+                                $db->DoQuery("UPDATE {$prefix}users SET invisible='$new_invisible' WHERE username='{$x7s->username}'");
+                        }
+		break;	
 		case "update":
 		
 			// Make sure they are not trying to cache this page
@@ -886,6 +903,42 @@
 							httpReq1.send("");
 							Alert("Messaggio cancellato");
 						}
+
+                                                invisible=<?PHP echo $x7s->invisible ?>;
+                                                function switch_invisibility(){
+                                                  jd=new Date();
+                                                  nocache = jd.getTime();
+                                                  url = './index.php?act=frame&frame=invisibility&room=<?PHP echo $x7c->room_name; ?>';
+                                                  if(invisible){
+                                                        document.getElementById('invisible_link').innerHTML='[Diventa invisibile]';
+                                                  }
+                                                  else{
+                                                        document.getElementById('invisible_link').innerHTML='[Diventa visibile]';
+                                                  }
+
+                                                  invisible=!invisible;
+                                                  
+                                                  if(window.XMLHttpRequest){
+                                                    try {
+                                                      httpReq1 = new XMLHttpRequest();
+                                                    } catch(e) {
+                                                      httpReq1 = false;
+                                                    }
+                                                  }else if(window.ActiveXObject){
+                                                    try{
+                                                      httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
+                                                    }catch(e){
+                                                      try{
+                                                        httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
+                                                      }catch(e){
+                                                        httpReq1 = false;
+                                                      }
+                                                    }
+                                                  }
+                                                  httpReq1.onreadystatechange = requestReady_channel1;
+                                                  httpReq1.open("GET", url, true);
+                                                  httpReq1.send("");
+                                                }
 						
 
 					</script>
@@ -1088,7 +1141,13 @@
 	}
 
 	if($x7c->permissions['admin_panic']){
-		echo '<div id="clean_chat"><a onClick="javascript: do_delete(\'all\')">[Pulisci chats]</a></div>';
+                if($x7s->invisible)
+                    $inv_txt="[Diventa visibile]";
+                else
+                    $inv_txt="[Diventa invisibile]";
+                                                
+		echo '<div id="clean_chat"><a onClick="javascript: do_delete(\'all\')">[Pulisci chats]</a></div>
+                      <div id="invisible_master"><a id="invisible_link" onClick="javascript: switch_invisibility()">'.$inv_txt.'</a></div>';
 	}
 
 ?>

@@ -132,7 +132,8 @@
                     $get_room="&room=$room";
                     
 		
-		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic FROM {$prefix}users u,
+		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,invisible
+                                          FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
@@ -212,7 +213,10 @@
 					$position = "&nbsp;";
 
                                 //For Quest buster
-                                if($row['admin_panic'] && !$x7c->permissions['admin_panic']){
+                                if($position != "&nbsp;" &&
+                                    $row['admin_panic'] &&
+                                    $row['invisible'] &&
+                                    !$x7c->permissions['admin_panic']){
                                             $position = "Ovunque";
                                 }
 				
