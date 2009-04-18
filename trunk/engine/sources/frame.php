@@ -156,15 +156,15 @@
 			header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
 
                         if($x7c->permissions['admin_panic']){
-                                $query=$db->DoQuery("SELECT invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
+                                $query=$db->DoQuery("SELECT m_invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
                                 $row=$db->Do_Fetch_Assoc($query);
 
                                 if(!$row)
                                     die('Invisibility: Inconsistenza');
 
-                                $new_invisible=!$row['invisible'];
+                                $new_invisible=!$row['m_invisible'];
 
-                                $db->DoQuery("UPDATE {$prefix}users SET invisible='$new_invisible' WHERE username='{$x7s->username}'");
+                                $db->DoQuery("UPDATE {$prefix}users SET m_invisible='$new_invisible' WHERE username='{$x7s->username}'");
                         }
 		break;	
 		case "update":
