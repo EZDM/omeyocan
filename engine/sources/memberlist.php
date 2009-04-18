@@ -132,7 +132,7 @@
                     $get_room="&room=$room";
                     
 		
-		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,invisible
+		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
