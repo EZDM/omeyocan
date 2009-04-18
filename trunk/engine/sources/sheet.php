@@ -1194,12 +1194,18 @@
 				";
 						
 				
-				
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">";
 
 				if($row_user['info']!="Morto"){
-				        $body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg'\" style=\"visibility: visible;\">";
+				        $body .= "<script language=\"javascript\" type=\"text/javascript\">
+                                                    function do_kill(){
+                                                          if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+                                                                  return;
+                                                          window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg';
+                                                    }
+				                  </script>";
+				        $body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi\" onClick=\"javascript: do_kill();\" style=\"visibility: visible;\">";
 				}
 				else{
 				        $body .= "<INPUT name=\"ress_button\" class=\"button\" type=\"button\" value=\"Resuscita\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg'\" style=\"visibility: visible;\">";
