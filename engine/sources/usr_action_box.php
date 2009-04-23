@@ -45,7 +45,7 @@
 		}elseif($_GET['action'] == "gop" && $x7c->permissions['room_operator'] == 1){
 			$user_info->give_ops();
 			$body = $txt[105];
-		}elseif($_GET['action'] == "dice" && $x7c->permissions['room_operator'] == 1){
+		}elseif($_GET['action'] == "dice" && $x7c->permissions['admin_panic'] == 1){
 			$form = $user_info->dice($user_info,$_GET['room']);
 			$body = "Effettua un tiro per <b>[".$user_info->user."]</b>:".$form;
 		}elseif($_GET['action'] == "top" && $x7c->permissions['room_operator'] == 1){
