@@ -25,7 +25,7 @@
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
 		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']}</title>";
 
-		srand(time()+microtime()/date("s"));
+		srand(time()+microtime()/(1+date("s")));
 		$i=rand(1,4);
 		
 		$mail_style = '

@@ -105,6 +105,13 @@
 				font-family: $data[FontFamily];
 				cursor: pointer;
 			}
+
+			.throw_eval{
+                                border: 1px solid;
+                                spacing: 0;
+                                text-align: center;
+                                font-weight: bold;
+			}
 			.menubar_hover {
 				color: $data[FontColor2];
 				background: url(./themes/$skin/button_over.gif);
