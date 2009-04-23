@@ -235,13 +235,72 @@
 		//Perform a roll for a user
 		function dice($user_info,$room){
 			global $db, $prefix;
+
+			$message='';
 			
 			if(isset($_POST['msg'])){
+                                $MAX_AB_RESULT=32;
+                                $MAX_CH_RESULT=22;
+                                $ab_eval=false;
+                                $ch_eval=false;
+                                
+                                $inv_cum_3d6[0]="100%";
+                                $inv_cum_3d6[1]="99%";
+                                $inv_cum_3d6[2]="98%";
+                                $inv_cum_3d6[3]="95%";
+                                $inv_cum_3d6[4]="90%";
+                                $inv_cum_3d6[5]="83%";
+                                $inv_cum_3d6[6]="74%";
+                                $inv_cum_3d6[7]="62%";
+                                $inv_cum_3d6[8]="50%";
+                                $inv_cum_3d6[9]="37%";
+                                $inv_cum_3d6[10]="25%";
+                                $inv_cum_3d6[11]="16%";
+                                $inv_cum_3d6[12]="9%";
+                                $inv_cum_3d6[13]="4%";
+                                $inv_cum_3d6[14]="2%";
+                                $inv_cum_3d6[15]="0%";
+
+                                $inv_cum_1d14[0]="100%";
+                                $inv_cum_1d14[1]="93%";
+                                $inv_cum_1d14[2]="86%";
+                                $inv_cum_1d14[3]="79%";
+                                $inv_cum_1d14[4]="71%";
+                                $inv_cum_1d14[5]="64%";
+                                $inv_cum_1d14[6]="57%";
+                                $inv_cum_1d14[7]="50%";
+                                $inv_cum_1d14[8]="43%";
+                                $inv_cum_1d14[9]="36%";
+                                $inv_cum_1d14[10]="28%";
+                                $inv_cum_1d14[11]="21%";
+                                $inv_cum_1d14[12]="14%";
+                                $inv_cum_1d14[13]="7%";
+                                $inv_cum_1d14[14]="0%";
+
+                                
+
+			
 				$action_regexp = "/§([^[:space:]]+)/i";
 				$message = $_POST['msg'];
-			
+
+
+                                $table_ability="<table cellspacing=0>";
+
+                                for($i=0; $i< $MAX_AB_RESULT; $i++){ // 31 is the possible max result
+                                    if($i < 11)
+                                          $action_msg="<span style=\"color: red;\">";
+                                    else if($i < 21)
+                                          $action_msg="<span style=\"color: orange;\">";
+                                    else
+                                          $action_msg="<span style=\"color: green;\">";
+                                          
+                                    $table_ability_row[$i]="<tr><td class=\"throw_eval\">$action_msg $i</td>";
+                                }
+
+                                $table_ability_head="<tr><td class=\"throw_eval\" style=\"width:30px;\">Ris.</td>";
+                                
 				while(preg_match($action_regexp,$message, $action)){
-					srand(time()+microtime()/date("s"));
+					srand(time()+microtime()/(1+date("s")));
 										
 					$action_msg="";
 					$query = $db->DoQuery("SELECT a.name AS ab_name, ua.value AS ab_value, uc.value AS char_value
@@ -252,7 +311,30 @@
 							 	AND ua.username='$user_info->user' 
 							 	AND ua.ability_id='$action[1]'");
 			 
-					if($row = $db->Do_Fetch_Assoc($query)){					
+					if($row = $db->Do_Fetch_Assoc($query)){
+                                                $ab_eval=true;
+                                                 
+                                                $modifier=$row['ab_value']*2 + $row['char_value']/2;
+                                                $displacement = $modifier - 2;
+
+                                                $table_ability_head.="<td class=\"throw_eval\">$row[ab_name]</td>";
+                                                for($i=0; $i < $MAX_AB_RESULT; $i++){
+                                                    if($i < 11)
+                                                            $action_msg="<span style=\"color: red;\">";
+                                                    else if($i < 21)
+                                                            $action_msg="<span style=\"color: orange;\">";
+                                                    else
+                                                            $action_msg="<span style=\"color: green;\">";
+                                                            
+                                                    if($i < $displacement)
+                                                        $table_ability_row[$i].="<td class=\"throw_eval\">$action_msg 100%</span></td>";
+                                                    else if($i < $displacement+16)
+                                                        $table_ability_row[$i].="<td class=\"throw_eval\">$action_msg".$inv_cum_3d6[$i - $displacement]."</span></td>";
+                                                    else
+                                                        $table_ability_row[$i].="<td class=\"throw_eval\">$action_msg 0% </span></td>";
+                                                }
+                                                
+                                                
 						$roll = rand(1,6);
 						$roll += rand(1,6);
 						$roll += rand(1,6);
@@ -270,12 +352,36 @@
 					$message = preg_replace($action_regexp, $action_msg, $message, 1);
 				
 				}
+				$table_ability_head.="</tr>";
+				
+				$table_ability.=$table_ability_head;
+
+				for($i=0; $i < $MAX_AB_RESULT; $i++){
+                                        $table_ability_row[$i].="</tr>";
+                                        $table_ability.=$table_ability_row[$i];
+                                }
+				$table_ability.="</table>";
 			
 				//Perform characteristic
 				$charact_regexp = "/%([^[:space:]]+)/i";
-			
+
+				$table_char="<table cellspacing=0>";
+
+                                for($i=0; $i< $MAX_CH_RESULT; $i++){ // 31 is the possible max result
+                                    if($i < 7)
+                                          $action_msg="<span style=\"color: red;\">";
+                                    else if($i < 14)
+                                          $action_msg="<span style=\"color: orange;\">";
+                                    else
+                                          $action_msg="<span style=\"color: green;\">";
+                                          
+                                    $table_char_row[$i]="<tr><td class=\"throw_eval\">$action_msg $i</td>";
+                                }
+
+                                $table_char_head="<tr><td class=\"throw_eval\" style=\"width: 30px;\">Ris.</td>";
+
 				while(preg_match($charact_regexp,$message, $charact)){
-					srand(time()+microtime()/date("s"));
+					srand(time()+microtime()/(1+date("s")));
 										
 					$charact_msg="";
 					$query = $db->DoQuery("SELECT c.name AS ch_name, uc.value AS ch_value
@@ -284,9 +390,29 @@
 							 	AND uc.username='$user_info->user' 
 								 AND uc.charact_id='$charact[1]'");
 				 
-					if($row = $db->Do_Fetch_Assoc($query)){					
+					if($row = $db->Do_Fetch_Assoc($query)){
+                                                $ch_eval=true;
 						$roll = rand(1,14);
                                                 $result = floor($row['ch_value'] - $roll) + 10;
+
+                                                $displacement=$row['ch_value']-4;
+                                                
+                                                $table_char_head.="<td class=\"throw_eval\">$row[ch_name]</td>";
+                                                for($i=0; $i < $MAX_CH_RESULT; $i++){
+                                                    if($i < 7)
+                                                            $action_msg="<span style=\"color: red;\">";
+                                                    else if($i < 14)
+                                                            $action_msg="<span style=\"color: orange;\">";
+                                                    else
+                                                            $action_msg="<span style=\"color: green;\">";
+                                                            
+                                                    if($i < $displacement)
+                                                        $table_char_row[$i].="<td class=\"throw_eval\">$action_msg 100%</span></td>";
+                                                    else if($i < $displacement+14)
+                                                        $table_char_row[$i].="<td class=\"throw_eval\">$action_msg".$inv_cum_1d14[$i - $displacement]."</span></td>";
+                                                    else
+                                                        $table_char_row[$i].="<td class=\"throw_eval\">$action_msg 0% </span></td>";
+                                                }
 					
                                                 if($result < 7)
                                                         $charact_msg="<span class=\"roll_neg\">{".$row['ch_name']." ".$result."}</span>";
@@ -300,63 +426,105 @@
 					$message = preg_replace($charact_regexp, $charact_msg, $message, 1);
 				
 				}
-				$time = time();
-				$todb = "<span class=\"masterRoll\">Il master effettua un tiro per [".$user_info->user."]: </span>".$message."<br>";
-				$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','System','4','Master roll','$todb','$room','$time')");
-				return $message;
-			
-			}else{
-				$form = "
-				<script language=\"javascript\" type=\"text/javascript\">
-				function action_select(myaction){
-									if(myaction != \"\"){
-										document.masterRoll.msg.value = document.masterRoll.msg.value + myaction +\" \";
-									}
-									document.masterRoll.action.selectedIndex=0;
-									document.masterRoll.charact.selectedIndex=0;
-								}
-				</script>
+				$table_char_head.="</tr>";
 				
-				<form name=\"masterRoll\" method=\"post\" action=\"index.php?act=usr_action&action=dice&user=$user_info->user&room=$room\">
-						<select class=\"button\" name=\"action\" onChange=\"javascript: return 	action_select(this.options[this.selectedIndex].value);\">
-						<option value=\"\">Scelta Abilit&agrave;...</option>
-						<option value=\"\">------------------</option>";
-				$query = $db->DoQuery("SELECT a.id AS id, 
-								ua.value AS value, 
-								a.name AS name 
-								FROM {$prefix}userability ua, {$prefix}ability a
-								WHERE ua.ability_id=a.id
-							 	AND username='$user_info->user'
-							 	ORDER BY a.name");
-										 	
-				while($row = $db->Do_Fetch_Assoc($query)){
-					$form .= "<option value=\"§".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
+				$table_char.=$table_char_head;
+
+				for($i=0; $i < $MAX_CH_RESULT; $i++){
+                                        $table_char_row[$i].="</tr>";
+                                        $table_char.=$table_char_row[$i];
+                                }
+				$table_char.="</table>";
+				
+				$time = time();
+				$todb = "<span class=\"masterRoll\">Il master effettua un tiro per [".$user_info->user."]: </span>".$message."<br>";				
+
+				$message .="<br><br><a href=\"index.php?act=memberlist&room=$room\">[Torna alla lista presenti]</a>";
+
+				if(isset($_POST['perform'])){
+				        $db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','System','4','Master roll','$todb','$room','$time')");
+				        return $message;
 				}
-				$form .= "</select>\n";
-			
-				$form .= '<select class="button" name="charact" onChange="javascript: return action_select(this.options[this.selectedIndex].value);">
-													<option value="">Scelta Caratteristica...</option>
-													<option value="">------------------</option>';
-				$query = $db->DoQuery("SELECT c.id AS id, 
-							uc.value AS value, 
-							c.name AS name 
-							FROM {$prefix}usercharact uc, {$prefix}characteristic c
-							WHERE uc.charact_id=c.id
-							 AND username='$user_info->user'
-							 ORDER BY c.name");
-												 	
-				while($row = $db->Do_Fetch_Assoc($query)){
-					$form .= "<option value=\"%".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
+				else{
+                                        $message="";
+                                        if($ab_eval)
+                                                $message.="<h3>Possibilita' di successo abilita'</h3>".$table_ability;
+                                        if($ch_eval)
+                                                $message.="<h3>Possibilita' di successo caratteristiche</h3>".$table_char;
 				}
-				$form .= '</select>';
 			
-				$form .= "
-					<br>Tiri da effettuare:
-					<br><input class=\"button\" type=\"text\" name=\"msg\" size=40>
-					<br><input type=\"submit\" class=\"button\" value=\"Tira\">
-					</form>";
-				return $form;
 			}
+			
+                        $form = "
+                        <script language=\"javascript\" type=\"text/javascript\">
+                        function action_select(myaction){
+                                                                if(myaction != \"\"){
+                                                                        document.masterRoll.msg.value = document.masterRoll.msg.value + myaction +\" \";
+                                                                }
+                                                                document.masterRoll.action.selectedIndex=0;
+                                                                document.masterRoll.charact.selectedIndex=0;
+                                                        }
+                        </script>
+
+                        <form name=\"masterRoll\" method=\"post\" action=\"index.php?act=usr_action&action=dice&user=$user_info->user&room=$room\">";
+                                        
+
+                        $the_action="Valuta i tiri";
+                        if(!isset($_POST['msg'])){
+                                $form.="<select class=\"button\" name=\"action\" onChange=\"javascript: return 	action_select(this.options[this.selectedIndex].value);\">
+                                                <option value=\"\">Scelta Abilit&agrave;...</option>
+                                                <option value=\"\">------------------</option>";
+                                $query = $db->DoQuery("SELECT a.id AS id,
+                                                                ua.value AS value,
+                                                                a.name AS name
+                                                                FROM {$prefix}userability ua, {$prefix}ability a
+                                                                WHERE ua.ability_id=a.id
+                                                                AND username='$user_info->user'
+                                                                ORDER BY a.name");
+
+                                while($row = $db->Do_Fetch_Assoc($query)){
+                                        $form .= "<option value=\"§".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
+                                }
+                                $form .= "</select>\n";
+
+                                $form .= '<select class="button" name="charact" onChange="javascript: return action_select(this.options[this.selectedIndex].value);">
+                                                                                                        <option value="">Scelta Caratteristica...</option>
+                                                                                                        <option value="">------------------</option>';
+                                $query = $db->DoQuery("SELECT c.id AS id,
+                                                        uc.value AS value,
+                                                        c.name AS name
+                                                        FROM {$prefix}usercharact uc, {$prefix}characteristic c
+                                                        WHERE uc.charact_id=c.id
+                                                          AND username='$user_info->user'
+                                                          ORDER BY c.name");
+
+                                while($row = $db->Do_Fetch_Assoc($query)){
+                                        $form .= "<option value=\"%".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
+                                }
+
+                                $form .= "</select>
+                                          <br>Tiri da effettuare:
+                                          <br><input class=\"button\" type=\"text\" name=\"msg\" size=40>";
+                        }
+
+                        else{
+                                $form .= "<input type=\"hidden\" name=\"perform\" value=\"1\" />
+                                          <input type=\"hidden\" name=\"msg\" value=\"$_POST[msg]\" />";
+                        
+                                $the_action="Effettua i tiri";
+                        }
+                        
+                        $form .= "
+                                <br><input type=\"submit\" class=\"button\" value=\"$the_action\">
+                                </form>";
+
+                        $toout='';
+                        
+                        if(isset($_POST['msg']))
+                                $toout="<div style=\"background: black; border: black 1px solid; padding: 2px; overflow: auto; height: 300px; width: 100%\">$message </div>";
+
+                        $toout.=$form;
+                        return $toout;
 		}
 		
 		// Kick a user
