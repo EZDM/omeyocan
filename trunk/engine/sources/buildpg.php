@@ -262,7 +262,7 @@
 							$marr="Sposata";
 						
 
-                                        $pf = $char['rob'] * 2;
+                                        $pf = $_POST['rob'] * 2;
 					$db->DoQuery("UPDATE {$prefix}users SET
 								name='$_POST[name] $_POST[surname]',
 								age='$_POST[age]',
