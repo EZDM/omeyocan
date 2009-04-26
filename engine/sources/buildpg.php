@@ -262,12 +262,14 @@
 							$marr="Sposata";
 						
 
+                                        $pf = $char['rob'] * 2;
 					$db->DoQuery("UPDATE {$prefix}users SET
 								name='$_POST[name] $_POST[surname]',
 								age='$_POST[age]',
 								nat='$_POST[nat]',
 								marr='$marr',
-								gender='$_POST[gender]'
+								gender='$_POST[gender]',
+								status='$pf'
 								WHERE username='$pg'");
 
 					foreach($char as $cur){
