@@ -269,7 +269,7 @@
 								nat='$_POST[nat]',
 								marr='$marr',
 								gender='$_POST[gender]',
-								status='$pf'
+								info='$pf'
 								WHERE username='$pg'");
 
 					foreach($char as $cur){
