@@ -291,23 +291,29 @@
 		
 		$memberlist_style = '
 		<style type="text/css">
+			body{
+				margin: 0;
+				overflow: hidden;
+			}
+			
 			#member{
 				width: 450px;
 				height: 500px;
 				background-image:url('.$sfondo.');
 			}
-                        #navigator{
-                                position: relative;
-                                top: 10px;
-                                width: 100%;
-                                text-align: center;
-                                font-weight: bold;
-                                color: black;
-                        }
+            
+			#navigator{
+                position: relative;
+                top: 10px;
+                width: 100%;
+                text-align: center;
+                font-weight: bold;
+                color: black;
+           }
 
-                        #navigator a{
-                                color: black;
-                        }
+           #navigator a{
+                 color: black;
+           }
 			
 			.dark_row{
 				font-size: 10pt;
@@ -331,8 +337,8 @@
 				background: transparent;
 				margin-top: 10px;
     				border: 0;
-				border-top: solid 2px gray;
-				border-bottom: solid 2px gray;
+				//border-top: solid 2px gray;
+				//border-bottom: solid 2px gray;
 			}
 
 			a:hover{
@@ -345,8 +351,8 @@
 			}
 
 			#inner_member{
-				width: 99%;
-				height: 98%;
+				width: 440px;
+				height: 480px;
 				overflow: auto;
 			}
 
@@ -360,7 +366,7 @@
 		echo $memberlist_style;
 		
 		echo '</head><body>
- 			<div class="member" id="member">
+ 			<div id="member">
  				<div id="inner_member">
  			';
  			
