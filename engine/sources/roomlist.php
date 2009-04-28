@@ -127,7 +127,7 @@
   <!-- Pulsanti mappa -->
 	<a href="javascript: hndl = window.open('sources/sub_chiesa.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Chiesa');" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></a>
 
-	<?PHP //<a href="javascript: hndl = window.open('sources/sub_ospedale.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Ospedale');" style="position:absolute; top:358px; left:270px;" src="./graphic/pulsante.gif"></a>?>
+	<a href="javascript: hndl = window.open('sources/sub_ospedale.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Ospedale');" style="position:absolute; top:358px; left:270px;" src="./graphic/pulsante.gif"></a>
   
 	<A href="index.php?act=frame&room=Cimitero"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Cimitero');" style="position:absolute; top:520px; left:655px;" src="./graphic/pulsante.gif"></A>
 
@@ -374,10 +374,10 @@
                                                                                                         if(typeof bell.Play == 'function')
                                                                                                             bell.Play();
                                                                                                        
-                                                                                                        messaggio="Arriva l'oscurità";
+                                                                                                        messaggio="Arriva l'oscuritï¿½";
                                                                                                 }
 												else
-													messaggio="L'oscurità se ne va";
+													messaggio="L'oscuritï¿½ se ne va";
 												
 												alert(messaggio);
 												window.location.href = window.location.href;
