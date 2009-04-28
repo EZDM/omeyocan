@@ -102,7 +102,7 @@
 	function resurgo(){
               global $db, $prefix;
               $time = time();
-              $db->DoQuery("UPDATE {$prefix}users SET resurgo='0', talk='1', info='' WHERE resurgo<'$time' AND info='Morto'");
+              $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE u.username=uc.username AND charact_id='rob') WHERE resurgo<'$time' AND info='Morto'");
               
 	}
 	

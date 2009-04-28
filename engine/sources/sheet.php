@@ -821,7 +821,7 @@
                                 }
                                 else{
                                         $errore = "Resuscitato";
-                                        $db->DoQuery("UPDATE {$prefix}users SET talk='1', info='' WHERE username='$pg'");
+                                        $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
                                 }
 			}
 	
