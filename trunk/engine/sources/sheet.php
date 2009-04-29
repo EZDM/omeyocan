@@ -321,7 +321,7 @@
 		$body='';
 	
 		if(isset($_GET['settings_change']) && checkIfMaster()){
-			if(isset($_POST['master'])){
+			if(isset($_POST['master']) && isset($_POST['master_private'])){
 			
 				if($pg!=$x7s->username){
 					include('./lib/alarms.php');
@@ -329,11 +329,12 @@
 				}
 				
 				$master = eregi_replace("\n","<Br>",$_POST['master']);
-				$db->DoQuery("UPDATE {$prefix}users SET master='$master' WHERE username='$pg'");
+				$master_private = eregi_replace("\n","<Br>",$_POST['master_private']);
+				$db->DoQuery("UPDATE {$prefix}users SET master='$master', master_private='$master_private' WHERE username='$pg'");
 			}
 		}
 		
-		$query = $db->DoQuery("SELECT master FROM {$prefix}users WHERE username='$pg'");
+		$query = $db->DoQuery("SELECT master, master_private FROM {$prefix}users WHERE username='$pg'");
 		$row = $db->Do_Fetch_Assoc($query);
 		
 		if($row){
@@ -346,8 +347,10 @@
 						if(!mod){
 							mod=true;
 							document.forms[0].elements["master"].disabled=false;
-							
 							document.forms[0].elements["master"].style.border="1px solid";
+							
+							document.forms[0].elements["master_private"].disabled=false;
+							document.forms[0].elements["master_private"].style.border="1px solid";
 							
 							document.forms[0].elements["aggiorna"].style.visibility="visible";
 							document.forms[0].elements["mod_button"].style.visibility="hidden";
@@ -360,8 +363,10 @@
 				';
 				
 				$master = eregi_replace("<Br>","\n",$row['master']);
+				$master_private = eregi_replace("<Br>","\n",$row['master_private']);
 				
 				$body .= '<div class="indiv" id="master"><textarea name="master" id="master_text" class="sheet_text" autocomplete="off" disabled>'.$master.'</textarea></div>';
+				$body .= '<div class="indiv" id="master_private">Annotazioni private:<div class=\"inner_private\"><textarea name="master_private" id="master_private_text" class="sheet_text" autocomplete="off" disabled>'.$master_private.'</textarea></div></div>';
 				
 				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
 				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
@@ -370,8 +375,10 @@
 		
 			}
 			else{
-				$body .= '<div class="indiv" id="masterdiv">'.$row['master'].'</div>
-			';
+				$body .= '<div class="indiv" id="masterdiv">'.$row['master'].'</div>';
+				
+				if(checkIfMaster() || $x7s->username == $pg)
+					$body .= '<div class="indiv" id="masterdiv_private">Annotazioni private:<div class="inner_private">'.$row['master_private'].'</div></div>';
 			}
 	
 		}
@@ -814,8 +821,7 @@
                                                   $errore = "Ucciso e perso un punto in $row[name]";
                                         }
                                         else{
-                                        //TODO mortissimo!!
-                                                ;
+                                                $errore = "Ucciso $row[name], ma non aveva punti abilita' residui";
                                         }
                                         
                                 }
@@ -1649,21 +1655,42 @@
 				left: 30px;
 				width: 200px;
 				height: 250px;
-			}
-			#master{
+			}';
+			
+		
+		if(checkIfMaster() || $x7s->username==$pg){
+			echo'#master, #masterdiv{
 				top: 60px;
 				left: 50px;
 				width: 400px;
-				height: 550px;
+				height: 220px;
 			}
-			#masterdiv{
-				width: 400px;
-				height: 550px;
-				top: 60px;
+			
+			#master_private, #masterdiv_private{
+				top: 300px;
 				left: 50px;
+				width: 400px;
+				height: 220px;
+				overflow: hidden;
+			}
+			.inner_private{
+				height: 200px;
+				width: 400px;
 				overflow: auto;
 			}
-			#psico{
+			';
+		}
+		
+		else{
+			echo '#master, #masterdiv{
+				top: 60px;
+				left: 50px;
+				width: 400px;
+				height: 550px;
+			}';
+		}
+			
+		echo '#psico{
 				top: 370px;
 				left: 250px;
 				width: 200px;
@@ -1677,7 +1704,7 @@
 				color: black;
 				border: 0;
 				width: 98%;
-				height: 98%;
+				height: 90%;
 			}
 			.ab_text{
 				font-size: 8pt;
@@ -1871,7 +1898,8 @@
 				border: solid 1px;
 				overflow: auto;
 			}
-                        #modifiable2{
+            
+			#modifiable2{
 				position: absolute;
 				top: 0;
 				left: 0;
