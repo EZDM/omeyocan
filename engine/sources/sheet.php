@@ -368,8 +368,10 @@
 				$body .= '<div class="indiv" id="master"><textarea name="master" id="master_text" class="sheet_text" autocomplete="off" disabled>'.$master.'</textarea></div>';
 				$body .= '<div class="indiv" id="master_private">Annotazioni private:<div class=\"inner_private\"><textarea name="master_private" id="master_private_text" class="sheet_text" autocomplete="off" disabled>'.$master_private.'</textarea></div></div>';
 				
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
-				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
+				$body .= "<div id=\"modify\">
+								<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+								<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">		
+						</div>";
 				
 				$body .="</form>\n";
 		
@@ -456,8 +458,10 @@
 			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off">'.$row['psico'].'</textarea></div>
 			';
 			
-			$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
-				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div>";
+			$body .= "<div id=\"modify\">
+							<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+							<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">		
+					</div>";
 			}
 			else{				
 				$body .= '<div class="indiv" id="storia">'.eregi_replace("\n","<Br>",$row['storia']).'</div>
@@ -757,8 +761,8 @@
 
 			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
 				$body .= "<div id=\"modify\">
+                                                    <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
                                                     <INPUT id=\"aggiorna\" style=\"visibility: hidden;\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled>
-				                    <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
 				          </div></form>";
 			}
 			
@@ -786,6 +790,22 @@
 			$ok = true;
 			$char;
 
+			if(isset($_GET['daily_px']) && checkIfMaster()){
+				$query = $db->DoQuery("SELECT daily_px FROM {$prefix}users WHERE username='$pg'");
+				$row = $db->Do_Fetch_Assoc($query);
+
+				if(!$row)
+					die("Database error on daily_px");
+					
+				$time = time();
+				$day = date("j", $row['daily_px']);
+				if($row['daily_px'] < $time && $day != date("j", $time)){
+					$db->DoQuery("UPDATE {$prefix}users SET xp=xp+1, daily_px='$time' WHERE username='$pg'");
+					$errore = "PX Giornaliero assegnato correttamente";
+				}
+				else
+					$errore ="PX gironaliero gia' assegnato";
+			}
 			if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
 			       $pg=$_GET['pg'];
                                 
@@ -1193,15 +1213,22 @@
 					</div>
 					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
 					";
+										
+				$time = time();
+				$day=date("j", $row_user['daily_px']);
+				$extra='';
+				if( checkIfMaster() && $row_user['daily_px'] < $time && $day!=date("j", $time) ){
+					$extra= "<INPUT name=\"daily_px\" class=\"button\" type=\"button\" value=\"PX Giornaliero\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&daily_px=1&pg=$pg';\" style=\"visibility: visible;\">";
+				}
 					
 				$body.= "
 					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
-					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" value=\"$row_user[xp]\" size=\"10\" disabled /></div>
+					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
 				";
 						
 				
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
-				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">";
+				$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">";
 
 				if($row_user['info']!="Morto"){
 				        $body .= "<script language=\"javascript\" type=\"text/javascript\">
@@ -1264,8 +1291,8 @@
 				$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
 				$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
 				
-				$body .= "<div id=\"submit\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
-				<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
+				$body .= "<div id=\"modify\"><INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"></div>
+											<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\"></div></form>";
 			}
 		
 		$body .= "<div id=\"descr\"> </div>";
@@ -1537,7 +1564,7 @@
 				        $body .= "<div id=\"modify3\">";
       
 				$body .="<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
-                                              <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
+                           <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
 				</div>";
                 }
                 

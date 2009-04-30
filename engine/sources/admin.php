@@ -2132,47 +2132,69 @@
 			}
 			else if(!isset($_GET['proom'])){
 			
-				if(isset($_GET['startfrom'])){
-					$limit=$_GET['startfrom'];
-				}
-				else{
-					$limit=0;
-                                }
+				$letter='a%';
+				if(isset($_GET['letter']))
+					$letter=$_GET['letter']."%";									
 					
-				$maxmsg=20;
-				$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}objects WHERE owner=''");
-				$row = $db->Do_Fetch_Assoc($query);
-				$total = $row['total'];
-					
-				if($total > $maxmsg){
-					$i=0;
-					while($total > 0){
-						if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
-							$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
-						else
-							$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=objects&startfrom=$i\">".($i+1)."</a> ";
-						$i++;
-						$total -= $maxmsg;
-							
-					}
-					$navigator.="<br>";
-				}
-					
+				if(isset($_POST['letter']))
+					$letter="%".$_POST['letter']."%";
 						
-				$limit_min = $limit * $maxmsg;
-				$limit_max = (($limit+1) * $maxmsg);
-					
-				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' ORDER BY name LIMIT $limit_min, $limit_max");
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='' AND name LIKE '$letter' ORDER BY name");
 						
 				$body = $error."<br><br>";
-				$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=-1\">[Crea nuovo oggetto]</a><br><br>
-				<a href=\"index.php?act=adminpanel&cp_page=objects&proom=1\">[Crea stanza privata]</a><br><br>
-				";
-				$body .= $navigator;
-                                while($row = $db->Do_Fetch_Assoc($query)){
-					$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\"><b>Oggetto: </b> $row[name]</a> <a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a><br>";
+				$body .= "<div align=\"center\"><input type=\"submit\" value=\"Crea nuovo oggetto\" class=\"button\" onClick=\"javascript: window.location.href='index.php?act=adminpanel&cp_page=objects&edit=-1'\"> &nbsp;				
+							<input type=\"submit\" value=\"Crea stanza privata\" class=\"button\" onClick=\"javascript: window.location.href='index.php?act=adminpanel&cp_page=objects&proom=1'\"></div>";
+				
+				$body .= "<div align=\"center\"><br><b>Cerca oggetto</b></div><Br>
+						<form action=\"index.php?act=adminpanel&cp_page=objects\" method=\"post\" name=\"quicke\">
+						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<tr>
+								<td>Nome oggetto:</td>
+								<td><input type=\"text\" name=\"letter\" class=\"text_input\"></td>
+								<td><div align=\"center\"><input type=\"submit\" value=\"Cerca\" class=\"button\"></div></td>
+							</tr>
+						</table>
+						</form>";
+				
+				$body .= " <p style=\"text-align: center;\">
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=a\">[a]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=b\">[b]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=c\">[c]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=d\">[d]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=e\">[e]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=f\">[f]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=g\">[g]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=h\">[h]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=i\">[i]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=j\">[j]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=k\">[k]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=l\">[l]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=m\">[m]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=n\">[n]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=o\">[o]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=p\">[p]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=q\">[q]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=r\">[r]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=s\">[s]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=t\">[t]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=u\">[u]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=v\">[v]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=w\">[w]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=x\">[x]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=y\">[y]</a>
+                                            <a href=\"index.php?act=adminpanel&cp_page=objects&letter=z\">[z]</a>
+                                          </p>
+                                          ";
+				
+				$body.='<table width="100%">
+						<tr><td><b>Nome oggetto:</b></td><td style="width=10%"><b>Azioni</b></td></tr>
+						<tr><td colspan=2><hr></td></tr>';	
+                while($row = $db->Do_Fetch_Assoc($query)){
+						$body .= "<tr><td><a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">$row[name]</a></td><td style=\"width=10%\"><a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a></td></tr>
+									<tr><td colspan=2><hr></td></tr>";
 				}
-				$body .= $navigator;
+				$body.='</table>';
+				
 						
 				
 			}
@@ -2346,7 +2368,7 @@
 				}
 			}else{
 				// Display all users
-                                $body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
+                    $body = "<Br><div align=\"center\"><b>$txt[460]</b></div><Br>
 						<form action=\"index.php?act=adminpanel&cp_page=users\" method=\"post\" name=\"quicke\">
 						<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
