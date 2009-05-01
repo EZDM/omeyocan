@@ -798,8 +798,8 @@
 					die("Database error on daily_px");
 					
 				$time = time();
-				$day = date("j", $row['daily_px']);
-				if($row['daily_px'] < $time && $day != date("j", $time)){
+				$day = date("j/n/Y", $row['daily_px']);
+				if($row['daily_px'] < $time && $day != date("j/n/Y", $time)){
 					$db->DoQuery("UPDATE {$prefix}users SET xp=xp+1, daily_px='$time' WHERE username='$pg'");
 					$errore = "PX Giornaliero assegnato correttamente";
 				}
@@ -1215,9 +1215,10 @@
 					";
 										
 				$time = time();
-				$day=date("j", $row_user['daily_px']);
+				$day=date("j/n/Y", $row_user['daily_px']);
 				$extra='';
-				if( checkIfMaster() && $row_user['daily_px'] < $time && $day!=date("j", $time) ){
+				
+				if(checkIfMaster() && $row_user['daily_px'] < $time && $day!=date("j/n/Y", $time)){
 					$extra= "<INPUT name=\"daily_px\" class=\"button\" type=\"button\" value=\"PX Giornaliero\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&daily_px=1&pg=$pg';\" style=\"visibility: visible;\">";
 				}
 					
