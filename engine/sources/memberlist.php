@@ -290,6 +290,7 @@
 		$sfondo = './graphic/sfondopresenti.jpg';
 		
 		$memberlist_style = '
+		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
 			body{
 				margin: 0;
