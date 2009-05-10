@@ -29,6 +29,7 @@
 		$i=rand(1,4);
 		
 		$mail_style = '
+		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
                         body {
                             background: black;

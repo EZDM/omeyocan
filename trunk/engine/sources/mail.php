@@ -399,6 +399,7 @@
 	 		$sfondo="./graphic/sfondopostaobscure.jpg";
 		
 		$mail_style = '
+		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
 
 			/*

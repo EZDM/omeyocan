@@ -1640,6 +1640,7 @@
 		echo $print->ss_uc;
 		
 		echo '
+		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
 			INPUT{
 				height: 21px;
