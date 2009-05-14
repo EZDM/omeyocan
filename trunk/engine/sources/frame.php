@@ -969,11 +969,11 @@
 								
 								if(!message.match(/^@/) && !message.match(/^\*/)){
 									if(trim(message).length < <?PHP echo $x7c->settings['min_post'];?>){
-										Alert("Il post ï¿½ troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
+										Alert("Il post e' troppo corto - deve essere almeno <?PHP echo $x7c->settings['min_post'];?> caratteri");
 										return false;
 									}
 									if(trim(message).length > <?PHP echo $x7c->settings['max_post'];?>){
-										Alert("Il post ï¿½ troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
+										Alert("Il post e' troppo lungo - sono consentiti al max <?PHP echo $x7c->settings['max_post'];?> caratteri");
 										return false;
 									}
 								}
@@ -1216,7 +1216,7 @@
 												 ORDER BY a.name");
 												 	
 								 			while($row = $db->Do_Fetch_Assoc($query)){
-								 				$string = "<option value=\"ï¿½".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
+								 				$string = "<option value=\"§".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
 								 				echo $string;
 								 			}
 										?>
@@ -1253,7 +1253,7 @@
 												 	ORDER BY name");
 												 	
 								 			while($row = $db->Do_Fetch_Assoc($query)){
-								 				$string = "<option value=\"ï¿½".$row['id']."\">".$row['name']."</option>\n";
+								 				$string = "<option value=\"°".$row['id']."\">".$row['name']."</option>\n";
 												echo $string;
 											}
 										?>
