@@ -414,7 +414,8 @@
 		
 		//In this case the user want to send a message
 		$old_msg="";
-		$onsubmit=" onSubmit=\"document.msg.body.value=document.msg.body.value.replace(/\+/gi,'%2B'); \"";
+		//$onsubmit=" onSubmit=\"document.msg.body.value=document.msg.body.value.replace(/\+/gi,'%2B'); \"";
+		$onsubmit="";
 		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$head = "Nuova comunicazione su ".$board['name'];
 			$body .= "<div align=\"center\">
