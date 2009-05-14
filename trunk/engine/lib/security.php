@@ -53,6 +53,7 @@
 			$value = preg_replace("/>/i","&gt;",$value);
 			$value = preg_replace("/'/i","&#039;",$value);
 			$value = preg_replace("/\"/i","&quot;",$value);
+			$value = preg_replace("/\+/i","%2B",$value);
 			
 			$_POST[$name] = $value;
 		}
@@ -66,6 +67,7 @@
 			$value = preg_replace("/>/i","&gt;",$value);
 			$value = preg_replace("/'/i","&#039;",$value);
 			$value = preg_replace("/\"/i","&quot;",$value);
+			$value = preg_replace("/\+/i","%2B",$value);
 			$_GET[$name] = $value;
 		}
 				
