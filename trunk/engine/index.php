@@ -91,6 +91,7 @@
 
 	// Clean all incoming data
 	parse_incoming();
+
 	include("./lib/load.php");
 
 	// Load the server variables
