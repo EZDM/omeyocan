@@ -205,6 +205,10 @@
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg' ORDER BY equipped DESC");
 
 		$room='';
+		$piccoli=0;
+		$medi=0;
+		$grandi=0;
+		
 		while($row=$db->Do_Fetch_Assoc($query)){
 
 		        if(($pg!=$x7s->username && $row['equipped']) || ($pg==$x7s->username) || checkIfMaster()){
@@ -223,6 +227,15 @@
                                       $dimensione="Medio";
                                 if($row['size']==5)
                                       $dimensione="Grande";
+                                      
+                                if($row['equipped']){
+                                      	if($row['size']==1)
+                                      		$piccoli++;
+                                		if($row['size']==2)
+                                      		$medi++;
+                                		if($row['size']==5)
+                                      		$grandi++;
+                                }
                                 
                                 if(preg_match("/key_/", $row['name'])) {
                                         list($pre, $name)=split("key_", $row['name']);
@@ -300,6 +313,10 @@
 		}
 		
 		$body.="</div>\n";
+		
+		$body .= '<div class="counter" id="piccoli">'. $piccoli .'</div>';
+		$body .= '<div class="counter" id="medi">'.$medi. '</div>';
+		$body .= '<div class="counter" id="grandi">'.$grandi.' </div>';
 		
 		if($errore!=''){
 			$body.='<script language="javascript" type="text/javascript">
@@ -1900,8 +1917,9 @@
 				height: 150px;
 				border: solid 1px;
 				overflow: auto;
-                        }
-                        #corp_mgmt{
+            }
+            
+            #corp_mgmt{
 				position: absolute;
 				top: 220px;
 				left: 0;
@@ -1926,9 +1944,9 @@
 			}
 			
 			#people{
-                                overflow: auto;
-                                height: 233px;
-                                width:400px;
+                overflow: auto;
+                height: 233px;
+                width:400px;
 			}
 
 			.dark_link{
@@ -1937,6 +1955,28 @@
 
 			a:hover{
 				color: red;
+			}
+			
+			.counter{
+				color: black;
+				font-size: 11pt;
+				font-weight: bold;
+				position: absolute;
+			}
+			
+			#grandi{
+				top: 602px;
+				left: 155px;
+			}
+			
+			#medi{
+				top: 602px;
+				left: 283px;			
+			}
+			
+			#piccoli{
+				top: 602px;
+				left: 425px;
 			}
 		</style>
 		';
