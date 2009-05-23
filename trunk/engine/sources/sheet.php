@@ -807,49 +807,10 @@
 					$errore ="PX gironaliero gia' assegnato";
 			}
 			if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
-			       $pg=$_GET['pg'];
-                                
-                               if($_GET['toggle_death']){
-                                        //Morto per 5 giorni
-                                        $death_day=5;
-                                        $resurgo = time() + $death_day*24*3600;
-                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', resurgo='$resurgo' WHERE username='$pg'");
-
-                                        $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
-                                        $row = $db->Do_Fetch_Assoc($query);
-                                        $cnt = $row['cnt'];
-
-                                        if($cnt > 0){
-
-                                                  $query = $db->DoQuery("SELECT * FROM {$prefix}userability u, {$prefix}ability a WHERE u.ability_id=a.id AND username='$pg' AND value>'0' ORDER BY ability_id");
-                                                  srand(time()+microtime());
-                                                  $roll=floor(rand(1,$cnt));
-                                                  $i=0;
-                                                  $row=0;
-
-                                                  while($i<$roll){
-                                                            $row = $db->Do_Fetch_Assoc($query);
-                                                            $i++;
-                                                  }
-                                                  $new_value=$row['value']-1;
-
-
-                                                  $db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
-
-                                                  include("./lib/message.php");
-                                                  send_offline_msg($pg,"Morte","Sei morto e hai perso un punto in $row[name]");
-                                                  $errore = "Ucciso e perso un punto in $row[name]";
-                                        }
-                                        else{
-                                                $errore = "Ucciso $row[name], ma non aveva punti abilita' residui";
-                                        }
-                                        
-                                }
-                                else{
-                                        $errore = "Resuscitato";
-                                        $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
-                                }
-			}
+			       	$pg=$_GET['pg'];
+			       	include_once('./lib/sheet_lib.php');
+            		$errore=toggle_death($pg, $_GET['toggle_death']);                    
+            }
 	
 			if(isset($_GET['settings_change']) && checkIfMaster()){
 							
