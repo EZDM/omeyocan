@@ -3497,7 +3497,7 @@
 		
 		}elseif($_GET['cp_page'] == "panic"){
 			$head = "Oscurit&agrave;";
-			$body = "Questo pannello permette di gestire l'oscurit&agrave;";
+			$body = "Questo pannello permette di gestire l'oscurit&agrave; e altre cose terribili";
 			
 			if(isset($_GET['switch'])){
 				$newstate = !($x7c->settings['panic']);
@@ -3532,6 +3532,11 @@
 				}
 			}
 			
+			if(isset($_GET['multidestroy'])){
+				$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner<>''");
+				$msg .= "<b>Hai distrutto tutti gli oggetti!</b>";				
+			}
+			
 
 			if($x7c->settings['panic']){
 				$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: red; font-weight: bold\">Attivata</span><br>
@@ -3548,9 +3553,16 @@
                                                                   return;
                                                           window.location.href='index.php?act=adminpanel&cp_page=panic&multikill=1';
                                                     }
+                                                    
+                                                    function do_destroy(){
+                                                          if(!confirm('!!!!!!----->>>>>> vuoi davvero distruggere TUTTI gli oggetti ?<<<<<----- !!!!!'))
+                                                                  return;
+                                                          window.location.href='index.php?act=adminpanel&cp_page=panic&multidestroy=1';
+                                                    }
 				      </script>";
 			
 			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Uccidi TUTTI!\" onClick=\"javascript: do_kill()\"></p>";
+			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Distruggi tutti gli oggetti!\" onClick=\"javascript: do_destroy()\"></p>";
 			
 			$body .= $msg;
 		
