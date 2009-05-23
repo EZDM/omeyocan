@@ -3519,6 +3519,20 @@
 				send_refresh_message($message);
 			}
 			
+			$msg='';
+			
+			if(isset($_GET['multikill'])){
+				$query = $db->DoQuery("SELECT username FROM {$prefix}users");
+				include_once('./lib/sheet_lib.php');
+				
+				while($row = $db->Do_Fetch_Assoc($query)){
+					$msg .= "<b>".$row['username'].":</b> ";
+					$msg .= toggle_death($row['username'], true);
+					$msg .= "<br>\n";
+				}
+			}
+			
+
 			if($x7c->settings['panic']){
 				$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: red; font-weight: bold\">Attivata</span><br>
 					<input class=\"button\" type=\"button\" value=\"Disattiva oscurit&agrave;\" onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=panic&switch=1'\"></p>";
@@ -3527,6 +3541,18 @@
 				$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: green; font-weight: bold\">Disattivata</span><br>
 				<input class=\"button\" type=\"button\" value=\"Attiva oscurit&agrave;\" onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=panic&switch=1'\"></p>";
 			}
+			
+			$body .= "<script language=\"javascript\" type=\"text/javascript\">
+                                                    function do_kill(){
+                                                          if(!confirm('!!!!!!----->>>>>> vuoi davvero uccidere TUTTI i personaggi ?<<<<<----- !!!!!'))
+                                                                  return;
+                                                          window.location.href='index.php?act=adminpanel&cp_page=panic&multikill=1';
+                                                    }
+				      </script>";
+			
+			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Uccidi TUTTI!\" onClick=\"javascript: do_kill()\"></p>";
+			
+			$body .= $msg;
 		
 		}elseif($_GET['cp_page'] == "keywords"){
 			$head = $txt[144];
@@ -3631,7 +3657,7 @@
 								".printlink("ban",$txt[312])."
 								".printlink("logs",$txt[314])."
 								".printlink("mail",$txt[316])."
-								".printlink("panic","Oscurit&agrave;")."
+								".printlink("panic","Oscurit&agrave;, multi-kill")."
 								".printlink("alarms","Allarmi")."
 								".printlink("objects","Oggetti")."
 								<tr valign=\"top\">
