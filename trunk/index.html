@@ -11,10 +11,37 @@
 
 			div, td{
 				text-align: center;
+				
+			}
+			
+			#enter{
+				position: absolute;
+				top: 450px;
+				width: 300px;
+				height: 125px;
+				border: 1px solid white;
+			}
+			
+			#rules{
+				position: absolute;
+				top: 450px;
+				right: 0px;
+				width: 400px;
+				height: 125px;
+				border: 1px solid white;
 			}
 
 			img {
 				border: 0;
+			}
+			
+			#main_img{
+				border: 1px solid white;
+				background-image: url('layout/homepage.jpg');
+				width: 992px;
+				height: 576px;
+				position: relative;
+				
 			}
 
 			.center{
@@ -37,18 +64,17 @@
 			<table class="center">
 				<tr>
 					<td colspan="2">
-						<img src="layout/homepage.jpg">
+					<div id="main_img">
+										
+					<a onClick="javascript: hndl = window.open('engine','main','width=1024,height=723, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();" href="#"><div id="enter"></div></a>
+					
+					<a href="rules.html"><div id="rules"></div></a>
+					
+					</div>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<a onClick="javascript: hndl = window.open('engine','main','width=1024,height=723, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();" href="#"><img src="layout/homepageentra.jpg"></a>
-					</td>
-						
-					<td>
-						<a href="rules.html"><img src="layout/homepagereg.jpg"> </a>
-					</td>
-				</tr>
+					
+				
 				<tr>
 				        <td colspan="2">
 				                <img src="layout/111.gif">
