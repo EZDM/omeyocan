@@ -648,7 +648,7 @@
 				$ability[$row['ability_id']]=$row;
 			}
 			
-			$body .='	<script language="javascript" type="text/javascript">
+			/*$body .='	<script language="javascript" type="text/javascript">
 						var descr = new Array();
 					
 			
@@ -667,13 +667,14 @@
 					document.getElementById("descr").style.visibility = "hidden";
 				}
 			</script>
-			';
+			';*/
                       
 			
 			$body .= "<div id=\"visual\"><table>";
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){
-					$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
+					//  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\"
+					$body .= "<tr class=\"ab_text\"><td class=\"ab_text\">".$cur['name']."</td><td>";
 					for($i=0; $i<6; $i++){
 						if($i<$cur['value']){
 							$body.='<img src="./graphic/on.gif"/>';
@@ -686,7 +687,8 @@
 					$body .= "</td></tr>\n";
 						foreach($ability as $cur2){
 							if($cur2['dep'] == $cur['ability_id']){
-								$body .= "<tr><td class=\"ab_text\" onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
+								// onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\"
+								$body .= "<tr><td class=\"ab_text\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
 							
 							for($i=0; $i<6; $i++){
 								if($i<$cur2['value']){
@@ -1380,7 +1382,7 @@
 			if(!checkIfMaster() && !isset($_POST['xp']))
 				$ok = false;
 				
-			//Controllo se le abilit� non sono state abbassate o superano il massimo
+			//Controllo se le abilita' non sono state abbassate o superano il massimo
 			//Il master fa quel che gli pare: niente controlli
 				
 			$tot_used=0;
@@ -1473,7 +1475,8 @@
                         
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){
-					$body .= "<tr class=\"ab_text\"><td onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" class=\"ab_text\">".$cur['name']."</td><td>";
+					//onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" 
+					$body .= "<tr class=\"ab_text\"><td class=\"ab_text\">".$cur['name']."</td><td>";
 					for($i=0; $i<6; $i++){
 						if($i<$cur['value']){
 							$body.='<img src="./graphic/on.gif"/>';
