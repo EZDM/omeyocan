@@ -660,8 +660,61 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
     <a name="abil" />
     <h2>Abilita'</h2>
     <p>
+    <b>Nota sulle abilita Gremios:</b> le abilita' esclusive di alcune Gremios
+    sono notevolmente forti e possono fare la differenza in molti casi. Alcune 
+    di esse sono veramente molto potenti e per questo ci e' sembrato opportuno 
+    limitarne un minimo gli effetti rendendo piu' appetibile il tiro del dado 
+    (che tiene conto di vari fattori ambientali che potrebbero inficiare il buon esito
+    dell'utilizzo dell'abilita') rispetto ad usarle senza tiro e quindi con la certezza
+    assoluta del risultato.
+    </p>
     
-    	</p>
+    <p>
+    Queste abilita' perticolari le riconoscerete perche' non verranno date
+    le descrizioni in base al numero di pallini assegnati ma in base al risultato
+    ottenuto con il tiro del dado. La descrizione sara' del tipo:
+    </p>
+    <p>
+    [14-15]-{2} effetto
+    </p>
+    <p>
+    Tale descrizione va letta in questo modo: l'effetto descritto dalla riga 
+    accade nel caso in cui si ottenga [14-15] con il tiro del dado oppure si utilizzi
+    l'abilita' senza tiro avendo {2} pallini.
+    In altre parole, i numeri tra parentesi [] indicano che l'effetto accade 
+    quando si ottiene quel risultato con il dado. I numeri tra {} indicano che l'effetto
+    accade se si usa l'abilita' senza tirare il dado.
+    </p>
+    
+    <p>
+    Noterete che tutte queste abilita' il valore {1} (quindi la riga che descrive 
+    l'utilizzo dell'abilita' senza tirare il dado e avendo solo un pallino) non ha un effetto.
+    Questo perche', come per qualunque abilita' in cui si e' davvero poco competenti e'
+    impossibile avere la certezza di riuscita.
+    Gli altri effetti che si ottengono senza il tiro del dado inoltre sono comunque sottomedia, ovvero,
+    se ho la caratteristica equivalente nella media, l'effetto che ottengo usando l'abilita'
+    senza tirare il dado è una fascia sotto all'effetto che i media si ottiene tirando il dado.
+    Inoltre noterete che gli effetti molto potenti (fascia [28-29-30-31]) non sono ottenibili senza il tiro del dado.    
+    </p>
+    
+    <p>
+    Ancora una nota: questo è quanto accade per il caso medio ovvero quando uso l'abilita'
+    per superare una prova di difficolta' adeguata al livello di competenza.
+    Ci saranno casi in cui il master puo' assegnare dei bonus/malus ai risultato della prova.
+    Ad esempio, con un pallino in riparare se e' (quasi) sempre in grado di avvitare una vite,
+    quindi si otterrebbe il successo anche senza il tiro del dado; 
+    al contempo se con un pallino di riparare tentate di riparare una macchina del tempo aliena, il master
+    vi assegnera' un malus (ad esempio di -5 al tiro) perche' e' estremamente difficile riparale
+    una macchina del tempo aliena.
+    </p>
+    
+    <p>
+    Ricordatevi che il master ha SEMPRE l'ultima parola sull'esito di una prova di abilita'
+    e SOPRATTUTTO il buon esito dell'utilizzo di una abilita' deve SEMPRE essere accompagnato da una descrizione
+    ben fatta, altrimenti non sara' valida (n.d.r se scrivete "riparo il tal oggeto + tiro" e 
+    pretendete di avere eseguito la riparazione VI BANNO).
+    </p>
+    
 <p><a href="#index">Indice</a></p>	
 	<p>
 		<a name="medicina" />
@@ -1030,13 +1083,13 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 		<a name="riparare" />
 		<h3>Riparare</h3>
 		Con questa abilità potete ripristinare gli usi degli oggetti o delle armi. Ovviamente è possibile riparare anche altri oggetti, ma è solo un Upgrade di meccanica o ediliza. In realtà questà è l'unica abilità che permette meccanicamente di restituire "usi" agli oggetti appunto.<br><br>
-		E' obbligatorio effetturare un tiro di dado per utilizzare questa abilita'. Di seguito gli effetti in base agli esiti.<br><br>
-		&lt;12 rottura dell'oggetto<br>
-		[12-13] ripristinato 1 uso dell'oggetto<br>
-		[14-15] ripristinati 2 usi dell'oggetto<br>
-		[16-17] ripristinati 3 usi dell'oggetto<br>
-		[18-19] ripristinati 4 usi dell'oggetto<br>
-		[20-21] ripristinati 5 usi dell'oggetto<br>
+		[&lt;11] rottura dell'oggetto
+		[11-12] - {1} nessun effetto<br>
+		[12-13] - {2} ripristinato 1 uso dell'oggetto<br>
+		[14-15] - {3} ripristinati 2 usi dell'oggetto<br>
+		[16-17] - {4} ripristinati 3 usi dell'oggetto<br>
+		[18-19] - {5} ripristinati 4 usi dell'oggetto<br>
+		[20-21] - {6} ripristinati 5 usi dell'oggetto<br>
 		[22-23] ripristinati 6 usi dell'oggetto<br>
 		[24-25] ripristinati 7 usi dell'oggetto<br>
 		[26-27] ripristinati 8 usi dell'oggetto + possibilita' di aggiungere di una nuova funzionalita'<br>
@@ -1057,12 +1110,12 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 		<a name="verafede" />
 		<h3>Vera Fede</h3>
 			Questa è l'abilità che i grandi uomini del passato (da Gandhi a Madre Teresa di Calcutta a Buddah fino ad arrivare ai martiri di ogni epoca e religione) possiedono per resistere alle malie del Male. Grazie a questa peculiarità resistere all'oscurità sarà più facile: guidati dalla fede potrete ritardare il panico nel vostro cuore in condizioni di OSCURITA', o infondere coraggio e sollevare gli afflitti nelle vostre prediche.<br><br>
-			&lt;12 nessun effetto<br>
-			[12-13] in condizioni di OSCURITA' il Panico è ritardato di 1 azione<br>
-			[14-15] in condizioni di OSCURITA' il Panico è ritardato di 2 azioni<br>
-			[16-17] in condizioni di OSCURITA' il Panico è ritardato di 3 azioni<br>
-			[18-19] in condizioni di OSCURITA' il Panico è ritardato di 5 azioni<br>
-			[20-21] in condizioni di OSCURITA' il Panico è ritardato di 7 azioni<br>
+			[&lt;12] - {1} nessun effetto<br>
+			[12-13] - {2} in condizioni di OSCURITA' il Panico è ritardato di 1 azione<br>
+			[14-15] - {3} in condizioni di OSCURITA' il Panico è ritardato di 2 azioni<br>
+			[16-17] - {4} in condizioni di OSCURITA' il Panico è ritardato di 3 azioni<br>
+			[18-19] - {5} in condizioni di OSCURITA' il Panico è ritardato di 5 azioni<br>
+			[20-21] - {6} in condizioni di OSCURITA' il Panico è ritardato di 7 azioni<br>
 			[22-23] in condizioni di OSCURITA' il Panico è ritardato di 9 azioni<br>
 			[24-25] in condizioni di OSCURITA' il Panico è ritardato di 11 azioni<br>
 			[26-27] in condizioni di OSCURITA' il Panico è ritardato di 15 azioni<br>
@@ -1086,15 +1139,13 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 	<p>
 		<a name="scudo" />
 		<h3>Scudo della fede</h3>
-		Questa abilità concede al soggetto di resistere al dolore e ai malefici dell'Oscurità. Ferite maledette, Armi infette e "fatture" in genere avranno meno efficacia contro gli alfieri del Signore! (E' una specie di resistenza alla Magia quindi è efficace SOLO contro armi o attacchi malefici. Inutile contro ferite "normali", anche se inferte da armi da fuoco o armi comuni brandite da esseri dell'oscurità)<br><br>
-		Quando subite danno innaturale, tirate un dado per verificare l'effetto<br>
-		
-		&lt;12 nessun effetto<br>
-		[12-13] Ogni danno innaturale viene ridotto del 5%<br>
-		[14-15] Ogni danno innaturale viene ridotto del 10%<br>
-		[16-17] Ogni danno innaturale viene ridotto del 15%<br>
-		[18-19] Ogni danno innaturale viene ridotto del 20%<br>
-		[20-21] Ogni danno innaturale viene ridotto del 30%<br>
+		Questa abilità concede al soggetto di resistere al dolore e ai malefici dell'Oscurità. Ferite maledette, Armi infette e "fatture" in genere avranno meno efficacia contro gli alfieri del Signore! (E' una specie di resistenza alla Magia quindi è efficace SOLO contro armi o attacchi malefici. Inutile contro ferite "normali", anche se inferte da armi da fuoco o armi comuni brandite da esseri dell'oscurità)<br><br>		
+		[&lt;12] - {1} nessun effetto<br>
+		[12-13] - {2} Ogni danno innaturale viene ridotto del 5%<br>
+		[14-15] - {3} Ogni danno innaturale viene ridotto del 10%<br>
+		[16-17] - {4} Ogni danno innaturale viene ridotto del 15%<br>
+		[18-19] - {5} Ogni danno innaturale viene ridotto del 20%<br>
+		[20-21] - {6} Ogni danno innaturale viene ridotto del 30%<br>
 		[22-23] Ogni danno innaturale viene ridotto del 40% e chi ve lo causa subisce il 10% del danno inflitto<br>
 		[24-25] Ogni danno innaturale viene ridotto del 50% e chi ve lo causa subisce il 30% del danno inflitto<br>
 		[26-27] Ogni danno innaturale viene ridotto del 60% e chi ve lo causa subisce il 50% del danno inflitto<br>
@@ -1137,15 +1188,14 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 	<p>
 		<a name="danza" />
 		<h3>Danza riparatoria</h3>
-		Con questa abilità è possibile schivare attacchi fisici o migliorare i risultati di Abilità di Mano utilizzando movimenti eleanti e suadenti. Questa arte è una somma di grazia ed efficacia proveniente dalle danza hindu, del ventre e la danza dei ventagli orientale. Può essere utilizzata anche per migliorare i risultati di una danza generica aggiungendo flessuosa morbidezza ed elegante atleticità all'esibizione<br>
-		Tirate un dado per verificare l'effetto della vostra danza<br><br>
+		Con questa abilità è possibile schivare attacchi fisici o migliorare i risultati di Abilità di Mano utilizzando movimenti eleanti e suadenti. Questa arte è una somma di grazia ed efficacia proveniente dalle danza hindu, del ventre e la danza dei ventagli orientale. Può essere utilizzata anche per migliorare i risultati di una danza generica aggiungendo flessuosa morbidezza ed elegante atleticità all'esibizione<br><br>
 				
-		&lt;12 nessun effetto<br>
-		[12-13] +1 a schivare o alle prove di danza<br>
-		[14-15] +2 a schivare o alle prove di danza<br>
-		[16-17] +3 a schivare o alle prove di danza<br>
-		[18-19] +4 a schivare o alle prove di danza<br>
-		[20-21] +5 a schivare o alle prove di danza<br>
+		[&lt;12] - {1} nessun effetto<br>
+		[12-13] - {2} +1 a schivare o alle prove di danza<br>
+		[14-15] - {3} +2 a schivare o alle prove di danza<br>
+		[16-17] - {4} +3 a schivare o alle prove di danza<br>
+		[18-19] - {5} +4 a schivare o alle prove di danza<br>
+		[20-21] - {6} +5 a schivare o alle prove di danza<br>
 		[22-23] +6 a schivare o alle prove di danza<br>
 		[24-25] +7 a schivare o alle prove di danza<br>
 		[26-27] +8 a schivare o alle prove di danza<br>
@@ -1170,12 +1220,12 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 		ATTENZIONE! Il bonus si applica solo DOPO aver colpito... dunque non conta come bonus per colpire... PRIMA si fa la differenza tra tiro di attacco e tiro di difesa e dopo, SOLO in caso
 		in cui l'attacco sia positivo, si somma il bonus ai danni di traumaturgia<br><br>
 		
-		&lt;12 nessun effetto<br>
-		[12-13] +1 ai danni inflitti<br>
-		[14-15] +2 ai danni inflitti<br>
-		[16-17] +3 ai danni inflitti<br>
-		[18-19] +4 ai danni inflitti<br>
-		[20-21] +5 ai danni inflitti<br>
+		[&lt;12] - {1} nessun effetto<br>
+		[12-13] - {2} +1 ai danni inflitti<br>
+		[14-15] - {3} +2 ai danni inflitti<br>
+		[16-17] - {4} +3 ai danni inflitti<br>
+		[18-19] - {5} +4 ai danni inflitti<br>
+		[20-21] - {6} +5 ai danni inflitti<br>
 		[22-23] +6 ai danni inflitti<br>
 		[24-25] +7 ai danni inflitti<br>
 		[26-27] +8 ai danni inflitti<br>
@@ -1235,12 +1285,12 @@ convenga farvi fuori tra di voi... ci pensa gia' Veracruz a uccidere)</p>
 		Abituati a vedere risse di ogni genere i licorai hanno svilupapto la capacità di incitare  al combattimento migliorando il morale e le prestazioni di un combattente o una fazione. Se proprio deve finire a cartoni speriamo almeno che vincano i "buoni"! (NOTA BENE: se più licorai tifano assieme le loro abilità vanno a sommarsi in una MEDIA OTTENUTA sommando
 		i bonus/malus e dividendo per il numero degli incitatori)<br><br>
 
-		&lt;12 nessun effetto<br>
-		[12-13] +1 ai tiri dei partner<br>
-		[14-15] +2 ai tiri dei partner<br>
-		[16-17] +3 ai tiri dei partner<br>
-		[18-19] +4 ai tiri dei partner<br>
-		[20-21] +5 ai tiri dei partner<br>
+		[&lt;12] - {1} nessun effetto<br>
+		[12-13] - {2} +1 ai tiri dei partner<br>
+		[14-15] - {3} +2 ai tiri dei partner<br>
+		[16-17] - {4} +3 ai tiri dei partner<br>
+		[18-19] - {5} +4 ai tiri dei partner<br>
+		[20-21] - {6} +5 ai tiri dei partner<br>
 		[22-23] +5 ai tiri dei partner e -1 ai tiri degli avversari<br>
 		[24-25] +5 ai tiri dei partner e -2 ai tiri degli avversari<br>
 		[26-27] +6 ai tiri dei partner e -2 ai tiri degli avversari<br>
