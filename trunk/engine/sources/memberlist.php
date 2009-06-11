@@ -219,10 +219,10 @@
 				$master_gif="";
 				
 				if($row['admin_panic'])
-					$master_gif='<img src="./graphic/master_gif.gif" />&nbsp;';
+					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
 				
 				$body .= "\n<tr>
-							<td class=\"dark_row\">$master_gif<a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}</a></td>
+							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
 							<td class=\"dark_row\">{$position}</td>";
 				if($room!='' && $room!="Mappa" && $position!="Ovunque")
 					if($row['position'] != '' && $row['position']==$room)
