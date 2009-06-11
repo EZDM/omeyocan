@@ -51,10 +51,10 @@
 	}
     function join_corp($pg, $corp, $from_sheet=0){
         global $db, $prefix, $x7s, $x7c;
-        $query = $db->DoQuery("SELECT * FROM {$prefix}corpab WHERE corp='$corp'");
+        $query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE corp='$corp'");
 
         while($row = $db->Do_Fetch_Assoc($query)){
-            $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[ability]', '$pg', '0')
+            $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
                           ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
         }
 
