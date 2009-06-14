@@ -298,9 +298,10 @@
                                 }
 
                                 $table_ability_head="<tr><td class=\"throw_eval\" style=\"width:30px;\">Ris.</td>";
+                srand(time()+microtime()/(1+date("s")));
                                 
 				while(preg_match($action_regexp,$message, $action)){
-					srand(time()+microtime()/(1+date("s")));
+				
 										
 					$action_msg="";
 					$query = $db->DoQuery("SELECT a.name AS ab_name, ua.value AS ab_value, uc.value AS char_value
@@ -381,7 +382,7 @@
                                 $table_char_head="<tr><td class=\"throw_eval\" style=\"width: 30px;\">Ris.</td>";
 
 				while(preg_match($charact_regexp,$message, $charact)){
-					srand(time()+microtime()/(1+date("s")));
+				
 										
 					$charact_msg="";
 					$query = $db->DoQuery("SELECT c.name AS ch_name, uc.value AS ch_value
