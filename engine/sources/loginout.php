@@ -104,6 +104,11 @@
 				                <img src=\"../layout/237.gif\">
 				        </td>
 				</tr>
+				<tr>
+					<td>
+					<span style=\"color: grey; font-size: 6pt;\">I simboli PEGI e il marchio PEGI  appartengono alla \"Interactive Software Federation of Europe\". Tutti i diritti riservati.</span>
+					</td>
+				</tr>
 					</table>
 					</form></div>
 				";
