@@ -105,7 +105,7 @@
 				        </td>
 				</tr>
 				<tr>
-					<td colspan=2>
+					<td colspan=2 style=\"text-align: center;\">
 					<span style=\"color: grey; font-size: 6pt;\">I simboli PEGI e il marchio PEGI  appartengono alla \"Interactive Software Federation of Europe\". Tutti i diritti riservati.</span>
 					</td>
 				</tr>
