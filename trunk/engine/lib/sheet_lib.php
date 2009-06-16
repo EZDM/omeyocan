@@ -1,5 +1,14 @@
 <?PHP
 
+        function toggle_heal($pg, $heal){
+                global $db, $prefix;
+		$errore='';
+		$time=time();
+		$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', autoheal='$heal' WHERE username='$pg'");
+		
+		
+        }
+
 	function toggle_death($pg, $kill){
 		global $db, $prefix;
 		$errore='';
@@ -7,7 +16,7 @@
                                         //Morto per 5 giorni
                                         $death_day=5;
                                         $resurgo = time() + $death_day*24*3600;
-                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', resurgo='$resurgo' WHERE username='$pg'");
+                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
 
                                         $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
                                         $row = $db->Do_Fetch_Assoc($query);
@@ -41,7 +50,7 @@
                                 }
                                 else{
                                         $errore = "Resuscitato";
-                                        $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
+                                        $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', autoheal='1', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
                                 }
                                 
              return $errore;

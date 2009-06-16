@@ -828,8 +828,14 @@
 			if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
 			       	$pg=$_GET['pg'];
 			       	include_once('./lib/sheet_lib.php');
-            		$errore=toggle_death($pg, $_GET['toggle_death']);                    
-            }
+                                $errore=toggle_death($pg, $_GET['toggle_death']);
+                        }
+
+                        if(isset($_GET['toggle_heal']) && isset($_GET['pg'])&& checkIfMaster()){
+			       	$pg=$_GET['pg'];
+			       	include_once('./lib/sheet_lib.php');
+            		        $errore=toggle_heal($pg, $_GET['toggle_heal']);
+                        }
 	
 			if(isset($_GET['settings_change']) && checkIfMaster()){
 							
@@ -918,9 +924,11 @@
 					if(checkIfMaster()){
 						if(isset($_POST['xp']) &&
 							isset($_POST['info']) ){
+							$time=time();
 							$db->DoQuery("UPDATE {$prefix}users
 									SET 	xp='$_POST[xp]',
-										info='$_POST[info]'
+										info='$_POST[info]',
+										heal_time='$time'
 									 WHERE username='$pg'");
 						}
 
@@ -1081,6 +1089,26 @@
 			while($row_ch = $db->Do_Fetch_Assoc($query_char)){
 					$charact[$row_ch['id']]=$row_ch;
 			}
+
+			
+			//Auto heal_button
+			$rob=$charact['rob']['value'];
+			
+			if($row_user['autoheal'] && $row_user['info']<($rob*2)){
+                              $time=time();
+                              $elapsed=$time-$row_user['heal_time'];
+                              $rec_rate=(13-$rob)*3600*24;
+
+                              $rec_value=floor($elapsed/$rec_rate);
+
+                              if($rec_value>0){
+                                  $new_status=$row_user['info']+$rec_value;
+                                  $new_status= ($new_status > $rob*2) ? $rob*2 : $new_status;
+                                  
+                                  $db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', info='$new_status' WHERE username='$pg'");
+                                  $row_user['info']=$new_status;
+                              }
+			}
 			
 			
 			if(!checkIfMaster()){
@@ -1136,6 +1164,7 @@
 
 				$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
 
+                                
 
 				foreach($charact as $cur_ch){
 					$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
@@ -1224,10 +1253,18 @@
 				else{
 				        $body .= "<INPUT name=\"ress_button\" class=\"button\" type=\"button\" value=\"Resuscita\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg'\" style=\"visibility: visible;\">";
 				}
+
+				if($row_user['autoheal']){
+				        $body .= "<br><INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Disattiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg'\" style=\"visibility: visible;\">";
+				}
+				else{
+				        $body .= "<br><INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Attiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg'\" style=\"visibility: visible;\">";
+				}
 				
 				$body .="</div></form>";
 		
 			}
+
 			
 			//Just for the avatar and password modification
 			if(!checkIfMaster() && $x7s->username==$pg){
