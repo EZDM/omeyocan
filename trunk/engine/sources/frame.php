@@ -668,6 +668,7 @@
 										//document.getElementById('debug').innerHTML = httpReq1.responseText.replace(/</g,'&lt;');
 										playSound = 0;
 										modification=0;
+										count_reset=0;
 										
 
 										var dataArray = httpReq1.responseText.split("|");
@@ -738,6 +739,8 @@
 												document.getElementById('message_window').innerHTML +=dataSubArray[1];
 												
 												modification=1;
+												if(!dataSubArray[1].match('<span class="sussurro">'))
+													count_reset=1;
 												
 												if(playSound == 0)
 													playSound = 1;
@@ -791,6 +794,8 @@
 											if(modification){
 												document.getElementById('message_window').scrollTop = 65000;
 
+												if(count_reset)
+													ActivateCountDown("CountDownPanel", '480', null);
 												
 											}
 
