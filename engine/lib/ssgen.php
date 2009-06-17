@@ -487,6 +487,15 @@
 				width: 870px;
 				text-align: center;
 			}
+			#action_countdown{
+				position: absolute;
+				top: 650px;
+				left: 770px;
+				width: 100px;
+				text-align: center;
+				font-size: 10pt;
+				font-weight: bold;
+			}
 			
 			#panicwrap {
 				position: absolute;
