@@ -613,6 +613,8 @@
 
 			?>
 				<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
+				<script type="text/javascript" src="sources/AdvancedCountDown.js"> </script>
+				
 				</head>
 					<body onload="javascript: do_initial_refresh();"> 
 					<iframe style='position: absolute;visibility: hidden;' src="index.php?act=frame&frame=send&room=<?PHP echo $x7c->room_name; ?>" name="send" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" noresize="true"></iframe>
@@ -786,8 +788,10 @@
 										
 
 											// Scroll to bottom
-											if(modification)
+											if(modification){
 												document.getElementById('message_window').scrollTop = 65000;
+												ActivateCountDown("CountDownPanel", '480', null);
+											}
 
 										}
 
@@ -1194,6 +1198,12 @@
 							
 								</table>
 							</div>
+							
+							<div id="action_countdown"><span class="CountDownPanel" id="CountDownPanel" time_format="%m:%s"></span>
+                                      <script type="text/javascript">
+                                              ActivateCountDown("CountDownPanel", '480', null);
+                                      </script>
+                            </div>
 							
 							<div id="cmddiv">
 								<table cellspacing=3 cellpadding=0 style="width: 100%">
