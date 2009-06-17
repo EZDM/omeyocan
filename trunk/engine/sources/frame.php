@@ -790,7 +790,8 @@
 											// Scroll to bottom
 											if(modification){
 												document.getElementById('message_window').scrollTop = 65000;
-												ActivateCountDown("CountDownPanel", '480', null);
+												if(dataSubArray[0] != '10')
+													ActivateCountDown("CountDownPanel", '480', null);
 											}
 
 										}
