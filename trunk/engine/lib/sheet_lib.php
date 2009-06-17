@@ -193,7 +193,9 @@
 									       document.getElementById("modifiable").style.visibility="visible";
 									if(document.getElementById("modifiable2"))
 									       document.getElementById("modifiable2").style.visibility="visible";
-                                                                        if(document.getElementById("modify"))
+									if(document.getElementById("modifiable3"))
+									       document.getElementById("modifiable3").style.visibility="visible";
+                                    if(document.getElementById("modify"))
 									       document.getElementById("modify").style.visibility="hidden";
 									if(document.getElementById("modify2"))
 									       document.getElementById("modify2").style.visibility="hidden";

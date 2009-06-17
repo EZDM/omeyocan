@@ -1534,7 +1534,7 @@
                 $body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
 
                 if(!$corp_master && !checkIfMaster())
-                        $body .= '<div id="modifiable">';
+                        $body .= '<div id="modifiable3">';
                 else
                         $body .= '<div id="modifiable2">';
 
@@ -1818,16 +1818,16 @@
 				left: 50px;
 				top: 630px;
 			}
-                        #modify2{
+            #modify2{
 				position: absolute;
 				left: 0px;
-				top: 160px;
+				top: 190px;
 				width: 200px;
 			}
 			#modify3{
 				position: absolute;
 				left: 50px;
-				top: 560px;
+				top: 460px;
 				width: 200px;
 			}
 			#ability{
@@ -1838,7 +1838,7 @@
 			#corp{
 				position: absolute;
 				left: 50px;
-				top: 70px;
+				top: 150px;
 			}	
 			#Forza{
 				position: absolute;
@@ -1954,17 +1954,28 @@
 				left: 0;
 				visibility: hidden;
 				width: 400px;
-				height: 150px;
+				height: 180px;
 				border: solid 1px;
 				overflow: auto;
             }
+            
+            #modifiable3{
+				position: absolute;
+				top: 0;
+				left: 0;
+				visibility: hidden;
+				width: 400px;
+				height: 450px;
+				border: solid 1px;
+				overflow: auto;
+			}
             
             #corp_mgmt{
 				position: absolute;
 				top: 220px;
 				left: 0;
 				width: 400px;
-				height: 300px;
+				height: 200px;
 				border: solid 1px;
 				
                         }
@@ -1979,6 +1990,7 @@
 				top: 0;
 				left:0;
 				height: 180px;
+				border: 1px solid;
 				width: 400px;
 				
 			}
@@ -2031,12 +2043,12 @@
 		echo $body;
 		
 		echo '
-		<a href="./index.php?act=sheet&page=main&pg='.$pg.'"><div class="sheetnav" style="left: 345px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=ability&pg='.$pg.'"><div class="sheetnav" style="left: 370px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 398px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 428px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 456px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 426px; top: 658px;">CORP</div></a>
+		<a href="./index.php?act=sheet&page=main&pg='.$pg.'"><div class="sheetnav" style="left: 313px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=ability&pg='.$pg.'"><div class="sheetnav" style="left: 337px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 367px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 399px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 424px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 451px; top: 638px;"></div></a>
 		</div>
 		</body>
 			</html>';
