@@ -790,8 +790,8 @@
 											// Scroll to bottom
 											if(modification){
 												document.getElementById('message_window').scrollTop = 65000;
-												if(!eregi('<span class="sussurro">', dataSubArray[0]))
-													ActivateCountDown("CountDownPanel", '480', null);
+
+												
 											}
 
 										}
