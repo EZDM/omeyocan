@@ -110,7 +110,7 @@
                 $row=$db->Do_Fetch_Assoc($gif_query);
                 $gif=$row['logo'];
         
-                $db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}', corp_master='0', bio='$gif' WHERE username='$target'");
+                $db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}', corp_master='0', corp_charge='', bio='$gif' WHERE username='$target'");
         }
         else
                 return "Non sei autorizzato a gestire questo gremios";

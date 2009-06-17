@@ -1337,7 +1337,7 @@
 		$body='';
 		$errore='';
 
-		$query = $db->DoQuery("SELECT xp,corp_master,user_group FROM {$prefix}users WHERE username='$pg'");
+		$query = $db->DoQuery("SELECT xp,corp_master,user_group,bio,corp_charge FROM {$prefix}users WHERE username='$pg'");
                 $row_user = $db->Do_Fetch_Assoc($query);
 
                 if(!$row_user)
@@ -1378,6 +1378,12 @@
                                         }
                                         else if($_GET['mgmt']=='notadmin'){
                                                 $errore=admin_corp($target,false);
+                                        }
+                                        else if($_GET['mgmt']=='charge'){
+                                        		if(isset($_POST['charge'])){
+                                        			$db->DoQuery("UPDATE {$prefix}users SET corp_charge='{$_POST[charge]}' WHERE username='$target'");
+                                        			header("location: index.php?act=sheet&page=corp&pg=$pg");
+                                        		}
                                         }
 
                                 }
@@ -1502,6 +1508,11 @@
                 while($row = $db->Do_Fetch_Assoc($query)){
                       $ability[$row['ability_id']]=$row;
                 }
+                
+                $body .="<div id=\"corp_name\">$row_user[user_group]</div>\n";
+                $body .="<div id=\"corp_symbol\"><img src=\"$row_user[bio]\" /></div>\n";
+                if($x7s->user_group != $x7c->settings['usergroup_default'])
+                	$body .="<div id=\"corp_charge\">$row_user[corp_charge]</div>";
 
                 $body.="<div id=\"corp\">\n";
 
@@ -1604,7 +1615,7 @@
                                   </div>
                                   <div id=\"people\"><table>";
 
-                        $query = $db->DoQuery("SELECT username,corp_master FROM {$prefix}users WHERE username<>'{$x7s->username}' AND user_group='{$row_user['user_group']}'");
+                        $query = $db->DoQuery("SELECT username,corp_master,corp_charge FROM {$prefix}users WHERE user_group='{$row_user['user_group']}'");
 
                         while($row=$db->Do_Fetch_Assoc($query)){
 
@@ -1618,6 +1629,11 @@
                                         <td>$row[username]</td>
                                         <td><a href=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=del&target=$row[username]\">[Cancella]</a></td>
                                         $admin
+                                        <form action=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=charge\" method=\"post\" name=\"corp_charge_form\">
+                                        	<td><input type=\"text\" name=\"charge\" class=\"text_input\" style=\"width: 90;\" value=\"$row[corp_charge]\"></td>
+                                    		<td><input type=\"submit\" class=\"button\" value=\"Assegna carica\">
+                                    		<input type=\"hidden\" value=\"$row[username]\" name=\"target\"></td>
+                                        </form>
                                     </tr>";
                         }
 
@@ -2029,6 +2045,21 @@
 			#piccoli{
 				top: 602px;
 				left: 425px;
+			}
+			#corp_name{
+				position: absolute;
+				top: 38px;
+				left: 130px;
+			}
+			#corp_symbol{
+				position: absolute;
+				top: 70px;
+				left: 400px;
+			}
+			#corp_charge{
+				position: absolute;
+				top: 80px;
+				left: 120px;
 			}
 		</style>
 		';
