@@ -2048,12 +2048,12 @@
 			}
 			#corp_name{
 				position: absolute;
-				top: 38px;
+				top: 41px;
 				left: 130px;
 			}
 			#corp_symbol{
 				position: absolute;
-				top: 70px;
+				top: 73px;
 				left: 400px;
 			}
 			#corp_charge{
