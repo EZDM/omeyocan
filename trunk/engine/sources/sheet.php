@@ -1094,7 +1094,7 @@
 			//Auto heal_button
 			$rob=$charact['rob']['value'];
 			
-			if($row_user['autoheal'] && $row_user['info']<($rob*2)){
+			if($row_user['autoheal'] && $row_user['info']!="Morto" && $row_user['info']<($rob*2)){
                               $time=time();
                               $elapsed=$time-$row_user['heal_time'];
                               $rec_rate=(13-$rob)*3600*24;
