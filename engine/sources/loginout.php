@@ -33,18 +33,17 @@
 	//		act = login2
 	//		act = logout
 	
-	//We want SSL on this page
-	if($_SERVER["SERVER_PORT"] != 443) {
-   			header("HTTP/1.1 301 Moved Permanently");
-   			header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-   			exit();
-	}	
-
-	
 	function page_login($failed=""){
 		global $print,$txt,$db,$prefix,$x7c;		
 		// Check to see if $failed contains a value, if it does then print
 		// a message telling them they failed to authenticate
+		//We want SSL on this page
+		if($_SERVER["SERVER_PORT"] != 443) {
+	   			header("HTTP/1.1 301 Moved Permanently");
+	   			header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
+	   			exit();
+		}
+		
 		if($failed == ""){
 			$title = $txt[0];
 			$failmsg = "";
