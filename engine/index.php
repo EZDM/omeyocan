@@ -179,6 +179,13 @@
 		page_login("activated");
 		exit;
 	}
+	
+	//This is used to return to flat http after login
+	if($_SERVER["SERVER_PORT"] == 443) {
+   			header("HTTP/1.1 301 Moved Permanently");
+   			header("Location: http://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
+   			exit();
+	}
 
 	// Prevent their username and room from being deleted
 	prevent_cleanup();
