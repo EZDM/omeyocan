@@ -369,18 +369,26 @@
 											}else if(dataSubArray[0] == '12'){
 												//Panic update
 												valore = parseInt(dataSubArray[1]);
-												var messaggio;
-                                                                                                if(valore){
-                                                                                                        var bell = document.getElementById('bell');
-                                                                                                        if(typeof bell.Play == 'function')
-                                                                                                            bell.Play();
-                                                                                                       
-                                                                                                        messaggio="Arriva l'oscurit�";
-                                                                                                }
+												messaggio='';
+                                                if(valore){
+                                                	//var bell = document.getElementById('bell');
+                                                    //if(typeof bell.Play == 'function')
+                                                    	//bell.Play();
+                                                    	
+                                                	//messaggio="Arriva l'oscurita'";
+
+                                                	var leftx = (screen.width/2)-(300/2);
+													var topy = (screen.height/2)-(200/2);
+													
+													hndl = window.open('./sources/oscurita_popup.html','oscurita','width=300,height=200, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
+													hndl.moveTo(leftx, topy); 
+													hndl.focus();
+                                                }
 												else
-													messaggio="L'oscurit� se ne va";
-												
-												alert(messaggio);
+													messaggio="L'oscurita' se ne va";
+
+												if(messaggio!='')
+													alert(messaggio);
 												window.location.href = window.location.href;
 											}else if(dataSubArray[0] == '13'){
 												//Delete message
