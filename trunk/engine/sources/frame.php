@@ -336,16 +336,18 @@
 				echo "9;;./index.php?act=panic&dump=$query&source=/sources/frame.php:155";
 			}
 
-			$query_gender = $db->DoQuery("SELECT gender, bio, username, name FROM {$prefix}users
+			$query_gender = $db->DoQuery("SELECT gender, bio, username, name, corp_charge FROM {$prefix}users
                                                       WHERE username IN (SELECT user FROM {$prefix}messages WHERE room='$_GET[room]')");
 
 			$genders='';
 			$gifs='';
 			$long_names='';
+			$charges='';
 			while($row = $db->Do_Fetch_Assoc($query_gender)){
 				$genders[strtolower($row['username'])]=$row['gender'];
 				$gifs[strtolower($row['username'])]=$row['bio'];
 				$long_names[strtolower($row['username'])]=$row['name'];
+				$charges[strtolower($row['username'])]=$row['corp_charge'];
 			}
 			while($row = $db->Do_Fetch_Row($query)){
 
@@ -386,7 +388,7 @@
 
                                                 $gif="";
                                                 if(isset($gifs[strtolower($row[0])]) && $gifs[strtolower($row[0])]!=""){
-                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" style=\"vertical-align: middle\"> ";
+                                                    $gif="<img src=\"".$gifs[strtolower($row[0])]."\" title=\"".$charges[strtolower($row[0])]."\" style=\"vertical-align: middle\"> ";
                                                 }
 
                                                 $toout='';
