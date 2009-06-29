@@ -2218,6 +2218,12 @@
 					
 				}else{
 					// Do the delete
+					$query = $db->DoQuery("SELECT id FROM {$prefix}users WHERE username='$_GET[delete]'");
+					while($row = $db->Do_Fetch_Assoc($query)){
+						$db->DoQuery("DELETE FROM {$prefix}banned WHERE id='$row[id]'");
+					}
+					
+					$db->DoQuery("DELETE FROM {$prefix}banned WHERE user_ip_email='$_GET[delete]'");
 					$db->DoQuery("DELETE FROM {$prefix}users WHERE username='$_GET[delete]'");
 					// Delete bandwidth info
 					$db->DoQuery("DELETE FROM {$prefix}bandwidth WHERE user='$_GET[delete]'");
