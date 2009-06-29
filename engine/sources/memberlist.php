@@ -191,6 +191,14 @@
 				
 		$body.=	"</tr>";
 		
+		$normal=0;
+		$ubiquitos=1;
+		
+		$list[$normal]="";
+		$list[$ubiquitos]="";
+		$cur=$normal;
+		
+		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			
 			if(($room!='' && $row['position']!='') ||$room==''){
@@ -218,17 +226,25 @@
                                 }
 				$master_gif="";
 				
+				if($position=="Ovunque"){
+					$cur=$ubiquitos;
+				}
+				else{
+					$cur=$normal;
+				}
+				
 				if($row['admin_panic'])
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
 				
-				$body .= "\n<tr>
+				$list[$cur] .= "\n<tr>
 							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
 							<td class=\"dark_row\">{$position}</td>";
-				if($room!='' && $room!="Mappa" && $position!="Ovunque")
+				
+				if($room!='' && $room!="Mappa")
 					if($row['position'] != '' && $row['position']==$room)
-						$body .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
+						$list[$cur] .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
 					else
-						$body .= "<td class=\"dark_row\">&nbsp;</td>";
+						$list[$cur] .= "<td class=\"dark_row\">&nbsp;</td>";
 
                                 //Adding more controle for admins
 				if($x7c->permissions['admin_panic']){
@@ -246,20 +262,22 @@
 					$getstanza='';
 
 					if($room!='' && $room!="Mappa"){
-						$body .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+						$list[$cur] .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
 					}
 
 					if($room!='')
 						$getstanza="&room";
 						
-					$body.="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&$action&user={$row['username']}$getstanza\">$new_state</a></td>";
+					$list[$cur].="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&$action&user={$row['username']}$getstanza\">$new_state</a></td>";
 
 				}
 			
-				$body .= "</tr>";
+				$list[$cur] .= "</tr>";
 			}
 			
 		}
+		
+		$body.= $list[$ubiquitos] . $list[$normal];
 		
 		$body .= "</table><p align=\"center\"><a class=\"dark_link\" href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></p></div>";
 
