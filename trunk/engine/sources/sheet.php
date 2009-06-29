@@ -922,15 +922,23 @@
 					}
 
 					if(checkIfMaster()){
-						if(isset($_POST['xp']) &&
-							isset($_POST['info']) ){
-							$time=time();
-							$db->DoQuery("UPDATE {$prefix}users
-									SET 	xp='$_POST[xp]',
-										info='$_POST[info]',
-										heal_time='$time'
-									 WHERE username='$pg'");
+						if(isset($_POST['info'])){
+								if(is_numeric($_POST['info'])){
+									$time=time();
+									$db->DoQuery("UPDATE {$prefix}users
+										SET info='$_POST[info]',
+											heal_time='$time'
+									 	WHERE username='$pg'");
+								}
+								else{
+									$errore .= "Il campo \"Status\" puo' contenere solo numeri";
+								}
 						}
+						
+						if(isset($_POST['xp'])){
+							$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");								
+						}
+					
 
 						foreach($char as $cur){
 							if(!isset($_POST[$cur['id']])){
@@ -1232,7 +1240,7 @@
 				}
 					
 				$body.= "
-					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"30\" disabled /></div>
+					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"5\" disabled /></div>
 					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
 				";
 						
