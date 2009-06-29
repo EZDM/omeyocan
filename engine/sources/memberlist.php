@@ -191,12 +191,10 @@
 				
 		$body.=	"</tr>";
 		
-		$normal=0;
-		$ubiquitos=1;
-		
-		$list[$normal]="";
-		$list[$ubiquitos]="";
-		$cur=$normal;
+	
+		$list[0]="";
+		$list[1]="";
+		$cur=0;
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -226,13 +224,22 @@
                                 }
 				$master_gif="";
 				
-				if($position=="Ovunque"){
-					$cur=$ubiquitos;
+				$cur=0;
+				
+				if($position=="Ovunque" && $_GET['sort'] == "3"){
+					$cur=0;
 				}
-				else{
-					$cur=$normal;
+				if($position=="Ovunque" && $_GET['sort'] == "4"){
+					$cur=1;
+				}
+				if($position!="Ovunque" && $_GET['sort'] == "3"){
+					$cur=1;
+				}
+				if($position!="Ovunque" && $_GET['sort'] == "4"){
+					$cur=0;
 				}
 				
+
 				if($row['admin_panic'])
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
 				
@@ -277,7 +284,7 @@
 			
 		}
 		
-		$body.= $list[$ubiquitos] . $list[$normal];
+		$body.= $list[0] . $list[1];
 		
 		$body .= "</table><p align=\"center\"><a class=\"dark_link\" href=\"#\" onClick=\"javascript: window.close();\">[Chiudi]</a></p></div>";
 
