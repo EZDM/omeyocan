@@ -226,17 +226,19 @@
 				
 				$cur=0;
 				
-				if($position=="Ovunque" && $_GET['sort'] == "3"){
-					$cur=0;
-				}
-				if($position=="Ovunque" && $_GET['sort'] == "4"){
-					$cur=1;
-				}
-				if($position!="Ovunque" && $_GET['sort'] == "3"){
-					$cur=1;
-				}
-				if($position!="Ovunque" && $_GET['sort'] == "4"){
-					$cur=0;
+				if(isset($_GET['sort'])){
+					if($position=="Ovunque" && $_GET['sort'] == "3"){
+						$cur=0;
+					}
+					if($position=="Ovunque" && $_GET['sort'] == "4"){
+						$cur=1;
+					}
+					if($position!="Ovunque" && $_GET['sort'] == "3"){
+						$cur=1;
+					}
+					if($position!="Ovunque" && $_GET['sort'] == "4"){
+						$cur=0;
+					}
 				}
 				
 
