@@ -579,6 +579,10 @@
 			include("./sources/mail.php");
 			mail_main();
 			exit;
+		case "mapeditor":
+			include("./sources/map_editor.php");
+			map_editor_main();
+			exit;
 		case "roomdesc":
 			include("./sources/roomdescr.php");
 			roomdescr_main();
