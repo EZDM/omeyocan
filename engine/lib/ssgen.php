@@ -480,6 +480,12 @@
 				left: 20px;
 			}
 			
+			#shadow_room{
+				position: absolute;
+				top: 110px;
+				left: 20px;
+			}
+			
 			#cmddiv {
 				position: absolute;
 				top: 680px;
