@@ -1003,10 +1003,10 @@ switch($_GET['frame']){
                                                   nocache = jd.getTime();
                                                   url = './index.php?act=frame&frame=shadow&room=<?PHP echo $x7c->room_name; ?>';
                                                   if(!shadow){
-                                                        document.getElementById('shadow_link').innerHTML='[Disattiva shadow]';
+                                                        document.getElementById('shadow_link').innerHTML='[Disattiva suspence]';
                                                   }
                                                   else{
-                                                        document.getElementById('shadow_link').innerHTML='[Attiva shadow]';
+                                                        document.getElementById('shadow_link').innerHTML='[Attiva suspence]';
                                                   }
 
                                                   shadow=!shadow;
@@ -1237,9 +1237,9 @@ if($x7c->permissions['admin_panic']){
 		$inv_txt="[Diventa invisibile]";
 
 	if($x7c->room_data['shadow'])
-		$shd_txt="[Disattiva shadow]";
+		$shd_txt="[Disattiva suspence]";
 	else
-		$shd_txt="[Attiva shadow]";
+		$shd_txt="[Attiva suspence]";
 
 	echo '<div id="clean_chat"><a onClick="javascript: do_delete(\'all\')">[Pulisci chats]</a></div>
                       <div id="invisible_master"><a id="invisible_link" onClick="javascript: switch_invisibility()">'.$inv_txt.'</a></div>
@@ -1318,7 +1318,7 @@ if($x7c->settings['panic']){
 												 ORDER BY a.name");
 
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$string = "<option value=\"§".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
+				$string = "<option value=\"ï¿½".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
 				echo $string;
 			}
 			?>
@@ -1353,7 +1353,7 @@ if($x7c->settings['panic']){
 												 	ORDER BY name");
 
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$string = "<option value=\"°".$row['id']."\">".$row['name']."</option>\n";
+				$string = "<option value=\"ï¿½".$row['id']."\">".$row['name']."</option>\n";
 				echo $string;
 			}
 			?>
