@@ -1353,7 +1353,7 @@ if($x7c->settings['panic']){
 												 	ORDER BY name");
 
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$string = "<option value=\"�".$row['id']."\">".$row['name']."</option>\n";
+				$string = "<option value=\"%".$row['id']."\">".$row['name']."</option>\n";
 				echo $string;
 			}
 			?>
