@@ -1318,7 +1318,7 @@ if($x7c->settings['panic']){
 												 ORDER BY a.name");
 
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$string = "<option value=\"ï¿½".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
+				$string = "<option value=\"§".$row['id']."\">".$row['name']." ".(floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
 				echo $string;
 			}
 			?>
