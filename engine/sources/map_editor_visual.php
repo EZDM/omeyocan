@@ -243,6 +243,9 @@
         	btn = document.getElementById(id);
         	if(btn){
             	btn.setAttribute('src', el.options[el.selectedIndex].value);
+
+        		if(document.getElementById('edit').value > 0)
+        			edited = 1;
         	}
 		}
 
