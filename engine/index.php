@@ -580,7 +580,7 @@
 			mail_main();
 			exit;
 		case "mapeditor":
-			include("./sources/map_editor.php");
+			include("./lib/map_editor.php");
 			map_editor_main();
 			exit;
 		case "roomdesc":
