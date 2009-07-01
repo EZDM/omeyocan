@@ -250,12 +250,12 @@
 		      		<tr><td><br><input type="button" value="Chiudi editor" onClick="javascript: window.close(self);"></td></tr>
 		      	</table>
 		      	
-		      	<input type="hidden" id="selected_id" name="selected_id"><br>
-		      	<input type="hidden" id="selected_x" name="selected_x"><br>
-		      	<input type="hidden" id="selected_y" name="selected_y"><br>
-		      	<input type="hidden" id="edit" value="-1" name="edit"><br>
-		      	<input type="hidden" id="add" value="-1" name="add"><br>
-		      	<input type="hidden" id="delete" value="-1" name="delete"><br>
+		      	<input type="hidden" id="selected_id" name="selected_id">
+		      	<input type="hidden" id="selected_x" name="selected_x">
+		      	<input type="hidden" id="selected_y" name="selected_y">
+		      	<input type="hidden" id="edit" value="-1" name="edit">
+		      	<input type="hidden" id="add" value="-1" name="add">
+		      	<input type="hidden" id="delete" value="-1" name="delete">
 	      	</form>
       	</div>
       	<div id="errore">
