@@ -25,18 +25,19 @@ If not, see <http://www.gnu.org/licenses/>
 
 ?>
 <?php 
-	$link_selection='<option value=""></option>';
-	$link_selection_static='<option value=""></option>';
+	$link_selection='<option value=""></option>\n';
+	$link_selection_static='<option value=""></option>\n';
 	$button_list='';
 	$button_img='';
+	$errore='';
 	
 	function map_editor_main(){		
-		global $x7c, $db, $prefix, $button_list, $link_selection, $button_img, $link_selection_static;
+		global $x7c, $db, $prefix, $button_list, $link_selection, $button_img, $link_selection_static, $errore;
 		if(!$x7c->permissions['admin_panic']){
 			die("Non autorizzato");
 		}
 		
-		if(isset($_GET['edit']))
+		if(isset($_GET['edited']))
 			map_edit();
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}map");
@@ -47,13 +48,13 @@ If not, see <http://www.gnu.org/licenses/>
 			if($row['button']!='')
 				$button=$row['button'];
 			
-			$button_list .= "<img id=\"$row[id]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">";
+			$button_list .= "<img id=\"$row[id]\" title=\"$row[descr]\" alt=\"$row[link]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
 		}
 		
 		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms");
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
-			$link_selection .= "<option id=\"{$row['name']}\" value=\"index.php?act=frame&room={$row['name']}\">{$row['long_name']}</option>";
+			$link_selection .= "<option id=\"{$row['name']}\" value=\"index.php?act=frame&room={$row['name']}\">{$row['long_name']}</option>\n";
 		}
 		
 		
@@ -65,7 +66,11 @@ If not, see <http://www.gnu.org/licenses/>
 		if($dh = opendir($path)){
 			while (($file = readdir($dh)) !== false) {				
 				if($file[0]!="." && filetype($path.$file)!="dir" && eregi("pulsante.*", $file)){
-					$button_img .= "<option value=\"$site_path$file\">$file</option>";
+					$selected='';
+					if($file=="pulsante.gif")
+						$selected="selected";
+						
+					$button_img .= "<option value=\"$site_path$file\" $selected>$file</option>";
 				}
 				
 			}
@@ -95,34 +100,99 @@ If not, see <http://www.gnu.org/licenses/>
 		include('map_editor_visual.php');
 	}
 	
+	
+	
+	
+	
 	function map_edit(){
-		global $prefix, $db;
+		global $prefix, $db, $errore;
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}map WHERE id='{$_POST['id']}'");
-		
-		$row = $db->Do_Fetch_Assoc($query);
-		
-		if(!isset($_POST['selected_id']) || 
-				!isset($_POST['selected_x']) ||
-				!isset($_POST['selected_y']) ||
-				(!isset($_POST['selected_link']) && !isset($_POST['selected_link_static'])) &&
-				!isset($_POST['selected_img']) ||
-				!isset($_POST['descr'])
-				)
+		if(isset($_POST['delete']) && $_POST['delete']>0){
+			$db->DoQuery("DELETE FROM {$prefix}map WHERE id='{$_POST['delete']}'");
+			header("location: index.php?act=mapeditor");
 			return;
+		}
 		
-		if(!$row){
-			//New button
-			
-			$db->DoQuery("INSERT INTO {$prefix}map id, link, posx, posy, button, link_type, descr, 
-									VALUES('$id', '$link', '$posx', '$posy', '$button', '$link_type', '$descr')");	
+		if(isset($_POST['edit']) && $_POST['edit']>0){
+				$link_type=-1;
+				$link = '';
+				if(	!isset($_POST['selected_x']) ||
+					!isset($_POST['selected_y']) ||
+					(!isset($_POST['selected_link']) && !isset($_POST['selected_link_static'])) &&
+					!isset($_POST['selected_img']) ||
+					!isset($_POST['descr'])
+				){	
+					$errore = "Parametri mancanti per l'edit";
+					return;
+				}
+				
+				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
+					$link_type=0;
+					$link = $_POST['selected_link'];
+				}
+				if(isset($_POST['selected_link_static']) && $_POST['selected_link_static']!=''){
+					$link_type=1;
+					$link = $_POST['selected_link_static'];
+				}
+					
+				if($link_type!=-1){
+					$db->DoQuery("UPDATE {$prefix}map 
+								SET link = '$link',
+									posx = '{$_POST['selected_x']}',
+									posy = '{$_POST['selected_x']}',
+									button = '{$_POST['selected_img']}',
+									link_type = '$link_type',
+									descr = '{$_POST['descr']}'
+								WHERE id='{$_POST['edit']}'");
+					
+					header("location: index.php?act=mapeditor");					
+					return;
+				}
+				else{
+					$errore="Link errato per l'edit";
+					return;
+				}
 		}
-		else{
-			//Modify button	
+		
+		
+		
+		if(isset($_POST['add']) && $_POST['add']>0){
+				$link_type=-1;
+				$link = '';
+				if(	!isset($_POST['selected_x']) ||
+					!isset($_POST['selected_y']) ||
+					(!isset($_POST['selected_link']) && !isset($_POST['selected_link_static'])) &&
+					!isset($_POST['selected_img']) ||
+					!isset($_POST['descr'])
+				){	
+					$errore="Parametri mancanti per l'add";
+					return;
+				}
+				
+				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
+					$link_type=0;
+					$link = $_POST['selected_link'];
+				}
+				if(isset($_POST['selected_link_static']) && $_POST['selected_link_static']!=''){
+					$link_type=1;
+					$link = $_POST['selected_link_static'];
+				}
+					
+				if($link_type!=-1){
+					$db->DoQuery("INSERT INTO {$prefix}map (link, posx, posy, button, link_type, descr) 
+									VALUES('$link', '$_POST[selected_x]', '$_POST[selected_y]', '$_POST[selected_img]', 
+									'$link_type', '$_POST[descr]')");
+					header("location: index.php?act=mapeditor");
+					return;
+				}
+				else{
+					$errore =  "Link errato o non selezionato per l'add";
+					return;
+				}
 		}
+		
 		
 		
 	}
 
 ?>
-
