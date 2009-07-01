@@ -73,6 +73,9 @@
     	posx-=9;
     	posy-=9;
 
+    	document.getElementById('selected_link_static').selectedIndex=0;
+  		document.getElementById('selected_link').selectedIndex=0;
+
 		document.getElementById('visual_selected_x').innerHTML=posx;
 		document.getElementById('visual_selected_y').innerHTML=posy;
 		document.getElementById('visual_selected_id').value="<Nome da visualizzare>";
@@ -127,10 +130,13 @@
     	id=targ.id;
     	link=targ.getAttribute('alt');
 
-		if((added || edited) && id!=document.getElementById('selected_id').value){
+		if((added || edited || deleted) && id!=document.getElementById('selected_id').value){
 			alert("Non puoi modificare un pulsante finche' non invii le modifiche effettuate finora");
 			return;
 		}
+
+		document.getElementById('selected_link_static').selectedIndex=0;
+  		document.getElementById('selected_link').selectedIndex=0;
 
 		document.getElementById('visual_selected_x').innerHTML=targ.offsetLeft;
 		document.getElementById('visual_selected_y').innerHTML=targ.offsetTop;
@@ -171,6 +177,7 @@
     	document.getElementById('add').value = -1;
     	document.getElementById('delete').value = -1;
     	
+    	
 
     }
 
@@ -201,8 +208,8 @@
             	document.getElementById('edit').value = -1;
         	}
 
-        	document.getElementById('selected_link').selectedIndex=0;
-        	document.getElementById('selected_link_static').selectedIndex=0;
+      		document.getElementById('selected_link_static').selectedIndex=0;
+      		document.getElementById('selected_link').selectedIndex=0;
             	
         }
 
@@ -218,7 +225,7 @@
 
     }
 
-    function reset_room(cur){
+    function reset_room(){
         sel = document.getElementById('selected_link');
         sel.selectedIndex=0;
 
