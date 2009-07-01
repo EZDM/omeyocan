@@ -330,11 +330,17 @@
 		$query = $db->DoQuery("SELECT * FROM {$prefix}map");
 		$button_list='';
 		
+		$hour = date("G");
+		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$button="./graphic/pulsante.gif";
 			
 			if($row['button']!='')
 				$button=$row['button'];
+				
+			//By night things becomes harder
+			if($row['night_red'] && ($hour >= 22 || $hour < 5))
+				$button="./graphic/pulsante.gif";
 				
 			if($row['link_type']==0){
 				$href=$row['link'];
