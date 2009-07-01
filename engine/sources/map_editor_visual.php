@@ -69,6 +69,10 @@
     			+ document.documentElement.scrollTop;
     	}
 
+    	//Correction for button size
+    	posx-=9;
+    	posy-=9;
+
 		document.getElementById('visual_selected_x').innerHTML=posx;
 		document.getElementById('visual_selected_y').innerHTML=posy;
 		document.getElementById('visual_selected_id').value="<Nome da visualizzare>";
