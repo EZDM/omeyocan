@@ -149,7 +149,7 @@ If not, see <http://www.gnu.org/licenses/>
 					return;
 				}
 				else{
-					$errore="Link errato per l'edit";
+					$errore="Non hai selezionato alcun link o popup!";
 					return;
 				}
 		}
@@ -186,7 +186,7 @@ If not, see <http://www.gnu.org/licenses/>
 					return;
 				}
 				else{
-					$errore =  "Link errato o non selezionato per l'add";
+					$errore =  "Non hai selezionato alcun link o popup!";
 					return;
 				}
 		}
