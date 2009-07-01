@@ -139,7 +139,7 @@ If not, see <http://www.gnu.org/licenses/>
 					$db->DoQuery("UPDATE {$prefix}map 
 								SET link = '$link',
 									posx = '{$_POST['selected_x']}',
-									posy = '{$_POST['selected_x']}',
+									posy = '{$_POST['selected_y']}',
 									button = '{$_POST['selected_img']}',
 									link_type = '$link_type',
 									descr = '{$_POST['descr']}'
