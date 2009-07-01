@@ -160,6 +160,8 @@
 		for(i=0; i<document.getElementById('selected_img').length; i++){
 			if(document.getElementById('selected_img').options[i].value==targ.getAttribute('src')){
 				document.getElementById('selected_img').selectedIndex=i;
+		    	img = document.getElementById('visual_img_preview');
+				img.setAttribute('src', document.getElementById('selected_img').options[i].value);
 			}
 		}
 
@@ -176,6 +178,8 @@
 		document.getElementById('edit').value = id;
     	document.getElementById('add').value = -1;
     	document.getElementById('delete').value = -1;
+
+
     	
     	
 
@@ -235,7 +239,6 @@
 
     function update_img(el){
 		img = document.getElementById('visual_img_preview');
-
 		img.setAttribute('src', el.options[el.selectedIndex].value);
 
 		id = document.getElementById('selected_id').value;
