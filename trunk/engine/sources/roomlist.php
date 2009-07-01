@@ -155,10 +155,10 @@
 			style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
 		}
 		
-		//echo $button_list;
+		echo $button_list;
   
-  ?>
-
+  
+/*
 	<a href="javascript: hndl = window.open('sources/sub_chiesa.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Chiesa');" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></a>
 
 	<a href="javascript: hndl = window.open('sources/sub_ospedale.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Ospedale');" style="position:absolute; top:358px; left:270px;" src="./graphic/pulsante.gif"></a>
@@ -174,8 +174,8 @@
 	<A href="index.php?act=frame&room=Teatro"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Teatro');" style="position:absolute; top:496px; left:380px;" src="./graphic/pulsante.gif"></A>
 
 	<A href="index.php?act=frame&room=Montague"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Montague Chambers');" style="position:absolute; top:458px; left:310px;" src="./graphic/pulsante.gif"></A>
-
-
+*/
+?>
 
 	
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=1011','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 175; left: 205;"></div></a>

@@ -51,7 +51,7 @@ If not, see <http://www.gnu.org/licenses/>
 			$button_list .= "<img id=\"$row[id]\" title=\"$row[descr]\" alt=\"$row[link]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
 		}
 		
-		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms");
+		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms ORDER BY long_name");
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$link_selection .= "<option id=\"{$row['name']}\" value=\"index.php?act=frame&room={$row['name']}\">{$row['long_name']}</option>\n";
