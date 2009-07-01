@@ -157,24 +157,6 @@
 		
 		echo $button_list;
   
-  
-/*
-	<a href="javascript: hndl = window.open('sources/sub_chiesa.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Chiesa');" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></a>
-
-	<a href="javascript: hndl = window.open('sources/sub_ospedale.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Ospedale');" style="position:absolute; top:358px; left:270px;" src="./graphic/pulsante.gif"></a>
-  
-	<A href="index.php?act=frame&room=Cimitero"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Cimitero');" style="position:absolute; top:520px; left:655px;" src="./graphic/pulsante.gif"></A>
-
-	<A href="index.php?act=frame&room=Piazza"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Piazza');" style="position:absolute; top:550px; left:380px;" src="./graphic/pulsante.gif"></A>
-
-	<A href="index.php?act=frame&room=Licoreria"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Licoreria');" style="position:absolute; top:555px; left:360px;" src="./graphic/pulsante.gif"></A>
-
-	<A href="index.php?act=frame&room=Auto"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Cimitero delle auto');" style="position:absolute; top:635px; left:490px;" src="./graphic/pulsante.gif"></A>
-
-	<A href="index.php?act=frame&room=Teatro"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Teatro');" style="position:absolute; top:496px; left:380px;" src="./graphic/pulsante.gif"></A>
-
-	<A href="index.php?act=frame&room=Montague"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Montague Chambers');" style="position:absolute; top:458px; left:310px;" src="./graphic/pulsante.gif"></A>
-*/
 ?>
 
 	
