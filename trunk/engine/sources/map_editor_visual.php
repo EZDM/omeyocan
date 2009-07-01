@@ -79,7 +79,13 @@
 
 		if(!added){
 			var new_button=document.createElement('img');
-			new_button.setAttribute('src', './graphic/pulsante.gif');
+			pulsante_img = './graphic/pulsante.gif';
+
+			el = document.getElementById('selected_img');
+			if(el.options[el.selectedIndex].value != '')
+				pulsante_img = el.options[el.selectedIndex].value;
+				
+			new_button.setAttribute('src', pulsante_img);
 			new_button.setAttribute('style', 'position: absolute; top:'+posy+'; left:'+posx+';');
 			new_button.setAttribute('id', new_id);
 			new_button.setAttribute('onClick', 'javascript: edit_button(event)');
