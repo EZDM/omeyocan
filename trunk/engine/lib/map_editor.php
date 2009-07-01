@@ -97,7 +97,7 @@ If not, see <http://www.gnu.org/licenses/>
 		
 		
 		
-		include('map_editor_visual.php');
+		include('../sources/map_editor_visual.php');
 	}
 	
 	
