@@ -239,7 +239,7 @@
       	<div id="form">
 	      	<form name="editor" method="post" action="index.php?act=mapeditor&edited=1">
 		      	<table>
-		      		<tr><td>Descrizione:</td><td><input type="text" id="visual_selected_id" name="descr"></td></tr>
+		      		<tr><td>Descrizione:</td><td><input type="text" id="visual_selected_id" name="descr" onClick="javascript: this.select();"></td></tr>
 		      		<tr><td>Coordinata X:</td><td id="visual_selected_x"></td></tr>
 		      		<tr><td>Coordinata Y:</td><td id="visual_selected_y"></td></tr>
 		      		<tr><td>Stanza:</td><td id="visual_selected_link" onChange="javascript: reset_static(this);"><select id="selected_link" name="selected_link"><?php echo $link_selection;?> </select></td></tr>
