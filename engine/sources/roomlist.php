@@ -101,6 +101,10 @@
 //This file include common layout for frame and map
 	include('./sources/layout.html');
 
+	if($x7c->permissions['admin_panic']){
+		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 20px;"><a onClick="javascript: window.open(\'index.php?act=mapeditor\',\'mapeditor\',\'width=scree.width,height=screen.height, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Map editor </a></div>';
+	}
+		
 	if(isset($_GET['errore'])){
 		$errore='';
 		switch($_GET['errore']) {
@@ -126,6 +130,35 @@
   <div id="position"> </div>
   
   <!-- Pulsanti mappa -->
+  
+  <?php 
+  
+		$query = $db->DoQuery("SELECT * FROM {$prefix}map");
+		$button_list='';
+		
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$button="./graphic/pulsante.gif";
+			
+			if($row['button']!='')
+				$button=$row['button'];
+				
+			if($row['link_type']==0){
+				$href=$row['link'];
+			}
+			else{
+				$href="javascript: hndl = window.open('$row[link]','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
+			}
+			
+			$button_list .= "<a href=\"$href\">
+			<img src=\"$button\" onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" 
+				onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\" 
+			style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
+		}
+		
+		//echo $button_list;
+  
+  ?>
+
 	<a href="javascript: hndl = window.open('sources/sub_chiesa.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Chiesa');" style="position:absolute; top:352px; left:206px;" src="./graphic/pulsante.gif"></a>
 
 	<a href="javascript: hndl = window.open('sources/sub_ospedale.html','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Ospedale');" style="position:absolute; top:358px; left:270px;" src="./graphic/pulsante.gif"></a>
@@ -141,6 +174,7 @@
 	<A href="index.php?act=frame&room=Teatro"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Teatro');" style="position:absolute; top:496px; left:380px;" src="./graphic/pulsante.gif"></A>
 
 	<A href="index.php?act=frame&room=Montague"> <img onMouseDown="this.src='./graphic/pulsante_down.gif'" onMouseOut="HidePopup(this);" onMouseOver="ShowPopup(this,'Montague Chambers');" style="position:absolute; top:458px; left:310px;" src="./graphic/pulsante.gif"></A>
+
 
 
 	
