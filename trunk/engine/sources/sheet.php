@@ -504,7 +504,7 @@
 			$min_auth=0;
 			include_once('./lib/sheet_lib.php');
 			
-			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
+			if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfModifySheet())){
 				$ok = true;
 				
 				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
@@ -532,7 +532,7 @@
 						break;
 					}
 				}
-				if(!checkIfMaster() && !isset($_POST['xp']))
+				if(!checkIfModifySheet() && !isset($_POST['xp']))
 					$ok = false;
 				
 				//Controllo se le abilit� non sono state abbassate o superano il massimo
@@ -540,7 +540,7 @@
 				
 				$tot_used=0;
 				$lvl_gained=0;
-				if(!checkIfMaster() && $ok){
+				if(!checkIfModifySheet() && $ok){
 					$max_ab = $x7c->settings['max_ab'];
 
 					
@@ -572,7 +572,7 @@
 					$lvl_gained=$tot_used;
 
 					
-					if(!checkIfMaster()){
+					if(!checkIfModifySheet()){
 						if($tot_used > $xp_avail){
 							$errore .= "Hai usato troppi PX<br>";
 							$ok = false;
@@ -707,7 +707,7 @@
 				
 			$body.="</table></div>";
 			
-			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
+			if(($xp!=0 && $pg==$x7s->username) || checkIfModifySheet()){
 				$max_ab = $x7c->settings['max_ab'];
 
 				$body.=build_ability_javascript($max_ab);
@@ -765,7 +765,7 @@
 				
 				$body .= "	</table>";
 				
-				if(!checkIfMaster()){
+				if(!checkIfModifySheet()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="xp" value="'.$xp.'"></div>
@@ -778,7 +778,7 @@
 			$body.="<div id=\"descr\"> </div>
 				</div>";
 
-			if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
+			if(($xp!=0 && $pg==$x7s->username) || checkIfModifySheet()){
 				$body .= "<div id=\"modify\">
                                                     <INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
                                                     <INPUT id=\"aggiorna\" style=\"visibility: hidden;\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" $disabled>
@@ -1359,7 +1359,7 @@
 		
 		$max_ab = $x7c->settings['max_ab'];
 
-		if(isset($_GET['mgmt']) && ($corp_master || checkIfMaster())){
+		if(isset($_GET['mgmt']) && ($corp_master || checkIfModifySheet())){
 		        if(isset($_GET['target']) || isset($_POST['target'])){
   		                if(isset($_GET['target']))
   		                    $target = $_GET['target'];
@@ -1402,7 +1402,7 @@
                           }
 		}
 
-		if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
+		if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfModifySheet())){
 			$ok = true;
 			
 			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
@@ -1430,7 +1430,7 @@
 					break;
 				}
 			}
-			if(!checkIfMaster() && !isset($_POST['xp']))
+			if(!checkIfModifySheet() && !isset($_POST['xp']))
 				$ok = false;
 				
 			//Controllo se le abilita' non sono state abbassate o superano il massimo
@@ -1438,7 +1438,7 @@
 				
 			$tot_used=0;
 			$lvl_gained=0;
-			if(!checkIfMaster() && $ok){
+			if(!checkIfModifySheet() && $ok){
 				$max_ab = $x7c->settings['max_ab'];
 
 					
@@ -1469,7 +1469,7 @@
                                 }
 
 
-                                if(!checkIfMaster()){
+                                if(!checkIfModifySheet()){
                                         if($tot_used > $xp_avail){
                                                 $errore .= "Hai usato troppi PX<br>";
                                                 $ok = false;
@@ -1524,7 +1524,7 @@
 
                 $body.="<div id=\"corp\">\n";
 
-                if(!$corp_master && !checkIfMaster())
+                if(!$corp_master && !checkIfModifySheet())
                         $body .= "<div id=\"visual\"><table>";
                 else
                         $body .= "<div id=\"visual2\"><table>";
@@ -1552,7 +1552,7 @@
 
                 $body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
 
-                if(!$corp_master && !checkIfMaster())
+                if(!$corp_master && !checkIfModifySheet())
                         $body .= '<div id="modifiable3">';
                 else
                         $body .= '<div id="modifiable2">';
@@ -1563,13 +1563,13 @@
 				$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
 
-                                if($cur['corp']==$x7s->user_group || checkIfMaster())
+                                if($cur['corp']==$x7s->user_group || checkIfModifySheet())
                                         $body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
 
 				$body .= "<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>";
 				$body .= "<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>";
 
-                                if($cur['corp']==$x7s->user_group || checkIfMaster())
+                                if($cur['corp']==$x7s->user_group || checkIfModifySheet())
 				        $body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
 
 				$body .= "<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
@@ -1588,7 +1588,7 @@
 
                 $body .= "	</table>";
 
-                if(!checkIfMaster()){
+                if(!checkIfModifySheet()){
 					$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
 							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="xp" value="'.$xp.'"></div>
@@ -1597,8 +1597,8 @@
 
                 $body.="</div>";
 
-                if(($xp!=0 && $pg==$x7s->username) || checkIfMaster()){
-                                if($corp_master || checkIfMaster())
+                if(($xp!=0 && $pg==$x7s->username) || checkIfModifySheet()){
+                                if($corp_master || checkIfModifySheet())
 				        $body .= "<div id=\"modify2\">";
 				else
 				        $body .= "<div id=\"modify3\">";
@@ -1610,7 +1610,7 @@
                 
                 $body.= '</form>';
 
-                if(($corp_master && $pg==$x7s->username) || (checkIfMaster() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
+                if(($corp_master && $pg==$x7s->username) || (checkIfModifySheet() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
                         $body.="<div id=\"corp_mgmt\">
                                 <div>
                                 Gestione gremios {$row_user['user_group']}
@@ -2097,6 +2097,14 @@
 		global $x7s, $x7c;
 		
 		$value = $x7c->permissions['admin_panic'];
+		
+		return $value;
+	}
+	
+	function checkIfModifySheet(){
+		global $x7s, $x7c;
+		
+		$value = $x7c->permissions['sheet_modify'];
 		
 		return $value;
 	}
