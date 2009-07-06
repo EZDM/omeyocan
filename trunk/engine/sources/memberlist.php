@@ -71,24 +71,37 @@
 		}
 
 		if(isset($_GET['letter'])){
-                        $letter=$_GET['letter'];
-                }
+        	$letter=$_GET['letter'];
+        }
 			
 		// See if the user wants the data sorted in anyway
 		$order = " ORDER BY username ASC";
-		$sort_order_1 = 1;
-		$sort_order_2 = 3;
+		$sort_order_1 = 2;
+		$sort_order_2 = 4;
 		if(isset($_GET['sort'])){
 			if($_GET['sort'] == "1"){
 				$order = " ORDER BY username ASC";
 				$sort_order_1 = 2;
 			}elseif($_GET['sort'] == "2"){
 				$order = " ORDER BY username DESC";
+				$sort_order_1 = 1;
 			}elseif($_GET['sort'] == "3"){
 				$order = " ORDER BY position ASC";
 				$sort_order_2 = 4;
 			}elseif($_GET['sort'] == "4"){
 				$order = " ORDER BY position DESC";
+				$sort_order_2 = 3;
+			}
+		}
+		
+		$costitution=false;
+		$sheet=false;
+		if($x7c->permissions['admin_panic']){
+			if(isset($_GET['cos'])){
+				$costitution = true;
+			}
+			elseif(isset($_GET['sheet'])){
+				$sheet=true;
 			}
 		}
 
@@ -131,8 +144,8 @@
                 if($room!='')
                     $get_room="&room=$room";
                     
-		
-		$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+		if(!$costitution && !$sheet){
+			$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
@@ -140,6 +153,38 @@
                                             AND p.usergroup = u.user_group
                                             {$more_query}
                                             {$order}");
+		}
+		elseif($sheet){
+			$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+                                          FROM {$prefix}users u,
+                                            {$prefix}rooms r, {$prefix}permissions p
+                                            WHERE (r.name = u.position
+                                            OR (u.position='' AND r.name='Mappa'))
+                                            AND p.usergroup = u.user_group
+                                            AND sheet_ok = 0
+                                            {$more_query}
+                                            {$order}");
+		}
+		elseif($costitution){
+			$query = $db->DoQuery("SELECT u.username AS username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+                                          FROM {$prefix}users u,
+                                            {$prefix}rooms r, {$prefix}permissions p,
+                                            {$prefix}usercharact uc
+                                            WHERE (r.name = u.position
+                                            OR (u.position='' AND r.name='Mappa'))
+                                            AND p.usergroup = u.user_group
+                                            AND uc.username = u.username
+                                            AND uc.charact_id = 'rob'
+                                            AND uc.value <= '6'
+                                            AND sheet_ok = '1'
+                                            {$more_query}
+                                            {$order}");
+		}
+                                            
+		$additional_controls='';                                            
+        if($x7c->permissions['admin_panic'] && $room==''){
+        	$additional_controls .= "<br><a href=\"index.php?act=memberlist&cos\">[Mostra robustezza &lt;= 6]</a><a href=\"index.php?act=memberlist&sheet\">[Mostra pg senza scheda]</a>";
+		}
 		
 		$body = "<div id=\"navigator\">
                       <a href=\"index.php?act=memberlist$get_room\">[Tutti]</a><br>
@@ -169,16 +214,26 @@
                       <a href=\"index.php?act=memberlist&letter=x$get_room\">[x]</a>
                       <a href=\"index.php?act=memberlist&letter=y$get_room\">[y]</a>
                       <a href=\"index.php?act=memberlist&letter=z$get_room\">[z]</a>
+                      $additional_controls
                     </div>";
 
                 $get_letter ='';
                 if($letter != 0)
                   $get_letter = "&letter=$letter";
                   
+		$additional_get='';                  
+        if($costitution){
+        	$additional_get .= "&cos";
+        }
+        
+        if($sheet){
+        	$additional_get .= "&sheet";
+        }
+        
 		$body .= "<table align=\"center\" cellspacing=\"0\" cellpadding=\"2\">
 			<tr>
-				<td class=\"col_header\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}$get_room$get_letter\">$txt[2]</a></td>
-				<td class=\"col_header\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}$get_room$get_letter\">$txt[560]</td>";
+				<td class=\"col_header\" height=\"25\">&nbsp;<a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_1}$get_room$get_letter$additional_get\">$txt[2]</a></td>
+				<td class=\"col_header\" height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&sort={$sort_order_2}$get_room$get_letter$additional_get\">$txt[560]</td>";
 		if($room!='' && $room!="Mappa")
 			$body.="<td class=\"col_header\" height=\"25\">Sussurra</td>";
 				
