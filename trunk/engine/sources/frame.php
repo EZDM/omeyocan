@@ -103,7 +103,7 @@ if($row['type'] == 2){
 
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE
 						owner = '{$x7s->username}' AND
-						name = 'key_$_GET[room]'
+						name = 'key_$_GET[room]' || name = 'masterkey_$_GET[room]'
 						$univoque_key
 					");
 
@@ -118,20 +118,20 @@ if($row['type'] == 2){
 
 								if($remain < 0){
 									$db->DoQuery("DELETE FROM {$prefix}objects
-							WHERE
-							owner = '{$x7s->username}' AND
-							name = 'key_$_GET[room]' AND
-							id = '$_GET[key_used]'
-						");
+											WHERE
+											owner = '{$x7s->username}' AND
+											name = 'key_$_GET[room]' AND
+											id = '$_GET[key_used]'
+										");
 								}
 								else{
 									$db->DoQuery("UPDATE {$prefix}objects
-								SET uses=$remain
-								WHERE
-								owner = '{$x7s->username}' AND
-								name = 'key_$_GET[room]' AND
-								id = '$_GET[key_used]'
-						");
+												SET uses=$remain
+												WHERE
+												owner = '{$x7s->username}' AND
+												name = 'key_$_GET[room]' AND
+												id = '$_GET[key_used]'
+										");
 									$ok=true;
 								}
 							}

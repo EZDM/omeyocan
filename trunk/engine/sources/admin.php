@@ -1919,7 +1919,7 @@
 					$error = "Oggetto non esistente";
 				}
 
-                                $residuo=$row_usr['spazio'] - $row['size'];
+                $residuo=$row_usr['spazio'] - $row['size'];
 				if($residuo<0)
 				        $error = "L'utente non pu&ograve; trasportare l'oggetto; ha solo spazio: $row_usr[spazio] e l'oggetto occupa $row[size]";
 				
@@ -1982,10 +1982,10 @@
 								FROM {$prefix}rooms WHERE name='$_POST[owner]'");
 
 						$query_obj_master =  $db->DoQuery("SELECT count(*) AS cnt
-								FROM {$prefix}objects WHERE name='key_$_POST[owner]' AND owner=''");
+								FROM {$prefix}objects WHERE name='masterkey_$_POST[owner]' AND owner=''");
 
 						$query_obj_user =  $db->DoQuery("SELECT count(*) AS cnt
-								FROM {$prefix}objects WHERE name='key_$_POST[owner]' AND owner='$_POST[owner]'");								
+								FROM {$prefix}objects WHERE name='masterkey_$_POST[owner]' AND owner='$_POST[owner]'");								
 						$row_rooms = $db->Do_Fetch_Assoc($query_rooms);
 						$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
 						$row_obj_user = $db->Do_Fetch_Assoc($query_obj_user);
@@ -2005,7 +2005,7 @@
 						//Copy of the key for the master
 							$db->DoQuery("INSERT INTO {$prefix}objects
 								(name, description, uses, image_url,equipped,size)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1','0')");
+								VALUES ('masterkey_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1','0')");
 							$body .= "Copia master della chiave creata con successo<br>";
 						}
 						else
@@ -2015,13 +2015,13 @@
 						//Cooy of the key for the owner
 							$db->DoQuery("INSERT INTO {$prefix}objects
 								(name, description, uses, image_url, owner,equipped,size)
-								VALUES ('key_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1','0')");
+								VALUES ('masterkey_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1','0')");
 							$body .= "Copia utente della chiave creata con successo<br>";
 							include_once('./lib/alarms.php');
 							object_assignement($_POST['owner'],"Chiave della stanza di $_POST[owner]");
 						}
 						else
-							$body .= "Copia utente della chiave gi&agrave; presente<br>";
+							$body .= "Copia utente della chiave master gi&agrave; presente<br>";
 						
 					}
 
@@ -2195,9 +2195,12 @@
 				$body.='<table width="100%">
 						<tr><td><b>Nome oggetto:</b></td><td style="width=10%"><b>Azioni</b></td></tr>
 						<tr><td colspan=2><hr></td></tr>';	
-                while($row = $db->Do_Fetch_Assoc($query)){
-						$body .= "<tr><td><a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">$row[name]</a></td><td style=\"width=10%\"><a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a></td></tr>
-									<tr><td colspan=2><hr></td></tr>";
+				
+				if(isset($_GET['letter'])||isset($_POST['letter'])){
+	                while($row = $db->Do_Fetch_Assoc($query)){
+							$body .= "<tr><td><a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">$row[name]</a></td><td style=\"width=10%\"><a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a></td></tr>
+										<tr><td colspan=2><hr></td></tr>";
+					}
 				}
 				$body.='</table>';
 				

@@ -162,18 +162,34 @@
 					$errore = "Oggetto non esistente";
 				}
 				if(!$row['equipped']){
-                                        $errore = "Non puoi consegnare un oggetto che non trasporti";
+                        $errore = "Non puoi consegnare un oggetto che non trasporti";
 				}
+				
+				$query = $db->DoQuery("SELECT position,spazio FROM {$prefix}users WHERE username='$_POST[owner]'");
+                $row_msg=$db->Do_Fetch_Assoc($query);
+                
+                if(!$row_msg)
+                 	die("Utente non esistente");
+
+                if($row_msg['spazio']<$row['size']){
+                   	$errore="Il destinatario non puo' equipaggiare l'oggetto";
+                }
+                else{
+                   	$residuo=$row_msg['spazio']-$row['size'];
+                }
+
 
 				if($errore==''){
 					//keys duplicates, and does not disappera from my sheet
-					if($row['name']=="key_{$x7s->username}" || ($row['name']=="key_$_GET[pg]" && checkIfMaster())){
+					if(preg_match("/^masterkey/", $row['name'])){
+						list($pre, $name)=split("masterkey_", $row['name']);
+						$obj="key_$name";
 						if(!isset($_POST['grants']) || $_POST['grants'] <= 0 || $_POST['grants']== '')
 							$_POST['grants'] = -1;
 							
 						$db->DoQuery("INSERT INTO {$prefix}objects
-							(name, description, owner, uses, image_url)
-							VALUES ('$row[name]', '$row[description]', '$_POST[owner]','$_POST[grants]','$row[image_url]')
+							(name, description, owner, uses, image_url, equipped)
+							VALUES ('$obj', '$row[description]', '$_POST[owner]','$_POST[grants]','$row[image_url]','1')
 						");
 					}
 					else{
@@ -186,6 +202,8 @@
 					$errore="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
 					object_moves($_POST['owner'],$pg,$row['name']);
+					recalculate_space($pg);
+					recalculate_space($_POST['owner']);
 				}
 				
 			}
@@ -237,11 +255,20 @@
                                       		$grandi++;
                                 }
                                 
-                                if(preg_match("/key_/", $row['name'])) {
-                                        list($pre, $name)=split("key_", $row['name']);
+                                if(preg_match("/^key_/", $row['name']) || preg_match("/^masterkey_/", $row['name'])) {
+                                		$master_key=0;
+                                		$master_string='';
+                                		if(preg_match("/^key_/", $row['name']))
+                                        	list($pre, $name)=split("key_", $row['name']);
+                                        elseif(preg_match("/^masterkey_/", $row['name'])){
+                                        	list($pre, $name)=split("masterkey_", $row['name']);
+                                        	$master_key=1;
+                                        	$master_string = " (chiave master)";
+                                        }
+                                        	
                                         if(strcasecmp($_GET['pg'], $x7s->username) == 0 || checkIfMaster()){
                                                 //we make clickable only key of my sheet
-                                                if(strcasecmp($row['name'], "key_{$x7s->username}") == 0 || (strcasecmp($row['name'], "key_$_GET[pg]") == 0 && checkIfMaster())){
+                                                if($master_key || checkIfMaster()){
                                                         //This is my key
                                                         $more_form = '
                                                                 <tr>
@@ -255,7 +282,7 @@
                                                         $description .= "<br>(Usi rimasti: $remaining_uses)";
                                                 }
                                                 
-                                                $obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.'</a>';
+                                                $obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.$master_string.'</a>';
                                                 
                                         }
                                         else{

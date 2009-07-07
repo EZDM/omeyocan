@@ -278,6 +278,7 @@
 				padding: 5px;
 				border: 3px dashed red;
 				text-decoration: none;
+				z-index: 2;
 			}
 			.errore_ab{
 				text-align: center;
