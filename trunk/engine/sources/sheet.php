@@ -268,8 +268,8 @@
                                         	
                                         if(strcasecmp($_GET['pg'], $x7s->username) == 0 || checkIfMaster()){
                                                 //we make clickable only key of my sheet
-                                                if($master_key || checkIfMaster()){
-                                                        //This is my key
+                                                if($master_key){
+                                                        //This a master key
                                                         $more_form = '
                                                                 <tr>
                                                                         <td>Usi concessi (vuoto per illimitati):</td>
