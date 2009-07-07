@@ -150,12 +150,6 @@
 							<td><select class=\"text_input\" style=\"width: 100px;\" name=\"room_type\">$type_options</select></td>
 						</tr>";
 
-				if($x7c->permissions['make_mod'] == 1)
-					$body .= "<tr>
-								<td>$txt[70]:</td>
-								<td><input type=\"checkbox\" name=\"moderated\" value=\"1\"{$def['moderated']}></td>
-							</tr>";
-
 				if($x7c->permissions['make_nexp'] == 1)
 					$body .= "<tr>
 								<td>$txt[71]:</td>
