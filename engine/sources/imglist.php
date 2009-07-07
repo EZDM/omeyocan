@@ -102,7 +102,7 @@
 		$i=0;
 		$maxcol=6;
 		
-		$body.="<table>\n";
+		$body.="<table style=\"width: 750px;\">\n";
 
 		$dir="<tr><td><h3>Categorie</h3><ul>";
 		if($subdir!="")
