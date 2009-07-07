@@ -178,7 +178,7 @@
                    	$residuo=$row_msg['spazio']-$row['size'];
                 }
 
-
+				$obj=$row['name'];
 				if($errore==''){
 					//keys duplicates, and does not disappera from my sheet
 					if(preg_match("/^masterkey/", $row['name'])){
@@ -201,7 +201,7 @@
 
 					$errore="Oggetto assegnato correttamente\n";
 					include('./lib/alarms.php');
-					object_moves($_POST['owner'],$pg,$row['name']);
+					object_moves($_POST['owner'],$pg,$obj);
 					recalculate_space($pg);
 					recalculate_space($_POST['owner']);
 				}
