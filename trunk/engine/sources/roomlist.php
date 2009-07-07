@@ -156,6 +156,29 @@
 							hoveritem.src=saved_src;
 						}
 
+						function ShowPopup2(hoveritem, locat)
+						{
+							hp = document.getElementById("position");
+		
+							// Set popup to visible
+							hp.style.top = hoveritem.offsetTop + 18;
+							hp.style.left = hoveritem.offsetLeft + 20;
+                                                        hp.style.zIndex = 1;
+							hp.innerHTML = locat;
+
+							hp.style.visibility = "Visible";
+							saved_src=hoveritem.src;
+							hoveritem.src='./graphic/pulsante_over.gif';
+							
+						}
+
+						function HidePopup2(hoveritem)
+						{
+							hp = document.getElementById("position");
+							hp.style.visibility = "Hidden";	
+							hoveritem.src=saved_src;
+						}
+
 						function do_initial_refresh(){
 							// Create object
 							if(window.self.name == ''){
@@ -349,7 +372,7 @@
 				$href="javascript: hndl = window.open('$row[link]','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
 			}
 			
-			$rollover='';
+			$rollover="onMouseOut=\"HidePopup2(this);\" onMouseOver=\"ShowPopup2(this,'$row[descr]');\"";
 			if($row['rollover']){
 				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\"";
 			}
