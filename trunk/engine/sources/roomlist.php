@@ -167,8 +167,7 @@
 							hp.innerHTML = locat;
 
 							hp.style.visibility = "Visible";
-							saved_src=hoveritem.src;
-							hoveritem.src='./graphic/pulsante_over.gif';
+							
 							
 						}
 
@@ -176,7 +175,6 @@
 						{
 							hp = document.getElementById("position");
 							hp.style.visibility = "Hidden";	
-							hoveritem.src=saved_src;
 						}
 
 						function do_initial_refresh(){
