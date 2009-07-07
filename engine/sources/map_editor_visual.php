@@ -201,6 +201,11 @@ If not, see <http://www.gnu.org/licenses/>
 		else
 			document.getElementById('night_red').checked=true;
 
+		if(targ.getAttribute('rollover') ==0)
+			document.getElementById('rollover').checked=false;
+		else
+			document.getElementById('rollover').checked=true;
+
 
 		document.getElementById('edit').value = id;
     	document.getElementById('add').value = -1;
@@ -301,6 +306,7 @@ If not, see <http://www.gnu.org/licenses/>
 		      		<tr><td>Popup:</td><td id="visual_selected_link_static"><select id="selected_link_static" name="selected_link_static" onChange="javascript: reset_room(this);"><?php echo $link_selection_static;?> </select></td></tr>
 		      		<tr><td>Immagine:</td><td id="visual_selected_img"><img id="visual_img_preview" src="./graphic/pulsante.gif"><select id="selected_img" name="selected_img" onChange="javascript: update_img(this);"><?php echo $button_img;?> </select></td></tr>
 		      		<tr><td>Cambia colore<br> di notte?</td><td><input type="checkbox" checked name="night_red" id="night_red"> </td></tr>
+		      		<tr><td>Rollover<br> abilitato?</td><td><input type="checkbox" checked name="rollover" id="rollover"> </td></tr>
 		      		<tr><td><input type="button" id="delete_btn" onClick="javascript: delete_button(event);" value="Cancella pulsante"></td></tr>
 		      		<tr><td><input type="submit" value="Invia modifiche"></td><td><input type="button" id="abort_btn" onClick="javascript: window.location.reload();" value="Annulla modifiche"></td></tr>
 		      		<tr><td><br><input type="button" value="Chiudi editor" onClick="javascript: window.close(self);"></td></tr>

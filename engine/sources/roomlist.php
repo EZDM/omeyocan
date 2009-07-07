@@ -349,10 +349,13 @@
 				$href="javascript: hndl = window.open('$row[link]','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
 			}
 			
+			$rollover='';
+			if($row['rollover']){
+				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\"";
+			}
+			
 			$button_list .= "<a href=\"$href\">
-			<img src=\"$button\" onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" 
-				onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\" 
-			style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
+			<img src=\"$button\" $rollover style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
 		}
 		
 		echo $button_list;
