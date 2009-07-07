@@ -103,7 +103,7 @@ if($row['type'] == 2){
 
 		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE
 						owner = '{$x7s->username}' AND
-						(name = 'key_$_GET[room]' OR name = 'masterkey_$_GET[room])'
+						(name = 'key_$_GET[room]' OR name = 'masterkey_$_GET[room]')
 						$univoque_key
 					");
 
