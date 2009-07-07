@@ -48,7 +48,7 @@ If not, see <http://www.gnu.org/licenses/>
 			if($row['button']!='')
 				$button=$row['button'];
 			
-			$button_list .= "<img night=\"$row[night_red]\" id=\"$row[id]\" title=\"$row[descr]\" alt=\"$row[link]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
+			$button_list .= "<img rollover=\"$row[rollover]\" night=\"$row[night_red]\" id=\"$row[id]\" title=\"$row[descr]\" alt=\"$row[link]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
 		}
 		
 		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms ORDER BY long_name");
@@ -127,9 +127,13 @@ If not, see <http://www.gnu.org/licenses/>
 				}
 				
 				$night_red=0;
+				$rollover=0;
 				
 				if(isset($_POST['night_red']))
 					$night_red=1;
+					
+				if(isset($_POST['rollover']))
+					$rollover=1;	
 				
 				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
 					$link_type=0;
@@ -148,6 +152,7 @@ If not, see <http://www.gnu.org/licenses/>
 									button = '{$_POST['selected_img']}',
 									link_type = '$link_type',
 									night_red = '$night_red',
+									rollover = '$rollover',
 									descr = '{$_POST['descr']}'
 								WHERE id='{$_POST['edit']}'");
 					
@@ -176,9 +181,13 @@ If not, see <http://www.gnu.org/licenses/>
 				}
 				
 				$night_red=0;
+				$rollover = 0;
 				
 				if(isset($_POST['night_red']))
 					$night_red=1;
+					
+				if(isset($_POST['rollover']))
+					$rollover=1;
 					
 				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
 					$link_type=0;
@@ -190,9 +199,9 @@ If not, see <http://www.gnu.org/licenses/>
 				}
 					
 				if($link_type!=-1){
-					$db->DoQuery("INSERT INTO {$prefix}map (link, posx, posy, button, link_type, descr, night_red) 
+					$db->DoQuery("INSERT INTO {$prefix}map (link, posx, posy, button, link_type, descr, night_red, rollover) 
 									VALUES('$link', '$_POST[selected_x]', '$_POST[selected_y]', '$_POST[selected_img]', 
-									'$link_type', '$_POST[descr]', '$night_red')");
+									'$link_type', '$_POST[descr]', '$night_red', '$rollover')");
 					header("location: index.php?act=mapeditor");
 					return;
 				}
