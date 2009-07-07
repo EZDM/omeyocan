@@ -66,7 +66,7 @@
 	}
 	
 	// This function creates a new room
-	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$exp,$panic_free){
+	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$exp,$panic_free, $long_name){
 		global $prefix, $db;
 		if($exp != 1)
 			$time = time();
@@ -74,9 +74,10 @@
 			$time = 0;
 		$ops = "$uid";
 		$voice = "$uid";
+
 		$db->DoQuery("INSERT INTO {$prefix}rooms 
-		(name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, panic_free, long_name)
-		VALUES('$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free','$name')");
+		(id, name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, logo, panic_free, long_name, shadow)
+		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free','$long_name', '0')");
 		return 1;
 	}
 	
@@ -93,4 +94,4 @@
 		$db->DoQuery("UPDATE {$prefix}rooms SET $setting='$new_setting' WHERE name='$room'");
 	}
 
-?> 
+?>

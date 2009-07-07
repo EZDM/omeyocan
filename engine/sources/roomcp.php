@@ -100,10 +100,8 @@
 						<td width=\"33%\">Descrizione:</td>
  						<td ><textarea class=\"text_input\" name=\"topic\" style=\"width: 100%; height: 200px\">{$x7c->room_data['topic']}</textarea></td>
 					</tr>
-					<tr>
-						<td>$txt[66]:</td>
-						<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\" autocomplete=\"off\"></td>
-					</tr>
+						<input type=\"hidden\" class=\"text_input\" style=\"width: 100%;\" name=\"greeting\" value=\"{$x7c->room_data['greeting_raw']}\" autocomplete=\"off\">
+					
 					<tr>
 						<td>$txt[3]:</td>
 						<td><input type=\"password\" class=\"text_input\" style=\"width: 100%;\"  name=\"password\" autocomplete=\"off\" value=\"{$x7c->room_data['password']}\"></td>
@@ -129,7 +127,8 @@
 					
 					$body .= "<tr>
 								<td>Immagine polaroid:</td>
-								<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\"  name=\"rm_logo\" value=\"{$x7c->room_data['logo']}\"></td>
+								<td><input type=\"text\" class=\"text_input\" style=\"width: 100%;\"  name=\"image_url\" value=\"{$x7c->room_data['logo']}\"></td>
+								<tr><td>&nbsp;</td><td><a onClick=\"javascript: window.open('index.php?act=images&subdir=polaroid','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
 							</tr>";
 					
 				}
@@ -193,8 +192,8 @@
 				if($x7c->permissions['set_background'] == 0 || $x7c->settings['enable_roombgs'] == 0 || !isset($_POST['rm_bg']))
 					$_POST['rm_bg'] = $x7c->room_data['background'];
 				
-				if($x7c->permissions['set_logo'] == 0 || $x7c->settings['enable_roomlogo'] == 0 || !isset($_POST['rm_logo']))
-					$_POST['rm_logo'] = $x7c->room_data['logo'];
+				if($x7c->permissions['set_logo'] == 0 || $x7c->settings['enable_roomlogo'] == 0 || !isset($_POST['image_url']))
+					$_POST['image_url'] = $x7c->room_data['logo'];
 				
 				if(!isset($_POST['panic_free']))
 					$_POST['panic_free']=0;
@@ -212,7 +211,7 @@
 				$new_settings[] = $_POST['password'];
 				$new_settings[] = $_POST['max_users'];
 				$new_settings[] = $_POST['rm_bg'];
-				$new_settings[] = $_POST['rm_logo'];
+				$new_settings[] = $_POST['image_url'];
 				$new_settings[] = $_POST['panic_free'];
 				$new_settings[] = $_POST['long_name'];
 

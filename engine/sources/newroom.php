@@ -82,19 +82,15 @@
 				// The Room Topic Field
 				$body .= "		<tr valign=\"top\">
 									<td width=\"70\">&nbsp;</td>
-									<td width=\"80\" style=\"vertical-align: middle;\">$txt[65]: </td>
-									<td width=\"175\" ><input type=\"text\" class=\"text_input\" name=\"roomtopic\"></td>
+									<td width=\"80\" style=\"vertical-align: middle;\">Nome esteso: </td>
+									<td width=\"175\" ><input type=\"text\" class=\"text_input\" name=\"roomlong\"></td>
 									<td width=\"70\">&nbsp;</td>
 								</tr>
 						";
 						
 				// The Room Greeting Field
-				$body .= "		<tr valign=\"top\">
-									<td width=\"70\">&nbsp;</td>
-									<td width=\"80\" style=\"vertical-align: middle;\">$txt[66]: "; $body .= $print->help_button("room_greeting"); $body .= "</td>
-									<td width=\"175\" ><input type=\"text\" class=\"text_input\" name=\"roomgreeting\"></td>
-									<td width=\"70\">&nbsp;</td>
-								</tr>
+				$body .= "		<input type=\"hidden\" class=\"text_input\" name=\"roomgreeting\">
+
 						";
 						
 				// The Room Password Field
@@ -115,28 +111,8 @@
 								</tr>
 						";
 							
-				// The room type selector
-				$type_options = "<option value=\"1\">$txt[68]</option>";
-				if($x7c->permissions['make_proom'] == 1)
-					$type_options .= "<option value=\"2\">$txt[69]</option>";
-				
-				$body .= "		<tr valign=\"top\">
-									<td width=\"70\">&nbsp;</td>
-									<td width=\"80\" style=\"vertical-align: middle;\">$txt[64]: </td>
-									<td width=\"175\" ><select class=\"text_input\" name=\"roomtype\" style=\"width:100px;\">$type_options</select></td>
-									<td width=\"70\">&nbsp;</td>
-								</tr>
-						";
 						
-				// Permission check and if enabled print moderated toggle
-				if($x7c->permissions['make_mod'] == 1)
-					$body .= "		<tr valign=\"top\">
-										<td width=\"70\">&nbsp;</td>
-										<td width=\"80\" style=\"vertical-align: middle;\">$txt[70]: </td>
-										<td width=\"175\" ><input type=\"checkbox\" name=\"roommod\" value=\"1\"></td>
-										<td width=\"70\">&nbsp;</td>
-									</tr>
-							";
+
 							
 				// Permission check and if enabled print never expire toggle
 				if($x7c->permissions['make_nexp'] == 1)
@@ -178,10 +154,14 @@
 		global $txt, $print, $x7c, $db, $prefix, $x7p;
 		
 		$error = "";
-		
+		$_POST['roomtype']=1;
+		$_POST['roomtopic']='';
 		// Make sure all values were filled out and check for errors in it
 		if($_POST['roomname'] == "" || eregi("\.|'|,|;|\*",$_POST['roomname']))
 			$error = $txt[72];
+			
+		if($_POST['roomlong'] == "" || eregi("\.|'|,|;|\*",$_POST['roomlong']))
+			$error = "Nome lungo errato: il nome può contenere solo lettere e numeri, non simboli.";
 			
 		$query = $db->DoQuery("SELECT name FROM {$prefix}rooms WHERE name='$_POST[roomname]'");
 		$row = $db->Do_Fetch_Row($query);
@@ -208,7 +188,8 @@
 		if($error == ""){
 			$body = $txt[75]."<Br><Br><a href=\"./index.php\">[$txt[29]]</a>";
 			// Crate the room
-			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'],$_POST['roomnexp'], $_POST['panic_free']);
+			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'],$_POST['roomnexp'], $_POST['panic_free'], $_POST['roomlong']);
+			header("location: index.php?act=roomcp&room=$_POST[roomname]&cp_page=settings");
 		}else{
 			$body = $error."<Br><Br><a href=\"index.php?act=newroom1\">[$txt[77]]</a>";
 		}
@@ -216,4 +197,4 @@
 		$print->normal_window($txt[59],$body);
 	}
 	
-?> 
+?>
