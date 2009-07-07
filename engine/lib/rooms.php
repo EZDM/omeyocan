@@ -74,10 +74,23 @@
 			$time = 0;
 		$ops = "$uid";
 		$voice = "$uid";
-
+		
 		$db->DoQuery("INSERT INTO {$prefix}rooms 
 		(id, name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, logo, panic_free, long_name, shadow)
 		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free','$long_name', '0')");
+		
+		//We also create the master key for the access
+		if($type==2){
+			$query_obj_master =  $db->DoQuery("SELECT count(*) AS cnt
+								FROM {$prefix}objects WHERE name='masterkey_$name' AND owner=''");
+			$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
+			if($row_obj_master['cnt'] == 0){
+						//Copy of the key for the master
+							$db->DoQuery("INSERT INTO {$prefix}objects
+								(name, description, uses, image_url,equipped,size)
+								VALUES ('masterkey_$name','Chiave della stanza $long_name', '-1', './graphic/private_key.jpg','1','0')");
+			}
+		}
 		return 1;
 	}
 	
@@ -86,6 +99,19 @@
 	function mass_change_roomsettings($room,$new_settings){
 		global $prefix, $db;
 		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]', panic_free='$new_settings[8]', long_name='$new_settings[9]' WHERE name='$room'");
+		
+		//We also create the master key for the access
+		if($new_settings[0]==2){
+			$query_obj_master =  $db->DoQuery("SELECT count(*) AS cnt
+								FROM {$prefix}objects WHERE name='masterkey_$room' AND owner=''");
+			$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
+			if($row_obj_master['cnt'] == 0){
+						//Copy of the key for the master
+							$db->DoQuery("INSERT INTO {$prefix}objects
+								(name, description, uses, image_url,equipped,size)
+								VALUES ('masterkey_$room','Chiave della stanza $new_settings[9]', '-1', './graphic/private_key.jpg','1','0')");
+			}
+		}
 	}
 	
 	// Changes a single setting (used mostly for IRC cmds I think)

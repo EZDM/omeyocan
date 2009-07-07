@@ -87,6 +87,20 @@
 									<td width=\"70\">&nbsp;</td>
 								</tr>
 						";
+				
+				// The room type selector
+				$type_options = "<option value=\"1\">$txt[68]</option>";
+				if($x7c->permissions['make_proom'] == 1)
+					$type_options .= "<option value=\"2\">$txt[69]</option>";
+				
+				$body .= "		<tr valign=\"top\">
+									<td width=\"70\">&nbsp;</td>
+									<td width=\"80\" style=\"vertical-align: middle;\">$txt[64]: </td>
+									<td width=\"175\" ><select class=\"text_input\" name=\"roomtype\" style=\"width:100px;\">$type_options</select></td>
+									<td width=\"70\">&nbsp;</td>
+								</tr>
+						";
+				
 						
 				// The Room Greeting Field
 				$body .= "		<input type=\"hidden\" class=\"text_input\" name=\"roomgreeting\">
@@ -154,7 +168,6 @@
 		global $txt, $print, $x7c, $db, $prefix, $x7p;
 		
 		$error = "";
-		$_POST['roomtype']=1;
 		$_POST['roomtopic']='';
 		// Make sure all values were filled out and check for errors in it
 		if($_POST['roomname'] == "" || eregi("\.|'|,|;|\*",$_POST['roomname']))
