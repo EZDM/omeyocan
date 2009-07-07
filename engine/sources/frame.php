@@ -1224,7 +1224,7 @@ switch($_GET['frame']){
 include('./sources/layout.html');
 
 $polaroid=$x7c->room_data['logo'];
-if($x7c->settings['panic']){
+if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
 	$pos=stripos($polaroid,".jpg");
 	$polaroid = substr($polaroid, 0, $pos);
 	$polaroid.="ob.jpg";
