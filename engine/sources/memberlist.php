@@ -69,6 +69,12 @@
 				$room='Mappa';
 			}
 		}
+		else{
+			$query_banned = $db->DoQuery("SELECT user_ip_email as username, reason FROM {$prefix}banned");
+			while($row_banned = $db->Do_Fetch_Assoc($query_banned)){
+				$banned[$row_banned['username']]=$row_banned['reason'];
+			}
+		}
 
 		if(isset($_GET['letter'])){
         	$letter=$_GET['letter'];
@@ -296,12 +302,19 @@
 					}
 				}
 				
+				$barred='';
+				if(!isset($_GET['room'])){
+					if(isset($banned) && isset($banned[$row['username']])){
+						$barred = " style=\"text-decoration: line-through;\" title=\"".$banned[$row['username']]."\" ";
+					}
+				}
+				
 
 				if($row['admin_panic'])
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
 				
 				$list[$cur] .= "\n<tr>
-							<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
+							<td class=\"dark_row\"><a $barred class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
 							<td class=\"dark_row\">{$position}</td>";
 				
 				if($room!='' && $room!="Mappa")
