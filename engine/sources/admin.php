@@ -2085,7 +2085,7 @@
 							</tr>
 							<tr>
 								<td>Descrizione:</td>
-								<td><textarea type=\"text\" name=\"description\" class=\"text_input\">$row[description]</textarea></td>
+								<td><textarea cols=\"30\" rows=\"10\" type=\"text\" name=\"description\" class=\"text_input\">$row[description]</textarea></td>
 							</tr>
 							<tr>
 								<td>Usi (-1 per usi infiniti):</td>
