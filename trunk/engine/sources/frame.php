@@ -1357,9 +1357,24 @@ if($x7c->settings['panic']){
 				echo $string;
 			}
 			?>
-		</select> <?PHP
+		</select><select class="button" name="charact"
+			onChange="javascript: return action_select(this);">
+			<option value="">Dadi</option>
+			<option value="">----</option>
+			<option value="~2">d2</option>
+			<option value="~4">d4</option>
+			<option value="~6">d6</option>
+			<option value="~8">d8</option>
+			<option value="~10">d10</option>
+			<option value="~12">d12</option>
+			<option value="~20">d20</option>
+			<option value="~100">d100</option> 
+		</select>
+		
+			
+		<?PHP
 		if($x7c->permissions['admin_panic']){
-			echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Invia immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
+			echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
 
 			echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Master\" onClick=\"document.chatIn.msgi.value ='* '; document.chatIn.msgi.focus();\">";
 		}

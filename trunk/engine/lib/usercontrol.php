@@ -437,6 +437,25 @@
                                 }
 				$table_char.="</table>";
 				
+				//Perform generic dice
+				$generic_eval = false;
+				$generic_eval_msg ="";
+				$dice_regexp = "/\~([^[:space:]]+)/i";
+			
+				while(preg_match($dice_regexp,$message, $dice_value)){
+					$dice_msg="";
+					
+					if(is_numeric($dice_value[1])){
+						$generic_eval = true;
+						$result = rand(1,$dice_value[1]);
+						$dice_msg="<span class=\"roll_avg\">{Tira un d$dice_value[1]:</span><span style=\"color: white; font-weight: bold;\"> $result </span><span class=\"roll_avg\">}</span>";
+						$generic_eval_msg .= "Tiro d$dice_value[1]<br>";
+					}
+			
+					$message = preg_replace($dice_regexp, $dice_msg, $message, 1);
+			
+				}
+				
 				$time = time();
 				$todb = "<span class=\"masterRoll\">Il master effettua un tiro per [".$user_info->user."]: </span>".$message."<br>";				
 
@@ -452,6 +471,8 @@
                                                 $message.="<h3>Possibilita' di successo abilita'</h3>".$table_ability;
                                         if($ch_eval)
                                                 $message.="<h3>Possibilita' di successo caratteristiche</h3>".$table_char;
+                                        if($generic_eval)
+                                        		$message.="<br>$generic_eval_msg";
 				}
 			
 			}
@@ -503,7 +524,22 @@
                                         $form .= "<option value=\"%".$row['id']."\">".$row['name']." ".$row['value']."</option>\n";
                                 }
 
-                                $form .= "</select>
+                                $form .= "</select>";
+                                
+                                $form.="<select class=\"button\" name=\"action\" onChange=\"javascript: return 	action_select(this.options[this.selectedIndex].value);\">
+                                                <option value=\"\">Dadi</option>
+                                                <option value=\"\">----</option>
+                                                <option value=\"~2\">d2</option>
+                                                <option value=\"~4\">d4</option>
+                                                <option value=\"~6\">d6</option>
+                                                <option value=\"~8\">d8</option>
+                                                <option value=\"~10\">d10</option>
+                                                <option value=\"~12\">d12</option>
+                                                <option value=\"~20\">d20</option>
+                                                <option value=\"~100\">d100</option>
+                                                ";
+
+                                $form .= "</select>\n
                                           <br>Tiri da effettuare:
                                           <br><input class=\"button\" type=\"text\" name=\"msg\" size=40>";
                         }
