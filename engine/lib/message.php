@@ -422,6 +422,21 @@
 				
 			}
 			
+			//Perform generic dice
+			$dice_regexp = "/\~([^[:space:]]+)/i";
+			
+			while(preg_match($dice_regexp,$message, $dice_value)){
+				$dice_msg="";
+				
+				if(is_numeric($dice_value[1])){
+					$result = rand(1,$dice_value[1]);
+					$dice_msg="<span class=\"roll_avg\">{Tira un d$dice_value[1]:</span><span style=\"color: white; font-weight: bold;\"> $result </span><span class=\"roll_avg\">}</span>";
+				}
+		
+				$message = preg_replace($dice_regexp, $dice_msg, $message, 1);
+		
+			}
+			
 			if(eregi("^\*",@$_POST['msg'])){
 				$message = preg_replace("/^\*/", "", $message);
 				$message = "<div class=\"mastering\">".$message."</div>";
