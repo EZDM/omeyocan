@@ -151,7 +151,7 @@
                     $get_room="&room=$room";
                     
 		if(!$costitution && !$sheet){
-			$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position, usergroup, talk,long_name,type,admin_panic,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
@@ -161,7 +161,7 @@
                                             {$order}");
 		}
 		elseif($sheet){
-			$query = $db->DoQuery("SELECT username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position,usergroup, talk,long_name,type,admin_panic,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
