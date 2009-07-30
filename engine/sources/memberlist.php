@@ -172,7 +172,7 @@
                                             {$order}");
 		}
 		elseif($costitution){
-			$query = $db->DoQuery("SELECT u.username AS username, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT u.username AS username, usergroup, position,talk,long_name,type,admin_panic,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p,
                                             {$prefix}usercharact uc
@@ -312,6 +312,8 @@
 
 				if($row['admin_panic'])
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
+				elseif($row['usergroup']=="Controller")
+					$master_gif='&nbsp;<img src="./graphic/controller_gif.gif" />';
 				
 				$list[$cur] .= "\n<tr>
 							<td class=\"dark_row\"><a $barred class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
