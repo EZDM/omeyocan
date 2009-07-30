@@ -31,7 +31,7 @@
 		if(isset($_GET['subdir']) && $_GET['subdir']!="")
 		  $image_dir.=$_GET['subdir']."/";
 		
-		if($x7c->permissions['admin_panic']){
+		if($x7c->permissions['admin_panic'] || $x7c->permissions['write_master']){
 			
 			$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 			
