@@ -309,7 +309,7 @@
 			//Perform ability
 			$action_regexp = "/§([^[:space:]]+)/i";
 			
-			srand(time()+microtime()/(1+date("s")));
+			//srand(time()+microtime()/(1+date("s")));
 			
 			while(preg_match($action_regexp,$message, $action)){									
 				$action_msg="";
@@ -414,7 +414,7 @@
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
-				if($x7c->permissions['admin_panic']){
+				if($x7c->permissions['write_master']){
 					$img_msg="<br><img src=\"".$img_url[1]."\" ><br>";
 				}
 					
