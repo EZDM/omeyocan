@@ -1499,6 +1499,7 @@
 				($row[40] == 1) ? $def['admin_alarms'] = " checked=\"true\"" : $def['admin_alarms'] = "";
 				($row[41] == 1) ? $def['admin_objects'] = " checked=\"true\"" : $def['admin_objects'] = "";
 				($row[43] == 1) ? $def['sheet_modify'] = " checked=\"true\"" : $def['sheet_modify'] = "";
+				($row[44] == 1) ? $def['write_master'] = " checked=\"true\"" : $def['write_master'] = "";
 				
 				$body = "$txt[424]<Br><Br><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" align=\"center\">
 					<form action=\"index.php?act=adminpanel&cp_page=groupmanager&update=$_GET[edit]\" method=\"post\">
@@ -1662,9 +1663,14 @@
 						<td width=\"120\">Amministra gli oggetti</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"admin_objects\" value=\"1\"{$def['admin_objects']}></td>
 					</tr>
+					<tr>
 					<td width=\"120\">Puo' modificare le schede</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"sheet_modify\" value=\"1\"{$def['sheet_modify']}></td>
 					</tr>	
+					<tr>
+					<td width=\"120\">Puo' scrivere in modo master</td>
+						<td width=\"50\"><input type=\"checkbox\" name=\"write_master\" value=\"1\"{$def['write_master']}></td>
+					</tr>
                     <tr>
 						<td width=\"120\">Logo</td>
 						<td width=\"50\"><input type=\"text\" name=\"logo\" value=\"$row[42]\"></td>
@@ -1760,9 +1766,10 @@
 					!isset($_POST['admin_objects']) ? $_POST['admin_objects'] = 0 : "";
 					!isset($_POST['sheet_modify']) ? $_POST['sheet_modify'] = 0 : "";
 					!isset($_POST['logo']) ? $_POST['logo'] = 0 : "";
+					!isset($_POST['write_master']) ? $_POST['write_master'] = 0 : "";
 					
 					// Save the settings
-					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]' WHERE usergroup='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]' WHERE usergroup='$_GET[update]'");
 					// Tell user they have been updated
 					$body .= "$txt[458]<Br><br>";
 					

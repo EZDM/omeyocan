@@ -592,7 +592,7 @@ switch($_GET['frame']){
 				alert_user($x7s->username,$txt[42]);
 			}
 
-		}elseif(eregi("^\*",@$_POST['msg']) && $x7c->permissions['admin_panic']){
+		}elseif(eregi("^\*",@$_POST['msg']) && $x7c->permissions['write_master']){
 			$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
 			$_POST['msg'] = eregi_replace(">","&gt;",$_POST['msg']);
 			$_POST['msg'] = eregi_replace("\n", " ",$_POST['msg']);
@@ -1373,7 +1373,7 @@ if($x7c->settings['panic']){
 		
 			
 		<?PHP
-		if($x7c->permissions['admin_panic']){
+		if($x7c->permissions['write_master']){
 			echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
 
 			echo "	<input name=\"img_btn\" type=\"button\" class=\"button\" value=\"Master\" onClick=\"document.chatIn.msgi.value ='* '; document.chatIn.msgi.focus();\">";
