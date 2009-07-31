@@ -441,7 +441,7 @@
 				$message = preg_replace("/^\*/", "", $message);
 				if($x7c->permissions['admin_paic'])
 					$message = "<div class=\"mastering\">".$message."</div>";
-				if($x7c->permissions['write_master'])
+				else if($x7c->permissions['write_master'])
 					$message = "<div class=\"ambient\">".$message."</div>";
 			}
 			else
