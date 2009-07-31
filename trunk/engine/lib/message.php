@@ -439,7 +439,10 @@
 			
 			if(eregi("^\*",@$_POST['msg'])){
 				$message = preg_replace("/^\*/", "", $message);
-				$message = "<div class=\"mastering\">".$message."</div>";
+				if($x7c->permissions['admin_paic'])
+					$message = "<div class=\"mastering\">".$message."</div>";
+				if($x7c->permissions['write_master'])
+					$message = "<div class=\"ambient\">".$message."</div>";
 			}
 			else
 				$message = "<span class=\"chatmsg\">".$message."</span>";

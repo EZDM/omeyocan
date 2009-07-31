@@ -664,6 +664,15 @@
 			}
 			.mastering{
 			 color: teal;
+			 border: 5px ridge #f3b700;
+			 padding: 5px;
+			 text-align: center;
+			 font-style: italic;
+			 font-size: 8pt;
+			 font-weight: bold;
+			}
+			.ambient{
+			 color: teal;
 			 border: 5px ridge purple;
 			 padding: 5px;
 			 text-align: center;
