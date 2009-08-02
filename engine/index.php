@@ -595,6 +595,33 @@
 			include("./sources/resurgo.php");
 			resurgo_main();
 			exit;
+        case "lvl":{
+        	$query = $db->DoQuery("SELECT username, value FROM
+        							ua.userability, u.users
+        							WHERE 
+        								ua.name = u.username
+        								AND sheet_ok=1
+        								ORDER BY username");
+        	
+        	$row = $db->Do_Fetch_Assoc($query);
+        	$prev_name =$row['username'];
+        	$lvl=0;
+        	while($row){
+        		for($i=1; $i<=$row['value'];$i++){
+        			$lvl+=$i;
+        		}
+        		
+        		$row = $db->Do_Fetch_Assoc($query);
+        		if($row['username'] != $prev_name){
+        			echo "$prev_name lvl $lvl<br>";
+        			$prev_name=$row['username'];
+        			
+        		}
+        		
+        	}
+        	
+        }
+        	
 		default:
 			// The default action is to show the room list
 			// Clean up old rooms
