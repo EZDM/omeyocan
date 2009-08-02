@@ -616,7 +616,7 @@
         		if($row['username'] != $prev_name){
         			echo "$prev_name lvl $lvl<br>";
         			$prev_name=$row['username'];
-        			
+        			$lvl=0;	
         		}
         		
         	}
