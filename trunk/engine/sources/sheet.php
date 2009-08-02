@@ -572,9 +572,9 @@
 
 					
 					foreach($ability as $cur){
-                                                if($cur['corp']!=""){
-                                                        die("Fatal: attempt to modify corp ability from normal form");
-                                                }
+                    	if($cur['corp']!=""){
+                        	die("Fatal: attempt to modify corp ability from normal form");
+                        }
 						if($cur['value'] != $_POST[$cur['ab_id']]){
 							$new_value = $_POST[$cur['ab_id']];
 
@@ -1504,6 +1504,7 @@
                                 }
 
                         }
+                        $lvl_gained = $tot_used;
 
                         if($ok){
                                 //Ora posso aggiornare
@@ -1514,9 +1515,10 @@
                                 }
 
                                 $newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
+                                $newlvl = $row_user['lvl']+$lvl_gained;
 
                                 $db->DoQuery("UPDATE {$prefix}users
-                                                                SET xp='$newxp'
+                                                                SET xp='$newxp', lvl='$newlvl'
                                                                 WHERE username='$pg'");
                                 foreach($ability as $cur){
                                         if($cur['value'] != $_POST[$cur['ab_id']]){
