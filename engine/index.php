@@ -597,7 +597,7 @@
 			exit;
         case "lvl":{
         	$query = $db->DoQuery("SELECT username, value FROM
-        							ua.userability, u.users
+        							{$prefix}userability ua, {$prefix}users u
         							WHERE 
         								ua.name = u.username
         								AND sheet_ok=1
