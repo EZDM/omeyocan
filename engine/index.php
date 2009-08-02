@@ -596,12 +596,12 @@
 			resurgo_main();
 			exit;
         case "lvl":{
-        	$query = $db->DoQuery("SELECT username, value FROM
+        	$query = $db->DoQuery("SELECT ua.username AS username, value FROM
         							{$prefix}userability ua, {$prefix}users u
         							WHERE 
-        								ua.name = u.username
+        								ua.username = u.username
         								AND sheet_ok=1
-        								ORDER BY username");
+        								ORDER BY ua.username");
         	
         	$row = $db->Do_Fetch_Assoc($query);
         	$prev_name =$row['username'];
