@@ -246,6 +246,10 @@
                                 if($row['size']==5)
                                       $dimensione="Grande";
                                       
+                                if($row['uses']==0){
+                                	$obj_name .= " [inutilizzabile]";
+                                }
+                                      
                                 if($row['equipped']){
                                       	if($row['size']==1)
                                       		$piccoli++;
