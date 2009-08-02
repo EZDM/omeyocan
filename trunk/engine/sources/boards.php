@@ -794,7 +794,7 @@
 			$avatar.="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
 		}
 		
-		$body.="<tr><td class=\"msg_row\"><b>Utente:</b> ".$row['user'].$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
+		$body.="<tr><td class=\"msg_row\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 		$msgid=$row['id'];
 		$user=$row['user'];
 			
@@ -829,7 +829,7 @@
 			$msgid=$row['id'];
 			$user=$row['user'];
 			
-			$body.="<tr><td class=\"msg_row\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user'].$avatar."</a></td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
+			$body.="<tr><td class=\"msg_row\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
 			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
                         }
