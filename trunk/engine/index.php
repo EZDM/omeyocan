@@ -611,6 +611,7 @@
         			$lvl+=$i;
         		}
         		
+        		$lvl -= 18;
         		$row = $db->Do_Fetch_Assoc($query);
         		if($row['username'] != $prev_name){
         			echo "$prev_name lvl $lvl<br>";
