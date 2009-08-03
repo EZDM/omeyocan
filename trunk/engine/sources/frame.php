@@ -547,8 +547,8 @@ switch($_GET['frame']){
 		// Make sure the message isn't null
 		if(@$_POST['msg'] != "" && !eregi("^@.*@",@$_POST['msg']) && !eregi("^\*",@$_POST['msg'])){
 
-			if(strlen(trim($_POST['msg'])) < $x7c->settings['min_post'] || strlen(trim($_POST['msg'])) > $x7c->settings['max_post'])
-			break;
+			if(strlen(trim($_POST['msg'])) < $x7c->settings['min_post'] || strlen(eregi_replace("&[^;]+;" ," " ,trim($_POST['msg']))) > $x7c->settings['max_post'])
+				break;
 
 			// Make sure incoming values are safe
 			$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
