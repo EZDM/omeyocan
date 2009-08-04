@@ -31,7 +31,11 @@
 		if(isset($_GET['subdir']) && $_GET['subdir']!="")
 		  $image_dir.=$_GET['subdir']."/";
 		
-		if($x7c->permissions['admin_panic'] || $x7c->permissions['write_master']){
+		if($x7c->permissions['admin_panic'] || 
+			($x7c->permissions['write_master']
+			 && ($image_dir == "/images/"
+			 	|| $image_dir == "/images/oggetti/" ))){
+			 		//this if is very bad.. i should think something better fro folder permission
 			
 			$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 			
