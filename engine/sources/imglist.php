@@ -182,7 +182,7 @@ function file_delete($path){
 function authorized($subdir, $group){
 	global $prefix, $db;
 	 
-	$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix} WHERE groupname='$group' AND subdir='$subdir'");
+	$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}imgpermission WHERE groupname='$group' AND subdir='$subdir'");
 	 
 	$row = $db->Do_Fetch_Assoc($query);
 	 
