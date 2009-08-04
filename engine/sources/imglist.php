@@ -187,9 +187,9 @@ function authorized($subdir, $group){
 	$row = $db->Do_Fetch_Assoc($query);
 	 
 	if($row['cnt']>0)
-	return true;
+		return true;
 	else
-	return false;
+		return false;
 }
 
 ?>
