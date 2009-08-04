@@ -62,9 +62,11 @@
         global $db, $prefix, $x7s, $x7c;
         $query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE corp='$corp'");
 
-        while($row = $db->Do_Fetch_Assoc($query)){
-            $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
-                          ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
+        if(!$from_sheet){
+	        while($row = $db->Do_Fetch_Assoc($query)){
+	            $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
+	                          ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
+	        }
         }
 
         if($from_sheet){
@@ -79,6 +81,11 @@
                 if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
                         return "Non sei autorizzato a gestire questo gremios";
                 }
+                
+        		while($row = $db->Do_Fetch_Assoc($query)){
+	            	$db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
+	                          ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
+	        	}
                 
                 $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$corp'");
                 $row=$db->Do_Fetch_Assoc($gif_query);
