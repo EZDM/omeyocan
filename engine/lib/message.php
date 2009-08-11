@@ -81,11 +81,13 @@
 
 				//Check if whisper is for everybody					
 				if($user[1] == "_all_"){
-					$query = $db->DoQuery("SELECT name FROM {$prefix}online WHERE room='$room'");
-
-					while($row = $db->Do_Fetch_Assoc($query)){
-						if($row['name'] != $x7s->username){
-							$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$row[name]:$body_parsed','$room','$time')");
+					if($x7c->permissions['write_master']){
+						$query = $db->DoQuery("SELECT name FROM {$prefix}online WHERE room='$room'");
+	
+						while($row = $db->Do_Fetch_Assoc($query)){
+							if($row['name'] != $x7s->username){
+								$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$row[name]:$body_parsed','$room','$time')");
+							}
 						}
 					}
 					
