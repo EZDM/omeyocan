@@ -38,6 +38,7 @@
 
 
                                                   $db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
+                                                  $db->DoQuery("UPDATE {$prefix}users SET lvl=lvl-{$row['value']} WHERE username='$pg'");
 
                                                   include_once("./lib/message.php");
                                                   send_offline_msg($pg,"Morte","Sei morto e hai perso un punto in $row[name]");
