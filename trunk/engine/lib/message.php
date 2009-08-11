@@ -311,7 +311,7 @@
 			//Perform ability
 			$action_regexp = "/§([^[:space:]]+)/i";
 			
-			//srand(time()+microtime()/(1+date("s")));
+			srand(time()+microtime());
 			
 			while(preg_match($action_regexp,$message, $action)){									
 				$action_msg="";

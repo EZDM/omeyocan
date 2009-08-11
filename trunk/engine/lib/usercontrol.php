@@ -298,7 +298,7 @@
                                 }
 
                                 $table_ability_head="<tr><td class=\"throw_eval\" style=\"width:30px;\">Ris.</td>";
-                srand(time()+microtime()/(1+date("s")));
+                		srand(time()+microtime());
                                 
 				while(preg_match($action_regexp,$message, $action)){
 				

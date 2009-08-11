@@ -176,7 +176,7 @@
 	}
 	
 	function logout_page(){
-		srand(time());
+		srand(time()+microtime());
 		$num = rand(1,4);
 
 

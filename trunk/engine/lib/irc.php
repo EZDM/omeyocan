@@ -116,7 +116,7 @@
 		}
 		
 		// Do the dice rolls
-		srand(time()+microtime()/date("s"));
+		srand(time()+microtime());
 		for($left_to_roll = $dice_to_roll;$left_to_roll > 0;$left_to_roll--){
 			$this_rand = rand(1,$dice_sides);
 			$results[] = $this_rand+$additional_m;
