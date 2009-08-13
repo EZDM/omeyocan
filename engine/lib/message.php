@@ -197,18 +197,7 @@
 	function parse_message($message,$sysmsg=0){
 		global $x7s, $x7c, $db, $prefix;
 		// We look for the following tags:
-		// [b][/b]
-		// [i][/i]
-		// [u][/u]
-		// [color=][/color]
-		// [size=][/size]
-		// [font=][/font]
-
-		// Filter First
-		/*include_once("./lib/filter.php");
-		$msg_filter = new filters(isset($_GET['room']) ? $_GET['room'] : '');
-		$message = $msg_filter->filter_text($message);*/
-
+		
 		// Do Auto-URL linking
 		if($x7c->settings['disable_autolinking'] != 1){
 			$message = preg_replace("/(http:\/\/(.+?)\.[^ \[\"<]*)(.)/ie","autoparse_url(\"2\",\"$1\",\"$3\");",$message);
@@ -221,59 +210,9 @@
 		if($sysmsg == 1)
 			$styles_off = 1;
 
-		//We do not want styles anymore
-		/*if($styles_off != 1){
-			// Look for simple style tags (b, i, u)
-			$message = preg_replace("/\[b\](.+?)\[\/b\]/i","<b>$1</b>",$message);
-			$message = preg_replace("/\[u\](.+?)\[\/u\]/i","<u>$1</u>",$message);
-			$message = preg_replace("/\[i\](.+?)\[\/i\]/i","<i>$1</i>",$message);
-
-			// Compress the default styles (color, font and size at beginning and end of message)
-			$store_color = "";
-			$store_size = "";
-			$store_font = "";
-
-			$message = preg_replace("/\[\/color\]\[\/size\]\[\/font\]$/i","",$message);
-			$message = preg_replace("/^\[color=([^\]]+)\]/ie","\$store_color='$1';",$message);
-			$message = preg_replace("/^$store_color/i","",$message);
-			$message = preg_replace("/^\[size=([^\]]+)\]/ie","\$store_size='$1';",$message);
-			$message = preg_replace("/^$store_size/i","",$message);
-			$message = preg_replace("/^\[font=([^\]]+)\]/ie","\$store_font='$1';",$message);
-			$message = preg_replace("/^$store_font/i","",$message);
-
-			// Ok add the tags back on after security check
-			$store_color = check_font_color($store_color,"",0);
-			$store_size = check_font_size($store_size,"",0);
-			$store_font = check_font_family($store_font,"",0);
-			$message = "<span style=\"color: $store_color; font-size: $store_size; font-family: $store_font;\">".$message;
-			$message .= "</span>";
-
-			// Color Tag
-			while(preg_match("/\[color=([^\]]+)\](.+?)\[\/color\]/i",$message))
-				$message = preg_replace("/\[color=([^\]]+)\](.+?)\[\/color\]/ie","check_font_color('$1','$2');",$message);
-
-			// Size Tag
-			while(preg_match("/\[size=([^\]]+)\](.+?)\[\/size\]/i",$message))
-				$message = preg_replace("/\[size=([^\]]+)\](.+?)\[\/size\]/ie","check_font_size('$1','$2');",$message);
-
-			// Font Tag
-			while(preg_match("/\[font=([^\]]+)\](.+?)\[\/font\]/i",$message))
-				$message = preg_replace("/\[font=([^\]]+)\](.+?)\[\/font\]/ie","check_font_family('$1','$2');",$message);
-		}else{*/
-			// Ok, so either the admin or user does not want styles
-
 			$message = remove_chattags($message);
 
-			// If this is a system message add on default sys_msg styles, otherwise just add on default syltes
-			/*$sysmsg_color = $x7c->settings['system_message_color'];
-			$default_color = $x7c->settings['sys_default_color'];
-			$default_size = $x7c->settings['sys_default_size'];
-			$default_font = $x7c->settings['sys_default_font'];*/
-			
 			//Action parse
-			
-			
-
 			$pos = stripos($message,"&lt;");
 			$open=0;
 			while($pos){
@@ -417,7 +356,21 @@
 			while(preg_match($img_regexp,$message, $img_url)){
 
 				if($x7c->permissions['write_master']){
-					$img_msg="<br><img src=\"".$img_url[1]."\" ><br>";
+					if(preg_match("/swf$/i",$img_url[1])){
+						$img_msg="<br>
+									<object>
+									<param name=\"movie\" value=\"".$img_url[1]."\">
+									<param name=\"quality\" value=\"high\">
+									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
+									<param name=\"allowFullScreen\" value=\"True\" />
+									<embed src=\"".$img_url[1]."\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\">
+									</embed>
+									</object>						
+									<br>";	
+					}
+					else{
+						$img_msg="<br><img src=\"".$img_url[1]."\" ><br>";
+					}
 				}
 					
 				$message = preg_replace($img_regexp, $img_msg, $message, 1);

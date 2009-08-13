@@ -117,7 +117,21 @@ function file_list($path,$url){
 					$img.="<tr>";
 				}
 					
-				$img.= "<td align=\"center\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width=100>". "<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+				if(preg_match("/swf$/i", $path.$file)){
+					$img.= "<td align=\"center\"><a onClick=\"putimage('$url$file');\">
+								<object>
+									<param name=\"movie\" value=\"".$url.$file."\">
+									<param name=\"quality\" value=\"high\">
+									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
+									<param name=\"allowFullScreen\" value=\"True\" />
+									<embed src=\"".$url.$file."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\">
+									</embed>
+								</object>					
+								<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+				}
+				else{
+					$img.= "<td align=\"center\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width=100> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+				}
 					
 				$i++;
 
@@ -150,7 +164,7 @@ function file_upload($path){
 		return;
 	}
 
-	if($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/pjpeg"){
+	if($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/pjpeg" || $_FILES['file']['type'] == "application/x-shockwave-flash"){
 
 		$size = getimagesize($_FILES['file']['tmp_name']);
 		if($size[0] > 650){
