@@ -838,6 +838,7 @@ function sheet_page_main(){
 	$body="";
 	$errore="";
 	$ok = true;
+	$reload = false;
 	$char;
 		
 	$query_usr = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
@@ -853,6 +854,7 @@ function sheet_page_main(){
 		if($row_user['daily_px'] < $time && $day != date("j/n/Y", $time)){
 			$db->DoQuery("UPDATE {$prefix}users SET xp=xp+1, daily_px='$time' WHERE username='$pg'");
 			$errore = "PX Giornaliero assegnato correttamente";
+			$reload = true;
 		}
 		else
 		$errore ="PX gironaliero gia' assegnato";
@@ -861,12 +863,14 @@ function sheet_page_main(){
 		$pg=$_GET['pg'];
 		include_once('./lib/sheet_lib.php');
 		$errore=toggle_death($pg, $_GET['toggle_death']);
+		$reload = true;
 	}
 
 	if(isset($_GET['toggle_heal']) && isset($_GET['pg'])&& checkIfMaster()){
 		$pg=$_GET['pg'];
 		include_once('./lib/sheet_lib.php');
 		$errore=toggle_heal($pg, $_GET['toggle_heal']);
+		$reload = true;
 	}
 
 	if(isset($_GET['settings_change']) && checkIfMaster()){
@@ -910,6 +914,7 @@ function sheet_page_main(){
 
 
 		if($ok){
+			$reload = true;
 			//Ora posso aggiornare
 			if(isset($_POST['name']) &&
 			isset($_POST['age'])&&
@@ -998,6 +1003,7 @@ function sheet_page_main(){
 			$db->DoQuery("UPDATE {$prefix}users SET
 						avatar='$_POST[avatar_in]'
 						WHERE username='$pg'");
+			$reload = true;
 		}
 
 		if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
@@ -1011,8 +1017,17 @@ function sheet_page_main(){
 				setcookie($auth_pcookie,$newpwd,time()+$x7c->settings['cookie_time'],$X7CHAT_CONFIG['COOKIE_PATH']);
 				$db->DoQuery("UPDATE {$prefix}users SET
 						password='$newpwd'
-						WHERE username='$pg'");	
+						WHERE username='$pg'");
+				$reload = true;	
 			}
+		}
+	}
+	
+	if($reload){
+		$query_usr = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+		$row_user = $db->Do_Fetch_Assoc($query_usr);
+		if(!$row_user){
+			die("User not in Database");
 		}
 	}
 		
