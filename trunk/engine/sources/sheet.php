@@ -839,6 +839,12 @@
 			$errore="";
 			$ok = true;
 			$char;
+			
+			$query_usr = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+			$row_user = $db->Do_Fetch_Assoc($query_usr);
+			if(!$row_user){
+				die("User not in Database");
+			}
 
 			if(isset($_GET['daily_px']) && checkIfMaster()){
 				$query = $db->DoQuery("SELECT daily_px FROM {$prefix}users WHERE username='$pg'");
@@ -955,11 +961,13 @@
 					if(checkIfMaster()){
 						if(isset($_POST['info'])){
 								if(is_numeric($_POST['info'])){
-									$time=time();
-									$db->DoQuery("UPDATE {$prefix}users
-										SET info='$_POST[info]',
-											heal_time='$time'
-									 	WHERE username='$pg'");
+									if($_POST['info']!=$row_user['info']){
+										$time=time();
+										$db->DoQuery("UPDATE {$prefix}users
+											SET info='$_POST[info]',
+												heal_time='$time'
+										 	WHERE username='$pg'");
+									}
 								}
 								else{
 									$errore .= "Il campo \"Status\" puo' contenere solo numeri";
@@ -1014,11 +1022,7 @@
 			}
 			
 			
-			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
-			$row_user = $db->Do_Fetch_Assoc($query);
-			if(!$row_user){
-				die("User not in Database");
-			}
+			
 			$gender = $row_user['gender'] == 0 ? "M":"F";
 			$group = $row_user['user_group'];
 			$date = date("j/n/Y",$row_user['iscr']);
