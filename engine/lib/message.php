@@ -357,12 +357,12 @@
 
 				if($x7c->permissions['write_master']){
 					if(preg_match("/swf$/i",$img_url[1])){
-						//This is specific for the server!
+						//This is specific for the server! (works only if the URL root and the DOCUMENT_ROOT point to the same place)
 						$file = $_SERVER['DOCUMENT_ROOT'].$img_url[1];
 						$size = getimagesize($file);
 						$width= $size[0];
 												
-						$img_msg="<br> $file
+						$img_msg="<br>
 									<object>
 									<param name=\"movie\" width=\"$size[0]\" height=\"$size[1]\" value=\"".$img_url[1]."\">
 									<param name=\"quality\" value=\"high\">
