@@ -362,8 +362,7 @@
 									<param name=\"movie\" value=\"".$img_url[1]."\">
 									<param name=\"quality\" value=\"high\">
 									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
-									<param name=\"allowFullScreen\" value=\"True\" />
-									<embed src=\"".$img_url[1]."\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\">
+									<embed src=\"".$img_url[1]."\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\">
 									</embed>
 									</object>						
 									<br>";	
