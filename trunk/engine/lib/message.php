@@ -364,10 +364,10 @@
 												
 						$img_msg="<br> $file
 									<object>
-									<param name=\"movie\" width=\"$size[0]\" value=\"".$img_url[1]."\">
+									<param name=\"movie\" width=\"$size[0]\" height=\"$size[1]\" value=\"".$img_url[1]."\">
 									<param name=\"quality\" value=\"high\">
 									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
-									<embed src=\"".$img_url[1]."\" width=\"$size[0]\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\">
+									<embed src=\"".$img_url[1]."\" width=\"$size[0]\" height=\"$size[1]\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\">
 									</embed>
 									</object>						
 									<br>";	
