@@ -357,7 +357,11 @@
 
 				if($x7c->permissions['write_master']){
 					if(preg_match("/swf$/i",$img_url[1])){
-						$size = getimagesize($img_url[1]);
+						//This is specific for the server!
+						$file = dirname($_SERVER['DOCUMENT_ROOT']).$img_url[1];
+						$size = getimagesize($file);
+						$width= $size[0];
+												
 						$img_msg="<br>
 									<object>
 									<param name=\"movie\" width=\"$size[0]\" value=\"".$img_url[1]."\">
