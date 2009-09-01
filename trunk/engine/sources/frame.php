@@ -1172,6 +1172,7 @@ switch($_GET['frame']){
 									document.chatIn.counter.value=document.chatIn.msgi.value.length;
 									document.getElementById('message_window').scrollTop = 65000;
 									sent=1;
+									document.getElementById('message_window').scrollTop = document.getElementById('message_window').scrollHeight;
 								}
 								return true;
 							}
