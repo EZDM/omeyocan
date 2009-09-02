@@ -84,6 +84,21 @@
 		$order = " ORDER BY username ASC";
 		$sort_order_1 = 2;
 		$sort_order_2 = 4;
+		
+		
+		$costitution=false;
+		$sheet=false;
+		if($x7c->permissions['admin_panic']){
+			if(isset($_GET['cos'])){
+				$costitution = true;
+				$order = " ORDER BY iscr DESC";
+			}
+			elseif(isset($_GET['sheet'])){
+				$sheet=true;
+				$order = " ORDER BY iscr DESC";
+			}
+		}
+		
 		if(isset($_GET['sort'])){
 			if($_GET['sort'] == "1"){
 				$order = " ORDER BY username ASC";
@@ -97,17 +112,6 @@
 			}elseif($_GET['sort'] == "4"){
 				$order = " ORDER BY position DESC";
 				$sort_order_2 = 3;
-			}
-		}
-		
-		$costitution=false;
-		$sheet=false;
-		if($x7c->permissions['admin_panic']){
-			if(isset($_GET['cos'])){
-				$costitution = true;
-			}
-			elseif(isset($_GET['sheet'])){
-				$sheet=true;
 			}
 		}
 
