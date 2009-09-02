@@ -1342,7 +1342,7 @@ if($x7c->settings['panic']){
 				echo $string;
 			}
 			?>
-		</select> <select class="button" name="objects" style="width: 200px;"
+		</select> <select class="button" name="objects" style="width: 150px;"
 			onChange="javascript: return action_select(this);">
 			<option value="">Oggetti...</option>
 			<option value="">------------------</option>
