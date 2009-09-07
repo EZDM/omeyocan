@@ -1566,8 +1566,9 @@ function sheet_page_corp(){
 
 	$body .="<div id=\"corp_name\">$row_user[user_group]</div>\n";
 	$body .="<div id=\"corp_symbol\"><img src=\"$row_user[bio]\" /></div>\n";
-	if($x7s->user_group != $x7c->settings['usergroup_default'])
-	$body .="<div id=\"corp_charge\">$row_user[corp_charge]</div>";
+	
+	if($row_user['corp_charge'] != $x7c->settings['usergroup_default'])
+		$body .="<div id=\"corp_charge\">$row_user[corp_charge]</div>";
 
 	$body.="<div id=\"corp\">\n";
 
