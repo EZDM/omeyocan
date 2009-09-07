@@ -770,6 +770,7 @@ switch($_GET['frame']){
 												alertText = '<?PHP echo $txt[511]; ?>';
 												alertText = alertText.replace('<a>',"<a style=\"cursor: pointer;\" onClick=\"window.open('index.php?act=pm&send_to=" + dataSubArray[1] + "','Pm" + dataSubArray[1] + "','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=<?PHP echo $x7c->settings['tweak_window_large_width']; ?>,height=<?PHP echo $x7c->settings['tweak_window_large_height']; ?>');\">");
 												document.getElementById('message_window').innerHTML += "<span style=\"color: <?PHP echo $x7c->settings['system_message_color']; ?>;font-size: <?PHP echo $x7c->settings['sys_default_size']; ?>; font-family: <?PHP echo $x7c->settings['sys_default_font']; ?>;\"><b>" + alertText + "</b></span><Br>";
+												modification=1;
 
 												if(playSound == 0)
 													playSound = 1;
