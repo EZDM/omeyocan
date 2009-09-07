@@ -694,6 +694,11 @@ switch($_GET['frame']){
 							
 						}
 
+						function scrollChat(){
+							document.getElementById('message_window').scrollTop = 65000;
+							document.getElementById('message_window').scrollTop = document.getElementById('message_window').scrollHeight;
+						}
+
 						function requestReady_channel1(){
 							if(httpReq1){
 								if(httpReq1.readyState == 4){
@@ -836,7 +841,7 @@ switch($_GET['frame']){
 
 											// Scroll to bottom
 											if(modification){
-												document.getElementById('message_window').scrollTop = 65000;
+												setTimeout("scrollChat()", 500);
 
 												if(count_reset)
 													ActivateCountDown("CountDownPanel", '480', null);
@@ -1170,9 +1175,8 @@ switch($_GET['frame']){
 									document.chatIn.msgi.value="";
 									document.chatIn.msgi.focus();
 									document.chatIn.counter.value=document.chatIn.msgi.value.length;
-									document.getElementById('message_window').scrollTop = 65000;
 									sent=1;
-									document.getElementById('message_window').scrollTop = document.getElementById('message_window').scrollHeight;
+									setTimeout("scrollChat()", 500);
 								}
 								return true;
 							}
