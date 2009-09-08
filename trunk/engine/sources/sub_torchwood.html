@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Torchwood Mansion</title>
+    <LINK REL="SHORTCUT ICON" HREF="../favicon.ico">
+    <style type="text/css">
+      div{
+        background-color: transparent;
+        position: absolute;
+      }
+      body{
+        margin: 0;
+      }
+
+      #container{
+        width: 100%;
+        height: 100%;
+        background-image:url('../graphic/sub-torchwood.jpg');
+      }
+
+      #magazzino{
+        left: 4px;
+        top: 257px;
+        width: 125px;
+        height: 60px;
+      }
+
+      #residenza{
+        left: 250px;
+        top: 138px;
+        width: 125px;
+        height: 60px;
+      }
+
+      #courtyard{
+        left: 366px;
+        top: 354px;
+        width: 157px;
+        height: 74px;
+      }
+
+      #laboratorio{
+        left: 450px;
+        top: 0px;
+        width: 140px;
+        height: 74px;
+      }
+
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        function go_there(url){
+              opener.location.href=url;
+              window.close(self);
+        }
+    </script>
+
+  </head>
+  <body>
+      <div id="container">
+        <a href="#" onClick="go_there('../index.php?act=frame&room=MagazzinoTW')"><div id="magazzino"></div></a>
+
+        <a href="#" onClick="go_there('../index.php?act=frame&room=ResidenzaTW')"><div id="residenza"></div></a>
+
+        <a href="#" onClick="go_there('../index.php?act=frame&room=LaboratorioTW')"><div id="laboratorio"></div></a>
+
+        <a href="#" onClick="go_there('../index.php?act=frame&room=CourtyardTW')"><div id="courtyard"></div></a>
+      </div>
+  </body>
+</html>
