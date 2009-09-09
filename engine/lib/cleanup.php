@@ -102,7 +102,12 @@
 	function resurgo(){
               global $db, $prefix;
               $time = time();
-              $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE u.username=uc.username AND charact_id='rob') WHERE resurgo<'$time' AND info='Morto'");
+              $query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE resurgo<'$time' AND info='Morto'");
+              
+              while($row = $db->Do_Fetch_Assoc($query)){
+              	include_once("./lib/sheet_lib.php");
+              	toggle_death($row['username'], 0);
+              }
               
 	}
 	

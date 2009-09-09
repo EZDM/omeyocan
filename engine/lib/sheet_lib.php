@@ -10,11 +10,11 @@
         }
 
 	function toggle_death($pg, $kill){
-		global $db, $prefix;
+		global $db, $prefix, $x7c;
 		$errore='';
 				if($kill){
                                         //Morto per 5 giorni
-                                        $death_day=5;
+                                        $death_day=$x7c->settings['death_days'];
                                         $resurgo = time() + $death_day*24*3600;
                                         $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
 
@@ -52,6 +52,9 @@
                                 else{
                                         $errore = "Resuscitato";
                                         $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', autoheal='1', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
+                                        
+                                        include_once("./lib/message.php");
+                                        send_offline_msg($pg, "Resurrezione", $x7c->settings['death_mail']);
                                 }
                                 
              return $errore;
