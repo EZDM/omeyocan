@@ -155,7 +155,7 @@
                     $get_room="&room=$room";
                     
 		if(!$costitution && !$sheet){
-			$query = $db->DoQuery("SELECT username, position, usergroup, talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position, usergroup, talk,long_name,type,admin_panic, info,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
@@ -165,7 +165,7 @@
                                             {$order}");
 		}
 		elseif($sheet){
-			$query = $db->DoQuery("SELECT username, position,usergroup, talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position,usergroup, talk,long_name,type,admin_panic,info,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p
                                             WHERE (r.name = u.position
@@ -176,7 +176,7 @@
                                             {$order}");
 		}
 		elseif($costitution){
-			$query = $db->DoQuery("SELECT u.username AS username, usergroup, position,talk,long_name,type,admin_panic,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT u.username AS username, usergroup, position,talk,long_name,type,admin_panic,info, m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r, {$prefix}permissions p,
                                             {$prefix}usercharact uc
@@ -313,6 +313,11 @@
 					}
 				}
 				
+				$dead_fmt='dark_link';
+				if($row['info']=="Morto"){
+					$dead_fmt = 'dark_link_red';
+				}
+				
 
 				if($row['admin_panic'])
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
@@ -320,7 +325,7 @@
 					$master_gif='&nbsp;<img src="./graphic/controller_gif.gif" />';
 				
 				$list[$cur] .= "\n<tr>
-							<td class=\"dark_row\"><a $barred class=\"dark_link\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
+							<td class=\"dark_row\"><a $barred class=\"$dead_fmt\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
 							<td class=\"dark_row\">{$position}</td>";
 				
 				if($room!='' && $room!="Mappa")
@@ -329,7 +334,7 @@
 					else
 						$list[$cur] .= "<td class=\"dark_row\">&nbsp;</td>";
 
-                                //Adding more controle for admins
+                //Adding more controle for admins
 				if($x7c->permissions['admin_panic']){
 					$new_state='';
 					$action='';
@@ -426,6 +431,11 @@
 				color: black;
 				background: transparent;
 				border-bottom: solid 1px gray;
+			}
+			
+			.dark_link_red{
+				font-style: italic;
+				color: red;
 			}
 
 			table{

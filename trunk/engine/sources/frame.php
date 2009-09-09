@@ -684,6 +684,7 @@ switch($_GET['frame']){
 							alert(msg);
 						}
 
+
 						function do_initial_refresh(){
 							// Create object
 							chatRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']; ?>');
@@ -705,8 +706,6 @@ switch($_GET['frame']){
 									if(httpReq1.status == 200){
 
 										// Request is all ready to go
-
-										//document.getElementById('debug').innerHTML = httpReq1.responseText.replace(/</g,'&lt;');
 										playSound = 0;
 										modification=0;
 										count_reset=0;
@@ -752,7 +751,7 @@ switch($_GET['frame']){
 													
 													if(!newMail){
 														var tardis = document.getElementById('tardis');
-														tardis.Play();
+														try { tardis.Play(); } catch(e) {}
 													}
 													
 													newMail = 1;
@@ -814,11 +813,6 @@ switch($_GET['frame']){
 												valore = parseInt(dataSubArray[1]);
 												messaggio='';
 												if(valore){
-                                                    //var bell = document.getElementById('bell');
-                                                    //if(typeof bell.Play == 'function')
-                                                    //	bell.Play();
-
-													//messaggio="Arriva l'oscurita'";
 													var leftx = (screen.width/2)-(300/2);
 													var topy = (screen.height/2)-(200/2);
 													
@@ -864,6 +858,31 @@ switch($_GET['frame']){
 								}
 							}
 						}
+
+
+						function send_async_request(url){
+                            if(window.XMLHttpRequest){
+                                try {
+                                  httpReq1 = new XMLHttpRequest();
+                                } catch(e) {
+                                  httpReq1 = false;
+                                }
+                              }else if(window.ActiveXObject){
+                                try{
+                                  httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
+                                }catch(e){
+                                  try{
+                                    httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
+                                  }catch(e){
+                                    httpReq1 = false;
+                                  }
+                                }
+                              }
+                              httpReq1.onreadystatechange = requestReady_channel1;
+                              httpReq1.open("GET", url, true);
+                              httpReq1.send("");
+						}
+						
 
 						function restoreText(torestore){
 							torestore = torestore.replace(/74ce61f75c75b155ea7280778d6e8183/g,"@");
@@ -912,26 +931,9 @@ switch($_GET['frame']){
 						function do_refresh(){
 							jd=new Date();
 							nocache = jd.getTime();
-							url = './index.php?act=frame&frame=update&room=<?PHP echo $x7c->room_name; ?>&listhash=' + listhash + '&startfrom=' + startfrom + '&nc=' + nocache;							if(window.XMLHttpRequest){
-								try {
-									httpReq1 = new XMLHttpRequest();
-								} catch(e) {
-									httpReq1 = false;
-								}
-							}else if(window.ActiveXObject){
-								try{
-									httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
-								}catch(e){
-									try{
-										httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
-									}catch(e){
-										httpReq1 = false;
-									}
-								}
-							}
-							httpReq1.onreadystatechange = requestReady_channel1;
-							httpReq1.open("GET", url, true);
-							httpReq1.send("");
+							url = './index.php?act=frame&frame=update&room=<?PHP echo $x7c->room_name; ?>&listhash=' + listhash + '&startfrom=' + startfrom + '&nc=' + nocache;							
+
+							send_async_request(url);
 						}
 						
 						function do_delete(msgid){
@@ -939,29 +941,10 @@ switch($_GET['frame']){
 							nocache = jd.getTime();
 							url = './index.php?act=frame&delete='+msgid+'&room=<?PHP echo $x7c->room_name; ?>';
 							if(msgid == 'all'){
-								if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+								if(!confirm('Vuoi davvero cancellare tutti i messaggi?'))
 									return;
 							}
-							if(window.XMLHttpRequest){
-								try {
-									httpReq1 = new XMLHttpRequest();
-								} catch(e) {
-									httpReq1 = false;
-								}
-							}else if(window.ActiveXObject){
-								try{
-									httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
-								}catch(e){
-									try{
-										httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
-									}catch(e){
-										httpReq1 = false;
-									}
-								}
-							}
-							httpReq1.onreadystatechange = requestReady_channel1;
-							httpReq1.open("GET", url, true);
-							httpReq1.send("");
+							send_async_request(url);
 							Alert("Messaggio cancellato");
 						}
 
@@ -979,26 +962,7 @@ switch($_GET['frame']){
 
                                                   invisible=!invisible;
                                                   
-                                                  if(window.XMLHttpRequest){
-                                                    try {
-                                                      httpReq1 = new XMLHttpRequest();
-                                                    } catch(e) {
-                                                      httpReq1 = false;
-                                                    }
-                                                  }else if(window.ActiveXObject){
-                                                    try{
-                                                      httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
-                                                    }catch(e){
-                                                      try{
-                                                        httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
-                                                      }catch(e){
-                                                        httpReq1 = false;
-                                                      }
-                                                    }
-                                                  }
-                                                  httpReq1.onreadystatechange = requestReady_channel1;
-                                                  httpReq1.open("GET", url, true);
-                                                  httpReq1.send("");
+                                                  send_async_request(url);
                                                 }
 
 
@@ -1017,26 +981,7 @@ switch($_GET['frame']){
 
                                                   shadow=!shadow;
                                                   
-                                                  if(window.XMLHttpRequest){
-                                                    try {
-                                                      httpReq1 = new XMLHttpRequest();
-                                                    } catch(e) {
-                                                      httpReq1 = false;
-                                                    }
-                                                  }else if(window.ActiveXObject){
-                                                    try{
-                                                      httpReq1 = new ActiveXObject("Msxml2.XMLHTTP");
-                                                    }catch(e){
-                                                      try{
-                                                        httpReq1 = new ActiveXObject("Microsoft.XMLHTTP");
-                                                      }catch(e){
-                                                        httpReq1 = false;
-                                                      }
-                                                    }
-                                                  }
-                                                  httpReq1.onreadystatechange = requestReady_channel1;
-                                                  httpReq1.open("GET", url, true);
-                                                  httpReq1.send("");
+                                                  send_async_request(url);
                                                 }
 						
 
@@ -1083,14 +1028,6 @@ switch($_GET['frame']){
 									// Some special things
 									if(message.match(/^\/clear/)){
 										document.getElementById('message_window').innerHTML = '';
-										document.chatIn.msg.value='';
-									}
-									if(message.match(/^\/debug_on/)){
-										document.getElementById('debug').style.display = 'block';
-										document.chatIn.msg.value='';
-									}
-									if(message.match(/^\/debug_off/)){
-										document.getElementById('debug').style.display = 'none';
 										document.chatIn.msg.value='';
 									}
 
@@ -1177,7 +1114,6 @@ switch($_GET['frame']){
 									document.chatIn.msgi.focus();
 									document.chatIn.counter.value=document.chatIn.msgi.value.length;
 									sent=1;
-									setTimeout("scrollChat()", 500);
 								}
 								return true;
 							}
