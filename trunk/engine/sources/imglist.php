@@ -100,7 +100,7 @@ function file_list($path,$url){
 
 
 	$i=0;
-	$maxcol=6;
+	$maxcol=5;
 
 	$body.="<table style=\"width: 750px;\">\n";
 
