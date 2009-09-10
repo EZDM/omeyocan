@@ -130,7 +130,7 @@ function file_list($path,$url){
 								<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 				}
 				else{
-					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width="100"> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width=\"100\"> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 				}
 					
 				$i++;
