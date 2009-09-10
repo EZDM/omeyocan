@@ -118,19 +118,19 @@ function file_list($path,$url){
 				}
 					
 				if(preg_match("/swf$/i", $path.$file)){
-					$img.= "<td align=\"center\" width="110"><a onClick=\"putimage('$url$file');\">
+					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\">
 								<object>
-									<param name=\"movie\" value=\"".$url.$file."\" width="100" height="100">
+									<param name=\"movie\" value=\"".$url.$file."\" width=\"100\" height=\"100\">
 									<param name=\"quality\" value=\"high\">
 									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
 									<param name=\"allowFullScreen\" value=\"True\" />
-									<embed src=\"".$url.$file."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width="100" height="100">
+									<embed src=\"".$url.$file."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width=\"100\" height=\"100\">
 									</embed>
 								</object>					
 								<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 				}
 				else{
-					$img.= "<td align=\"center\" width="110"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width="100"> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width="100"> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 				}
 					
 				$i++;
