@@ -147,6 +147,7 @@
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
+			include_once('./lib/message.php');
 			$db->DoQuery("UPDATE {$prefix}users SET exp_warn='1'");
 			$warn_list.=$row['username']."\n";
 			
@@ -157,6 +158,9 @@
 			$body="Attenzione, l'account $row[username] risulta inativo da $warn_day. Se non to colleghi, entro $del_day sara' cancellato senza ulteriore avviso";
 			
 			mail($row['email'],$obj,"$body\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
+			
+			$body = parse_message($body);
+			send_offline_msg($row['username'],$obj,$body,"Buio");
 		}
 		
 		//First we send wanring to old pg
@@ -188,7 +192,7 @@
 			
 			$body= parse_message($body);
 			while($row = $db->Do_Fetch_Assoc($query)){
-				//send_offline_msg($row['username'],$obj,$body);	
+				send_offline_msg($row['username'],$obj,$body,"Buio");	
 			}
 		}
 		
