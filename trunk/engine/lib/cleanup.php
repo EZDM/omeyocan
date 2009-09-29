@@ -188,7 +188,7 @@
 			
 			$body= parse_message($body);
 			while($row = $db->Do_Fetch_Assoc($query)){
-				//send_offline_msg($row['username'],$obj,$body);	
+				send_offline_msg($row['username'],$obj,$body);	
 			}
 		}
 		
