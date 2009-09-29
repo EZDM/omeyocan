@@ -169,7 +169,7 @@
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
-			//delete_user($row['username']);
+			delete_user($row['username']);
 			$del_list.=$row['username']."\n";	
 		}
 		
