@@ -36,7 +36,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the yabbse Configuration File
-	include("../Settings.php");
+	include_once("../Settings.php");
 	
 	// Make a database connection to the yabbse database
 	$yabbsedb = new x7chat_db($db_server,$db_user,$db_passwd,$db_name);

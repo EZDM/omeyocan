@@ -306,7 +306,7 @@
 		}elseif($_GET['cp_page'] == "filter"){
 		
 			$head = $txt[143];
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$filters = new filters($_GET['room']);
 			
 			if(isset($_GET['add']) && isset($_GET['add2'])){
@@ -349,7 +349,7 @@
 			
 			if($x7c->permissions['use_keywords'] == 1){
 
-				include("./lib/filter.php");
+				include_once("./lib/filter.php");
 				$filters = new filters($_GET['room']);
 
 				if(isset($_GET['add']) && isset($_GET['add2'])){
@@ -406,7 +406,7 @@
 			$head = $txt[219];
 			
 			// Include the necessary librarys for this
-			include("./lib/usercontrol.php");
+			include_once("./lib/usercontrol.php");
 			
 			if(isset($_POST['add'])){
 			
@@ -454,7 +454,7 @@
 		
 			$head = $txt[220];
 			// Include the necessary librarys for this
-			include("./lib/usercontrol.php");
+			include_once("./lib/usercontrol.php");
 			
 			if(isset($_POST['add'])){
 			
@@ -504,7 +504,7 @@
 		
 			$head = $txt[221];
 			// Include the necessary librarys for this
-			include("./lib/usercontrol.php");
+			include_once("./lib/usercontrol.php");
 			
 			if(isset($_POST['add'])){
 			
@@ -560,7 +560,7 @@
 				
 			}else{
 			
-				include("./lib/logs.php");
+				include_once("./lib/logs.php");
 				$log = new logs(1,$_GET['room']);
 			
 				if(isset($_GET['subact'])){
@@ -622,7 +622,7 @@
 					
 					$body .= "$txt[249]  <a href=\"index.php?act=roomcp&cp_page=logs&subact=clear&room=$_GET[room]\">[$txt[250]]</a><Br>{$pages}<hr>";
 					
-					include("./lib/message.php");
+					include_once("./lib/message.php");
 					foreach($contents as $linenum=>$entry){
 						// Get date and sender
 						preg_match("/^(.+?);\[(.+?)\]/",$entry,$match);

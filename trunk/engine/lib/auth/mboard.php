@@ -35,7 +35,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the MB configuration file
-	include("../settings.php");
+	include_once("../settings.php");
 	
 	// Create MB database connection
 	$mbdb = new x7chat_db($set['db_host'],$set['db_user'],$set['db_pass'],$set['db_name']);

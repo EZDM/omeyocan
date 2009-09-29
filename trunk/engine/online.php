@@ -31,10 +31,10 @@
 	set_magic_quotes_runtime(0);
 
 	// Import the configuration file
-	include("./config.php");
+	include_once("./config.php");
 
 	// Import the database library
-	include("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
+	include_once("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
 
 	// Create a new database connection
 	$db = new x7chat_db();

@@ -72,7 +72,7 @@ header("Location: index.php?errore=noroom");
 
 if(isset($_GET['delete']))
 if($x7c->permissions['admin_panic']){
-	include("./lib/message.php");
+	include_once("./lib/message.php");
 	if($_GET['delete']!="all"){
 		$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='{$_GET['delete']}'");
 		delete_communication($_GET['delete'],$_GET['room']);
@@ -210,7 +210,7 @@ switch($_GET['frame']){
 		$row = $db->Do_Fetch_Assoc($query);
 			
 		if($row['position'] != $_GET['room'] && $_GET['startfrom']>0){
-			include('./lib/alarms.php');
+			include_once('./lib/alarms.php');
 			double_login($_GET['room']);
 			die("9;Non puoi aprire due finestre contemporaneamente;index.php");
 		}
@@ -536,7 +536,7 @@ switch($_GET['frame']){
 		break;
 
 		// Include the message library
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 
 		//Check if user can talk
 		if(!$x7s->talk){
@@ -1046,7 +1046,7 @@ switch($_GET['frame']){
 
 									<?PHP
 									// Do Keyword parsing, Smilie parsing and filter parsing
-									include("./lib/filter.php");
+									include_once("./lib/filter.php");
 									$msg_filter = new filters($_GET['room']);
 									echo $msg_filter->filter_javascript();
 									?>
@@ -1163,7 +1163,7 @@ switch($_GET['frame']){
 <div id="container">
 <div id="divchat"><?PHP 
 //This file include common layout for frame and map
-include('./sources/layout.html');
+include_once('./sources/layout.html');
 
 $polaroid=$x7c->room_data['logo'];
 if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){

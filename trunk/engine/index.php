@@ -62,7 +62,7 @@
 	set_magic_quotes_runtime(0);
 
 	// Import the configuration file
-	include("./config.php");
+	include_once("./config.php");
 
 	// Test to see if it is installed
 	if(!isset($X7CHAT_CONFIG['INSTALLED'])){
@@ -80,35 +80,35 @@
 	}
 
 	// Import the database library
-	include("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
+	include_once("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
 
 	// Create a new database connection
 	$db = new x7chat_db();
 	// Include the classes needed for loading
 
 	// Include the security
-	include("./lib/security.php");
+	include_once("./lib/security.php");
 
 	// Clean all incoming data
 	parse_incoming();
 
-	include("./lib/load.php");
+	include_once("./lib/load.php");
 
 	// Load the server variables
 	$x7c = new settings();
 
 	// Clean up the database a tad
-	include("./lib/cleanup.php");
+	include_once("./lib/cleanup.php");
 	cleanup_banned();
 
 	//Resurgo
 	resurgo();
 
 	// Include the authentication functions
-	include("./lib/auth.php");
+	include_once("./lib/auth.php");
 
 	// Include the AuthMod file
-	include("./lib/auth/".strtolower($X7CHAT_CONFIG['AUTH_MODE']).".php");
+	include_once("./lib/auth/".strtolower($X7CHAT_CONFIG['AUTH_MODE']).".php");
 
 	// Force Settings from AuthMod
 	if($auth_disable_guest)
@@ -135,10 +135,10 @@
 	}
 
 	// Include the language file
-	include("./lang/".$x7c->settings['default_lang'].".php");
+	include_once("./lang/".$x7c->settings['default_lang'].".php");
 
 	// Include the output library
-	include("./lib/output.php");
+	include_once("./lib/output.php");
 
 	// Load the skin data
 	$print = new load_skin($x7c->settings['default_skin']);
@@ -160,22 +160,22 @@
 	if($x7s->loggedin == 0 && !in_array(@$_GET['act'],$no_login_req)){
 		// They are not logged in
 		// Include controls for login and logout
-		include("./sources/loginout.php");
+		include_once("./sources/loginout.php");
 		page_login();
 		exit;
 	}elseif($x7s->loggedin == 2 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but with an incorrect pass or username
-		include("./sources/loginout.php");
+		include_once("./sources/loginout.php");
 		page_login("failed");
 		exit;
 	}elseif($x7s->loggedin == 3 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but their username was invalid
-		include("./sources/loginout.php");
+		include_once("./sources/loginout.php");
 		page_login("invalid");
 		exit;
 	}elseif($x7s->loggedin == 4 && !in_array(@$_GET['act'],$no_login_req)){
 		// They tried to login but their username was invalid
-		include("./sources/loginout.php");
+		include_once("./sources/loginout.php");
 		page_login("activated");
 		exit;
 	}
@@ -189,6 +189,10 @@
 
 	// Prevent their username and room from being deleted
 	prevent_cleanup();
+	
+	if(@$_GET['act'] != "frame"){
+		cleanup_inactive_users();
+	}
 
 	// If the user has just entered as a guest then we need to remove old logs
 	// This variable is set in lib/auth.php IF it is set at all
@@ -218,7 +222,7 @@
 
 	// See if the room is password protected
 	if(isset($_GET['room'])){
-		include("./sources/room_password.php");
+		include_once("./sources/room_password.php");
 
 		$cookie_name = "rpw_".$x7c->room_data['id'];
 
@@ -244,7 +248,7 @@
 
 	// See if a bandwidth error is occuring
 	if($x7c->settings['log_bandwidth'] == 1){
-		include("./lib/bandwidth.php");
+		include_once("./lib/bandwidth.php");
 		$BW_CHECK = check_bandwidth($x7s->username);
 		if($BW_CHECK && ((@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') && (@$_GET['pmf'] != "update" || $_GET['act'] != "pm")))
 			$_GET['act'] = "bw_error";
@@ -260,7 +264,7 @@
 	// correct page
 
 	// See if they are banned from this server
-	include("./lib/ban.php");
+	include_once("./lib/ban.php");
 	$x7p->bans_on_you = get_bans_onyou();
 	$bans = $x7p->bans_on_you;
 
@@ -307,7 +311,7 @@
 			if($to_send != ""){
 				header("Location: $to_send");
 			}else{
-				include('./sources/loginout.php');
+				include_once('./sources/loginout.php');
 				logout_page();
 				exit;
 			}
@@ -329,7 +333,7 @@
 
 		// Chat is disabled and user is not an admin
 		case "support_sit":
-			include("./sources/support.php");
+			include_once("./sources/support.php");
 			support_mainpage();
 			$print->dump_buffer();
 			exit;
@@ -371,14 +375,14 @@
 
 		// They want to see who is registered
 		case "memberlist":
-			include("./sources/memberlist.php");
+			include_once("./sources/memberlist.php");
 			memberlist();
 			exit;
 		break;
 
 		// They want to see whats up
 		case "calendar":
-			include("./sources/calendar.php");
+			include_once("./sources/calendar.php");
 			calendar();
 			$print->dump_buffer();
 			exit;
@@ -388,7 +392,7 @@
 		case "user_cp": // Legacy support
 		case "userpanel":
 			// The user wants to access their Control Panel
-			include("./sources/usercp.php");
+			include_once("./sources/usercp.php");
 			usercp_master();
 			$print->dump_buffer();
 			exit;
@@ -398,7 +402,7 @@
 		case "admincp":	// Legacy support
 		case "adminpanel":
 			// The user wants to access the Admin cp
-			include("./sources/admin.php");
+			include_once("./sources/admin.php");
 			admincp_master();
 			$print->dump_buffer();
 			exit;
@@ -407,7 +411,7 @@
 		// See if they are trying to access the Room CP
 		case "roomcp":
 			// The user wants to access their Control Panel
-			include("./sources/roomcp.php");
+			include_once("./sources/roomcp.php");
 			roomcp_master();
 			$print->dump_buffer();
 			exit;
@@ -420,14 +424,14 @@
 			// See if bandwidth logging is on
 			if($x7c->settings['log_bandwidth'] == 1){
 				ob_start();
-				include("./sources/frame.php");
+				include_once("./sources/frame.php");
 				$used = ob_get_length();
 				log_bw($used);
 				ob_end_flush();
 			//}elseif(@$_GET['frame'] == "update"){
-			//	include("./sources/update.php");
+			//	include_once("./sources/update.php");
 			}else{
-				include("./sources/frame.php");
+				include_once("./sources/frame.php");
 			}
 
 			/*$debug_start = microtime_float()-$debug_start;
@@ -450,7 +454,7 @@
 				// Redirect
 				header("location: $auth_register_link");
 			}else{
-				include("./sources/register.php");
+				include_once("./sources/register.php");
 				register_user();
 				//$print->dump_buffer();
 			}
@@ -459,7 +463,7 @@
 
 		// awe, how sad, the user forgot their little password
 		case "forgotmoipass":
-			include("./sources/forgotpass.php");
+			include_once("./sources/forgotpass.php");
 			forgot_pass();
 			$print->dump_buffer();
 			exit;
@@ -470,13 +474,13 @@
 			// See what they want to do and if we need to long bandwidth
 			if($x7c->settings['log_bandwidth'] == 1){
 				ob_start();
-				include("./sources/privatemessage.php");
+				include_once("./sources/privatemessage.php");
 				pm_whatshouldicall();
 				$used = ob_get_length();
 				log_bw($used);
 				ob_end_flush();
 			}else{
-				include("./sources/privatemessage.php");
+				include_once("./sources/privatemessage.php");
 				pm_whatshouldicall();
 			}
 			exit;
@@ -484,7 +488,7 @@
 
 		// They want to see someone elses profile, or maybe their own?
 		case "view_profile":
-			include("./sources/profile.php");
+			include_once("./sources/profile.php");
 
 			// If no user is specified we will show them their own profile
 			if(!isset($_GET['user']))
@@ -498,7 +502,7 @@
 
 		// Dispay a small information popup window
 		case "sm_window":
-			include("./sources/info_box.php");
+			include_once("./sources/info_box.php");
 			mini_page();
 			$print->dump_buffer();
 			exit;
@@ -507,13 +511,13 @@
 		// Dispay a small information popup window that contains help info
 		case "help":
 			$_GET['help_file'] = "./help/main";
-			include("./help/mini.php");
+			include_once("./help/mini.php");
 			exit;
 		break;
 
 		// Perform a user action (ignore, ops, view ip, kick, mute)
 		case "usr_action":
-			include("./sources/usr_action_box.php");
+			include_once("./sources/usr_action_box.php");
 			usr_action_window();
 			$print->dump_buffer();
 			exit;
@@ -521,7 +525,7 @@
 
 		// Dispay the form for creating a new room
 		case "newroom1":
-			include("./sources/newroom.php");
+			include_once("./sources/newroom.php");
 			newroom_form();
 			$print->dump_buffer();
 			exit;
@@ -529,8 +533,8 @@
 
 		// Create the new room
 		case "newroom2":
-			include("./lib/rooms.php");
-			include("./sources/newroom.php");
+			include_once("./lib/rooms.php");
+			include_once("./sources/newroom.php");
 			newroom_creation();
 			$print->dump_buffer();
 			exit;
@@ -548,51 +552,51 @@
 			// Clean up old rooms
 			cleanup_rooms();
 			// First we include the rooms library
-			include("./sources/roomlist.php");
+			include_once("./sources/roomlist.php");
 			join_other_room();
 			$print->dump_buffer();
 			exit;
 		break;
 		case "boards":
-			include("./sources/boards.php");
+			include_once("./sources/boards.php");
 			board_main();
 			$print->dump_buffer();
 			exit;
 		break;	
 		case "images":
-			include("./sources/imglist.php");
+			include_once("./sources/imglist.php");
 			imglist_main();
 			$print->dump_buffer();
 			exit;
 		break;	
 		case "sheet":
-			include("./sources/sheet.php");
+			include_once("./sources/sheet.php");
 			sheet_main();
 			exit;
 		break;	
 		case "buildpg":
-			include("./sources/buildpg.php");
+			include_once("./sources/buildpg.php");
 			buildpg_main();
 			exit;
 		break;
 		case "mail":
-			include("./sources/mail.php");
+			include_once("./sources/mail.php");
 			mail_main();
 			exit;
 		case "mapeditor":
-			include("./lib/map_editor.php");
+			include_once("./lib/map_editor.php");
 			map_editor_main();
 			exit;
 		case "roomdesc":
-			include("./sources/roomdescr.php");
+			include_once("./sources/roomdescr.php");
 			roomdescr_main();
 			exit;
                 case "secret":
-			include("./sources/secret.php");
+			include_once("./sources/secret.php");
 			secret_main();
 			exit;
                 case "resurgo":
-			include("./sources/resurgo.php");
+			include_once("./sources/resurgo.php");
 			resurgo_main();
 			exit;
    		default:
@@ -600,7 +604,7 @@
 			// Clean up old rooms
 			cleanup_rooms();
 			// First we include the rooms library
-			include("./sources/roomlist.php");
+			include_once("./sources/roomlist.php");
 			room_list_page();
 			exit;
 		break;

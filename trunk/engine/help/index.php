@@ -34,7 +34,7 @@
 	}
 	
 	// Load the help definitions
-	include("./{$_GET['help_file']}");
+	include_once("./{$_GET['help_file']}");
 
 	// Check for default values
 	if(!isset($_GET['s']) || !isset($help[$_GET['s']]))

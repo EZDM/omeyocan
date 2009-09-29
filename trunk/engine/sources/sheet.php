@@ -82,7 +82,7 @@ function sheet_page_equip(){
 		}
 			
 		$db->DoQuery("UPDATE {$prefix}objects SET uses='$_POST[use]' WHERE id='$_POST[id]'");
-		include('./lib/alarms.php');
+		include_once('./lib/alarms.php');
 		object_uses($pg,$_POST['id'],$_POST['use']);
 			
 			
@@ -133,7 +133,7 @@ function sheet_page_equip(){
 
 
 				if($row_msg['position']!="Mappa" && $row_msg['position']!=""){
-					include("./lib/message.php");
+					include_once("./lib/message.php");
 					$txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
 					alert_room($row_msg['position'], $txt);
 				}
@@ -200,7 +200,7 @@ function sheet_page_equip(){
 			}
 
 			$errore="Oggetto assegnato correttamente\n";
-			include('./lib/alarms.php');
+			include_once('./lib/alarms.php');
 			object_moves($_POST['owner'],$pg,$obj);
 			recalculate_space($pg);
 			recalculate_space($_POST['owner']);
@@ -372,7 +372,7 @@ function sheet_page_master(){
 		if(isset($_POST['master']) && isset($_POST['master_private'])){
 				
 			if($pg!=$x7s->username){
-				include('./lib/alarms.php');
+				include_once('./lib/alarms.php');
 				sheet_modification($pg,$_GET['page']);
 			}
 
@@ -454,7 +454,7 @@ function sheet_page_background(){
 
 
 			if($pg!=$x7s->username){
-				include('./lib/alarms.php');
+				include_once('./lib/alarms.php');
 				sheet_modification($pg,$_GET['page']);
 			}
 
@@ -633,7 +633,7 @@ function sheet_page_ability(){
 								//Ora posso aggiornare
 									
 								if($pg!=$x7s->username){
-									include('./lib/alarms.php');
+									include_once('./lib/alarms.php');
 									sheet_modification($pg,$_GET['page']);
 								}
 									
@@ -926,7 +926,7 @@ function sheet_page_main(){
 
 
 				if($pg!=$x7s->username){
-					include('./lib/alarms.php');
+					include_once('./lib/alarms.php');
 					sheet_modification($pg,$_GET['page']);
 				}
 
@@ -1528,7 +1528,7 @@ function sheet_page_corp(){
 								//Ora posso aggiornare
 
 								if($pg!=$x7s->username){
-									include('./lib/alarms.php');
+									include_once('./lib/alarms.php');
 									sheet_modification($pg,$_GET['page']);
 								}
 

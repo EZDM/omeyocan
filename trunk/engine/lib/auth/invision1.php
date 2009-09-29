@@ -35,7 +35,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the IB configuration file
-	include("../conf_global.php");
+	include_once("../conf_global.php");
 	
 	// Create IB database connection
 	$ibdb = new x7chat_db($INFO['sql_host'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_database']);

@@ -99,7 +99,7 @@
 
 <?PHP 
 //This file include common layout for frame and map
-	include('./sources/layout.html');
+	include_once('./sources/layout.html');
 
 	if($x7c->permissions['admin_panic']){
 		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 20px;"><a onClick="javascript: window.open(\'index.php?act=mapeditor\',\'mapeditor\',\'width=scree.width,height=screen.height, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Map editor </a></div>';

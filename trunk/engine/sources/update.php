@@ -45,8 +45,8 @@
 		}
 				
 		// Start with getting new messages from server
-		include("./lib/online.php");
-		include("./lib/message.php");
+		include_once("./lib/online.php");
+		include_once("./lib/message.php");
 		
 		// Get the last update time
 		// Returns 2 if room is full

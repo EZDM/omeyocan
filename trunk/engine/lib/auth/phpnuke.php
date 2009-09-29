@@ -37,7 +37,7 @@
 	// Get the PhpNuke Configuration File
 	// Preserve X7 Chat $prefix variable
 	$temp_prefix = $prefix;
-	include("../config.php");
+	include_once("../config.php");
 	$nuke_prefix = $prefix."_";
 	$prefix = $temp_prefix;
 	

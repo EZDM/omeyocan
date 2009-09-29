@@ -63,7 +63,7 @@
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 		send_offline_msg($owner,"Hai ricevuto un oggetto","Hai ricevuto l\'oggetto: $obj");
 		
 		
@@ -76,7 +76,7 @@
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 		send_offline_msg($owner,"Hai ricevuto un oggetto","Hai ricevuto l\'oggetto: $obj");
 		
 		

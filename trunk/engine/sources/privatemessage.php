@@ -52,7 +52,7 @@
 		global $db, $prefix, $x7s, $print, $x7c, $BW_CHECK, $x7p, $txt;
 
 		// Include the message library
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 
 		$script = "";
 
@@ -164,7 +164,7 @@
 		global $x7c, $prefix, $db;
 
 		// Include the message library
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 
 		// Make sure the message isn't null
 		if(@$_GET['msg'] != "" && !eregi("^/",@$_GET['msg'])){
@@ -210,7 +210,7 @@
 
 		}elseif(eregi("^/",@$_GET['msg'])){
 			// User has done a command
-			include("./lib/irc.php");
+			include_once("./lib/irc.php");
 			parse_irc_command(@$_GET['msg'],1);
 		}
 
@@ -220,7 +220,7 @@
 	function pm_base_frame(){
 		global $x7s, $x7c, $print, $txt;
 
-		include("./lib/message.php");
+		include_once("./lib/message.php");
 
 		// IE is retarded so we have to do this
 		$_GET['send_to'] = eregi_replace("__ATSIGN__","@",$_GET['send_to']);
@@ -413,7 +413,7 @@
 
 						<?PHP
 						// Do Keyword parsing, Smilie parsing and filter parsing
-						include("./lib/filter.php");
+						include_once("./lib/filter.php");
 						$msg_filter = new filters();
 						echo $msg_filter->filter_javascript();
 						?>

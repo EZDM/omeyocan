@@ -35,7 +35,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the XMB configuration file
-	include("../config.php");
+	include_once("../config.php");
 	
 	// Create XMB database connection
 	$xmbdb = new x7chat_db($dbhost,$dbuser,$dbpw,$dbname);

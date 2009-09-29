@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 	// Include the flatfile-hybrid libraries
-	// include("./lib/db/txtdb.php");
+	// include_once("./lib/db/txtdb.php");
 
 	// This class handles database communication
 	class x7chat_db {

@@ -39,7 +39,7 @@
 	// Get the PostNuke Configuration File
 	// For some reason PostNuke still uses a damned deprecated extract statement which fucks up our prefix variable
 	$save_the_prefixs = $prefix;
-	include("../config.php");
+	include_once("../config.php");
 	$pn_prefix = $pnconfig['prefix']."_";
 	$prefix = $save_the_prefixs;
 	

@@ -96,7 +96,7 @@
 		if(@$_GET['room'] != "")
 			$db->DoQuery("UPDATE {$prefix}rooms SET time='$time' WHERE name='$_GET[room]' AND time<>0");
 		if(@$x7s->username != "")
-			$db->DoQuery("UPDATE {$prefix}users SET time='$time' WHERE username='$x7s->username'");
+			$db->DoQuery("UPDATE {$prefix}users SET time='$time', exp_warn='0' WHERE username='$x7s->username'");
 	}
 
 	function resurgo(){
@@ -110,5 +110,92 @@
               }
               
 	}
+	
+	function delete_user($user){
+		global $db, $prefix;
+		$query = $db->DoQuery("SELECT id FROM {$prefix}users WHERE username='$user'");
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$db->DoQuery("DELETE FROM {$prefix}banned WHERE id='$row[id]'");
+		}
+					
+		$db->DoQuery("DELETE FROM {$prefix}banned WHERE user_ip_email='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}users WHERE username='$user'");
+		// Delete bandwidth info
+		$db->DoQuery("DELETE FROM {$prefix}bandwidth WHERE user='$user'");
+		// Delete character sheet
+		$db->DoQuery("DELETE FROM {$prefix}userability WHERE username='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}usercharact WHERE username='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE user='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$user'");
+		// Clean up logs
+		cleanup_guest_logs($user);	
+	}
+	
+	
+	function cleanup_inactive_users(){
+		global $db, $prefix, $x7c;
+		
+		$warn_list='';
+		$del_list='';
+		$del_day='';
+		
+		//First we send wanring to old pg
+		$exptime = time()-$x7c->settings['pg_expire_warn'];
+		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE exp_warn='0' AND time<'$exptime'");
+		
+		
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$db->DoQuery("UPDATE {$prefix}users SET exp_warn='1'");
+			$warn_list.=$row['username']."\n";
+			
+			$warn_day = $x7c->settings['pg_expire_warn']/(24*3600);
+			$del_day = ($x7c->settings['pg_expire']-$x7c->settings['pg_expire_warn'])/(24*3600);
+			
+			$obj="Avviso imminente cancellazione account";
+			$body="Attenzione, l'account $row[username] risulta inativo da $warn_day. Se non to colleghi, entro $del_day sara' cancellato senza ulteriore avviso";
+			
+			mail($row['email'],$obj,"$body\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
+		}
+		
+		//First we send wanring to old pg
+		$exptime = time()-$x7c->settings['pg_expire'];
+		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE time<'$exptime'");
+		
+		
+		while($row = $db->Do_Fetch_Assoc($query)){
+			//delete_user($row['username']);
+			$del_list.=$row['username']."\n";	
+		}
+		
+		if($warn_list!='' || $del_list!=''){
+			
+			$admin=$x7c->settings['usergroup_admin'];
+			$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE user_group='$admin'");
+			include_once('./lib/message.php');
+			$obj = "Avviso cancellazione pg";
+			
+			$body='';
+			
+			if($warn_list!=''){
+				$body.="I seguenti account saranno automaticamente rimossi tra $del_day\n".$warn_list."\n\n";
+			}
+			
+			if($del_list!=''){
+				$body.="I seguenti account sono stati automaticamente rimossi\n".$del_list."\n\n";
+			}
+			
+			$body= parse_message($body);
+			while($row = $db->Do_Fetch_Assoc($query)){
+				send_offline_msg($row['username'],$obj,$body);	
+			}
+		}
+		
+
+		
+		
+	}
+	
 	
 ?>
