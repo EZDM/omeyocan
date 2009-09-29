@@ -329,8 +329,8 @@
 							<td class=\"dark_row\">{$position}</td>";
 				
 				if($room!='' && $room!="Mappa")
-					if($row['position'] != '' && $row['position']==$room)
-						$list[$cur] .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Invia sussurro</a></td>";
+					if($row['position'] != '' && $row['position']==$room && $position!="Ovunque")
+						$list[$cur] .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Sussurra</a></td>";
 					else
 						$list[$cur] .= "<td class=\"dark_row\">&nbsp;</td>";
 
