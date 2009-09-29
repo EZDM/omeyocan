@@ -334,7 +334,7 @@
 	function irc_away($params){
 		global $txt;
 		// Accepts no arguments so syntax is always correct :)
-		include("./lib/status.php");
+		include_once("./lib/status.php");
 		set_status($txt[149]);
 	}
 	
@@ -342,7 +342,7 @@
 	function irc_back($params){
 		global $txt;
 		// Accepts no arguments so syntax is always correct :)
-		include("./lib/status.php");
+		include_once("./lib/status.php");
 		set_status($txt[150]);
 	}
 	

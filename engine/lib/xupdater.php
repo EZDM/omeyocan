@@ -84,7 +84,7 @@
 				}else{
 					// Ok to continue
 					// Get the data from the unzipped info file
-					include("./mods/temp/theme.info");
+					include_once("./mods/temp/theme.info");
 					
 					$return[$i]['author'] = $author;
 					$return[$i]['date'] = $date;
@@ -187,7 +187,7 @@
 				}else{
 					// Ok to continue
 					// Get the data from the unzipped info file
-					include("./mods/temp/mod.info");
+					include_once("./mods/temp/mod.info");
 					
 					$return[$i]['author'] = $author;
 					$return[$i]['date'] = $date;

@@ -35,7 +35,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the PhpBB2 Configuration File
-	include("../config.php");
+	include_once("../config.php");
 	
 	// Make a database connection to the PhpBB2 database
 	$phpbbdb = new x7chat_db($dbhost,$dbuser,$dbpasswd,$dbname);

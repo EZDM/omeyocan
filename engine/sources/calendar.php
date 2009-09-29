@@ -30,7 +30,7 @@
 	function calendar(){
 		global $x7c,$print,$txt;	
 	
-		include("./lib/events.php");
+		include_once("./lib/events.php");
 			
 		$body = cal_threedays()."<Br><br>";
 		

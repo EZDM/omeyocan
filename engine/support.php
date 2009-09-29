@@ -33,10 +33,10 @@
 	set_magic_quotes_runtime(0);
 
 	// Import the configuration file
-	include("./config.php");
+	include_once("./config.php");
 	
 	// Import the database library
-	include("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
+	include_once("./lib/db/".strtolower($X7CHAT_CONFIG['DB_TYPE']).".php");
 	
 	// Create a new database connection
 	$db = new x7chat_db();
@@ -55,7 +55,7 @@
 	
 		
 	// Include the language file
-	include("./lang/$settings[default_lang].php");
+	include_once("./lang/$settings[default_lang].php");
 	
 	$exp_time = time()-30;
 	$query = $db->DoQuery("SELECT name FROM {$prefix}online WHERE room='support;' AND ($queryx) AND time>'$exp_time'");

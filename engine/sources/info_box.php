@@ -31,7 +31,7 @@
 		global $print, $txt, $x7c, $db, $prefix;
 		if($_GET['page'] == "smile"){
 			// Print the smilies
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$body = "";
 			$smile = new filters("");
 			$smilies = $smile->get_filter_by_type("2");
@@ -54,14 +54,14 @@
 		}elseif($_GET['page'] == "colors"){
 			
 			// Print the color table for users to pick from
-			include("./lib/color_picker.php");
+			include_once("./lib/color_picker.php");
 			$body = color_form();
 			
 		}elseif($_GET['page'] == "colors2"){
 			
 			// If the user is using the GD library for colors then
 			// a second page (this one) is required to update the settings.
-			include("./lib/color_picker.php");
+			include_once("./lib/color_picker.php");
 			$body = color_update();
 			
 		}elseif($_GET['page'] == "event"){

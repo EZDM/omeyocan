@@ -35,7 +35,7 @@
 	$auth_disable_guest = true;
 	
 	// Get the mambo Configuration File
-	include("../configuration.php");
+	include_once("../configuration.php");
 	
 	// Make a database connection to the PhpBB2 database
 	$mamdb = new x7chat_db($mosConfig_host,$mosConfig_user,$mosConfig_password,$mosConfig_db);

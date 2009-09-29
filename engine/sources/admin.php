@@ -84,7 +84,7 @@
 			if($X7CHAT_CONFIG['DISABLE_XUPDATER'] == 1){
 				$body = $txt[319];
 			}else{
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				$news = get_news();
 				if($news == "nonews"){
 					$body = $txt[320];
@@ -957,7 +957,7 @@
 				// This section shows themes that are available to be installed
 				
 				// Get the uploaded themes
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				$uploaded_themes = get_uploaded_themes();
 				if(is_array($uploaded_themes)){
 					$body .= "$txt[399]<Br>
@@ -1033,7 +1033,7 @@
 			
 			}elseif($theme_page == "install"){
 				// Time to install a theme, how exciting!
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				if(install_theme($_GET['theme']) == 1){
 					$body = "<div align=\"center\">$txt[402]<Br><Br>$txt[396]<Br><br><a href=\"./index.php?act=adminpanel&cp_page=themes\">$txt[77]</a></div>";
 				}else{
@@ -1050,7 +1050,7 @@
 				
 				}else{
 				
-					include("./lib/xupdater.php");
+					include_once("./lib/xupdater.php");
 					$uploaded_themes = get_uploaded_themes();
 					foreach($uploaded_themes as $key=>$val){
 						if($val['name'] == $_GET['theme']){
@@ -1096,7 +1096,7 @@
 				$body = "";
 			
 				// Include the theme creator librarys
-				include("./lib/theme_creator.php");
+				include_once("./lib/theme_creator.php");
 				
 				
 				// Check file permissions
@@ -1386,7 +1386,7 @@
 			
 			$head = $txt[143];
 			
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$filters = new filters();
 			
 			if(isset($_GET['add']) && isset($_GET['add2'])){
@@ -1395,7 +1395,7 @@
 				$filters->add_filter(1,$_GET['add'],$_GET['add2']);
 				$filters->reload();
 			}elseif(isset($_GET['upload_and_add'])){
-				include("./lib/upload.php");
+				include_once("./lib/upload.php");
 				upload_file("filter_list","filter_list.txt");
 				$data = implode("",file("{$x7c->settings['uploads_path']}/filter_list.txt"));
 				$data = eregi_replace("[\r|\n|']","",$data);
@@ -1935,7 +1935,7 @@
 							(name,description,uses,image_url,owner,equipped,size)
 							VALUES('$row[name]','$row[description]','$row[uses]','$row[image_url]','$_POST[owner]','1','$row[size]')");
 
-                                        include('./lib/sheet_lib.php');
+                                        include_once('./lib/sheet_lib.php');
                                         recalculate_space($_POST['owner']);
 							
 					$error="Oggetto assegnato correttamente\n";
@@ -2234,24 +2234,9 @@
 					
 				}else{
 					// Do the delete
-					$query = $db->DoQuery("SELECT id FROM {$prefix}users WHERE username='$_GET[delete]'");
-					while($row = $db->Do_Fetch_Assoc($query)){
-						$db->DoQuery("DELETE FROM {$prefix}banned WHERE id='$row[id]'");
-					}
+					include_once('./lib/cleanup.php');
+					delete_user($_GET["delete"]);
 					
-					$db->DoQuery("DELETE FROM {$prefix}banned WHERE user_ip_email='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}users WHERE username='$_GET[delete]'");
-					// Delete bandwidth info
-					$db->DoQuery("DELETE FROM {$prefix}bandwidth WHERE user='$_GET[delete]'");
-					// Delete character sheet
-					$db->DoQuery("DELETE FROM {$prefix}userability WHERE username='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}usercharact WHERE username='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE user='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='$_GET[delete]'");
-					$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$_GET[delete]'");
-					// Clean up logs
-					cleanup_guest_logs($_GET['delete']);
 					$body = "<div align=\"center\">$txt[462]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 				}
 			
@@ -2375,7 +2360,7 @@
                                         
 					
 					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
-					include('./lib/sheet_lib.php');
+					include_once('./lib/sheet_lib.php');
 					join_corp($_GET['update'], $_POST['usergroup']);
 
 					$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
@@ -2515,7 +2500,7 @@
 			}
                         else if(isset($_GET['invite'])){
                                 if(isset($_POST['host'])){
-                                        include("./lib/message.php");
+                                        include_once("./lib/message.php");
                                         $query = $db->DoQuery("SELECT count(*) AS count FROM {$prefix}users WHERE username='{$_POST['host']}'");
                                         $row = $db->Do_Fetch_Assoc($query);
                                         if($row['count']!=1){
@@ -2911,7 +2896,7 @@
 			
 			
 				// Display a table of all rooms showing if logging is enabled giving a Manage/View link
-				include("./lib/rooms.php");
+				include_once("./lib/rooms.php");
 				$rooms = list_rooms();
 				$body .= "<Br>
 							<table align=\"center\"  width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
@@ -2961,7 +2946,7 @@
 			$head = $txt[315];
 		
 			// Show the current one month calendar and allow admin to add, edit and delete events.
-			include("./lib/events.php");
+			include_once("./lib/events.php");
 			cleanup_events();
 			
 			$body = "";
@@ -3087,7 +3072,7 @@
 		
 			$head = $txt[317];
 			
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$filters = new filters();
 			
 			if(isset($_GET['add']) && isset($_GET['add2'])){
@@ -3098,7 +3083,7 @@
 				$filters->remove_smiley($_GET['remove']);
 				$filters->reload();
 			}elseif(isset($_GET['upload_and_add'])){
-				include("./lib/upload.php");
+				include_once("./lib/upload.php");
 				upload_file("smile_list","smile_list.txt");
 				$data = implode("",file("{$x7c->settings['uploads_path']}/smile_list.txt"));
 				$data = eregi_replace("[\r|\n|']","",$data);
@@ -3206,7 +3191,7 @@
 				if(!isset($_GET['step']))
 					$_GET['step'] = 1;
 					
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				open_package($_GET['install']);
 				include("./mods/temp/mod.info");
 				
@@ -3311,7 +3296,7 @@
 				if(!isset($_GET['step']))
 					$_GET['step'] = 1;
 					
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				open_package($_GET['uninstall']);
 				include("./mods/temp/uninstall.info");
 				
@@ -3406,7 +3391,7 @@
 				
 				// Include the mod file and library file
 				include("./mods/mod_data");
-				include("./lib/xupdater.php");
+				include_once("./lib/xupdater.php");
 				
 				// Auto-Detect any new mods
 				$mods = get_uploaded_mods();
@@ -3537,7 +3522,7 @@
 					$message="0";
 				}
 				
-				include("./lib/message.php");
+				include_once("./lib/message.php");
 				send_refresh_message($message);
 			}
 			
@@ -3591,7 +3576,7 @@
 		}elseif($_GET['cp_page'] == "keywords"){
 			$head = $txt[144];
 			
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$filters = new filters();
 
 			if(isset($_GET['add']) && isset($_GET['add2'])){

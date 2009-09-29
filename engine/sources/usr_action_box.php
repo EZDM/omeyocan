@@ -31,7 +31,7 @@
 		global $print, $txt, $x7c;
 		
 		// Include the user control library
-		include("./lib/usercontrol.php");
+		include_once("./lib/usercontrol.php");
 		
 		// Create a user info object for this user
 		$user_info = new user_control($_GET['user']);

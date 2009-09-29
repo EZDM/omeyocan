@@ -107,7 +107,7 @@
 
 		// Do logging if required
 		if($x7c->room_data['logged'] == 1 && $room != "" && $x7c->settings['enable_logging'] == 1){
-			include("./lib/logs.php");
+			include_once("./lib/logs.php");
 			$log = new logs(1,$room);
 			$log->add($x7s->username,$body);
 		}
@@ -516,7 +516,7 @@
 	}
 
 	// Include the private message handling function
-	include("./lib/private_chat.php");
+	include_once("./lib/private_chat.php");
 
 	// The following functions handle offline messages
 

@@ -109,7 +109,7 @@
 		// See if the stats window should be displayed
 		if($x7c->settings['show_stats'] == 1){
 			// Get the information for the online table
-			include("./lib/online.php");
+			include_once("./lib/online.php");
 			clean_old_data();
 			$people_online = get_online();
 			$number_online = count($people_online);
@@ -160,7 +160,7 @@
 		
 		// See if the admin wants the upcoming events to show
 		if($x7c->settings['show_events'] == 1){
-			include("./lib/events.php");
+			include_once("./lib/events.php");
 			
 			if($x7c->settings['events_show3day'] == 1){
 				$body .= cal_threedays()."<Br><br>";

@@ -79,7 +79,7 @@
 			$errore='';
 			$ok=true;
 			$pg=$x7s->username;
-			include('./lib/sheet_lib.php');
+			include_once('./lib/sheet_lib.php');
 			
 			if(isset($_GET['build'])){
 				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");

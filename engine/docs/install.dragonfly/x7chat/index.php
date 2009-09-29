@@ -31,11 +31,11 @@ if (!defined('CPG_NUKE')) { exit; }
 global $userinfo;
  setcookie("X7C2U", $userinfo['username']);
  setcookie("X7C2P", $userinfo['user_password']);  
-    include("header.php");
+    include_once("header.php");
     
     OpenTable();
     	echo 'Rooms will load in a new window...... <br><center><IFRAME SRC="x7chat/index.php" TITLE="Visioneer Chat" WIDTH="460" HEIGHT="600" (frame height)></IFRAME></center>';
      CloseTable();
-    include("footer.php");
+    include_once("footer.php");
 
 ?>

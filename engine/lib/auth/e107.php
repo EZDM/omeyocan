@@ -34,7 +34,7 @@
 	$auth_disable_guest = true;
 	
 	// Include the e107 cooookie
-	include("../e107_config.php");
+	include_once("../e107_config.php");
 	// Init a new DB session to grab the cookie name
 	$e107 = new x7chat_db($mySQLserver,$mySQLuser,$mySQLpassword,$mySQLdefaultdb);
 	

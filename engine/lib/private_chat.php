@@ -44,7 +44,7 @@
 		
 		// Do logging if required
 		if($x7c->settings['log_pms'] == 1 && $to != ""){
-			include("./lib/logs.php");
+			include_once("./lib/logs.php");
 			$log = new logs(2,$to);
 			$log->add($x7s->username,$msg);
 		}

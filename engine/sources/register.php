@@ -195,7 +195,7 @@
 		}
 		
 		// Save the body to the print buffer
-		include('./sources/loginout.php');
+		include_once('./sources/loginout.php');
 		print_loginout($body);
 		return 1;
 	}

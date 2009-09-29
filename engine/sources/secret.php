@@ -13,7 +13,7 @@ function secret_main(){
     $row = $db->Do_Fetch_Assoc($query);
 
 
-    include("./lib/secrets/{$_GET['secret']}.php");
+    include_once("./lib/secrets/{$_GET['secret']}.php");
 
     //It changes each 65535 seconds ~18h
     $today_secret=$secrets[(time()>>16)%$secret_lenght];

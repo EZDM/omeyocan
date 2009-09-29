@@ -40,7 +40,7 @@
 	function perfom_mail(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix;
 			$sys_msg="";
-			include("./lib/message.php");
+			include_once("./lib/message.php");
 
 
 			if(isset($_GET['ok']))

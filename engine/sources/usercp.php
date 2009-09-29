@@ -68,7 +68,7 @@
 
 		}elseif($_GET['cp_page'] == "status"){
 			// Do the status page
-			include("./lib/status.php");
+			include_once("./lib/status.php");
 			$head = $txt[140];
 			if(isset($_GET['new_status'])){
 				set_status($_GET['new_status']);
@@ -100,7 +100,7 @@
 
 			if(isset($_GET['remove'])){
 
-				include("./lib/usercontrol.php");
+				include_once("./lib/usercontrol.php");
 				$userinfo = new user_control($_GET['remove']);
 				$userinfo->unignore();
 				$txt[158] = eregi_replace("_u",$_GET['remove'],$txt[158]);
@@ -108,7 +108,7 @@
 
 			}elseif(isset($_GET['add'])){
 
-				include("./lib/usercontrol.php");
+				include_once("./lib/usercontrol.php");
 				$userinfo = new user_control($_GET['add']);
 				$userinfo->ignore();
 				$txt[161] = eregi_replace("_u",$_GET['add'],$txt[161]);
@@ -138,7 +138,7 @@
 		}elseif($_GET['cp_page'] == "wfilter"){
 
 			$head = $txt[143];
-			include("./lib/filter.php");
+			include_once("./lib/filter.php");
 			$filters = new filters();
 
 			if(isset($_GET['add']) && isset($_GET['add2'])){
@@ -178,7 +178,7 @@
 
 			$head = $txt[142];
 
-			include("./lib/message.php");
+			include_once("./lib/message.php");
 
 			if(isset($_GET['to']) && isset($_GET['subject']) && isset($_GET['body'])){
 				$body = "$txt[171]<Br><Br>";
@@ -449,7 +449,7 @@
 
 			if(isset($_GET['uploaded'])){
 				// Do the upload
-				include("./lib/uploads.php");
+				include_once("./lib/uploads.php");
 				$returned = handle_uploaded_avatar();
 
 				if($returned == 1){
@@ -643,7 +643,7 @@
 
 			}else{
 
-				include("./lib/logs.php");
+				include_once("./lib/logs.php");
 				$log = new logs(2,"");
 
 				if(isset($_GET['subact'])){
@@ -704,7 +704,7 @@
 
 					$body .= "$txt[249]<Br>$pages<hr>";
 
-					include("./lib/message.php");
+					include_once("./lib/message.php");
 					foreach($contents as $linenum=>$entry){
 						// Get date and sender
 						preg_match("/^(.+?);\[(.+?)\]/",$entry,$match);
