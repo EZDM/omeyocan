@@ -562,7 +562,7 @@ $txt[508] = "sei ora invisibile in questa Stanza";
 $txt[509] = "Non sei più invisibile in questa Stanza";
 $txt[510] = "Entra in tutte le Stanze in modalità invisibile";
 $txt[511] = "Avete ricevuto un messaggio privato. Se non si apre automaticamente in una nuova finestra, <a>[Cliccate Qui]</a>";		// Leave <a> and </a> alone
-$txt[512] = "_u è stato bandito dalla Stanza per _r.";	// _u is replaced with the username, _r is the reason
+$txt[512] = "<span style=\"color: red; \">_u è stato bandito. Motivo: _r.</span><br>";	// _u is replaced with the username, _r is the reason
 $txt[513] = "_u è stato riammesso in questa Stanza.";
 $txt[514] = "Posta non letta";
 $txt[515] = "Numero massimo di caratteri nel Nome Utente";

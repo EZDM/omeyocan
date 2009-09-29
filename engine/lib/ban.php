@@ -60,12 +60,17 @@
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason')");
 	
-		// Alert the room if this isn't a server ban and if the user isn't an IP or E-Mail
-		if($room != "*" && !eregi("\.",$user)){
+		// Alert all active rooms if the user isn't an IP or E-Mail
+		if(!eregi("\.",$user)){
 			$txt[512] = eregi_replace("_u","$user",$txt[512]);
 			$txt[512] = eregi_replace("_r","$reason",$txt[512]);
 			include_once("./lib/message.php");
-			alert_room(@$_GET['room'],$txt[512]);
+			
+			$query = $db->DoQuery("SELECT DISTINCT room FROM {$prefix}online");
+			
+			while($row=$db->Do_Fetch_Assoc($query)){
+				alert_room($row['room'],$txt[512]);
+			}
 		}
 	}
 
