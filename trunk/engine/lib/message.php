@@ -521,7 +521,7 @@
 	// The following functions handle offline messages
 
 	// This function sends an offline message
-	function send_offline_msg($to,$subject,$msg){
+	function send_offline_msg($to,$subject,$msg,$sender=''){
 		global $x7s, $db, $prefix, $x7c;
 		$time = time();
 
@@ -530,9 +530,12 @@
 		$font = $x7c->settings['default_font'];
 		$starttags = "[color=$color][size=$size][font=$font]";
 		$endtags = "[/color][/size][/font]";
+		
+		if($sender=='')
+			$sender=$x7s->username;
 
 		//$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$starttags$msg$endtags','parsed_body','$to','0')");
-		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$time::$msg','parsed_body','$to','0')");
+		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$sender','6','$subject::$time::$msg','parsed_body','$to','0')");
 	}
 
 	// This function gets a list of all offline messages
