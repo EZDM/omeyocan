@@ -143,7 +143,7 @@
 		
 		//First we send wanring to old pg
 		$exptime = time()-$x7c->settings['pg_expire_warn'];
-		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE exp_warn='0' AND time<'$exptime'");
+		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE exp_warn='0' AND time<'$exptime' ORDER BY username");
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
@@ -165,7 +165,7 @@
 		
 		//First we send wanring to old pg
 		$exptime = time()-$x7c->settings['pg_expire'];
-		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE time<'$exptime'");
+		$query = $db->DoQuery("SELECT username, email FROM {$prefix}users WHERE time<'$exptime' ORDER BY username");
 		
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
