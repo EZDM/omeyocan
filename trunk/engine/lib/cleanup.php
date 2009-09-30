@@ -148,7 +148,7 @@
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			include_once('./lib/message.php');
-			$db->DoQuery("UPDATE {$prefix}users SET exp_warn='1'");
+			$db->DoQuery("UPDATE {$prefix}users SET exp_warn='1' WHERE username='$row[username]'");
 			$warn_list.=$row['username']."\n";
 			
 			$warn_day = $x7c->settings['pg_expire_warn']/(24*3600);
