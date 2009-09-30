@@ -143,7 +143,7 @@
 		// we force a fake join with Mappa
 		$more_query="";
                 if(isset($_GET['dead'])){
-                    $more_query = " AND u.info='Morto'";
+                    $more_query = " AND (u.info='Morto' OR u.info<'{$x7c->settings['dead_threshold']}')";
                 }
 
                 if($letter!=''){
@@ -314,7 +314,7 @@
 				}
 				
 				$dead_fmt='dark_link';
-				if($row['info']=="Morto"){
+				if($row['info']=="Morto" || $row['info']<$x7c->settings['dead_threshold']){
 					$dead_fmt = 'dark_link_red';
 				}
 				
