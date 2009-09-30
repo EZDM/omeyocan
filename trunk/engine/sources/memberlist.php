@@ -143,7 +143,7 @@
 		// we force a fake join with Mappa
 		$more_query="";
                 if(isset($_GET['dead'])){
-                    $more_query = " AND (u.info='Morto' OR u.info<'{$x7c->settings['dead_threshold']}')";
+                    $more_query = " AND sheet_ok='1' AND (u.info='Morto' OR u.info<'{$x7c->settings['dead_threshold']}')";
                 }
 
                 if($letter!=''){
