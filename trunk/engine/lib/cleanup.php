@@ -155,7 +155,7 @@
 			$del_day = ($x7c->settings['pg_expire']-$x7c->settings['pg_expire_warn'])/(24*3600);
 			
 			$obj="Avviso imminente cancellazione account";
-			$body="Attenzione, l'account $row[username] risulta inativo da $warn_day. Se non to colleghi, entro $del_day sara' cancellato senza ulteriore avviso";
+			$body="Attenzione, l'account $row[username] risulta inativo da $warn_day giorni. Se non to colleghi entro $del_day giorni sara' cancellato senza ulteriore avviso";
 			
 			mail($row['email'],$obj,"$body\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
 			
@@ -183,7 +183,7 @@
 			$body='';
 			
 			if($warn_list!=''){
-				$body.="I seguenti account saranno automaticamente rimossi tra $del_day\n".$warn_list."\n\n";
+				$body.="I seguenti account saranno automaticamente rimossi tra $del_day giorni\n".$warn_list."\n\n";
 			}
 			
 			if($del_list!=''){
