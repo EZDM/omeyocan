@@ -325,7 +325,7 @@
 
 			$ch_fields ='';
 			foreach($charact as $cur_ch){
-				$ch_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur_ch['id']}');\" onMouseOut=\"javascript: hide_desc();*/"\">
+				$ch_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur_ch['id']}');\" onMouseOut=\"javascript: hide_desc();\"*/">
 					<td>{$cur_ch['name']}:</td><td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
 					<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$x7c->settings['min_ch']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 						<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$x7c->settings['min_ch']}\"/>
@@ -362,7 +362,7 @@
 			$ab_fields ='';
 			foreach($ability as $cur){
 				if($cur['dep'] == ""){
-					$ab_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur['ability_id']}');\" onMouseOut=\"javascript: hide_desc();*/"\">";
+					$ab_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur['ability_id']}');\" onMouseOut=\"javascript: hide_desc();\"*/">";
 					$ab_fields .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
 					<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 					<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
@@ -384,7 +384,7 @@
 
 					foreach($ability as $cur2){
 						if($cur2['dep'] == $cur['ability_id']){
-							$ab_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')*/"\">\n";
+							$ab_fields .= "<tr "./*onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\"*/">\n";
 							$ab_fields .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
 								<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
 								<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
@@ -485,12 +485,12 @@
 			<form action="index.php?act=buildpg&build" method="post" name="sheet_form">
 				<div class="overflow" id="all">
 				<table>
-					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();*/'">
+					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();"*/'>
 						<td>Nome:</td>
 						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
 					</tr>
 					
-					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();*/'">
+					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();"*/'>
 						<td>Cognome:</td>
 						<td><input class="sheet_input" type="text" name="surname" size="16" /></td>
 					</tr>
@@ -500,13 +500,13 @@
 						<td><input class="sheet_input" type="text" name="age" value="16" size="2" style="text-align: right;" /></td>
 					</tr>
 
-					<tr './*onMouseOver="javascript: show_desc(\'naz\');" onMouseOut="javascript: hide_desc();*/'">
+					<tr './*onMouseOver="javascript: show_desc(\'naz\');" onMouseOut="javascript: hide_desc();"*/'>
 						<td>Nazionalit&agrave;</td>
 						<td><input class="sheet_input" type="text" name="nat" size="16" /></td>
 					</tr>
 					
 					</tr>
-					<tr './*onMouseOver="javascript: show_desc(\'sesso\');" onMouseOut="javascript: hide_desc();*/'"><td>Sesso:</td>
+					<tr './*onMouseOver="javascript: show_desc(\'sesso\');" onMouseOut="javascript: hide_desc();"*/'><td>Sesso:</td>
 						<td>
 						<select class="button" name="gender">
 											<option value="0">M</option>
@@ -515,7 +515,7 @@
 						</td>
 					</tr>
 
-					<tr './*onMouseOver="javascript: show_desc(\'civile\');" onMouseOut="javascript: hide_desc();*/'">
+					<tr './*onMouseOver="javascript: show_desc(\'civile\');" onMouseOut="javascript: hide_desc();"*/'>
 						<td>Stato civile:</td>
 						<td>
 							<select class="button" name="marr">
@@ -550,7 +550,7 @@
 				</table>
 				</div>
 			</form>
-			<!--<div id="help"><a onClick="javascript: opener.focus();" target="_blank" href="../rules.html">Vedi il regolamento</a></div>-->
+			<div id="help"><a onClick="javascript: opener.focus();" target="_blank" href="../rules.html">Vedi il regolamento</a></div>
 			';
 
 						
@@ -590,7 +590,7 @@
 			}
 
 			#help{
-				position: absolute;
+				position: fixed;
 				left: 620px;
 				top: 70px;;
 				font-size: 10pt;
