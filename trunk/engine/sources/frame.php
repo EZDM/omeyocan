@@ -71,7 +71,7 @@ if($_GET['room'] == "Mappa" && !isset($_GET['frame']))
 header("Location: index.php?errore=noroom");
 
 if(isset($_GET['delete']))
-if($x7c->permissions['write_master']){
+if($x7c->permissions['admin_panic']){
 	include_once("./lib/message.php");
 	if($_GET['delete']!="all"){
 		$db->DoQuery("DELETE FROM {$prefix}messages WHERE id='{$_GET['delete']}'");
@@ -91,7 +91,7 @@ $row = $db->Do_Fetch_Assoc($query);
 
 //If it is private
 if($row['type'] == 2){
-	if($x7s->username != $_GET['room'] && !$x7c->permissions['write_master']){
+	if($x7s->username != $_GET['room'] && !$x7c->permissions['admin_panic']){
 		//We are not the owner of the room or the master..
 		//To enter we must own the keyCode
 		$univoque_key='';
@@ -155,7 +155,7 @@ switch($_GET['frame']){
 		header("Cache-Control: no-cache");
 		header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
 
-		if($x7c->permissions['write_master']){
+		if($x7c->permissions['admin_panic']){
 			$query=$db->DoQuery("SELECT m_invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
 			$row=$db->Do_Fetch_Assoc($query);
 
@@ -177,7 +177,7 @@ switch($_GET['frame']){
 		if(!isset($_GET['room']))
 			exit();
 
-		if($x7c->permissions['write_master']){
+		if($x7c->permissions['admin_panic']){
 			$query=$db->DoQuery("SELECT shadow FROM {$prefix}rooms WHERE name='{$_GET[room]}'");
 			$row=$db->Do_Fetch_Assoc($query);
 
@@ -415,7 +415,7 @@ switch($_GET['frame']){
 					}
 
 					$toout='';
-					if($x7c->permissions['write_master']){
+					if($x7c->permissions['admin_panic']){
 						$toout = "$gif<a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row[0]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" ><span class=$gender>$long_name ($row[0]) $timestamp:</span></a>";
 						$toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
 						$toout.="$row[2]<br>";
@@ -455,7 +455,7 @@ switch($_GET['frame']){
 						if(strtolower($x7s->username) == strtolower($user)){
 							$toout = "<span class=\"sussurro\">[$row[0]] ti ha mandato un sussurro:".$msg."</span><br>";
 						}
-						elseif($x7c->permissions['write_master']){
+						elseif($x7c->permissions['admin_panic']){
 							$toout = "<span class=\"sussurro\">[$row[0]] ha mandato un sussurro a [$user]:".$msg."</span><br>";
 						}
 					}
@@ -475,7 +475,7 @@ switch($_GET['frame']){
 					echo utf8_encode("13;$row[2]|");
 				}elseif($row[1] == 14){
 					$toout = "$row[2]";
-					if($x7c->permissions['write_master']){
+					if($x7c->permissions['admin_panic']){
 						$toout .= "<a onClick=\"javascript: do_delete($row[4])\">[Delete]</a>";
 					}
 					$toout.= "<br>";
@@ -562,7 +562,7 @@ switch($_GET['frame']){
 			//If we are in panic
 			if($x7c->settings['panic']){
 				//If user is not a master and room is not panic_free
-				if(!$x7c->permissions['write_master'] && !$x7c->room_data['panic_free']){
+				if(!$x7c->permissions['admin_panic'] && !$x7c->room_data['panic_free']){
 					if($x7s->panic >= $x7s->max_panic){
 						$_POST['msg']="<span style=\"color: red;\">Panico al massimo</span><br>".$_POST['msg'];
 					}
@@ -1176,7 +1176,7 @@ if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
 	$polaroid.="ob.jpg";
 }
 
-if($x7c->permissions['write_master']){
+if($x7c->permissions['admin_panic']){
 	if($x7s->invisible)
 		$inv_txt="[Diventa visibile]";
 	else
