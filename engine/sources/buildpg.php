@@ -550,7 +550,7 @@
 				</table>
 				</div>
 			</form>
-			<div id="help"><a onClick="javascript: opener.focus();" target="_blank" href="../rules.html">Vedi il regolamento</a></div>
+			<!--<div id="help"><a onClick="javascript: opener.focus();" target="_blank" href="../rules.html">Vedi il regolamento</a></div>-->
 			';
 
 						
