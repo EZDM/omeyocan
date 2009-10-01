@@ -590,7 +590,7 @@
 			}
 
 			#help{
-				position: fixed;
+				position: absolute;
 				left: 620px;
 				top: 70px;;
 				font-size: 10pt;
@@ -598,7 +598,7 @@
 				width:300px;
 				margin-left: 5px;
 				padding: 5px;
-				visibility: block;
+				
 			}
 
 			#all{
@@ -628,7 +628,7 @@
 				overflow: auto;
 				height: 100%;
 			}
-                        .overflow {
+             .overflow {
 				overflow: auto;
                         }
 
