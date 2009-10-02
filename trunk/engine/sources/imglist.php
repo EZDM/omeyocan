@@ -127,6 +127,10 @@ function file_list($path,$url){
 		
 		sort($file_array);
 		
+		$sep="";
+		if($subdir!="")
+			$sep="/";
+		
 		for($fp=0; $fp<count($file_array); $fp++){
 
 			if($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])!="dir"){
@@ -158,9 +162,7 @@ function file_list($path,$url){
 					
 			}
 			elseif($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])=="dir"){
-				if($subdir!="")
-					$subdir.="/";
-				$dir.="<li><a href=\"index.php?act=images&subdir=$subdir$file_array[$fp]\">$file_array[$fp]</a></li>";
+				$dir.="<li><a href=\"index.php?act=images&subdir=$subdir$sep$file_array[$fp]\">$file_array[$fp]</a></li>";
 			}
 
 		}
