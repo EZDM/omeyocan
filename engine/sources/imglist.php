@@ -105,32 +105,49 @@ function file_list($path,$url){
 	$body.="<table style=\"width: 750px;\">\n";
 
 	$dir="<tr><td><h3>Categorie</h3><ul>";
-	if($subdir!="")
-	$dir.="<li><a href=\"index.php?act=images\">/</a></li>";
+	if($subdir!=""){
+		$dir.="<li><a href=\"index.php?act=images\">/</a></li>";
+		
+		$prev_array = explode("/", $subdir);
+		$previous ="";
+		for($i=0; $i<(count($prev_array)-1);$i++){
+			if($i>0)
+				$previous .= "/";
+			$previous .=$prev_array[$i];
+		}
+			
+		$dir.="<li><a href=\"index.php?act=images&subdir=$previous\">../</a></li>";
+	}
 	$img="";
 
 	if($dh = opendir($path)){
 		while (($file = readdir($dh)) !== false) {
+			$file_array[]=$file;
+		}
+		
+		sort($file_array);
+		
+		for($fp=0; $fp<count($file_array); $fp++){
 
-			if($file[0]!="." && filetype($path.$file)!="dir"){
+			if($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])!="dir"){
 				if($i % $maxcol == 0){
 					$img.="<tr>";
 				}
 					
-				if(preg_match("/swf$/i", $path.$file)){
-					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\">
+				if(preg_match("/swf$/i", $path.$file_array[$fp])){
+					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\">
 								<object>
-									<param name=\"movie\" value=\"".$url.$file."\" width=\"100\" height=\"100\">
+									<param name=\"movie\" value=\"".$url.$file_array[$fp]."\" width=\"100\" height=\"100\">
 									<param name=\"quality\" value=\"high\">
 									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
 									<param name=\"allowFullScreen\" value=\"True\" />
-									<embed src=\"".$url.$file."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width=\"100\" height=\"100\">
+									<embed src=\"".$url.$file_array[$fp]."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width=\"100\" height=\"100\">
 									</embed>
 								</object>					
-								<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+								<br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
 				}
 				else{
-					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width=\"100\"> <br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file\")'>[Delete]</a><td>\n";
+					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\"><img src=\"$url$file_array[$fp]\" width=\"100\"> <br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
 				}
 					
 				$i++;
@@ -140,8 +157,10 @@ function file_list($path,$url){
 				}
 					
 			}
-			elseif($file[0]!="." && filetype($path.$file)=="dir"){
-				$dir.="<li><a href=\"index.php?act=images&subdir=$file\">$file</a></li>";
+			elseif($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])=="dir"){
+				if($subdir!="")
+					$subdir.="/";
+				$dir.="<li><a href=\"index.php?act=images&subdir=$subdir$file_array[$fp]\">$file_array[$fp]</a></li>";
 			}
 
 		}
