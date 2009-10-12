@@ -2323,7 +2323,7 @@
 								<td width=\"100\"><input type=\"text\" name=\"avatar\" class=\"text_input\" value=\"{$def->profile['avatar']}\"></td>
 							</tr>
 							<tr>
-								<td>Override group gif <input type=\"checkbox\" name=\"override\" value=\"1\"></td>
+								<td>Override group gif</td><td><input type=\"checkbox\" name=\"override\" value=\"1\"></td>
 							</tr>
 							
 							<tr>
