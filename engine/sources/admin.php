@@ -2312,16 +2312,15 @@
 							-->
 							
 							<tr>
-								<td width=\"60\">Avatar:</td>
-								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"bio\" cols=\"18\" value=\"{$def->profile['bio']}\"></td>
-							</tr>
-							
-
-							
-							<tr>
-								<td width=\"60\">Gif Gremios: </td>
+								<td width=\"60\">Avatar: </td>
 								<td width=\"100\"><input type=\"text\" name=\"avatar\" class=\"text_input\" value=\"{$def->profile['avatar']}\"></td>
 							</tr>
+							
+							<tr>
+								<td width=\"60\">Gif gremios:</td>
+								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"bio\" cols=\"18\" value=\"{$def->profile['bio']}\"></td>
+							</tr>
+
 							<tr>
 								<td>Override group gif</td><td><input type=\"checkbox\" name=\"override\" value=\"1\"></td>
 							</tr>
