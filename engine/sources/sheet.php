@@ -499,11 +499,11 @@ function sheet_page_background(){
 			$body .= '<form action="index.php?act=sheet&page=background&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 			';
 				
-			$body .= '<div class="indiv" id="storia"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off">'.$row['storia'].'</textarea></div>
+			$body .= '<div class="indiv" id="storia"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off" disabled>'.$row['storia'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="fisici"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off">'.$row['fisici'].'</textarea></div>
+			$body .= '<div class="indiv" id="fisici"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off" disabled>'.$row['fisici'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off">'.$row['psico'].'</textarea></div>
+			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off" disabled>'.$row['psico'].'</textarea></div>
 			';
 				
 			$body .= "<div id=\"modify\">
@@ -878,6 +878,7 @@ function sheet_page_main(){
 		//We are modifiyng character sheet
 		if(isset($_POST['name']) &&
 		isset($_POST['age'])&&
+		isset($_POST['hobbies'])&&
 		isset($_POST['nat']) &&
 		isset($_POST['marr']) &&
 		isset($_POST['gender']) &&
@@ -916,29 +917,21 @@ function sheet_page_main(){
 		if($ok){
 			$reload = true;
 			//Ora posso aggiornare
-			if(isset($_POST['name']) &&
-			isset($_POST['age'])&&
-			isset($_POST['nat']) &&
-			isset($_POST['marr']) &&
-			isset($_POST['gender']) &&
-			isset($_POST['avatar_in'])
-			){
+			if($pg!=$x7s->username){
+				include_once('./lib/alarms.php');
+				sheet_modification($pg,$_GET['page']);
+			}
 
-
-				if($pg!=$x7s->username){
-					include_once('./lib/alarms.php');
-					sheet_modification($pg,$_GET['page']);
-				}
-
-				$db->DoQuery("UPDATE {$prefix}users SET
+			$db->DoQuery("UPDATE {$prefix}users SET
 							name='$_POST[name]',
 							age='$_POST[age]',
 							nat='$_POST[nat]',
 							marr='$_POST[marr]',
+							hobbies='$_POST[hobbies]',
 							gender='$_POST[gender]',
 							avatar='$_POST[avatar_in]'
 							WHERE username='$pg'");
-			}
+			
 
 			if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
 
@@ -1100,6 +1093,11 @@ function sheet_page_main(){
 								document.forms[0].elements["info"].style.border="1px solid";
 								document.forms[0].elements["info"].style.background="white";
 								document.forms[0].elements["info"].disabled=false;
+								
+								document.forms[0].elements["hobbies"].style.color="blue";
+								document.forms[0].elements["hobbies"].style.border="1px solid";
+								document.forms[0].elements["hobbies"].style.background="white";
+								document.forms[0].elements["hobbies"].disabled=false;
 
 								document.forms[0].elements["xp"].style.color="blue";
 								document.forms[0].elements["xp"].style.background="white";
@@ -1127,6 +1125,7 @@ function sheet_page_main(){
 	if(!checkIfMaster()){
 		$body.= "
 					<div class=\"indiv\" id=\"status\">$row_user[info]</div>
+					<div class=\"indiv\" id=\"real_status\">$row_user[hobbies]</div>
 					<div class=\"indiv\" id=\"xp_point\">$row_user[xp]</div>
 				";
 	}
@@ -1286,6 +1285,7 @@ function sheet_page_main(){
 							
 						$body.= "
 					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"5\" disabled /></div>
+					<div class=\"indiv\" id=\"real_status\"><input class=\"sheet_input\" type=\"text\" name=\"hobbies\" value=\"$row_user[hobbies]\" size=\"10\" disabled /></div>
 					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
 				";
 
@@ -1660,7 +1660,7 @@ function sheet_page_corp(){
 
 	if(($corp_master && $pg==$x7s->username) || (checkIfModifySheet() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
 		$body.="<div id=\"corp_mgmt\">
-                                <div>
+                                <div id=\"corp_panel\">
                                 Gestione gremios {$row_user['user_group']}
                                 <form action=\"index.php?act=sheet&page=corp&pg=$pg&mgmt=add\" method=\"post\" name=\"corp_mgmt_form\">
                                     <table>
@@ -1989,6 +1989,11 @@ function print_sheet($body,$bg){
 				left: 52px;
 				top: 602px;
 			}
+			#real_status{
+				left: 265px;
+				top: 602px;
+				width: 200px;
+			}
 			#avatar{
 				left: 65px;
 				top: 61px;
@@ -2048,9 +2053,8 @@ function print_sheet($body,$bg){
 				left: 0;
 				width: 400px;
 				height: 200px;
-				border: solid 1px;
 				
-                        }
+            }
 			#visual{
 				position: absolute;
 				top: 0;
@@ -2067,10 +2071,13 @@ function print_sheet($body,$bg){
 				
 			}
 			
+			#corp_panel{
+				width:400px;
+			}
 			#people{
                 overflow: auto;
-                height: 233px;
                 width:400px;
+                height:150px;
 			}
 
 			.dark_link{
