@@ -2286,7 +2286,9 @@
 								<td width=\"100\"><input type=\"text\" name=\"rname\" class=\"text_input\" value=\"{$def->profile['name']}\"></td>
 							</tr>
 							
-							<!--<tr>
+							<!--
+							
+							<tr>
 								<td width=\"60\">$txt[121]:</td>
 								<td width=\"100\"><input type=\"text\" name=\"location\" class=\"text_input\" value=\"{$def->profile['location']}\"></td>
 							</tr>
@@ -2294,11 +2296,6 @@
 							<tr>
 								<td width=\"60\">$txt[122]:</td>
 								<td width=\"100\"><input type=\"text\" name=\"hobbies\" class=\"text_input\" value=\"{$def->profile['hobbies']}\"></td>
-							</tr>-->
-							
-							<tr>
-								<td width=\"60\">Avatar:</td>
-								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"bio\" cols=\"18\" value=\"{$def->profile['bio']}\"></td>
 							</tr>
 							
 							<tr>
@@ -2312,6 +2309,14 @@
 									</select>
 								</td>
 							</tr>
+							-->
+							
+							<tr>
+								<td width=\"60\">Avatar:</td>
+								<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"bio\" cols=\"18\" value=\"{$def->profile['bio']}\"></td>
+							</tr>
+							
+
 							
 							<tr>
 								<td width=\"60\">Gif Gremios: </td>
