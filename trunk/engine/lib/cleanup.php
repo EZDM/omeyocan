@@ -155,12 +155,11 @@
 			$del_day = ($x7c->settings['pg_expire']-$x7c->settings['pg_expire_warn'])/(24*3600);
 			
 			$obj="Avviso imminente cancellazione account";
-			$body="Attenzione, l'account $row[username] risulta inativo da $warn_day giorni. Se non to colleghi entro $del_day giorni sara' cancellato senza ulteriore avviso";
+			$body="Attenzione, l\'account $row[username] risulta inativo da $warn_day giorni. Se non to colleghi entro $del_day giorni sara\' cancellato senza ulteriore avviso";
 			
 			mail($row['email'],$obj,"$body\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
 			
 			$body = parse_message($body);
-			send_offline_msg($row['username'],$obj,$body,"Buio");
 		}
 		
 		//First we send wanring to old pg
