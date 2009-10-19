@@ -70,7 +70,7 @@
 		
 		// Create a new session
 		function session(){
-			global $X7CHAT_CONFIG,$db,$auth_ucookie,$auth_pcookie,$prefix,$ACTIVATION_ERROR;
+			global $X7CHAT_CONFIG,$db,$auth_ucookie,$auth_pcookie,$prefix,$ACTIVATION_ERROR,$FROZEN_ERROR;
 			
 			// Set username to null by default
 			$this->username = "";
@@ -78,15 +78,21 @@
 			if(@$_COOKIE[$auth_ucookie] != "" && @$_COOKIE[$auth_pcookie] != "" ){
 			
 				// The user has a cookie set for username
-				if($_COOKIE[$auth_pcookie] == auth_getpass($auth_ucookie)){
-					$this->loggedin = 1;
-					$this->username = $_COOKIE[$auth_ucookie];
+				if($_COOKIE[$auth_pcookie] == auth_getpass($auth_ucookie)){ 
+					if(!isset($ACTIVATION_ERROR) && !isset($FROZEN_ERROR)){
+						$this->loggedin = 1;
+						$this->username = $_COOKIE[$auth_ucookie];
+					}
+					
+					if(isset($ACTIVATION_ERROR))
+						$this->loggedin = 4;	
+				
+					if(isset($FROZEN_ERROR))
+						$this->loggedin = 5;
+					
 				}else{
 					$this->loggedin = 2;
-				}
-				
-				if(isset($ACTIVATION_ERROR))
-					$this->loggedin = 4;
+				}				
 					
 			}else{
 				// This user is NOT logged in
@@ -95,7 +101,7 @@
 		}
 		
 		function dologin(){
-			global $X7CHAT_CONFIG,$db,$auth_ucookie,$auth_pcookie,$x7c,$x7s,$prefix,$g_default_settings,$remove_old_guest_logs,$txt,$ACTIVATION_ERROR;
+			global $X7CHAT_CONFIG,$db,$auth_ucookie,$auth_pcookie,$x7c,$x7s,$prefix,$g_default_settings,$remove_old_guest_logs,$txt,$ACTIVATION_ERROR,$FROZEN_ERROR;
 			
 			// The AuthMod file has already been included above
 			
@@ -112,6 +118,7 @@
 				$pw = parse_outgoing($_POST['password']);
 				setcookie($auth_ucookie,$un,0/*time()+$x7c->settings['cookie_time']*/,$X7CHAT_CONFIG['COOKIE_PATH']);
 				setcookie($auth_pcookie,$pw,0/*time()+$x7c->settings['cookie_time']*/,$X7CHAT_CONFIG['COOKIE_PATH']);
+				
 				$x7s->loggedin = 1;
 				$this->username = $_COOKIE[$auth_ucookie];
 				return 1;
@@ -147,15 +154,22 @@
 					}
 				}
 				
-				if(!isset($ACTIVATION_ERROR)){
+				if($temp->loggedin == 2){
 					$x7s->loggedin = 2;
 					setcookie($auth_ucookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
 					setcookie($auth_pcookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
 					return 0;
-				}else{
+				}elseif($temp->loggedin == 5){
+					$x7s->loggedin = 5;
+					setcookie($auth_ucookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
+					setcookie($auth_pcookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
+					return 0;
+				}
+				elseif($temp->loggedin == 4){
 					$x7s->loggedin = 4;
 					return 0;
 				}
+
 			
 			
 			}

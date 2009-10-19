@@ -2335,6 +2335,10 @@
 							</tr>
 							
 							<tr>
+								<td>Congelato:</td><td><input type=\"checkbox\" name=\"frozen\" value=\"1\" "; $body .= ($def->profile['frozen'] == 1) ? "checked":"";$body .="></td>
+							</tr>
+							
+							<tr>
 								<td width=\"160\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" value=\"$txt[187]\" class=\"button\"></div></td>
 							</tr>
 						</table><Br>";
@@ -2359,15 +2363,20 @@
                                             $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[usergroup]'");
                                             $row=$db->Do_Fetch_Assoc($gif_query);
                                             $_POST['bio']=$row['logo'];
-                                        }
+                    }
 
-                                        $corp_master=0;
-                                        if(isset($_POST['corp_master']))
-                                            $corp_master=1;
+                    $corp_master=0;
+					if(isset($_POST['corp_master']))
+						$corp_master=1;
+						
+					$frozen=0;
+					if(isset($_POST['frozen']))
+						$frozen=1;
                                         
 					
+					$time = time();
 					//$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}users SET time='$time', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
 					include_once('./lib/sheet_lib.php');
 					join_corp($_GET['update'], $_POST['usergroup']);
 

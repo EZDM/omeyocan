@@ -452,7 +452,7 @@
 
 		function profile_info($user){
 			global $db, $prefix;
-			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,status,user_group,id,hideemail,gender,settings,password,corp_master FROM {$prefix}users WHERE username='$user'");
+			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,status,user_group,id,hideemail,gender,settings,password,corp_master,frozen FROM {$prefix}users WHERE username='$user'");
 			$row = $db->Do_Fetch_Row($query);
 			$this->profile['email'] = $row[0];
 			$this->profile['avatar'] = $row[1];
@@ -470,6 +470,7 @@
 			$this->profile['settings'] = $row[11];
 			$this->profile['password'] = $row[12];
 			$this->profile['corp_master'] = $row[13];
+			$this->profile['frozen'] = $row[14];
 		}
 	}
 ?>

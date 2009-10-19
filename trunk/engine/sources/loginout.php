@@ -54,6 +54,9 @@
 		}elseif($failed == "activated"){
 			$title = $txt[14];
 			$failmsg = $txt[613];
+		}elseif($failed == "frozen"){
+			$title = "Personaggio congelato";
+			$failmsg = "Il tuo personaggio e' congelato; chiedi a un admin di scongelartelo. <a href=\"mailto:webmaster@omeyocan.it\">webmaster@omeyocan.it</a> ";
 		}else{
 			$failmsg = $txt[13];
 			$title = $txt[14];
