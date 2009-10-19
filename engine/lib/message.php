@@ -61,10 +61,10 @@
 		$time = time();
 
 		// Check message size limit
-		if($x7c->settings['maxchars_msg'] != 0 && strlen($body) > $x7c->settings['maxchars_msg']){
+		/*if($x7c->settings['maxchars_msg'] != 0 && strlen($body) > $x7c->settings['maxchars_msg']){
 			alert_user($x7s->username,$txt[252]);
 			return 0;
-		}
+		}*/
 
 		$body_parsed = parse_message($body);
 		if($sussurro == 0){
