@@ -178,6 +178,11 @@
 		include_once("./sources/loginout.php");
 		page_login("activated");
 		exit;
+	}elseif($x7s->loggedin == 5 && !in_array(@$_GET['act'],$no_login_req)){
+		// They tried to login but their username was invalid
+		include_once("./sources/loginout.php");
+		page_login("frozen");
+		exit;
 	}
 	
 	//This is used to return to flat http after login
