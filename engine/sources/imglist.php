@@ -125,7 +125,7 @@ function file_list($path,$url){
 			$file_array[]=$file;
 		}
 		
-		natcasesort($file_array);
+		sort($file_array);
 		
 		$sep="";
 		if($subdir!="")
