@@ -163,7 +163,7 @@
 							<tr valign=\"top\">
 								<td width=\"50\">&nbsp;</td>
 								<td width=\"120\" style=\"vertical-align: middle;\">$txt[2]:<br>
-                                                                                          <b>Attenzione questo e' il nome con cui verrete identificati sulle chat</b></td>
+                                   <b>Questo nome verra' utilizzato per il login, la posta e per la lista presenti</b></td>
 								<td width=\"175\" height=\"25\"><input type=\"text\" class=\"text_input\" name=\"username\"></td>
 								<td width=\"50\">&nbsp;</td>
 							</tr>
