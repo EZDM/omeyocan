@@ -494,6 +494,12 @@
 						<td>Cognome:</td>
 						<td><input class="sheet_input" type="text" name="surname" size="16" /></td>
 					</tr>
+					
+					<tr>
+						<td>
+						NOTA: Nome e cognome verranno utilizzati per identificare il vostro personaggio nelle stanze 
+						</td>
+					</tr>
 
 					<tr>
 						<td>Et&agrave;</td>
