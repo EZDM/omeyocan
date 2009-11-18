@@ -555,15 +555,12 @@ switch($_GET['frame']){
 				alert_user($x7s->username,"Messaggio troppo corto");
 				break;	
 			}
-			if(strlen(eregi_replace("&[^;]+;" ," " ,trim($_POST['msg']))) > $x7c->settings['max_post']){
-				alert_user($x7s->username,"Messaggio troppo lungo");
+			
+			$tmp=preg_replace("/&[^;];+/gi" ,"X",trim($_POST['msg']));
+			if(strlen($tmp) > $x7c->settings['max_post']){
+				alert_user($x7s->username,"Messaggio troppo lungo: ".strlen($tmp).">".$_POST['msg']."<");
 				break;
 			}
-
-			// Make sure incoming values are safe
-			$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
-			$_POST['msg'] = eregi_replace(">","&gt;",$_POST['msg']);
-			$_POST['msg'] = eregi_replace("\n", "",$_POST['msg']);
 
 			//If we are in panic
 			if($x7c->settings['panic']){
@@ -1017,7 +1014,6 @@ switch($_GET['frame']){
 
 							function msgSent(){
 								message = document.chatIn.msgi.value;
-								message = message.replace(/\+/gi,"%2B");
 								document.chatIn.msg.value=message;
 								
 								if(!message.match(/^@/) && !message.match(/^\*/)){
@@ -1031,7 +1027,6 @@ switch($_GET['frame']){
 									}
 								}
 								
-								message = message.replace(/%2B/gi,"+");
 								if(message != ""){
 
 

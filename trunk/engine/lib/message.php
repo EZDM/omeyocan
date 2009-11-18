@@ -248,7 +248,7 @@
 			$message = preg_replace("/^@.*@/i","",$message);
 			
 			//Perform ability
-			$action_regexp = "/§([^[:space:]]+)/i";
+			$action_regexp = "/&sect;([^[:space:]]+)/i";
 			
 			srand(time()+microtime());
 			
@@ -312,7 +312,7 @@
 			}
 			
 			//Perform objects
-			$obj_regexp = "/°([^[:space:]]+)/i";
+			$obj_regexp = "/&deg;([^[:space:]]+)/i";
 			
 			while(preg_match($obj_regexp,$message, $obj)){
 									
@@ -351,7 +351,7 @@
 			}			
 			
 			//Perform image
-			$img_regexp = "/£([^[:space:]]+)/i";
+			$img_regexp = "/&pound;([^[:space:]]+)/i";
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
