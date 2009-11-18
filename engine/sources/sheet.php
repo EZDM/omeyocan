@@ -474,6 +474,12 @@ function sheet_page_background(){
 
 	if($row){
 			
+		$visual .= '<div class="indiv" id="storia">'.eregi_replace("\n","<Br>",$row['storia']).'</div>
+				';
+		$visual .= '<div class="indiv" id="fisici">'.eregi_replace("\n","<Br>",$row['fisici']).'</div>
+				';
+		$visual .= '<div class="indiv" id="psico">'.eregi_replace("\n","<Br>",$row['psico']).'</div>
+				';
 		if($pg==$x7s->username || checkIfMaster()){
 			$body .= '<script language="javascript" type="text/javascript">
 					mod=false;
@@ -481,13 +487,21 @@ function sheet_page_background(){
 					function modify(){
 						if(!mod){
 							mod=true;
-							document.forms[0].elements["storia"].disabled=false;
-							document.forms[0].elements["psico"].disabled=false;
-							document.forms[0].elements["fisici"].disabled=false;
+							document.getElementById("storia").style.visibility = "hidden";
+							document.getElementById("fisici").style.visibility = "hidden";
+							document.getElementById("psico").style.visibility = "hidden";
+
+							document.getElementById("storia_hid").style.visibility = "visible";
+							document.getElementById("fisici_hid").style.visibility = "visible";
+							document.getElementById("psico_hid").style.visibility = "visible";
 							
 							document.forms[0].elements["storia"].style.border="1px solid";
 							document.forms[0].elements["psico"].style.border="1px solid";
 							document.forms[0].elements["fisici"].style.border="1px solid";
+							
+							document.forms[0].elements["storia"].disabled=false;
+							document.forms[0].elements["psico"].disabled=false;
+							document.forms[0].elements["fisici"].disabled=false;
 							
 							document.forms[0].elements["aggiorna"].style.visibility="visible";
 							document.forms[0].elements["mod_button"].style.visibility="hidden";
@@ -496,14 +510,16 @@ function sheet_page_background(){
 				</script>
 				';
 				
+			$body .= $visual;
+			
 			$body .= '<form action="index.php?act=sheet&page=background&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">
 			';
 				
-			$body .= '<div class="indiv" id="storia"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off" disabled>'.$row['storia'].'</textarea></div>
+			$body .= '<div class="indiv" id="storia_hid"><textarea name="storia" id="storia_text" class="sheet_text" autocomplete="off" disabled>'.$row['storia'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="fisici"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off" disabled>'.$row['fisici'].'</textarea></div>
+			$body .= '<div class="indiv" id="fisici_hid"><textarea name="fisici" id="fisici_text" class="sheet_text" autocomplete="off" disabled>'.$row['fisici'].'</textarea></div>
 			';
-			$body .= '<div class="indiv" id="psico"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off" disabled>'.$row['psico'].'</textarea></div>
+			$body .= '<div class="indiv" id="psico_hid"><textarea name="psico" id="psico_text" class="sheet_text" autocomplete="off" disabled>'.$row['psico'].'</textarea></div>
 			';
 				
 			$body .= "<div id=\"modify\">
@@ -512,12 +528,7 @@ function sheet_page_background(){
 					</div>";
 		}
 		else{
-			$body .= '<div class="indiv" id="storia">'.eregi_replace("\n","<Br>",$row['storia']).'</div>
-				';
-			$body .= '<div class="indiv" id="fisici">'.eregi_replace("\n","<Br>",$row['fisici']).'</div>
-				';
-			$body .= '<div class="indiv" id="psico">'.eregi_replace("\n","<Br>",$row['psico']).'</div>
-				';
+			$body .= $visual;
 		}
 			
 		$body .= '</form>';
@@ -1765,6 +1776,33 @@ function print_sheet($body,$bg){
 			#sheetcorp{
 				background-image:url(./graphic/schedapgCORP.jpg);
 			}
+			#psico_hid{
+				top: 370px;
+				left: 250px;
+				width: 200px;
+				height: 250px;
+			}
+			#storia_hid{
+				top: 80px;
+				left: 30px;
+				width: 430px;
+				height: 250px;
+				visibility: hidden;
+			}
+			#fisici_hid{
+				top: 370px;
+				left: 30px;
+				width: 200px;
+				height: 250px;
+				visibility: hidden;
+			}
+			#psico{
+				top: 370px;
+				left: 250px;
+				width: 200px;
+				height: 250px;
+				visibility: hidden;
+			}
 			#storia{
 				top: 80px;
 				left: 30px;
@@ -1811,12 +1849,7 @@ function print_sheet($body,$bg){
 			}';
 	}
 		
-	echo '#psico{
-				top: 370px;
-				left: 250px;
-				width: 200px;
-				height: 250px;
-			}
+	echo '
 			.sheet_text{
 				background: transparent;
 				overflow: auto;
