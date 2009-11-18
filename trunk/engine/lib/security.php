@@ -44,35 +44,20 @@
 		global $_POST, $_GET, $_COOKIE;
 		// Make POST variables clean
 		foreach($_POST as $name=>$value){
-			//$value = preg_replace("/\+/i","%2B",$value);
-			
-			//$value = urldecode($value);
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
 				
 			$value = htmlentities($value);
-			//$value = preg_replace("/</i","&lt;",$value);
-			//$value = preg_replace("/>/i","&gt;",$value);
-			//$value = preg_replace("/'/i","&#039;",$value);
-			//$value = preg_replace("/\"/i","&quot;",$value);
-			
-			
+					
 			$_POST[$name] = $value;
 		}
 		
 		// Mke GET variables clean
 		foreach($_GET as $name=>$value){
-			//$value = preg_replace("/\+/i","%2B",$value);
-			
-			//$value = urldecode($value);
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
 			
 			$value = htmlentities($value);
-			//$value = preg_replace("/</i","&lt;",$value);
-			//$value = preg_replace("/>/i","&gt;",$value);
-			//$value = preg_replace("/'/i","&#039;",$value);
-			//$value = preg_replace("/\"/i","&quot;",$value);
 			
 			$_GET[$name] = $value;
 		}
