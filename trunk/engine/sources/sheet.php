@@ -1802,7 +1802,6 @@ function print_sheet($body,$bg){
 				left: 250px;
 				width: 200px;
 				height: 250px;
-				visibility: hidden;
 			}
 			#storia{
 				top: 80px;
