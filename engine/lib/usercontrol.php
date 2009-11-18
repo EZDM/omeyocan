@@ -280,7 +280,7 @@
                                 
 
 			
-				$action_regexp = "/§([^[:space:]]+)/i";
+				$action_regexp = "/&sect;([^[:space:]]+)/i";
 				$message = $_POST['msg'];
 
 
