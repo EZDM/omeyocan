@@ -47,7 +47,7 @@
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
 				
-			$value = htmlentities($value);
+			$value = htmlentities($value, ENT_QUOTES);
 					
 			$_POST[$name] = $value;
 		}
@@ -57,7 +57,7 @@
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
 			
-			$value = htmlentities($value);
+			$value = htmlentities($value, ENT_QUOTES);
 			
 			$_GET[$name] = $value;
 		}
