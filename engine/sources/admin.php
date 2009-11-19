@@ -2375,20 +2375,34 @@
                                         
 					
 					$time = time();
-					//$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}users SET time='$time', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
-					include_once('./lib/sheet_lib.php');
-					join_corp($_GET['update'], $_POST['usergroup']);
-
-					$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}usercharact SET username='$_POST[username]' WHERE username='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}objects SET owner='$_POST[username]' WHERE owner='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}boardmsg SET user='$_POST[username]' WHERE user='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}boardunread SET user='$_POST[username]' WHERE user='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}messages SET user='$_POST[username]' WHERE user='$_GET[update]'");
+					$ok=true;
 					
-					$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
+					if($_GET['update']!=$_POST['username']){
+						$u_query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[username]'");
+						$row = $db->Do_Fetch_Assoc($u_query);
+						
+						if($row['cnt']>0){
+							$body = "<div align=\"center\">Errore: Nome utente gia' in uso<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
+							$ok=false;
+						}
+					}
+					
+					if($ok){
+						//$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}users SET time='$time', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
+						include_once('./lib/sheet_lib.php');
+						join_corp($_GET['update'], $_POST['usergroup']);
+
+						$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}usercharact SET username='$_POST[username]' WHERE username='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}objects SET owner='$_POST[username]' WHERE owner='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}boardmsg SET user='$_POST[username]' WHERE user='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}boardunread SET user='$_POST[username]' WHERE user='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}messages SET user='$_POST[username]' WHERE user='$_GET[update]'");
+					
+						$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
+					}
 				}
 			}else{
 				// Display all users
