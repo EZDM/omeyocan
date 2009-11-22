@@ -613,12 +613,19 @@
 				if($x7c->room_data['logged'] == 1){
 				
 					// Get the log contents
-					$contents = $log->get_log_contents();
+					$contents = $log->get_log_contents_per_date();
 					// Calculate the pages display
-					$pages = "";
-					for($i = 1;$i <= $log->number_of_pages;$i++){
-						$pages .= "<a href=\"./index.php?act=roomcp&cp_page=logs&start_page=$i&room=$_GET[room]\">[$i]</a> ";
-					}
+					$selected_date="";
+					
+					if(isset($_POST['date']))
+						$selected_date="value=\"$_POST[date]\"";
+					
+					$pages = '<script language="javascript" type="text/javascript" src="lib/datetimepicker.js" ></script>
+					<form id="dateform" action="index.php?act=roomcp&cp_page=logs&room='.$_GET['room'].'" method="post">
+						<input type="Text" name="date" id="demo1" maxlength="15" size="15" '.$selected_date.'><a href="javascript:NewCal(\'demo1\',\'ddmmyyyy\',false,24)"><img src="graphic/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+					</form>
+					';
+					
 					
 					$body .= "$txt[249]  <a href=\"index.php?act=roomcp&cp_page=logs&subact=clear&room=$_GET[room]\">[$txt[250]]</a><Br>{$pages}<hr>";
 					

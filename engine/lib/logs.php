@@ -181,6 +181,53 @@
 				return array();
 		}
 		
+	function get_log_contents_per_date($logfile=""){
+			if($logfile == "")
+				$logfile = $this->log_file;
+			
+			$data = file($logfile);
+			
+			$start=-1;
+			$end=-1;
+			
+			if(!isset($_POST['date']))
+				$_POST['date']=date("d/m/Y", time());
+
+			$i=0;
+			foreach($data as $linenum=>$entry){
+				// Get date and sender
+				preg_match("/^(.+?);\[(.+?)\]/",$entry,$match);
+				$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
+				$date = date("d/m/Y",$match[1]);
+
+				if($date){
+					if($start<0){
+						if($date == $_POST['date']){
+							$start = $i;
+						}
+					}else{
+						if($date != $_POST['date']){
+							$end = $i;
+							break;
+						}
+					}
+				}
+						
+				$i++;		
+						
+			}
+			
+			//die($start." ".$end);
+			$data = array_slice($data, $start, $end);
+			
+			$this->number_of_pages = count($data);
+				
+			if(count($data) > 0)
+				return $data;
+			else
+				return array();
+		}
+		
 		// Returns an array containing a list of logs that a user has
 		function get_pm_loglist(){
 			global $x7c,$x7s;
