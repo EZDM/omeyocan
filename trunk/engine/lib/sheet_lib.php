@@ -179,7 +179,7 @@
         
 
         //We can remove only members that belong to our corp
-        if(in_array($row['user_group'],$x7s->user_group) || checkIfMaster()){
+        if(in_array($row['user_group'],$x7p->profile['usergroup']) || checkIfMaster()){
                 $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[usergroup]'");
                 $row_perm = $db->Do_Fetch_Assoc($perm_query);
 
