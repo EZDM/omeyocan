@@ -2353,12 +2353,6 @@
 						// Change their password
 						change_pass($_GET['update'],$_POST['pass1']);
 						
-					// Update the profile info
-					/*if(!isset($_POST['override'])){
-                                            $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[usergroup]'");
-                                            $row=$db->Do_Fetch_Assoc($gif_query);
-                                            $_POST['bio']=$row['logo'];
-                    }*/
 
                     $corp_master=0;
 					if(isset($_POST['corp_master']))
@@ -2398,6 +2392,9 @@
 							
 						if(isset($_POST['gremios']))
 							$error_group .= join_corp($_GET['update'], $_POST['gremios']);
+							
+						if(isset($_POST['override']))
+							$db->DoQuery("UPDATE {$prefix}users SET bio='$_POST[bio]' WHERE username='$_GET[update]'");
 
 						$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
 						$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
