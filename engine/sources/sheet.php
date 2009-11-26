@@ -1418,9 +1418,9 @@ function sheet_page_corp(){
 	if(isset($_GET['mgmt']) && ($corp_master || checkIfModifySheet())){
 		if(isset($_GET['target']) || isset($_POST['target'])){
 			if(isset($_GET['target']))
-			$target = $_GET['target'];
+				$target = $_GET['target'];
 			if(isset($_POST['target']))
-			$target=$_POST['target'];
+				$target=$_POST['target'];
 
 			$query=$db->DoQuery("SELECT username, user_group FROM {$prefix}users WHERE username='$target'");
 			$row = $db->Do_Fetch_Assoc($query);
