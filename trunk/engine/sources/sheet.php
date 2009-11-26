@@ -1499,12 +1499,12 @@ function sheet_page_corp(){
 
 									
 								foreach($ability as $cur){
-									if(!in_array($cur['corp'],$x7p->profile['usergroup'])){
-										$ok=false;
-										$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
-									}
-
 									if($cur['value'] != $_POST[$cur['ab_id']]){
+										if(!in_array($cur['corp'],$x7p->profile['usergroup'])){
+											$ok=false;
+											$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
+										}
+										
 										$new_value = $_POST[$cur['ab_id']];
 										while($new_value > $cur['value']){
 											$tot_used+= $new_value;
@@ -1584,9 +1584,9 @@ function sheet_page_corp(){
 	$body.="<div id=\"corp\">\n";
 
 	if(!$corp_master && !checkIfModifySheet())
-	$body .= "<div id=\"visual\"><table>";
+		$body .= "<div id=\"visual\"><table>";
 	else
-	$body .= "<div id=\"visual2\"><table>";
+		$body .= "<div id=\"visual2\"><table>";
 
 	foreach($ability as $cur){
 		if($cur['dep'] == ""){
@@ -1612,9 +1612,9 @@ function sheet_page_corp(){
 	$body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
 
 	if(!$corp_master && !checkIfModifySheet())
-	$body .= '<div id="modifiable3">';
+		$body .= '<div id="modifiable3">';
 	else
-	$body .= '<div id="modifiable2">';
+		$body .= '<div id="modifiable2">';
 
 	$body.='<table align="left" border="0" cellspacing="0" cellpadding="0">';
 	foreach($ability as $cur){
@@ -2101,6 +2101,7 @@ function print_sheet($body,$bg){
 				height: 180px;
 				border: 1px solid;
 				width: 400px;
+				overflow: auto;
 				
 			}
 			
