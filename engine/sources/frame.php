@@ -575,13 +575,13 @@ switch($_GET['frame']){
 			$parsed_msg = "<span class=\"locazione_display\">[".$_POST['locazione']."]</span><br>"." ".$_POST['msg'];
 
 			// Make sure the user has a voice
-			if($x7c->permissions['room_voice'] == 1){
+			//if($x7c->permissions['room_voice'] == 1){
 				send_message($parsed_msg,$x7c->room_name);
 
-			}else{
+			//}else{
 				// The user doesn't have a voice, alert them
-				alert_user($x7s->username,$txt[42]);
-			}
+			//	alert_user($x7s->username,$txt[42]);
+			//}
 
 			//This is a sussuro
 		}elseif(eregi("^@.*@",@$_POST['msg'])){
@@ -591,13 +591,13 @@ switch($_GET['frame']){
 			$_POST['msg'] = eregi_replace("\n", " ",$_POST['msg']);
 			$parsed_msg = $_POST['msg'];
 
-			if($x7c->permissions['room_voice'] == 1){
+			//if($x7c->permissions['room_voice'] == 1){
 				send_message($parsed_msg,$x7c->room_name,1);
 
-			}else{
+			//}else{
 				// The user doesn't have a voice, alert them
-				alert_user($x7s->username,$txt[42]);
-			}
+			//	alert_user($x7s->username,$txt[42]);
+			//}
 
 		}elseif(eregi("^\*",@$_POST['msg']) && $x7c->permissions['write_master']){
 			$_POST['msg'] = eregi_replace("<","&lt;",$_POST['msg']);
@@ -605,14 +605,14 @@ switch($_GET['frame']){
 			$_POST['msg'] = eregi_replace("\n", " ",$_POST['msg']);
 			$parsed_msg = $_POST['msg'];
 
-			if($x7c->permissions['room_voice'] == 1){
+			//if($x7c->permissions['room_voice'] == 1){
 				//Mastering message
 				send_message($parsed_msg,$x7c->room_name,2);
 
-			}else{
+			//}else{
 				// The user doesn't have a voice, alert them
-				alert_user($x7s->username,$txt[42]);
-			}
+			//	alert_user($x7s->username,$txt[42]);
+			//}
 				
 		}
 
