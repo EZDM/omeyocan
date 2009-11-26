@@ -259,7 +259,7 @@
 				}
 				$body .= '<div id="menu"><a href="./index.php?act=mail&write">[Scrivi]</a>';
 				 
-				if(checkIfMaster()){
+				if(checkIfMaster() || $x7s->user_group != $x7c->settings['usergroup_default']){
 					$body .= '<a href="./index.php?act=mail&write&group">[Mail di gruppo]</a>';
 				} 
 				else{
@@ -305,7 +305,7 @@
 					<br><input class=\"wickEnabled\" type=\"text\" name=\"to\" autocomplete=\"off\" value=\"$_GET[to]\">
 					<br>";
 				
-				if(isset($_POST['group'])){
+				if(isset($_GET['group'])){
 				
 					
 					if(checkIfMaster()){
@@ -318,16 +318,16 @@
 						}
 						
 					}
-					//TODO da sistemare
-					/*else if($x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
+
+					else if($x7s->user_group != '' && $x7s->user_group != $x7c->settings['usergroup_default']){
 						$elenco .= "<option value=\"{$x7s->user_group}\"> {$x7s->user_group} </option>\n";	
-					}*/
+					}
 					
 					$to = "<p style=\"text-align: center\">
 					<input type=\"hidden\" name=\"act\" value=\"mail\">
 					<input type=\"hidden\" name=\"group\">
 					$txt[182]: 
-					<br><select class=\"text_input\" name=\"to\">
+					<br><select class=\"text_input\" name=\"to\" style=\"background: white;\">
 						$elenco	
 					</select>
 					<br>";
@@ -378,7 +378,7 @@
 	function checkIfMaster(){
 		global $x7s, $x7c;
 		
-		$value = $x7c->permissions['admin_panic'];
+		$value = $x7c->permissions['write_master'];
 		
 		return $value;
 	}
