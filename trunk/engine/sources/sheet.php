@@ -2084,7 +2084,7 @@ function print_sheet($body,$bg){
 				position: absolute;
 				top: 220px;
 				left: 0;
-				width: 400px;
+				width: 450px;
 				height: 200px;
 				
             }
