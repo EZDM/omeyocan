@@ -1500,6 +1500,7 @@
 				($row[41] == 1) ? $def['admin_objects'] = " checked=\"true\"" : $def['admin_objects'] = "";
 				($row[43] == 1) ? $def['sheet_modify'] = " checked=\"true\"" : $def['sheet_modify'] = "";
 				($row[44] == 1) ? $def['write_master'] = " checked=\"true\"" : $def['write_master'] = "";
+				($row[45] == 1) ? $def['gremios'] = " checked=\"true\"" : $def['gremios'] = "";
 				
 				$body = "$txt[424]<Br><Br><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" align=\"center\">
 					<form action=\"index.php?act=adminpanel&cp_page=groupmanager&update=$_GET[edit]\" method=\"post\">
@@ -1671,6 +1672,9 @@
 					<td width=\"120\">Puo' scrivere in modo master</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"write_master\" value=\"1\"{$def['write_master']}></td>
 					</tr>
+					<td width=\"120\">E' una gremios?</td>
+						<td width=\"50\"><input type=\"checkbox\" name=\"gremios\" value=\"1\"{$def['gremios']}></td>
+					</tr>
                     <tr>
 						<td width=\"120\">Logo</td>
 						<td width=\"50\"><input type=\"text\" name=\"logo\" value=\"$row[42]\"></td>
@@ -1692,32 +1696,16 @@
 						$change_ops .= "<option value=\"$row[0]\">$row[0]</option>";
 					}
 					
-					$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE user_group='$_GET[view]'");
+					$query = $db->DoQuery("SELECT username FROM {$prefix}groups WHERE usergroup='$_GET[view]'");
 					// This is the javascript for the check all uncheck all boxes
-					$body .= "
-					<script language=\"javascript\" type=\"text/javascript\">
-						function chkAll(){
-							dgform = document.gform;
-							for(i=0;i < dgform.elements.length;i++){
-								this1 = dgform.elements[i];
-								if(this1.name != 'checkall' && this1.type == 'checkbox'){
-									if(this1.checked)
-										this1.checked = false;
-									else
-										this1.checked = true;
-								}
-							}
-						}
-						
-					</script>";
+
 					
-					$body .= "$txt[418]<Br><form action=\"index.php?act=adminpanel&cp_page=groupmanager\" method=\"post\" name=\"gform\"><Br>
-					&nbsp;&nbsp; <input type=\"checkbox\" name=\"checkall\" onClick=\"javascript: chkAll();\"><b>$txt[419]</b><Br>";
+					$body .= "$txt[418]<Br><br>";
 					while($row = $db->Do_Fetch_Row($query)){
-						$body .= "&nbsp;&nbsp; <input type=\"checkbox\" name=\"ug_$row[0]\" value=\"1\"> $row[0]<Br>";
+						$body .= "&nbsp;&nbsp;<b>$row[0]</b><Br>";
 					}
 					
-					$body .= "<Br><div align=\"center\">$txt[417]: <select class=\"text_input\" name=\"new_g\">{$change_ops}</select><input type=\"submit\" class=\"button\" value=\"$txt[416]\"></form><Br><Br><a href=\"index.php?act=adminpanel&cp_page=groupmanager\">$txt[77]</a></div>";
+					$body .= "<br><a href=\"index.php?act=adminpanel&cp_page=groupmanager\">$txt[77]</a></div>";
 					
 			}else{
 			
@@ -1767,16 +1755,17 @@
 					!isset($_POST['sheet_modify']) ? $_POST['sheet_modify'] = 0 : "";
 					!isset($_POST['logo']) ? $_POST['logo'] = 0 : "";
 					!isset($_POST['write_master']) ? $_POST['write_master'] = 0 : "";
+					!isset($_POST['gremios']) ? $_POST['gremios'] = 0 : "";
 					
 					// Save the settings
-					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]' WHERE usergroup='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]', gremios='$_POST[gremios]' WHERE usergroup='$_GET[update]'");
 					// Tell user they have been updated
 					$body .= "$txt[458]<Br><br>";
 					
 				}elseif(isset($_GET['delete'])){
 					// Delete a group
 					// Make sure the group is empty
-					$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE user_group='$_GET[delete]'");
+					$query = $db->DoQuery("SELECT * FROM {$prefix}groups WHERE usergroup='$_GET[delete]'");
 					$row = $db->Do_Fetch_Row($query);
 					if($row[0] != ""){
 						$body .= "$txt[420]<Br><Br>";
@@ -1796,8 +1785,6 @@
 							$gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[new_g]'");
                                               		$row=$db->Do_Fetch_Assoc($gif_query);
                                               		$gif=$row['logo'];
-
-							$db->DoQuery("UPDATE {$prefix}users SET user_group='$_POST[new_g]', bio='$gif', corp_master='0' WHERE username='$key'");
 
                             include_once('./lib/sheet_lib.php');
 							join_corp($key, $_POST['new_g']);
@@ -2249,13 +2236,21 @@
 					$body = "<div align=\"center\">$txt[463]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 				}else{
 					// Get the default user group
-					$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions");
+					$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions WHERE gremios=0");
 					$group_options = "";
 					while($row = $db->Do_Fetch_Row($query)){
-						if($def->profile['user_group'] == $row[0])
-							$group_options .= "<option value=\"$row[0]\" selected=\"true\">$row[0]</option>";
+						if(in_array($row[0], $def->profile['usergroup']))
+							$group_options .= "<input type=\"checkbox\" name=\"$row[0]\" value=\"$row[0]\" checked>$row[0]<br>";
 						else
-							$group_options .= "<option value=\"$row[0]\">$row[0]</option>";
+							$group_options .= "<input type=\"checkbox\" name=\"$row[0]\" value=\"$row[0]\">$row[0]<br>";
+					}
+					
+					$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions WHERE gremios=1");
+					while($row = $db->Do_Fetch_Row($query)){
+						if(in_array($row[0], $def->profile['usergroup']))
+							$group_options .= "<input type=\"radio\" name=\"gremios\" value=\"$row[0]\" checked>$row[0]<br>";
+						else
+							$group_options .= "<input type=\"radio\" name=\"gremios\" value=\"$row[0]\">$row[0]<br>";
 					}
 				
 					$body = "<Br>
@@ -2327,7 +2322,7 @@
 							
 							<tr>
 								<td width=\"60\">$txt[309]: </td>
-								<td width=\"100\"><select name=\"usergroup\" class=\"text_input\">{$group_options}</select></td>
+								<td width=\"100\">{$group_options}</td>
 							</tr>
 							<tr>
                                                                 <td width=\"60\">Corp master? </td>
@@ -2359,11 +2354,11 @@
 						change_pass($_GET['update'],$_POST['pass1']);
 						
 					// Update the profile info
-					if(!isset($_POST['override'])){
+					/*if(!isset($_POST['override'])){
                                             $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$_POST[usergroup]'");
                                             $row=$db->Do_Fetch_Assoc($gif_query);
                                             $_POST['bio']=$row['logo'];
-                    }
+                    }*/
 
                     $corp_master=0;
 					if(isset($_POST['corp_master']))
@@ -2388,10 +2383,21 @@
 					}
 					
 					if($ok){
+						$error_group = "";
 						//$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
-						$db->DoQuery("UPDATE {$prefix}users SET time='$time', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
+						$db->DoQuery("UPDATE {$prefix}users SET time='$time',user_group='{$x7c->settings['usergroup_default']}', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
 						include_once('./lib/sheet_lib.php');
-						join_corp($_GET['update'], $_POST['usergroup']);
+						
+						$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$_GET[update]'");
+						$error_group .= join_corp($_GET['update'], $x7c->settings['usergroup_default']);
+						
+						$query_group = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions");
+						while($row_g = $db->Do_Fetch_Assoc($query_group))
+							if(isset($_POST[$row_g['usergroup']]))
+								$error_group .= join_corp($_GET['update'], $row_g['usergroup']);
+							
+						if(isset($_POST['gremios']))
+							$error_group .= join_corp($_GET['update'], $_POST['gremios']);
 
 						$db->DoQuery("UPDATE {$prefix}bandwidth SET user='$_POST[username]' WHERE user='$_GET[update]'");
 						$db->DoQuery("UPDATE {$prefix}userability SET username='$_POST[username]' WHERE username='$_GET[update]'");
@@ -2401,7 +2407,7 @@
 						$db->DoQuery("UPDATE {$prefix}boardunread SET user='$_POST[username]' WHERE user='$_GET[update]'");
 						$db->DoQuery("UPDATE {$prefix}messages SET user='$_POST[username]' WHERE user='$_GET[update]'");
 					
-						$body = "<div align=\"center\">$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
+						$body = "<div align=\"center\">$error_group<br>$txt[464]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 					}
 				}
 			}else{
@@ -2472,10 +2478,15 @@
 				
 				
 				while(($row = $db->Do_Fetch_Row($query))){
+					$query_g = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$row[1]' ORDER BY usergroup");
+					$gr = "";
+					
+					while($row_g = $db->Do_Fetch_Assoc($query_g))
+						$gr .=$row_g['usergroup']."; ";
 				
 					$body .= "<tr>
 							<td width=\"33%\" ><a href=\"#\" onClick=\"javascript: hndl=window.open('index.php?act=sheet&pg={$row[1]}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes'); hndl.focus();\">$row[1]</a></td>
-							<td width=\"33%\">$row[10]</td>
+							<td width=\"33%\">$gr</td>
 							<td><a href=\"index.php?act=adminpanel&cp_page=users&edit=$row[1]\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=users&delete=$row[1]\">[$txt[175]]</a></td>
 							
 						</tr>

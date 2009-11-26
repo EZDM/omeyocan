@@ -61,7 +61,7 @@
 	}
 
 	function move_msg(){
-                global $print, $x7s, $db, $prefix;
+                global $print, $x7s, $x7c, $db, $prefix;
 
                 //You cannot do anything if you are not master
                 if(!checkIfMaster()){
@@ -110,7 +110,7 @@
 	}
 	
 	function delete_board($id){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		
 		$body='';
 		$head='';
@@ -141,7 +141,7 @@
 	}
 	
 	function create_board(){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$body ='';
 		if(checkIfMaster()){
 			if($_GET['newboard']){
@@ -195,7 +195,7 @@
 	}
 	
 	function delete_message($msgid){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$indice=0;
 		$msgid = $_GET['delete'];
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$msgid'");
@@ -262,7 +262,7 @@
 	}
 	
 	function new_communication($bid){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$indice=0;
 		
 		$body='';
@@ -477,7 +477,7 @@
 	
 	//This function show the list of all board you are atuhorized to see
 	function board_list(){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$head = "";
 		$body='';
 		
@@ -494,50 +494,52 @@
 	}
 	
 	function indice_board(){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix, $x7p;
 		$body='	<table width=100% align="center" style="border-collapse: collapse;">';
 		$body_offgame='<table width=100% align="center" style="border-collapse: collapse;">';
 		
-		if(checkIfMaster()){
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");
-		}
-		else{
-			$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE user_group='{$x7s->user_group}' OR user_group='Cittadino' ORDER BY id");
-		}
+
+		$query = $db->DoQuery("SELECT * FROM {$prefix}boards ORDER BY id");
+
+
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
-			$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg msg, {$prefix}boardunread un
-								WHERE msg.id=un.id
- 								AND board='$row[id]'
-								AND un.user='{$x7s->username}'");
-			$new_msg = $db->Do_Fetch_Assoc($q_new);
-
-			$new_cnt='';
-			if($new_msg['cnt']>0){
-				$new_cnt="<b>($new_msg[cnt])</b>";
+			if(	checkIfMaster() || 
+				in_array($row['user_group'], $x7p->profile['usergroup']) ||
+				$row['user_group'] == $x7c->settings['usergroup_default']){
+				$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg msg, {$prefix}boardunread un
+									WHERE msg.id=un.id
+	 								AND board='$row[id]'
+									AND un.user='{$x7s->username}'");
+				$new_msg = $db->Do_Fetch_Assoc($q_new);
+	
+				$new_cnt='';
+				if($new_msg['cnt']>0){
+					$new_cnt="<b>($new_msg[cnt])</b>";
+				}
+	
+				if(!$row['offgame']){
+	                                $body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+	                                
+	                                if(checkIfMaster()){
+	                                        $body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+	                                }
+	                                
+	                                $body.="</td></tr>";
+	
+				}
+	
+				else{
+	                                $body_offgame.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+	                                
+	                                if(checkIfMaster()){
+	                                        $body_offgame.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+	                                }
+	                                
+	                                $body_offgame.="</td></tr>";
+				}
+			
 			}
-
-			if(!$row['offgame']){
-                                $body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
-                                
-                                if(checkIfMaster()){
-                                        $body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
-                                }
-                                
-                                $body.="</td></tr>";
-
-			}
-
-			else{
-                                $body_offgame.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
-                                
-                                if(checkIfMaster()){
-                                        $body_offgame.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
-                                }
-                                
-                                $body_offgame.="</td></tr>";
-			}
-		
 		}
 		$body.="</table>";
 		$body_offgame.="</table>";
@@ -561,7 +563,7 @@
 	//This function check if you want to see all the messages of a board or a single conversation
 	//and also check user permission
 	function show_board($bid){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$indice=0;
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}boards WHERE id='{$bid}'");
@@ -607,7 +609,7 @@
 	
 	//This function show all messages of a board
 	function show_all_messages($board){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 
 		$head="Board ".$board['name'];
 		$body="<script language=\"javascript\" type=\"text/javascript\">
@@ -708,7 +710,7 @@
 	
 	//This function show a conversation
 	function show_single_message($id, $board){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix;
 		$body="<script language=\"javascript\" type=\"text/javascript\">
                             function do_delete(url){
                                   if(!confirm('Vuoi davvero cancellare il messaggio?'))
@@ -794,7 +796,8 @@
 			$avatar.="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
 		}
 		
-		$body.="<tr><td class=\"msg_row\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
+		$body.="<tr><td class=\"msg_avatar\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td>
+					<td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 		$msgid=$row['id'];
 		$user=$row['user'];
 			
@@ -867,7 +870,7 @@
 	
 	//This function return true if the user is allowed to see the board
 	function checkAuth($bid){
-		global $x7s, $db, $prefix;
+		global $x7s, $x7c, $db, $prefix, $x7p;
 		
 		$query = $db->DoQuery("
 			SELECT user_group
@@ -879,7 +882,7 @@
 		
 		if(checkIfMaster())
 			return true;		
-		else if($row['user_group'] == $x7s->user_group || $row['user_group'] == 'Cittadino')
+		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == 'Cittadino')
 			return true;
 		else
 			return false;
@@ -899,29 +902,25 @@
 	}
 
 	function udpate_unread(){
-		global $print, $x7s, $db, $prefix;
+		global $print, $x7s, $x7c, $db, $prefix, $x7p;
 
 		$query = $db->DoQuery("SELECT last_board_id FROM {$prefix}users WHERE username='{$x7s->username}'");
 		$row = $db->Do_Fetch_Assoc($query);
 		$last_read = $row['last_board_id'];
 		
 		//We create the list of new messages
-		if(checkIfMaster()){
-			$query = $db->DoQuery("SELECT id FROM {$prefix}boardmsg msg WHERE id>'$last_read' AND user<>'{$x7s->username}'");
-		}
-		else{
-			$query = $db->DoQuery("SELECT msg.id FROM {$prefix}boardmsg msg, {$prefix}boards brd
+		$query = $db->DoQuery("SELECT msg.id, user_group FROM {$prefix}boardmsg msg, {$prefix}boards brd
  					WHERE msg.board=brd.id
- 					AND (user_group='{$x7s->user_group}' OR user_group='Cittadino')
  					AND msg.id>'$last_read' AND user<>'{$x7s->username}'");
-		}
 		
 		$lastid=0;
 		while($new_msg=$db->Do_Fetch_Assoc($query)){
-			if($lastid<$new_msg['id'])
-				$lastid=$new_msg['id'];
-				
-			$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
+			if(in_array($new_msg['user_group'], $x7p->profile['usergroup'])){
+				if($lastid<$new_msg['id'])
+					$lastid=$new_msg['id'];
+					
+				$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
+			}
 		}
 
 		$db->DoQuery("UPDATE {$prefix}users SET last_board_id=(SELECT MAX(id) FROM {$prefix}boardmsg) WHERE username='{$x7s->username}'");

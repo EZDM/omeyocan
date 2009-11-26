@@ -1396,7 +1396,7 @@ function sheet_page_main(){
 }
 
 function sheet_page_corp(){
-	global $db,$x7c,$prefix,$x7s,$print;
+	global $db,$x7c,$prefix,$x7s,$print, $x7p;
 	$pg=$_GET['pg'];
 	$body='';
 	$errore='';
@@ -1409,7 +1409,7 @@ function sheet_page_corp(){
 
 	$corp_master=false;
 	if($row_user['corp_master'] && $row_user['user_group']!=$x7c->settings['usergroup_default'])
-	$corp_master=true;
+		$corp_master=true;
 
 	$xp=floor($row_user['xp']/$x7c->settings['xp_ratio']);
 
@@ -1435,13 +1435,13 @@ function sheet_page_corp(){
 					}
 				}
 				else if($_GET['mgmt']=='del'){
-					$errore=leave_corp($target);
+					$errore=leave_corp($target,$row_user['user_group']);
 				}
 				else if($_GET['mgmt']=='admin'){
-					$errore=admin_corp($target,true);
+					$errore=admin_corp($target, true, $row_user['user_group']);
 				}
 				else if($_GET['mgmt']=='notadmin'){
-					$errore=admin_corp($target,false);
+					$errore=admin_corp($target, false, $row_user['user_group']);
 				}
 				else if($_GET['mgmt']=='charge'){
 					if(isset($_POST['charge'])){
@@ -1499,7 +1499,7 @@ function sheet_page_corp(){
 
 									
 								foreach($ability as $cur){
-									if($cur['corp']!=$x7s->user_group){
+									if(!in_array($cur['corp'],$x7p->profile['usergroup'])){
 										$ok=false;
 										$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
 									}
@@ -1621,15 +1621,15 @@ function sheet_page_corp(){
 		$body .= "<tr>";
 		$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
-
-		if($cur['corp']==$x7s->user_group || checkIfModifySheet())
-		$body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
+		
+		if(in_array($cur['corp'],$x7p->profile['usergroup']) || checkIfModifySheet())
+			$body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
 
 		$body .= "<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>";
 		$body .= "<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>";
 
-		if($cur['corp']==$x7s->user_group || checkIfModifySheet())
-		$body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
+		if(in_array($cur['corp'],$x7p->profile['usergroup']) || checkIfModifySheet())
+			$body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
 
 		$body .= "<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
 				<input type=\"hidden\" name=\"".$cur['ability_id']."_name\" value=\"{$cur['name']}\">
@@ -1682,7 +1682,7 @@ function sheet_page_corp(){
                                   </div>
                                   <div id=\"people\"><table>";
 
-		$query = $db->DoQuery("SELECT username,corp_master,corp_charge FROM {$prefix}users WHERE user_group='{$row_user['user_group']}'");
+		$query = $db->DoQuery("SELECT g.username AS username, g.corp_master AS corp_master, corp_charge FROM {$prefix}users u, {$prefix}groups g WHERE g.username=u.username AND usergroup='{$row_user['user_group']}'");
 
 		while($row=$db->Do_Fetch_Assoc($query)){
 

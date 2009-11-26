@@ -171,7 +171,7 @@
 			global $txt;
 		
 			$return['status'] = $this->user_info->profile['status'];
-			$return['group'] = $this->user_info->profile['user_group'];
+			$return['group'] = $this->user_info->profile['usergroup'];
 			
 			if($return['status'] == "")
 				$return['status'] = $txt[150];

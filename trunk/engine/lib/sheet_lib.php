@@ -1,13 +1,34 @@
 <?PHP
 
-        function toggle_heal($pg, $heal){
-                global $db, $prefix;
+	function toggle_heal($pg, $heal){
+        global $db, $prefix;
 		$errore='';
 		$time=time();
 		$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', autoheal='$heal' WHERE username='$pg'");
-		
-		
-        }
+
+    }
+    
+    function can_join($user, $gremios){
+    	global $db, $prefix, $x7c; 
+    	$query = $db->DoQuery("SELECT gremios FROM {$prefix}permissions WHERE usergroup = '$gremios'");
+    	
+    	$row = $db->Do_Fetch_Assoc($query);
+    	
+    	if(!$row['gremios'])
+    		return true;
+    		
+    	else{
+    		$query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$user'");
+    		$row = $db->Do_Fetch_Assoc($query);
+    		if(	$gremios != $x7c->settings['usergroup_default'] && 
+    			$row['user_group']!=$x7c->settings['usergroup_default'] &&
+    			$row['user_group'] != $gremios){
+    			return false; 
+    			}
+    		else
+    			return true;
+    	}
+    }
 
 	function toggle_death($pg, $kill){
 		global $db, $prefix, $x7c;
@@ -62,11 +83,18 @@
 		
 		
 	}
+	
+	
+	
     function join_corp($pg, $corp, $from_sheet=0){
-        global $db, $prefix, $x7s, $x7c;
+        global $db, $prefix, $x7s, $x7c, $x7p;
+        
+        if(!can_join($pg, $corp))
+        	return "$pg non puo' far parte di $corp";
+        
         $query = $db->DoQuery("SELECT id FROM {$prefix}ability WHERE corp='$corp'");
 
-        if(!$from_sheet){
+        if(!$from_sheet){                        
 	        while($row = $db->Do_Fetch_Assoc($query)){
 	            $db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
 	                          ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
@@ -82,7 +110,7 @@
                         return "Gruppo $corp non esistente";
 
                 //Only admin can make admin and masters
-                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                if(!in_array($x7c->settings['usergroup_admin'], $x7p->profile['usergroup']) && $row_perm['admin_panic']==1){
                         return "Non sei autorizzato a gestire questo gremios";
                 }
                 
@@ -90,30 +118,38 @@
 	            	$db->DoQuery("INSERT INTO {$prefix}userability (ability_id, username, value) VALUES('$row[id]', '$pg', '0')
 	                          ON DUPLICATE KEY UPDATE username=username, ability_id=ability_id");
 	        	}
-                
-                $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$corp'");
-                $row=$db->Do_Fetch_Assoc($gif_query);
-                $gif=$row['logo'];
-                
-                $db->DoQuery("UPDATE {$prefix}users SET user_group='$corp', corp_master='0', bio='$gif' WHERE username='$pg'");
+               
         }
+                
+        $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='$corp'");
+        $row=$db->Do_Fetch_Assoc($gif_query);
+        $gif=$row['logo'];
+        $db->DoQuery("UPDATE {$prefix}users SET bio='$gif' WHERE username='$pg'");
+        
+        if(is_gremios($corp)){
+        		$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$pg' AND usergroup='{$x7c->settings['usergroup_default']}'");
+            	$db->DoQuery("UPDATE {$prefix}users SET user_group='$corp', bio='$gif' WHERE username='$pg'");
+        }
+        
+        $db->DoQuery("INSERT INTO {$prefix}groups (usergroup, username, corp_master) VALUES('$corp', '$pg','0')
+        					ON DUPLICATE KEY UPDATE usergroup=usergroup, username=username");
     }
 
-    function leave_corp($target){
-        global $db, $prefix, $x7s, $x7c;
-        $query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$target'");
+    function leave_corp($target, $corp){
+        global $db, $prefix, $x7s, $x7c, $x7p;
+        $query = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$target' AND usergroup='$corp'");
         $row = $db->Do_Fetch_Assoc($query);
 
         //We can remove only members that belong to our corp
-        if($row['user_group']==$x7s->user_group || checkIfMaster()){
-                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[user_group]'");
+        if(in_array($corp, $x7p->profile['usergroup']) || checkIfMaster()){
+                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[usergroup]'");
                 $row_perm = $db->Do_Fetch_Assoc($perm_query);
 
                 if($row_perm==null)
                         return "Gruppo $corp non esistente";
 
                 //Only admin can make admin and masters
-                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                if(!in_array($x7c->settings['usergroup_admin'], $x7p->profile['usergroup']) && $row_perm['admin_panic']==1){
                         return "Non sei autorizzato a gestire questo gremios";
                 }
                 
@@ -121,37 +157,54 @@
                 $row=$db->Do_Fetch_Assoc($gif_query);
                 $gif=$row['logo'];
         
-                $db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}', corp_master='0', corp_charge='', bio='$gif' WHERE username='$target'");
+                $db->DoQuery("UPDATE {$prefix}users SET bio='$gif' WHERE username='$target'");
+                $db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$target' AND usergroup='$corp'");
+                
+            
+	            if(is_gremios($corp)){
+    	        	$db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}' WHERE username='$target'");
+    	        	$db->DoQuery("INSERT INTO {$prefix}groups (usergroup, username, corp_master) VALUES('{$x7c->settings['usergroup_default']}', '$target','0')
+        					ON DUPLICATE KEY UPDATE usergroup=usergroup, username=username");
+	            }
         }
         else
                 return "Non sei autorizzato a gestire questo gremios";
 
     }
 
-    function admin_corp($target, $status){
-        global $db, $prefix, $x7s, $x7c;
-        $query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$target'");
+    function admin_corp($target, $status, $corp){
+        global $db, $prefix, $x7s, $x7c, $x7p;
+        $query = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$target' AND usergroup='$corp'");
         $row = $db->Do_Fetch_Assoc($query);
         
 
         //We can remove only members that belong to our corp
-        if($row['user_group']==$x7s->user_group || checkIfMaster()){
-                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[user_group]'");
+        if(in_array($row['user_group'],$x7s->user_group) || checkIfMaster()){
+                $perm_query=$db->DoQuery("SELECT admin_panic FROM {$prefix}permissions WHERE usergroup='$row[usergroup]'");
                 $row_perm = $db->Do_Fetch_Assoc($perm_query);
 
                 if($row_perm==null)
                         return "Gruppo $corp non esistente";
 
                 //Only admin can make admin and masters
-                if($x7s->user_group != $x7c->settings['usergroup_admin'] && $row_perm['admin_panic']==1){
+                if(!in_array($x7c->settings['usergroup_admin'], $x7p->profile['usergroup']) && $row_perm['admin_panic']==1){
                         return "Non sei autorizzato a gestire questo gremios";
                 }
                 
-                $db->DoQuery("UPDATE {$prefix}users SET corp_master='$status' WHERE username='$target'");
+                $db->DoQuery("UPDATE {$prefix}groups SET corp_master='$status' WHERE username='$target' AND usergroup='$corp'");
         }
         else
                 return "Non sei autorizzato a gestire questo gremios";
 
+    }
+    
+    function is_gremios($group){
+    	global $db, $prefix;
+    	
+    	$query = $db->DoQuery("SELECT gremios FROM {$prefix}permissions WHERE usergroup='$group'");
+    	$row = $db->Do_Fetch_Assoc($query);
+    	
+    	return $row['gremios'];
     }
 
     function build_ability_javascript($max_ab){
