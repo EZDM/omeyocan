@@ -175,7 +175,7 @@
 		if($warn_list!='' || $del_list!=''){
 			
 			$admin=$x7c->settings['usergroup_admin'];
-			$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE user_group='$admin'");
+			$query = $db->DoQuery("SELECT username FROM {$prefix}groups WHERE user_group='$admin'");
 			include_once('./lib/message.php');
 			$obj = "Avviso cancellazione pg";
 			

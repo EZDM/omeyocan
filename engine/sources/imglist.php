@@ -24,14 +24,14 @@ If not, see <http://www.gnu.org/licenses/>
 */
 
 function imglist_main(){
-	global $print, $x7s, $x7c;
+	global $print, $x7s, $x7c, $x7p;
 
 	$image_dir="/images/";
 
 	if(isset($_GET['subdir']) && $_GET['subdir']!="")
 	$image_dir.=$_GET['subdir']."/";
 
-	if($x7c->permissions['admin_panic'] || authorized($image_dir, $x7s->user_group)){
+	if($x7c->permissions['admin_panic'] || authorized($image_dir, $x7p->profile['usergroup'])){
 			
 		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 			
@@ -217,11 +217,11 @@ function file_delete($path){
 function authorized($subdir, $group){
 	global $prefix, $db;
 	 
-	$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}imgpermission WHERE groupname='$group' AND subdir='$subdir'");
+	$query = $db->DoQuery("SELECT groupname FROM {$prefix}imgpermission WHERE subdir='$subdir'");
 	 
 	$row = $db->Do_Fetch_Assoc($query);
 	 
-	if($row['cnt']>0)
+	if(in_array($row['groupname'],$group))
 		return true;
 	else
 		return false;

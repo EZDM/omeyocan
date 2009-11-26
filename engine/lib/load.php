@@ -286,9 +286,52 @@
 
 			// By default user is not an administrator :)
 			$return['admin_access'] = 0;
+			$return['make_room']  = 0;
+			$return['make_proom']  = 0;
+			$return['make_nexp']  = 0;
+			$return['make_mod']  = 0;
+			$return['viewip']  = 0;
+			$return['kick']  = 0;
+			$return['ban_kick_imm']  = 0;
+			$return['AOP_all']  = 0;
+			$return['AV_all']  = 0;
+			$return['view_hidden_emails']  = 0;
+			$return['use_keywords']  = 0;
+			$return['access_room_logs'] = 0;
+			$return['log_pms'] = 0;
+			$return['set_background'] = 0;
+			$return['set_logo']  = 0;
+			$return['make_admins']  = 0;
+			$return['server_msg']  = 0;
+			$return['can_mdeop']  = 0;
+			$return['can_mkick']  = 0;
+			$return['admin_settings']  = 0;
+			$return['admin_themes']  = 0;
+			$return['admin_filter']  = 0;
+			$return['admin_groups']  = 0;
+			$return['admin_users']  = 0;
+			$return['admin_ban']  = 0;
+			$return['admin_bandwidth']  = 0;
+			$return['admin_logs']  = 0;
+			$return['admin_events']  = 0;
+			$return['admin_mail']  = 0;
+			$return['admin_mods']  = 0;
+			$return['admin_smilies']  = 0;
+			$return['admin_rooms']  = 0;
+			$return['access_disabled']  = 0;
+			$return['b_invisible']  = 0;
+			$return['c_invisible']  = 0;
+			$return['admin_keywords']  = 0;
+			$return['access_pw_rooms']  = 0;
+			$return['admin_panic'] = 0;
+			$return['admin_alarms'] = 0;
+			$return['admin_objects'] = 0;
+			$return['sheet_modify'] = 0;
+			$return['write_master'] = 0;
+			$temp = 0;
 
 			// Load other permissions
-			$user_group = @$user_data->profile['user_group'];
+			
 			$query = $db->DoQuery("SELECT * FROM {$prefix}permissions");
 			$this->groups_with_aop = array();
 			$this->groups_with_av = array();
@@ -300,70 +343,74 @@
 					$this->groups_with_av[] = $permissions_query[1];
 			}
 
-			$row = $querydb['permissions_1'][$user_group];
-
-			$return['make_room'] = $row[2];
-			$return['make_proom'] = $row[3];
-			$return['make_nexp'] = $row[4];
-			$return['make_mod'] = $row[5];
-			$return['viewip'] = $row[6];
-			$return['kick'] = $row[7];
-			$return['ban_kick_imm'] = $row[8];
-			$return['AOP_all'] = $row[9];
-			$return['AV_all'] = $row[10];
-			$return['view_hidden_emails'] = $row[11];
-			$return['use_keywords'] = $row[12];
-
-			// If logging is enabled, see if this user is allowed to
-			if($x7c->settings['enable_logging'] == 1){
-				$return['access_room_logs'] = $row[13];
-				$return['log_pms'] = $row[14];
-			}else{
-				$return['access_room_logs'] = 0;
-				$return['log_pms'] = 0;
+			foreach (@$user_data->profile['usergroup'] as $user_group){
+				$row = $querydb['permissions_1'][$user_group];
+	
+				$return['make_room'] += $row[2];
+				$return['make_proom'] += $row[3];
+				$return['make_nexp'] += $row[4];
+				$return['make_mod'] += $row[5];
+				$return['viewip'] += $row[6];
+				$return['kick'] += $row[7];
+				$return['ban_kick_imm'] += $row[8];
+				$return['AOP_all'] += $row[9];
+				$return['AV_all'] += $row[10];
+				$return['view_hidden_emails'] += $row[11];
+				$return['use_keywords'] += $row[12];
+	
+				// If logging is enabled, see if this user is allowed to
+				if($x7c->settings['enable_logging'] == 1){
+					$return['access_room_logs'] += $row[13];
+					$return['log_pms'] += $row[14];
+				}else{
+					$return['access_room_logs'] = 0;
+					$return['log_pms'] = 0;
+				}
+	
+	
+				$return['set_background'] += $row[15];
+				$return['set_logo'] += $row[16];
+				$return['make_admins'] += $row[17];
+				$return['server_msg'] += $row[18];
+				$return['can_mdeop'] += $row[19];
+				$return['can_mkick'] += $row[20];
+				$return['admin_settings'] += $row[21];
+				$return['admin_themes'] += $row[22];
+				$return['admin_filter'] += $row[23];
+				$return['admin_groups'] += $row[24];
+				$return['admin_users'] += $row[25];
+				$return['admin_ban'] += $row[26];
+				$return['admin_bandwidth'] += $row[27];
+				$return['admin_logs'] += $row[28];
+				$return['admin_events'] += $row[29];
+				$return['admin_mail'] += $row[30];
+				$return['admin_mods'] += $row[31];
+				$return['admin_smilies'] += $row[32];
+				$return['admin_rooms'] += $row[33];
+				$return['access_disabled'] += $row[34];
+				$return['b_invisible'] += $row[35];
+				$return['c_invisible'] += $row[36];
+				$return['admin_keywords'] += $row[37];
+				$return['access_pw_rooms'] += $row[38];
+				$return['admin_panic']+=$row[39];
+				$return['admin_alarms']+=$row[40];
+				$return['admin_objects']+=$row[41];
+				$return['sheet_modify']+=$row[43];
+				$return['write_master']+=$row[44];
+				
+				$temp += $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38]+$row[39]+$row[40]+$row[41];
+			
 			}
 
-
-			$return['set_background'] = $row[15];
-			$return['set_logo'] = $row[16];
-			$return['make_admins'] = $row[17];
-			$return['server_msg'] = $row[18];
-			$return['can_mdeop'] = $row[19];
-			$return['can_mkick'] = $row[20];
-			$return['admin_settings'] = $row[21];
-			$return['admin_themes'] = $row[22];
-			$return['admin_filter'] = $row[23];
-			$return['admin_groups'] = $row[24];
-			$return['admin_users'] = $row[25];
-			$return['admin_ban'] = $row[26];
-			$return['admin_bandwidth'] = $row[27];
-			$return['admin_logs'] = $row[28];
-			$return['admin_events'] = $row[29];
-			$return['admin_mail'] = $row[30];
-			$return['admin_mods'] = $row[31];
-			$return['admin_smilies'] = $row[32];
-			$return['admin_rooms'] = $row[33];
-			$return['access_disabled'] = $row[34];
-			$return['b_invisible'] = $row[35];
-			$return['c_invisible'] = $row[36];
-			$return['admin_keywords'] = $row[37];
-			$return['access_pw_rooms'] = $row[38];
-			$return['admin_panic']=$row[39];
-			$return['admin_alarms']=$row[40];
-			$return['admin_objects']=$row[41];
-			$return['sheet_modify']=$row[43];
-			$return['write_master']=$row[44];
-
 			// See if they should have access to the admin panel
-			$temp = $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38]+$row[39]+$row[40]+$row[41];
 			if($temp != 0)
-				$return['admin_access'] = 1;
+				$return['admin_access'] += 1;
 
 			// Check for special ones like AOP_all and AV_all (Auto-Op all rooms and Auto-Voice all rooms)
 			if($row[9] == 1)
-				$return['room_operator'] = 1;
+				$return['room_operator'] += 1;
 			if($row[10] == 1)
-				$return['room_voice'] = 1;
+				$return['room_voice'] += 1;
 
 			// Return the values
 			return $return;
@@ -452,7 +499,7 @@
 
 		function profile_info($user){
 			global $db, $prefix;
-			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,status,user_group,id,hideemail,gender,settings,password,corp_master,frozen FROM {$prefix}users WHERE username='$user'");
+			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,status,id,hideemail,gender,settings,password,corp_master,frozen FROM {$prefix}users WHERE username='$user'");
 			$row = $db->Do_Fetch_Row($query);
 			$this->profile['email'] = $row[0];
 			$this->profile['avatar'] = $row[1];
@@ -462,15 +509,22 @@
 			$this->profile['hobbies'] = $row[4];
 			$this->profile['bio'] = $row[5];
 			$this->profile['status'] = $row[6];
-			$this->profile['user_group'] = $row[7];
-			$this->profile['id'] = $row[8];
-			$this->profile['hideemail'] = $row[9];
+			$this->profile['id'] = $row[7];
+			$this->profile['hideemail'] = $row[8];
 			$this->profile['ip'] = $_SERVER['REMOTE_ADDR'];
-			$this->profile['gender'] = $row[10];
-			$this->profile['settings'] = $row[11];
-			$this->profile['password'] = $row[12];
-			$this->profile['corp_master'] = $row[13];
-			$this->profile['frozen'] = $row[14];
+			$this->profile['gender'] = $row[9];
+			$this->profile['settings'] = $row[10];
+			$this->profile['password'] = $row[11];
+			$this->profile['corp_master'] = $row[12];
+			$this->profile['frozen'] = $row[13];
+			
+			$this->profile['usergroup'] = array();
+			$query = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$user'");
+			while($row = $db->Do_Fetch_Row($query)){
+				$this->profile['usergroup'][] = $row[0];
+			}
+			
+			
 		}
 	}
 ?>

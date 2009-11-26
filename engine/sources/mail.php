@@ -38,7 +38,7 @@
 	
 	
 	function perfom_mail(){
-			global $txt, $x7c, $x7s, $print, $db, $prefix;
+			global $txt, $x7c, $x7s, $print, $db, $prefix, $x7p;
 			$sys_msg="";
 			include_once("./lib/message.php");
 
@@ -69,7 +69,7 @@
 				
 				//Group send
 				if(isset($_POST['group'])){
-					if(!checkIfMaster() && $x7s->user_group != $_POST['to']){
+					if(!checkIfMaster() && !in_array($_POST['to'], $x7p->profile['usergroup'])){
 						$body = "<div id=\"sysmsg\">Non sei autorizzato a inviare a questo gruppo</div>";
 						$_POST['msg'] = $_POST['body'];
 					}
@@ -82,7 +82,7 @@
 							if($_POST['to'] == "all")
 								$query = "SELECT username FROM {$prefix}users";
 							else
-								$query = "SELECT username FROM {$prefix}users WHERE user_group = '$_POST[to]'";
+								$query = "SELECT username FROM {$prefix}groups WHERE usergroup = '$_POST[to]'";
 								
 							$result = $db->DoQuery($query);
 							
@@ -259,7 +259,7 @@
 				}
 				$body .= '<div id="menu"><a href="./index.php?act=mail&write">[Scrivi]</a>';
 				 
-				if(checkIfMaster() || $x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
+				if(checkIfMaster()){
 					$body .= '<a href="./index.php?act=mail&write&group">[Mail di gruppo]</a>';
 				} 
 				else{
@@ -310,17 +310,18 @@
 					
 					if(checkIfMaster()){
 						$elenco = '<option value="all">Tutti</option>';
-						$query = "SELECT DISTINCT user_group FROM {$prefix}users";
+						$query = "SELECT DISTINCT usergroup FROM {$prefix}groups";
 						$result = $db->DoQuery($query);
 						
 						while($row = $db->Do_Fetch_Assoc($result)){
-							$elenco .= "<option value=\"{$row['user_group']}\"> {$row['user_group']} </option>\n";
+							$elenco .= "<option value=\"{$row['usergroup']}\"> {$row['usergroup']} </option>\n";
 						}
 						
 					}
-					else if($x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
+					//TODO da sistemare
+					/*else if($x7s->user_group != '' && $x7s->user_group != 'Cittadino'){
 						$elenco .= "<option value=\"{$x7s->user_group}\"> {$x7s->user_group} </option>\n";	
-					}
+					}*/
 					
 					$to = "<p style=\"text-align: center\">
 					<input type=\"hidden\" name=\"act\" value=\"mail\">

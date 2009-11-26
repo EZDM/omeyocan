@@ -649,6 +649,7 @@
 		echo '</head><body>
  			<div id="buildpg">
  				<div id="inner_buildpg">
+ 				<br><br><br><br><br>
  			';
  			
 		

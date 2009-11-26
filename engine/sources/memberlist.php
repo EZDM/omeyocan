@@ -155,34 +155,31 @@
                     $get_room="&room=$room";
                     
 		if(!$costitution && !$sheet){
-			$query = $db->DoQuery("SELECT username, position, usergroup, talk,long_name,type,admin_panic, info,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position, talk,long_name,type,info,m_invisible AS invisible
                                           FROM {$prefix}users u,
-                                            {$prefix}rooms r, {$prefix}permissions p
+                                            {$prefix}rooms r
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
-                                            AND p.usergroup = u.user_group
                                             {$more_query}
                                             {$order}");
 		}
 		elseif($sheet){
-			$query = $db->DoQuery("SELECT username, position,usergroup, talk,long_name,type,admin_panic,info,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, position, talk,long_name,type,info,m_invisible AS invisible
                                           FROM {$prefix}users u,
-                                            {$prefix}rooms r, {$prefix}permissions p
+                                            {$prefix}rooms r
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
-                                            AND p.usergroup = u.user_group
                                             AND sheet_ok = 0
                                             {$more_query}
                                             {$order}");
 		}
 		elseif($costitution){
-			$query = $db->DoQuery("SELECT u.username AS username, usergroup, position,talk,long_name,type,admin_panic,info, m_invisible AS invisible
+			$query = $db->DoQuery("SELECT u.username AS username, position,talk,long_name,type,info, m_invisible AS invisible
                                           FROM {$prefix}users u,
-                                            {$prefix}rooms r, {$prefix}permissions p,
+                                            {$prefix}rooms r
                                             {$prefix}usercharact uc
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
-                                            AND p.usergroup = u.user_group
                                             AND uc.username = u.username
                                             AND uc.charact_id = 'rob'
                                             AND uc.value <= '6'
@@ -282,7 +279,6 @@
 
                                 //For Quest buster
                                 if($position != "&nbsp;" &&
-                                    $row['admin_panic'] &&
                                     $row['invisible'] &&
                                     !$x7c->permissions['admin_panic']){
                                             $position = "Ovunque";
@@ -318,10 +314,12 @@
 					$dead_fmt = 'dark_link_red';
 				}
 				
+				include_once('./lib/load.php');
+				$info = new profile_info($row['username']);
 
-				if($row['admin_panic'])
+				if(in_array("Master", $info->profile['usergroup']) || in_array("Administrator", $info->profile['usergroup']))
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
-				elseif($row['usergroup']=="Controller")
+				elseif(in_array("Controller", $info->profile['usergroup']))
 					$master_gif='&nbsp;<img src="./graphic/controller_gif.gif" />';
 				
 				$list[$cur] .= "\n<tr>

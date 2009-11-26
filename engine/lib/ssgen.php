@@ -295,6 +295,12 @@
 				vertical-align: top;
 				padding: 5px;
 			}
+			.msg_avatar{
+				border-bottom: 1px solid white;
+				vertical-align: top;
+				padding: 5px;
+				width: 110px;
+			}
 		</style>";
 		
 		return $css;
