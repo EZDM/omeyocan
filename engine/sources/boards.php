@@ -916,8 +916,10 @@
 		$lastid=0;
 		while($new_msg=$db->Do_Fetch_Assoc($query)){
 			//We consider only groups which we belong to and the default user group
+			//Master must be updated on alle messages
 			if(in_array($new_msg['user_group'], $x7p->profile['usergroup']) || 
-					$new_msg['user_group'] == $x7c->settings['usergroup_default']){
+					$new_msg['user_group'] == $x7c->settings['usergroup_default'] ||
+					checkIfMaster()){
 				if($lastid<$new_msg['id'])
 					$lastid=$new_msg['id'];
 					
