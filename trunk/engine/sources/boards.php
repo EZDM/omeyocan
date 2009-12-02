@@ -882,7 +882,7 @@
 		
 		if(checkIfMaster())
 			return true;		
-		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == 'Cittadino')
+		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default'])
 			return true;
 		else
 			return false;
