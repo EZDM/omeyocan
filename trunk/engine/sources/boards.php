@@ -915,7 +915,9 @@
 		
 		$lastid=0;
 		while($new_msg=$db->Do_Fetch_Assoc($query)){
-			if(in_array($new_msg['user_group'], $x7p->profile['usergroup'])){
+			//We consider only groups which we belong to and the default user group
+			if(in_array($new_msg['user_group'], $x7p->profile['usergroup']) || 
+					$new_msg['user_group'] == $x7c->settings['usergroup_default']){
 				if($lastid<$new_msg['id'])
 					$lastid=$new_msg['id'];
 					
