@@ -57,7 +57,7 @@
 	
 		// Check permissions to make sure they have access to the Room Control Panel
 		if($x7c->permissions['room_operator'] != 1){
-			$print->normal_window($txt[215],$txt[216]);
+			$print->normal_window($txt[215],"++"$txt[216]);
 			return "";
 		}
 				
