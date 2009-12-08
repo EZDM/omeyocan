@@ -196,25 +196,26 @@
 			$i=0;
 			foreach($data as $linenum=>$entry){
 				// Get date and sender
-				preg_match("/^(.+?);\[(.+?)\]/",$entry,$match);
-				$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
-				die($match[1]);
-				$date = date("d/m/Y",$match[1]);
+				if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
+					$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
+				
+					$date = date("d/m/Y",$match[1]);
 
-				if($date){
-					if($start<0){
-						if($date == $_POST['date']){
-							$start = $i;
-						}
-					}else{
-						if($date != $_POST['date']){
-							$end = $i;
-							break;
+					if($date){
+						if($start<0){
+							if($date == $_POST['date']){
+								$start = $i;
+							}
+						}else{
+							if($date != $_POST['date']){
+								$end = $i;
+								break;
+							}
 						}
 					}
 				}
 						
-				$i++;		
+					$i++;		
 						
 			}
 			
