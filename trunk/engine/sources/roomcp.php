@@ -56,7 +56,7 @@
 		global $x7p, $x7s, $print, $db, $txt, $x7c, $prefix;
 	
 		// Check permissions to make sure they have access to the Room Control Panel
-		if($x7c->permissions['room_operator'] != 1){
+		if($x7c->permissions['room_operator'] == 0){
 			$print->normal_window($txt[215],"++".$txt[216]);
 			return "";
 		}
