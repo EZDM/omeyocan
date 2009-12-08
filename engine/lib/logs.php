@@ -198,7 +198,7 @@
 				// Get date and sender
 				preg_match("/^(.+?);\[(.+?)\]/",$entry,$match);
 				$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
-				die($match);
+				die($match[0]);
 				$date = date("d/m/Y",$match[1]);
 
 				if($date){
