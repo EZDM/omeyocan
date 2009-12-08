@@ -399,18 +399,20 @@
 				$return['write_master']+=$row[44];
 				
 				$temp += $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38]+$row[39]+$row[40]+$row[41];
+				
+							// See if they should have access to the admin panel
+				if($temp != 0)
+					$return['admin_access'] += 1;
+
+				// Check for special ones like AOP_all and AV_all (Auto-Op all rooms and Auto-Voice all rooms)
+				if($row[9] == 1)
+					$return['room_operator'] += 1;
+				if($row[10] == 1)
+					$return['room_voice'] += 1;
 			
 			}
 
-			// See if they should have access to the admin panel
-			if($temp != 0)
-				$return['admin_access'] += 1;
 
-			// Check for special ones like AOP_all and AV_all (Auto-Op all rooms and Auto-Voice all rooms)
-			if($row[9] == 1)
-				$return['room_operator'] += 1;
-			if($row[10] == 1)
-				$return['room_voice'] += 1;
 
 			// Return the values
 			return $return;
