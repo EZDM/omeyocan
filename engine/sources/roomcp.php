@@ -556,7 +556,7 @@
 		
 			if($x7c->permissions['access_room_logs'] == 0){
 			
-				$body = $txt[216];
+				$body = "--".$txt[216];
 				
 			}else{
 			
