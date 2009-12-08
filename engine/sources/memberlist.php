@@ -176,7 +176,7 @@
 		elseif($costitution){
 			$query = $db->DoQuery("SELECT u.username AS username, position,talk,long_name,type,info, m_invisible AS invisible
                                           FROM {$prefix}users u,
-                                            {$prefix}rooms r
+                                            {$prefix}rooms r,
                                             {$prefix}usercharact uc
                                             WHERE (r.name = u.position
                                             OR (u.position='' AND r.name='Mappa'))
