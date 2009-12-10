@@ -200,7 +200,7 @@
 					//$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
 				
 					$date = date("d/m/Y",$match[1]);
-					echo $date."\n";
+					echo $date."<br>\n";
 					if($date){
 						if($start<0){
 							if($date == $_POST['date']){
