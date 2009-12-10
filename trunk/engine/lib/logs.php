@@ -191,7 +191,7 @@
 			$end=-1;
 			
 			if(!isset($_POST['date']))
-				$_POST['date']=date("d/m/Y", time());
+				$_POST['date']=date("j/n/Y", time());
 
 			$i=0;
 			foreach($data as $linenum=>$entry){
@@ -199,8 +199,7 @@
 				if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
 					//$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
 				
-					$date = date("d/m/Y",$match[1]);
-					echo $_POST['date']."--".$date."<br>\n";
+					$date = date("j/n/Y",$match[1]);
 					if($date){
 						if($start<0){
 							if($date == $_POST['date']){
