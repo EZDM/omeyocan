@@ -197,10 +197,10 @@
 			foreach($data as $linenum=>$entry){
 				// Get date and sender
 				if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
-					$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
+					//$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
 				
 					$date = date("d/m/Y",$match[1]);
-
+					echo $date;
 					if($date){
 						if($start<0){
 							if($date == $_POST['date']){
@@ -215,7 +215,7 @@
 					}
 				}
 						
-					$i++;		
+				$i++;		
 						
 			}
 			
