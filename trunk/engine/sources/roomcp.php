@@ -632,20 +632,22 @@
 					include_once("./lib/message.php");
 					foreach($contents as $linenum=>$entry){
 						// Get date and sender
+						$messarge="";
 						if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
 							$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
 							$date = date($x7c->settings['date_format_full'],$match[1]);
 							$sender = $match[2];
 							// Get message
-							$message = $entry;
-							
-							// Parse and display
-							$message = parse_message($message);
-							$body .= "<b>$sender</b>[$date]: $message<br>";
+							$message = $entry;	
 						}
 						else{
-							echo $entry."<br>";
+							$message = "<b>Warning: wrong log format </b>".$entry;
 						}
+
+						// Parse and display
+						$message = parse_message($message);
+												
+						$body .= "<b>$sender</b>[$date]: $message<br>";
 						
 					}
 					
