@@ -142,7 +142,7 @@
 				}
 					
 				$type_options = "<option value=\"1\"$def[public]>$txt[68]</option>";
-				if($x7c->permissions['make_proom'] == 1)
+				if($x7c->permissions['make_proom'] != 0)
 					$type_options .= "<option value=\"2\"$def[private]>$txt[69]</option>";
 
 				$body .= "<tr>
