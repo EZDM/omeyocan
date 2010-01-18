@@ -880,9 +880,11 @@
 		
 		$row = $db->Do_Fetch_Assoc($query);
 		
-		if(checkIfMaster())
-			return true;		
+		if(checkIfMaster()){
+			return true;	
+		}	
 		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default']){
+			$x7p->bans_on_you = get_bans_on_you();
 			$bans = $x7p->bans_on_you;
 			foreach($bans as $key=>$rban){
 				if($rban[1] == "*")
