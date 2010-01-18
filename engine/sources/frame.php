@@ -299,7 +299,7 @@ switch($_GET['frame']){
 		if(count($your_record) == 0){
 			// Test if the room is full
 			if($total >= $x7c->room_data['maxusers'])
-			echo "9;;./index.php?act=overload|";
+				echo "9;;./index.php?act=overload|";
 
 			// Create a new record for you
 			$time = time();
@@ -500,10 +500,14 @@ switch($_GET['frame']){
 
 			// If a row returned and they don't have immunity then thrown them out the door and lock up
 			if($row != "" && $x7c->permissions['ban_kick_imm'] != 1){
-				if($row[1] == "*"){
-					// They are banned from the server
-					$txt[117] = eregi_replace("_r",$row[5],$txt[117]);
-					echo utf8_encode("9;$txt[117];./index.php|");
+				if($row[1] == "*"){ 
+					if($row[6] && $_GET['room'] != "Prigione"){
+						echo utf8_encode("9;Sei stato arrestato;./index.php?act=frame&room=Prigione|");						
+					}elseif(!$row[6]){
+						//They are banned from the server
+						$txt[117] = eregi_replace("_r",$row[5],$txt[117]);
+						echo utf8_encode("9;$txt[117];./index.php|");						
+					}
 				}elseif($row[1] == $x7c->room_data['id'] && $row[4] == 60){
 					// They are kicked from this room
 					$txt[115] = eregi_replace("_r",$row[5],$txt[115]);
@@ -630,7 +634,7 @@ switch($_GET['frame']){
 		$row = $db->Do_Fetch_Assoc($query);
 
 		if($row['num'] >= $x7c->room_data['maxusers'])
-		echo "9;;./index.php?act=overload|";
+			echo "9;;./index.php?act=overload|";
 
 		// Create a new record for you
 		$time = time();

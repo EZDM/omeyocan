@@ -210,7 +210,6 @@
 
 	// We cannot allow a user to start the frameset without choosing a room
 	if($_GET['act'] == "frame" && $x7c->room_name == ""){
-		$_GET['act'] = "";
 		$_GET['errore'] = "noroom";
 	}
 
@@ -275,14 +274,34 @@
 
 	foreach($bans as $key=>$row){
 		if($row[1] == "*" && ((@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') && (@$_GET['pmf'] != "update" || $_GET['act'] != "pm"))){	// The reason we see if they are getting the update frame is cuz if they are we need to let them so it'll remove them from the room they are in now
-                        if($_GET['act']!="logout")
-                                $_GET['act'] = "sbanned";
-			$ban_reason = $row[5];
+                        if($row[6]){
+                        		if( (!isset($_GET['act']) || $_GET['act']=="") && !isset($_GET['errore'])){
+                        			//We protect from error of Prigione not existing
+                        			$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}rooms WHERE name='Prigione'");
+                        			$rr = $db->Do_Fetch_Assoc($query);
+                        			
+                        			if($rr['cnt'])
+                        				header("Location: index.php?act=frame&room=Prigione");
+                        			else{
+                        				$_GET['act'] = "sbanned";
+                                		$ban_reason = $row[5];
 
-			// Remove them from all online lists
-			$db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
-			$db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
-		}
+										// 	Remove them from all online lists
+										$db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
+										$db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
+                        			}
+                        		}
+                        }
+						else if($_GET['act']!="logout"){
+                                $_GET['act'] = "sbanned";
+                                $ban_reason = $row[5];
+
+							// Remove them from all online lists
+							$db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
+							$db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
+                                
+                        }
+					}
 	}
 	
 	$query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,talk,panic,max_panic,info,resurgo,m_invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
@@ -366,7 +385,7 @@
 		// They have been banned from this server
 		case "sbanned":
 			$txt[117] = eregi_replace("_r",$ban_reason,$txt[117]);
-			$print->normal_window($txt[14],$txt[117]);
+			$print->normal_window($txt[14],$txt[117]."<br><a href=index.php?act=logout>Logout</a>");
 			$print->dump_buffer();
 			exit;
 		break;
