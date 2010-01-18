@@ -138,7 +138,11 @@
 
 			// If a row returned and they don't have immunity then thrown them out the door and lock up
 			if($row != "" && $x7c->permissions['ban_kick_imm'] != 1){
-				if($row[1] == "*"){
+				if($row[1] == "*" && $row[6] && $_GET['room'] != "Prigione"){
+					$txt[117] = eregi_replace("_r",$row[5],$txt[117]);
+					$script = "alert('$txt[117]')\n
+								window.parent.location='./index.php'\r\n";
+				}elseif($row[1] == "*"){
 					// They are banned from the server
 					$txt[117] = eregi_replace("_r",$row[5],$txt[117]);
 					$script = "alert('$txt[117]')\n
