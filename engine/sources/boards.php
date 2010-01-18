@@ -28,7 +28,7 @@
 	
 	//This is the main function called by the index.php
 	function board_main(){
-		global $x7c, $x7s, $db, $prefix;
+		global $x7c, $x7s, $db, $prefix, $x7p;
 
 
 		udpate_unread();
@@ -885,7 +885,7 @@
 		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default']){
 			$bans = $x7p->bans_on_you;
 			foreach($bans as $key=>$rban){
-				if($rban[1] == "*" /*&& !$row['offgame']*/)
+				if($rban[1] == "*")
 					return false;
 				else
 					return true;
