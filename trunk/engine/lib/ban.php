@@ -64,6 +64,7 @@
 		if(!eregi("\.",$user)){
 			$txt[512] = eregi_replace("_u","$user",$txt[512]);
 			$txt[512] = eregi_replace("_r","$reason",$txt[512]);
+			$txt[512] = eregi_replace("bandito","messo in prigione",$txt[512]);
 			include_once("./lib/message.php");
 			
 			$query = $db->DoQuery("SELECT DISTINCT room FROM {$prefix}online");
