@@ -55,10 +55,10 @@
 		return $return;
 	}
 	
-	function new_ban($user,$length,$reason,$room){
+	function new_ban($user,$length,$reason,$room,$prison=0){
 		global $db,$prefix, $txt;
 		$time = time();
-		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason')");
+		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason','$prison')");
 	
 		// Alert all active rooms if the user isn't an IP or E-Mail
 		if(!eregi("\.",$user)){
@@ -74,10 +74,10 @@
 		}
 	}
 
-        function new_ban2($user,$length,$reason,$room){
+        function new_ban2($user,$length,$reason,$room,$prison=0){
 		global $db,$prefix, $txt;
 		$time = time();
-		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason')");
+		$db->DoQuery("INSERT INTO {$prefix}banned VALUES('0','$room','$user','$time','$length','$reason','$prison')");
 	
 		// Alert the room if this isn't a server ban and if the user isn't an IP or E-Mail
 // 		if($room != "*" && !eregi("\.",$user)){

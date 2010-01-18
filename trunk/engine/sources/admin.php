@@ -2638,7 +2638,10 @@
 					$length = $_POST['len_limited']*$_POST['len_period'];
 				}
 				
-				new_ban($_POST['toban'],$length,$_POST['reason'],"*");
+				if(!isset($_POST['prison']))
+					$_POST['prison']=0;
+					
+				new_ban($_POST['toban'],$length,$_POST['reason'],"*",$_POST['prison']);
 				$body = "$txt[234]<br><Br>";
 			
 			}elseif(@$_GET['subact'] == "unban"){
@@ -2662,12 +2665,11 @@
 			
 				$body .= "$txt[233]<Br><Br><table width=\"95%\" border=\"0\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"col_header\">
 						<tr>
-							<td >$txt[224]</td>
+							<td align>$txt[224]</td>
 							<td >$txt[223]</td>
 							<td >$txt[225]</td>
-						</tr>
-						</table>
-						<table border=\"0\" width=\"95%\" align=\"center\" cellspacing=\"0\" cellpadding=\"2\" class=\"inside_table\">";
+							<td >In prigione</td>
+						</tr>";
 				
 				// Get the ban records
 				$query = $db->DoQuery("SELECT * FROM {$prefix}banned WHERE room='*'");
@@ -2679,10 +2681,14 @@
 						$length = date("{$x7c->settings['date_format_full']}",$row[3]+$row[4]);
 					
 				
+					$prison = "";
+					if($row[6])
+						$prison = "<b>X</b>";
 					$body .= "<tr>
 								<td class=\"dark_row\"><a href=\"index.php?act=adminpanel&cp_page=ban&subact=unban&banid=$row[0]\">$row[2]</a></td>
 								<td class=\"dark_row\">$row[5]</td>
-								<td class=\"dark_row\" style=\"text-align: center\">$length</td>
+								<td class=\"dark_row\" >$length</td>
+								<td class=\"dark_row\" >$prison</td>
 							</tr>";
 				}
 							
@@ -2715,6 +2721,13 @@
 									</select>
 								</td>
 							</tr>
+							<tr>
+								<td width=\"100\">
+									Confina in prigione?
+								</td>
+								<td width=\"100\" style=\"text-align: center\">
+									<input type=\"checkbox\" value=\"1\" name=\"prison\">
+								</td>
 							<tr>
 								<td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" value=\"$txt[222]\" class=\"button\"></div></td>
 							</tr>
