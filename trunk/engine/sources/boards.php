@@ -873,7 +873,7 @@
 		global $x7s, $x7c, $db, $prefix, $x7p;
 		
 		$query = $db->DoQuery("
-			SELECT user_group
+			SELECT user_group, offgame
 			FROM  {$prefix}boards
 			WHERE id='{$bid}'
 		");
@@ -882,8 +882,15 @@
 		
 		if(checkIfMaster())
 			return true;		
-		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default'])
-			return true;
+		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default']){
+			$bans = $x7p->bans_on_you;
+			foreach($bans as $key=>$rban){
+				if($rban[1] && !$row['offgame'])
+					return false;
+				else
+					return true;
+			}
+		}
 		else
 			return false;
 	}
