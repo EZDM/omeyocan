@@ -2087,7 +2087,11 @@
 							</tr>
 							<tr>
 								<td>URL immagine:</td>
-								<td><input type=\"text\" name=\"image_url\" class=\"text_input\" value=\"$row[image_url]\"></td>
+								<td><input type=\"text\" name=\"image_url\" class=\"text_input\" value=\"$row[image_url]\" onChange=\"javascript: document.getElementById('objImg').src=this.value;\"></td>
+							</tr>
+							<tr>
+								<td>Preview:</td>
+								<td><img id=\"objImg\" src=\"$row[image_url]\"></td>
 							</tr>
 							<tr>
 							       <td>Dimesione:</td>
