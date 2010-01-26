@@ -2676,7 +2676,7 @@
 						</tr>";
 				
 				// Get the ban records
-				$query = $db->DoQuery("SELECT * FROM {$prefix}banned WHERE room='*' ORDER BY user_ip_mail");
+				$query = $db->DoQuery("SELECT * FROM {$prefix}banned WHERE room='*' ORDER BY user_ip_email");
 				while($row = $db->Do_Fetch_Row($query)){
 				
 					if($row[4] == 0)
