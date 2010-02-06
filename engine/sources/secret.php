@@ -51,7 +51,7 @@ function secret_main(){
       //We ban for 5 minutes after two attempts
       if($row['secrets'] > 2){
         echo  header("Location: index.php?act=logout&secret");
-        new_ban2($x7s->username,600,"lo smarrimento alla ricerca di un luogo segreto. Per 10 minuti non potrai ricollegarti","*");
+        new_ban2($x7s->username,600,"Ti sei smarrito durante la ricerca di un luogo segreto. Per 10 minuti non potrai ricollegarti","*");
         $db->DoQuery("UPDATE {$prefix}users SET secrets='0' WHERE username='{$x7s->username}'");
         return;
       }
