@@ -41,12 +41,21 @@
 		echo '
 		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
-			body {
+		
+			#container{
+				position: relative;
+			}
+
+			#innerdiv{
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 1024px;
+				height: 723px;
 				background-image:url(\'./graphic/ban_page.jpg\');
 			}
-			
 			#bandiv {
-				position: relative;
+				position: absolute;
 				left: 0;
 				top: 450;
 				width: 1024px;
@@ -60,12 +69,17 @@
 		
 		
                 echo '</head><body>
-			<div id="bandiv">';
-                echo $body;
+			<div id="container">
+				<div id="innerdiv">
+					<div id="bandiv">';
+
+		echo $body;
 
 
-		echo '<br><br>
-			<a href="index.php?act=logout">Logout</a>
+		echo '			<br><br>
+					<a href="index.php?act=logout">Logout</a>
+					</div>
+				</div>
 			</div>
 
                         </body>
