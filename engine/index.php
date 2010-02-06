@@ -384,9 +384,8 @@
 
 		// They have been banned from this server
 		case "sbanned":
-			$txt[117] = eregi_replace("_r",$ban_reason,$txt[117]);
-			$print->normal_window($txt[14],$txt[117]."<br><a href=index.php?act=logout>Logout</a>");
-			$print->dump_buffer();
+			include_once('./sources/banpage.php');
+			print_ban($ban_reason);
 			exit;
 		break;
 
