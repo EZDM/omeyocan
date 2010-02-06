@@ -2647,9 +2647,9 @@
 				
 				if(strtolower($_POST['toban'])=="thedoctor"){
 					new_ban($x7s->username,300,"Non puoi bannare il dottore","*",false);
+				}else{
+					new_ban($_POST['toban'],$length,$_POST['reason'],"*",$_POST['prison']);
 				}
-
-				new_ban($_POST['toban'],$length,$_POST['reason'],"*",$_POST['prison']);
 				$body = "$txt[234]<br><Br>";
 			
 			}elseif(@$_GET['subact'] == "unban"){
