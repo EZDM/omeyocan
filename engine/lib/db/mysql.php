@@ -44,7 +44,12 @@
 			}else{
 				$this->error = 4;
 				//return mysql_error();	// otherwise return the error
-				die(mysql_error());
+				$error = mysql_error();
+				$error .= "\n";
+				$error .= var_dump($_GET);
+				$error .= "\n";
+				$error .= var_dump($_POST);
+				die($error);
 			}
 		}
 
