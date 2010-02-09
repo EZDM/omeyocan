@@ -49,6 +49,8 @@
 				$error .= var_dump($_GET);
 				$error .= "\n";
 				$error .= var_dump($_POST);
+
+				debug_print_backtrace();
 				die($error);
 			}
 		}
