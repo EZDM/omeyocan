@@ -140,6 +140,16 @@
 		$warn_list='';
 		$del_list='';
 		$del_day='';
+		$time = time();
+		$one_day = 86400;
+
+		//We do this check once per day
+		if($time < $x7c->settings['last_cleanup'] + $one_day){
+			return;
+		}
+
+		$db->DoQuery("UPDATE {$prefix}settings SET setting = '$time' WHERE variable = 'last_cleanup'");
+
 		
 		//First we send wanring to old pg
 		$exptime = time()-$x7c->settings['pg_expire_warn'];
