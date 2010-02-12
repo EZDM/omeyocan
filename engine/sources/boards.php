@@ -330,7 +330,7 @@
 				
 				$replies++;
 			
-				$nb = offline_msg_split($rawtext);
+				$nb = board_msg_split($rawtext);
 				$subject = $nb[1];
 				
 				
@@ -448,7 +448,7 @@
 			}
 			$rawtext = $row['body'];
 			
-			$nb = offline_msg_split($rawtext);
+			$nb = board_msg_split($rawtext);
 			$msg = $nb[0];
 			$subject = $nb[1];
 			$head.=$subject;
@@ -678,7 +678,7 @@
 				$unread .= "<b>(Nuove repliche: $new_replies[cnt])</b>";
 			}
 			
-			$nb = offline_msg_split($row['body']);
+			$nb = board_msg_split($row['body']);
 			$msg = $nb[0];
 			$object = $nb[1];
 			$msgid=$row['id'];
@@ -770,7 +770,7 @@
 		//Head message
 		$row = $db->Do_Fetch_Assoc($query);
 		
-		$nb = offline_msg_split($row['body']);
+		$nb = board_msg_split($row['body']);
 		$msg = $nb[0];
 		$object = $nb[1];
 
@@ -825,7 +825,7 @@
 				$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id='{$row['id']}' AND user='{$x7s->username}'");
 			}
 			
-			$nb = offline_msg_split($row['body']);
+			$nb = board_msg_split($row['body']);
 			$msg = $nb[0];
 			$object = $nb[1];
 			
@@ -894,7 +894,7 @@
 			return false;
 	}
 	
-	function offline_msg_split($body){
+	function board_msg_split($body){
 		// 0 is the body
 		$return[0] = preg_replace("/^(.+?)::/i","",$body);
 
