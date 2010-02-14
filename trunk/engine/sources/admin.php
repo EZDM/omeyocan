@@ -3521,8 +3521,9 @@
 		elseif($_GET['cp_page'] == "alarms"){
 			$head = "Allarmi";
 			
-			$maxmsg=5;
-			$navigator='';
+			$maxmsg=10;
+			$max_display=10;
+			$half_display = $max_display/2;
 			
 			if(isset($_GET['startfrom'])){
 				$limit=$_GET['startfrom'];
@@ -3533,20 +3534,31 @@
 			$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}logs");
 			$row = $db->Do_Fetch_Assoc($query);
 			$total = $row['total'];
+			$display = 0;
+			
+			$navigator = "<a href=\"index.php?act=adminpanel&cp_page=alarms&startfrom=0\">&lt;&lt;</a> ";
+			
+			if(!isset($_GET['startfrom']))
+				$_GET['startfrom'] = 0;
 			
 			if($total > $maxmsg){
-				$i=0;
-				while($total > 0){
+				$i = ($_GET['startfrom'] - $half_display < 0 ? 0 :  $_GET['startfrom'] - $half_display);
+				$total = $total - (($_GET['startfrom']+1)*$maxmsg) + ($i*$maxmsg);
+				while($total > 0 && $display < $max_display){
 					if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
 						$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=alarms&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
 					else
 						$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=alarms&startfrom=$i\">".($i+1)."</a> ";
 					$i++;
+					$display++;
 					$total -= $maxmsg;
 					
 				}
-				$navigator.="<br>";
 			}
+			
+			$max_value = ($row['total']/$maxmsg)-1;
+			$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=alarms&startfrom=".$max_value."\">&gt;&gt;</a> ";
+			$navigator .="<br><br>";
 			
 				
 			$limit_min = $limit * $maxmsg;
