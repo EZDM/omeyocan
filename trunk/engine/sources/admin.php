@@ -3543,7 +3543,7 @@
 			
 			if($total > $maxmsg){
 				$i = ($_GET['startfrom'] - $half_display < 0 ? 0 :  $_GET['startfrom'] - $half_display);
-				$total = $total - (($_GET['startfrom']+1)*$maxmsg);
+				$total = $total - (($_GET['startfrom']+1)*$maxmsg) + ($i*$maxmsg);
 				while($total > 0 && $display < $max_display){
 					if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || (!isset($_GET['startfrom']) && $i == 0))
 						$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=alarms&startfrom=$i\"><b>[".($i+1)."]</b></a> ";
@@ -3562,7 +3562,7 @@
 			
 				
 			$limit_min = $limit * $maxmsg;
-			$limit_max = $limit_min + $maxmsg;
+			$limit_max = $maxmsg;
 			
 			$query = $db->DoQuery("SELECT * FROM {$prefix}logs ORDER BY time DESC LIMIT $limit_min, $limit_max");
 				
