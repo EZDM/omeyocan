@@ -10,8 +10,10 @@ include('int/open2.php');
 
 <head>
     <title>Guida Omeyocan</title>
-    <link rel="stylesheet" type="text/css" href="prinstyle.css">
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <style type="text/css">
+	<? include_once('style.css'); ?>
+    </style>
+
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript">
 
@@ -41,11 +43,10 @@ if ($_POST['passmod'] != "") mysql_query("UPDATE Utenti SET Pass = '".$_POST['pa
 $pass = mysql_fetch_array(mysql_query("SELECT Pass FROM Utenti WHERE Utente = 'guida'"));
 
 ?>
-<body bgcolor="#000000">
-
+<body>
 <center><table border=0 width="900"><tr>
 
-<td><a href="#" onClick="login();"><font face="georgia" color="#FFFFFF" size=4>Regolamento</font></a></td></tr>
+<td><a href="#" onClick="login();" style="color: white; font-weight: bold;">Regolamento</a></td></tr>
 
 <form method="post" action="guida.php" id="form_central">
 <input type="hidden" name="passcode" id="passcode">
@@ -135,7 +136,7 @@ for ($i=$rsdopo['Tipologia'];$i<$rs1['Tipologia'];$i++) echo '</li></ul>';
 <tr><td height="35"></td></tr>
 <tr><td height="594"><iframe height="594" width="900" src="guidaview.php" frameborder=0 border=0 id="list_page"></iframe></td></tr>
 </table></td>
-</tr></table> </center>
+</tr></table></center>
 </body>
 
 </html>

@@ -10,6 +10,10 @@ include('int/open2.php');
 
 <head>
   <title>Guida</title>
+
+    <style type="text/css">
+        <? include_once('style.css'); ?>
+    </style>
 </head>
 <?
 
@@ -19,12 +23,11 @@ $rs = mysql_fetch_array($Result);
 
 ?>
 <body>
-
 <table border=0 width="100%">
 <tr><td height="10"></td></tr>
 <tr><td height="60" valign="middle"><h2><?=$rs['Titolo']?></h2></td></tr>
 
-<tr><td><div style="line-height:2;"><?=stripslashes($rs['Testo'])?></div></td></tr>
+<tr><td><?=stripslashes($rs['Testo'])?></td></tr>
 <?
 
 if ($rs['Tipologia'] == '1') {
@@ -40,8 +43,8 @@ $Result2 = mysql_query($MySql2);
 
 while ($rs2 = mysql_fetch_array($Result2)) {
 ?>
-<tr><td height="60" valign="middle"><font face="Georgia" size="3" color="#FFFFFF">&nbsp;&nbsp;<i><?=$rs2['Titolo']?></i></font></td></tr>
-<tr><td><font face="Georgia" size="2" color="#FFFFFF"><div style="line-height:2;"><?=stripslashes($rs2['Testo'])?></div></font></td></tr>
+<tr><td height="60" valign="middle"><h3><?=$rs2['Titolo']?></h3></td></tr>
+<tr><td><?=stripslashes($rs2['Testo'])?></td></tr>
 <?
 }}
 
