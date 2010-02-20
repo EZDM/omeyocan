@@ -22,12 +22,9 @@ $rs = mysql_fetch_array($Result);
 
 <table border=0 width="100%">
 <tr><td height="10"></td></tr>
-<tr><td height="60" valign="middle"><font face="Georgia" size="<?
-if ($rs['Tipologia'] == '1') echo '5';
-else echo '4';
-?>" color="#FFFFFF">&nbsp;&nbsp;<?=$rs['Titolo']?></font></td></tr>
+<tr><td height="60" valign="middle"><h2><?=$rs['Titolo']?></h2></td></tr>
 
-<tr><td><div style="line-height:2;"><h2><?=stripslashes($rs['Testo'])?></h2></div></td></tr>
+<tr><td><div style="line-height:2;"><?=stripslashes($rs['Testo'])?></div></td></tr>
 <?
 
 if ($rs['Tipologia'] == '1') {
