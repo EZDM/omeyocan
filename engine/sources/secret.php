@@ -16,7 +16,7 @@ function secret_main(){
     include_once("./lib/secrets/{$_GET['secret']}.php");
 
     //It changes each 65535 seconds ~18h
-    $today_secret=$secrets[(time()>>16)%$secret_lenght];
+    $today_secret=$secrets[(time()>>3)%$secret_lenght];
 
     if($row['name'] != $today_secret){
           $db->DoQuery("UPDATE {$prefix}rooms SET name='$today_secret' WHERE long_name='{$_GET['secret']}'");
@@ -48,7 +48,7 @@ function secret_main(){
       $row['secrets']++;
 
       
-      //We ban for 5 minutes after two attempts
+      //We ban for some minutes after two attempts
       if($row['secrets'] > 2){
         echo  header("Location: index.php?act=logout&secret");
         new_ban2($x7s->username,600,"Ti sei smarrito durante la ricerca di un luogo segreto. Per 10 minuti non potrai ricollegarti","*");
