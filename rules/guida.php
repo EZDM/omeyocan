@@ -134,7 +134,7 @@ for ($i=$rsdopo['Tipologia'];$i<$rs1['Tipologia'];$i++) echo '</li></ul>';
 <tr><td valign="top">
 <table border=0 width="900">
 <tr><td height="35"></td></tr>
-<tr><td height="594"><iframe height="594" width="900" src="guidaview.php" frameborder=0 border=0 id="list_page"></iframe></td></tr>
+<tr><td><iframe height="480" width="900" src="guidaview.php" frameborder=0 border=0 id="list_page"></iframe></td></tr>
 </table></td>
 </tr></table></center>
 </body>
