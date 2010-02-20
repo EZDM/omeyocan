@@ -1,5 +1,5 @@
 <?
-$db = mysql_connect('mysql.netsons.com',$par_DbUser,$par_DbPassword) or die("<b>ERRORE DI ACCESSO AI DATI</B><br><a href='Javascript:location.reload()'>riprova</a>");
+$db = mysql_connect('localhost',$par_DbUser,$par_DbPassword) or die("<b>ERRORE DI ACCESSO AI DATI</B><br><a href='Javascript:location.reload()'>riprova</a>");
 mysql_select_db($par_Conn);
 
 /*
