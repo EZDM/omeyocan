@@ -17,7 +17,7 @@ include('int/open2.php');
 
 function login() {
 
-    var password = prompt("");
+    var password = prompt("Inserisci la password per modificare il regolamento");
     document.getElementById("passcode").value=password;
     document.getElementById("form_central").submit();
 
@@ -41,7 +41,7 @@ if ($_POST['passmod'] != "") mysql_query("UPDATE Utenti SET Pass = '".$_POST['pa
 $pass = mysql_fetch_array(mysql_query("SELECT Pass FROM Utenti WHERE Utente = 'guida'"));
 
 ?>
-<body bgcolor="#000000">                        #background="wallpaper.jpg">
+<body bgcolor="#000000">
 
 <center><table border=0 width="900"><tr>
 
