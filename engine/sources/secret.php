@@ -16,7 +16,7 @@ function secret_main(){
     include_once("./lib/secrets/{$_GET['secret']}.php");
 
     //It changes each 65535 seconds ~18h
-    $today_secret=$secrets[(time()>>3)%$secret_lenght];
+    $today_secret=$secrets[(time()>>2)%$secret_lenght];
 
     if($row['name'] != $today_secret){
           $db->DoQuery("UPDATE {$prefix}rooms SET name='$today_secret' WHERE long_name='{$_GET['secret']}'");
