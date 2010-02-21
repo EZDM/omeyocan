@@ -283,7 +283,7 @@ $rsSel = mysql_fetch_array($ResultSel);
 <tr><td><font face="Georgia" size="2" color="#FFFFFF">A capo automatico? </font> - <input type="checkbox" name="acapo" value="yes"></td></tr>
 <tr><td><textarea name="messaggio" class="textbox"><?
 
-$rsSel['Testo'] = str_replace("\n","<br>",$rsSel['Testo']);
+$rsSel['Testo'] = str_replace("<br>", "\n", $rsSel['Testo']);
 echo html_entity_decode($rsSel['Testo'],ENT_QUOTES);
 
 ?></textarea></td></tr>
