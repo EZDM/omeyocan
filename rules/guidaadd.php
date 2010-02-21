@@ -53,11 +53,9 @@ function riavvio() {
 
 <?
 
-//if ($_POST['acapo'] != "") {
-//$_POST['messaggio'] = str_replace("\n","<br>",$_POST['messaggio']);
-//}
 
 $_POST['messaggio'] = htmlentities($_POST['messaggio'], ENT_QUOTES);
+$_POST['messaggio'] = str_replace("\n","<br>",$_POST['messaggio']);
 
 $_POST['title'] = htmlentities($_POST['title'], ENT_QUOTES);
 
