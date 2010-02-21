@@ -195,7 +195,7 @@ if ($_POST['position'] == $rsId['ID']) echo "SELECTED";
 if ($rsId['Tipologia'] >= 2) {
     for ($i=2;$i<=$rsId['Tipologia'];$i++) echo "&nbsp;&nbsp;";
 }
-echo $rsId['Titolo'];
+echo html_entity_decode($rsId['Titolo'];
 ?></option>
 <?}?>
 <option value="fine" <?
@@ -283,7 +283,7 @@ $rsSel = mysql_fetch_array($ResultSel);
 <tr><td><input type="text" name="title" class="corpo" value="<?=$rsSel['Titolo']?>"></td></tr>
 <tr><td><font face="Georgia" size="2" color="#FFFFFF">Inserire la spiegazione:</font></td></tr>
 <tr><td><font face="Georgia" size="2" color="#FFFFFF">A capo automatico? </font> - <input type="checkbox" name="acapo" value="yes"></td></tr>
-<tr><td><textarea name="messaggio" class="textbox"><?=$rsSel['Testo']?></textarea></td></tr>
+<tr><td><textarea name="messaggio" class="textbox"><?=html_entity_decode($rsSel['Testo'],ENT_QUOTES)?></textarea></td></tr>
 <?
 $maximum = $_POST['choose'];
 $rsType = mysql_fetch_array(mysql_query("SELECT Tipologia, Titolo FROM Guida WHERE ID = '$maximum'"));
