@@ -98,7 +98,7 @@ if ($_REQUEST['option'] == "register") {
 
 } elseif ($_REQUEST['option'] == "register2") {
 
-    $MySql = "UPDATE Guida SET Titolo = '".$_POST['title']."', Testo = '".$_POST['messaggio']."', Tipologia = '".$_POST['priority']."' WHERE ID = '".$_POST['choose']."'";
+    $MySql = "UPDATE Guida SET Titolo = '".$_POST['title']."', Testo = '".$_POST['messaggio']."' WHERE ID = '".$_POST['choose']."'";
     mysql_query($MySql);
 
     $MySqlProva = "SELECT * FROM Guida WHERE Titolo = '".$_POST['title']."' AND Testo = '".$_POST['messaggio']."'";
@@ -281,7 +281,12 @@ $rsSel = mysql_fetch_array($ResultSel);
 <tr><td><input type="text" name="title" class="corpo" value="<?=$rsSel['Titolo']?>"></td></tr>
 <tr><td><font face="Georgia" size="2" color="#FFFFFF">Inserire la spiegazione:</font></td></tr>
 <tr><td><font face="Georgia" size="2" color="#FFFFFF">A capo automatico? </font> - <input type="checkbox" name="acapo" value="yes"></td></tr>
-<tr><td><textarea name="messaggio" class="textbox"><?=html_entity_decode($rsSel['Testo'],ENT_QUOTES)?></textarea></td></tr>
+<tr><td><textarea name="messaggio" class="textbox"><?
+
+$rsSel['Testo'] = str_replace("\n","<br>",$rsSel['Testo']);
+echo html_entity_decode($rsSel['Testo'],ENT_QUOTES);
+
+?></textarea></td></tr>
 <?
 $maximum = $_POST['choose'];
 $rsType = mysql_fetch_array(mysql_query("SELECT Tipologia, Titolo FROM Guida WHERE ID = '$maximum'"));
@@ -290,28 +295,6 @@ $rsMaxNum = mysql_fetch_array(mysql_query("SELECT Tipologia, Titolo FROM Guida W
 
 if ($rsMaxNum['Tipologia'] >= $rsMinNum['Tipologia']) {
 ?>
-<tr><td><font face="Georgia" size="2" color="#FFFFFF">Attenzione!!! Modificando questo parametro si modificher&agrave; anche la struttura dei menu: rendere una sezione un sottomenu della sezione precedente, ad esempio, farà rendere anche tutti i sottomenu della sezione dei sottomenu della sezione precedente. Se ad esempio si vuole modificare la sezione <b>Scheda</b> rendendola sottomenu, i sottomenu di <b>Guida generale</b> saranno in successione ... HINT, Staff, master & Others, Scheda, generale... e così via!</font><br><br><select name="priority" class="selection"><?
-for ($f=($rsMinNum['Tipologia']-1);$f<=($rsMaxNum['Tipologia']+1);$f++) {
-
-$rsControllore = mysql_fetch_array(mysql_query("SELECT MAX(ID) FROM Guida WHERE ID < '$maximum' AND Tipologia = '$f'"));
-$rsControllo = mysql_fetch_array(mysql_query("SELECT Titolo, ID FROM Guida WHERE ID = '".$rsControllore['MAX(ID)']."'"));
-$rsControllore2 = mysql_fetch_array(mysql_query("SELECT MAX(ID) FROM Guida WHERE ID < '$maximum' AND ID > '".$rsControllo['ID']."' AND Tipologia = '".($f-1)."'"));
-$rsControllo2 = mysql_fetch_array(mysql_query("SELECT Titolo FROM Guida WHERE ID = '".$rsControllore2['MAX(ID)']."'"));
-
-if ($f == '1') {
-?>
-<option value="1" <?
-if ($maximum == '1') echo "SELECTED";
-?>>Sezione (a destra di <?=$rsControllo['Titolo']?>)</option>
-<?} else {?>
-<option value="<?=$f?>" <?
-if ($maximum == $f) echo "SELECTED";
-?>>Menu (<?
-if ($rsControllo2['Titolo'] != "") echo "submenu di ".$rsControllo2['Titolo'].")";
-else echo "dopo ".$rsControllo['Titolo'].")";
-?></option>
-<?}}?>
-</select></td></tr>
 <tr><td><input type="submit" name="invia" class="selection" value="Invia la modifica"></td></tr>
 </table></form>
 <?
