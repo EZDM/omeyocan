@@ -57,23 +57,9 @@ if ($_POST['acapo'] != "") {
 $_POST['messaggio'] = str_replace("\n","<br>",$_POST['messaggio']);
 }
 
-$_POST['messaggio'] = str_replace("è","&egrave;",$_POST['messaggio']);
-$_POST['messaggio'] = str_replace("à","&agrave;",$_POST['messaggio']);
-$_POST['messaggio'] = str_replace("ù","&ugrave;",$_POST['messaggio']);
-$_POST['messaggio'] = str_replace("ì","&igrave;",$_POST['messaggio']);
-$_POST['messaggio'] = str_replace("ò","&ograve;",$_POST['messaggio']);
+$_POST['messaggio'] = htmlentities($_POST['messaggio'], ENT_QUOTES);
 
-$_POST['messaggio'] = str_replace("é","&eacute;",$_POST['messaggio']);
-
-
-$_POST['title'] = str_replace("è","&egrave;",$_POST['title']);
-$_POST['title'] = str_replace("à","&agrave;",$_POST['title']);
-$_POST['title'] = str_replace("ù","&ugrave;",$_POST['title']);
-$_POST['title'] = str_replace("ì","&igrave;",$_POST['title']);
-$_POST['title'] = str_replace("ò","&ograve;",$_POST['title']);
-
-$_POST['title'] = str_replace("é","&eacute;",$_POST['title']);
-
+$_POST['title'] = htmlentities($_POST['title'], ENT_QUOTES);
 
 if ($_REQUEST['option'] == "register") {
 
@@ -83,26 +69,26 @@ if ($_REQUEST['option'] == "register") {
         $ResultInit = mysql_query($MySqlInit);
         $ID = mysql_num_rows($ResultInit) + 1;
 
-        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".addslashes($_POST['title'])."', '".addslashes($_POST['messaggio'])."', '$ID')";
+        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".$_POST['title']."', '".$_POST['messaggio']."', '$ID')";
         mysql_query($MySql);
 
     } elseif ($_POST['position'] == "inizio") {
 
         mysql_query("UPDATE Guida SET ID = ID + 1");
 
-        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".addslashes($_POST['title'])."', '".addslashes($_POST['messaggio'])."', '1')";
+        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".$_POST['title']."', '".$_POST['messaggio']."', '1')";
         mysql_query($MySql);
 
     } else {
 
         mysql_query("UPDATE Guida SET ID = ID + 1 WHERE ID > '".$_POST['position']."'");
 
-        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".addslashes($_POST['title'])."', '".addslashes($_POST['messaggio'])."', '".($_POST['position']+1)."')";
+        $MySql = "INSERT INTO Guida (Tipologia, Titolo, Testo, ID) VALUES ('".$_POST['priority']."', '".$_POST['title']."', '".$_POST['messaggio']."', '".($_POST['position']+1)."')";
         mysql_query($MySql);
 
     }
 
-    $MySqlProva = "SELECT * FROM Guida WHERE Titolo = '".addslashes($_POST['title'])."'";
+    $MySqlProva = "SELECT * FROM Guida WHERE Titolo = '".$_POST['title']."'";
     $Result = mysql_query($MySqlProva);
     if (mysql_num_rows($Result) != "") echo "<font face=Georgia size=2 color=#FFFFFF>Modifica effettuata correttamente</font>";
     else echo "<font face=Georgia size=2 color=#FFFFFF>Modifica non eseguita. Riprovare.</font>";
@@ -114,10 +100,10 @@ if ($_REQUEST['option'] == "register") {
 
 } elseif ($_REQUEST['option'] == "register2") {
 
-    $MySql = "UPDATE Guida SET Titolo = '".addslashes($_POST['title'])."', Testo = '".addslashes($_POST['messaggio'])."', Tipologia = '".$_POST['priority']."' WHERE ID = '".$_POST['choose']."'";
+    $MySql = "UPDATE Guida SET Titolo = '".$_POST['title']."', Testo = '".$_POST['messaggio']."', Tipologia = '".$_POST['priority']."' WHERE ID = '".$_POST['choose']."'";
     mysql_query($MySql);
 
-    $MySqlProva = "SELECT * FROM Guida WHERE Titolo = '".addslashes($_POST['title'])."' AND Testo = '".addslashes($_POST['messaggio'])."'";
+    $MySqlProva = "SELECT * FROM Guida WHERE Titolo = '".$_POST['title']."' AND Testo = '".$_POST['messaggio']."'";
     $ResultProva = mysql_query($MySqlProva);
     if (mysql_num_rows($ResultProva) != "") echo "<font face=Georgia size=2 color=#FFFFFF>Modifica effettuata correttamente</font>";
     else echo "<font face=Georgia size=2 color=#FFFFFF>Modifica non eseguita. Riprovare.</font>";
