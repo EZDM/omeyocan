@@ -195,7 +195,7 @@ if ($_POST['position'] == $rsId['ID']) echo "SELECTED";
 if ($rsId['Tipologia'] >= 2) {
     for ($i=2;$i<=$rsId['Tipologia'];$i++) echo "&nbsp;&nbsp;";
 }
-echo html_entity_decode($rsId['Titolo'];
+echo html_entity_decode($rsId['Titolo'],ENT_QUOTES);
 ?></option>
 <?}?>
 <option value="fine" <?
