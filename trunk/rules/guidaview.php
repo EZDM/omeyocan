@@ -27,7 +27,11 @@ $rs = mysql_fetch_array($Result);
 <tr><td height="10"></td></tr>
 <tr><td height="60" valign="middle"><h2><?=$rs['Titolo']?></h2></td></tr>
 
-<tr><td><?=$rs['Testo']?></td></tr>
+<tr><td><?
+
+echo html_entity_decode($rs['Testo'], ENT_QUOTES);
+
+?></td></tr>
 <?
 
 if ($rs['Tipologia'] == '1') {
@@ -44,7 +48,11 @@ $Result2 = mysql_query($MySql2);
 while ($rs2 = mysql_fetch_array($Result2)) {
 ?>
 <tr><td height="60" valign="middle"><h3><?=$rs2['Titolo']?></h3></td></tr>
-<tr><td><?=$rs2['Testo']?></td></tr>
+<tr><td><?
+
+echo html_entity_decode($rs2['Testo'], ENT_QUOTES);
+
+?></td></tr>
 <?
 }}
 
