@@ -220,6 +220,7 @@
 				font-size: $data[FontSize1];
 				background: $data[BGColor3];
 				text-align: left;
+                                font-weight: normal;
 			}
 			.inside_table {
 				border: 0;

@@ -1501,6 +1501,7 @@
 				($row[43] == 1) ? $def['sheet_modify'] = " checked=\"true\"" : $def['sheet_modify'] = "";
 				($row[44] == 1) ? $def['write_master'] = " checked=\"true\"" : $def['write_master'] = "";
 				($row[45] == 1) ? $def['gremios'] = " checked=\"true\"" : $def['gremios'] = "";
+				($row[46] == 1) ? $def['admin_abilities'] = " checked=\"true\"" : $def['admin_abilities'] = "";
 				
 				$body = "$txt[424]<Br><Br><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" align=\"center\">
 					<form action=\"index.php?act=adminpanel&cp_page=groupmanager&update=$_GET[edit]\" method=\"post\">
@@ -1672,6 +1673,9 @@
 					<td width=\"120\">Puo' scrivere in modo master</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"write_master\" value=\"1\"{$def['write_master']}></td>
 					</tr>
+					<td width=\"120\">Amministra le abilit&agrave;</td>
+						<td width=\"50\"><input type=\"checkbox\" name=\"admin_abilities\" value=\"1\"{$def['admin_abilities']}></td>
+					</tr>
 					<td width=\"120\">E' una gremios?</td>
 						<td width=\"50\"><input type=\"checkbox\" name=\"gremios\" value=\"1\"{$def['gremios']}></td>
 					</tr>
@@ -1756,9 +1760,10 @@
 					!isset($_POST['logo']) ? $_POST['logo'] = 0 : "";
 					!isset($_POST['write_master']) ? $_POST['write_master'] = 0 : "";
 					!isset($_POST['gremios']) ? $_POST['gremios'] = 0 : "";
+					!isset($_POST['admin_abilities']) ? $_POST['admin_abilities'] = 0 : "";
 					
 					// Save the settings
-					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]', gremios='$_POST[gremios]' WHERE usergroup='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]', gremios='$_POST[gremios]', admin_abilities='$_POST[admin_abilities]' WHERE usergroup='$_GET[update]'");
 					// Tell user they have been updated
 					$body .= "$txt[458]<Br><br>";
 					
@@ -3695,7 +3700,203 @@
 
 			</form>";
 			
-		}elseif($_GET['cp_page'] == "ad"){
+		}elseif($_GET['cp_page'] == "abilities"){
+			$head = "Gestione abilit&agrave;";
+                        $body = "";
+			
+			$query = "SELECT id, name FROM {$prefix}characteristic ORDER BY name";
+			$result_char = $db->DoQuery($query);
+			$char_list = array();
+	
+			while($row = $db->Do_Fetch_Assoc($result_char)){
+				$char_list[$row['id']] = $row['name'];
+			}
+			
+			$query = "SELECT id, name FROM {$prefix}ability WHERE dep = '' ORDER BY name";
+			$result_ab = $db->DoQuery($query);
+			$ability_list = array();
+	
+			while($row = $db->Do_Fetch_Assoc($result_ab)){
+				$ability_list[$row['id']] = $row['name'];
+			}
+
+			if(isset($_POST['id']) && $_POST['id']!=''){
+				if(isset($_POST['name']) && $_POST['name']!='' &&
+				   isset($_POST['dep']) &&
+				   isset($_POST['char']) && $_POST['char']!='' &&
+				   isset($_POST['gremios']) && $_POST['gremios']!=''){
+					$_GET['group'] = $_POST['gremios'];
+
+					if(preg_match("/[a-z]+/", $_POST['id'])){
+						$query = $db->DoQuery("SELECT count(*) AS count FROM {$prefix}ability WHERE id='{$_POST['id']}'");
+						$result = $db->Do_Fetch_Assoc($query);
+						if($result['count'] == 0){
+							$gremios = $_POST['gremios'];
+							if($_POST['gremios'] == $x7c->settings['usergroup_default']){
+								$_POST['gremios']="";
+								$gremios =  $x7c->settings['usergroup_default'];
+							}
+
+							$db->DoQuery("INSERT INTO {$prefix}ability 
+									(`id`, `name`, `dep`, `char`, `corp`) 
+									VALUES ('{$_POST['id']}', 
+										'{$_POST['name']}', 
+										'{$_POST['dep']}', 
+										'{$_POST['char']}',
+										'{$_POST['gremios']}'
+										)");
+
+							$query = $db->DoQuery("SELECT DISTINCT username FROM {$prefix}groups WHERE usergroup='$gremios'");
+							while($row = $db->Do_Fetch_Assoc($query)){
+								$db->DoQuery("INSERT INTO {$prefix}userability (`ability_id`, `username`, `value`)
+										VALUES ('{$_POST['id']}', '$row[username]', '0')");
+							}
+
+							$body .= "<h3 style=\"color: teal\">Abilit&agrave; inserita correttamente</h3>";
+						}
+						else {
+							$body .= "<h3 style=\"color: red\">Errore: id gi&agrave; in uso</h3>";
+						}
+					}
+					else {
+						$body .= "<h3 style=\"color: red\">Errore id non valido: deve contenere SOLO lettere minuscole</h3>";
+					}
+
+				}
+				else{
+					$body .= "<h3 style=\"color: red\">Errore: parametri mancanti</h3>";
+				}
+			}
+
+			if(isset($_GET['delete'])){
+				$query = "DELETE FROM {$prefix}ability WHERE id='$_GET[delete]'";
+				$db->DoQuery($query);
+				
+				$query = "DELETE FROM {$prefix}ability WHERE dep='$_GET[delete]'";
+				$db->DoQuery($query);
+				
+				$query = "DELETE FROM {$prefix}userability WHERE ability_id='$_GET[delete]'";
+				$db->DoQuery($query);
+			}
+
+			if(!isset($_GET['group']))
+				$_GET['group'] = $x7c->settings['usergroup_default'];
+
+			$body .= "<div style=\"text-align: center\">
+					<form>Seleziona la gremios:
+						<select onChange=\"location='index.php?act=adminpanel&cp_page=abilities&group='+this.options[this.selectedIndex].value\">\n";
+
+			$query = "SELECT usergroup FROM {$prefix}permissions WHERE gremios='1'";
+			$result = $db->DoQuery($query);
+			$usergroup_list = array();
+	
+			while($row = $db->Do_Fetch_Assoc($result)){
+				$usergroup_list[] = $row['usergroup'];
+				$selected = "";
+				if($_GET['group'] == $row['usergroup'])
+					$selected = "SELECTED";
+				$body .= "<option value=\"$row[usergroup]\" $selected>$row[usergroup]</option>\n";
+			}
+			
+
+			$body .= "</select></form></div>";
+
+			$body .= '<script language="javascript" type="text/javascript">
+                                                    function do_delete(id){
+                                                          if(!confirm(\'Attenzione!!! Se cancelli una abilit&agrave; tutti i PG la perderanno irreversibilmente.\n Vuoi proseguire?\'))
+                                                                  return;
+                                                          window.location.href=\'index.php?act=adminpanel&cp_page=abilities&group='.$_GET['group'].'&delete=\'+id;
+                                                    }
+				 </script>';
+
+
+			$corp = '';
+			if($_GET['group'] != $x7c->settings['usergroup_default'])
+				$corp = $_GET['group'];
+
+			$query = "SELECT * FROM {$prefix}ability WHERE corp='$corp'ORDER BY name";
+			$result = $db->DoQuery($query);
+                       
+			$body .="<table class=\"inner_table\" width=100%>
+                                   <tr>	<td class=\"col_header\">ID</td>
+					<td class=\"col_header\">Nome</td>
+					<td class=\"col_header\">Ab. primaria</td>
+					<td class=\"col_header\">Car. associata</td>
+					<td></td></tr>";
+ 
+                        while($row = $db->Do_Fetch_Assoc($result)){
+                        	$body .= "<tr>
+                         			<td class=\"dark_row\">$row[id]</td>
+						<td class=\"dark_row\">$row[name]</td>
+						<td class=\"dark_row\">$row[dep]</td>
+						<td class=\"dark_row\">$row[char]</td>";
+
+				// It is too dangerous allowing deletion of default abilities
+				if($_GET['group'] != $x7c->settings['usergroup_default'])
+					$body .="<td class=\"dark_row\">
+							<a href=\"#\" onClick=\"javascript: do_delete('$row[id]');\">[Elimina]</a></td>";
+
+				$body .= "</tr>";
+                        }
+
+			$body .= "</table>";
+
+
+			
+			$body .= "<h3>Inserisci una nuova abilit&agrave</h3>
+					<form action=\"index.php?act=adminpanel&cp_page=abilities\" method=\"post\">";
+			
+			$body .= "<table>
+					<tr>
+						<td>ID (deve essere univoco <br>e di sole lettere)</td>
+						<td><input type=\"text\" name=\"id\"></td>
+
+					</tr>
+					<tr>
+						<td>Nome abilita</td>
+						<td><input type=\"text\" name=\"name\"></td>
+
+					</tr>
+					<tr>
+						<td>Caratteristica associata</td>
+						<td><select name=\"char\">";
+						
+			foreach($char_list as $i => $name){
+				$body .= "<option value=\"$i\">$name</option>\n";
+			}
+
+			$body .= "</select></td>
+
+					</tr>
+					<tr>
+						<td>Abilit&agrave; primaria</td>
+						<td><select name=\"dep\">
+							<option value=\"\">Nessuna</option>";
+						
+			foreach($ability_list as $i => $name){
+				$body .= "<option value=\"$i\">$name</option>\n";
+			}
+
+			$body .= "</select></td>
+					</tr>
+					<tr>
+						<td>Gremios</td>
+						<td><select name=\"gremios\">";
+						
+			foreach($usergroup_list as $i){
+				$selected = "";
+				if($_GET['group'] == $i)
+					$selected = "SELECTED";
+				$body .= "<option value=\"$i\" $selected>$i</option>\n";
+			}
+
+			$body .= "</select></td>
+					</tr>
+					<tr><td><input type=\"submit\" value=\"Inserisci\"></td></tr>";
+
+			$body .+ "</form>";
+
+                }elseif($_GET['cp_page'] == "ad"){
 			// A permission denied error occured, Don't show admin menu, only the error
 			$head = $txt[14];
 			$cbody = $txt[216];
@@ -3716,8 +3917,7 @@
 				$check_page = $id;
 				if($check_page == "groupmanager")
 					$check_page = "groups";
-				if($x7c->permissions["admin_{$check_page}"] != 1){
-
+				if($x7c->permissions["admin_{$check_page}"] == 0){
 					return "";
 
 				}else{
@@ -3741,12 +3941,13 @@
 						<td width=\"20%\" height=\"100%\">
 							<table width=\"100%\" class=\"ucp_table2\" height=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 								".printlink("main",$txt[137])."
-								".printlink("settings",$txt[139])."
-								".printlink("groupmanager",$txt[309])."
-								".printlink("users",$txt[310])."
-								".printlink("rooms",$txt[311])."
-								".printlink("ban",$txt[312])."
-								".printlink("logs",$txt[314])."
+								".printlink("settings","Settaggi server")."
+								".printlink("abilities", "Abilit&agrave;")."
+								".printlink("groupmanager","Gruppi/Gremios")."
+								".printlink("users","Utenti")."
+								".printlink("ban","Ban")."
+								".printlink("rooms","Stanze")."
+								".printlink("logs","Registrazioni stanze")."
 								".printlink("mail",$txt[316])."
 								".printlink("panic","Oscurit&agrave;, multi-kill")."
 								".printlink("alarms","Allarmi")."

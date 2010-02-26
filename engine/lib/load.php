@@ -328,6 +328,7 @@
 			$return['admin_objects'] = 0;
 			$return['sheet_modify'] = 0;
 			$return['write_master'] = 0;
+                        $return['admin_abilities'] = 0;
 			$temp = 0;
 
 			// Load other permissions
@@ -397,8 +398,9 @@
 				$return['admin_objects']+=$row[41];
 				$return['sheet_modify']+=$row[43];
 				$return['write_master']+=$row[44];
+                                $return['admin_abilities']+=$row[46];
 				
-				$temp += $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38]+$row[39]+$row[40]+$row[41];
+				$temp += $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+$row[38]+$row[39]+$row[40]+$row[41]+$row[46];
 				
 
 
