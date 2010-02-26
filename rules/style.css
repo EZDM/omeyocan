@@ -1,11 +1,11 @@
 body {
 	margin:25px;
-	color: white;
+	color: teal;
 	background: black;
 }
 ul.menu {list-style:none; margin:0; padding:0}
 ul.menu * {margin:0; padding:0; font-size: 8pt;}
-ul.menu a {display:block; color:#fff; text-decoration:none}
+ul.menu a {display:block; text-decoration:none}
 ul.menu li {position:relative; float:left; margin-right:2px}
 ul.menu ul {position:absolute; top:26px; left:0; background:#000000; display:none; opacity:0; list-style:none}
 ul.menu ul li {position:relative; border:1px solid #aaa; border-top:none; width:148px; margin:0}
@@ -19,6 +19,7 @@ ul.menu .topline {border-top:1px solid #aaa;}
 
 a:link, a:visited {
   text-decoration: none;
+  color: teal;
 }
 
 a:hover {
@@ -26,6 +27,6 @@ a:hover {
 }
 
 td {
-	text-color: white;
+	text-color: teal;
 }
 
