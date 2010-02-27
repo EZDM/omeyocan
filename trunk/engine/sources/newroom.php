@@ -62,8 +62,9 @@
 			return 0;
 		}
 		
+				$body = "<h3 style=\"color: red\">Se vuoi creare una stanza privata per un utente, usa <a href=\"index.php?act=adminpanel&cp_page=objects&proom=1\">questo link</a></h3>";
 		// Print the form
-				$body = "	<form action=\"index.php?act=newroom2\" method=\"post\" name=\"newroomform\">
+				$body .= "	<form action=\"index.php?act=newroom2\" method=\"post\" name=\"newroomform\">
 							<table border=\"0\" width=\"400\" cellspacing=\"5\" cellpadding=\"0\">
 								<tr valign=\"top\">
 									<td width=\"400\" style=\"text-align: center\" colspan=\"4\">$txt[62]<Br><Br></td>
@@ -170,7 +171,7 @@
 		$error = "";
 		$_POST['roomtopic']='';
 		// Make sure all values were filled out and check for errors in it
-		if($_POST['roomname'] == "" || eregi("\.|'|,|;|\*",$_POST['roomname']))
+		if($_POST['roomname'] == "" || eregi("\ |\.|'|,|;|\*",$_POST['roomname']))
 			$error = $txt[72];
 			
 		if($_POST['roomlong'] == "" || eregi("\.|'|,|;|\*",$_POST['roomlong']))
