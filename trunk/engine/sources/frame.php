@@ -90,7 +90,7 @@ $row = $db->Do_Fetch_Assoc($query);
 
 
 //If it is private
-if($row['type'] == 2){
+if($row['type'] == 2 && (!isset($_GET['frame']) || $_GET['frame']!="update" && $_GET['frame']!="send")){
 	if($x7s->username != $_GET['room'] && !$x7c->permissions['admin_panic']){
 		//We are not the owner of the room or the master..
 		//To enter we must own the keyCode
@@ -107,44 +107,41 @@ if($row['type'] == 2){
 						$univoque_key
 					");
 
-						$ok=false;
-						while(($row = $db->Do_Fetch_Assoc($query))!=null && !$ok){
-							if($univoque_key=='')
-							$_GET['key_used'] = $row['id'];
+		$ok=false;
+		while(($row = $db->Do_Fetch_Assoc($query))!=null && !$ok){
+			$ok = true;
+			if($univoque_key=='')
+				$_GET['key_used'] = $row['id'];
 								
-							if($_GET['frame']!="update" &&	$_GET['frame']!="send" && $row['uses'] >= 0){
-								//If we have a limited access to the room whe must update the use of the keyCode
-								$remain = $row['uses'] -1;
+			if($row['uses'] > 0){
+				//If we have a limited access to the room whe must update the use of the keyCode
+				$remain = $row['uses'] - 1;
 
-								if($remain < 0){
-									$db->DoQuery("DELETE FROM {$prefix}objects
-											WHERE
-											owner = '{$x7s->username}' AND
-											name = 'key_$_GET[room]' AND
-											id = '$_GET[key_used]'
-										");
-								}
-								else{
-									$db->DoQuery("UPDATE {$prefix}objects
-												SET uses=$remain
-												WHERE
-												owner = '{$x7s->username}' AND
-												name = 'key_$_GET[room]' AND
-												id = '$_GET[key_used]'
-										");
-									$ok=true;
-								}
-							}
-							else
-							$ok=true;
+				if($remain <= 0){
+					$db->DoQuery("DELETE FROM {$prefix}objects
+							WHERE
+							owner = '{$x7s->username}' AND
+							name = 'key_$_GET[room]' AND
+							id = '$_GET[key_used]'
+						");
+				}
+				else{
+					$db->DoQuery("UPDATE {$prefix}objects
+								SET uses=$remain
+								WHERE
+								owner = '{$x7s->username}' AND
+								name = 'key_$_GET[room]' AND
+								id = '$_GET[key_used]'
+						");
+				}
+			}
 
-						}
-
-						if(!$ok){
-							//We do not own a valid key
-							header("Location: index.php?errore=nokey");
-							return;
-						}
+		}
+		if(!$ok){
+			//We do not own a valid key
+			header("Location: index.php?errore=nokey");
+			return;
+		}
 							
 	}
 }
