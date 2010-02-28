@@ -1500,7 +1500,7 @@ function sheet_page_corp(){
 									
 								foreach($ability as $cur){
 									if($cur['value'] != $_POST[$cur['ab_id']]){
-										if(!in_array($cur['corp'],$x7p->profile['usergroup'])){
+										if(!in_array($cur['corp'],$x7p->profile['usergroup']) && $cur['corp']!="_personal"){
 											$ok=false;
 											$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
 										}
@@ -1622,13 +1622,13 @@ function sheet_page_corp(){
 		$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
 		
-		if(in_array($cur['corp'],$x7p->profile['usergroup']) || checkIfModifySheet())
+		if(in_array($cur['corp'],$x7p->profile['usergroup']) || $cur['corp'] == "_personal" || checkIfModifySheet())
 			$body .= "<input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">";
 
 		$body .= "<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>";
 		$body .= "<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>";
 
-		if(in_array($cur['corp'],$x7p->profile['usergroup']) || checkIfModifySheet())
+		if(in_array($cur['corp'],$x7p->profile['usergroup']) || $cur['corp'] == "_personal" || checkIfModifySheet())
 			$body .= "<input class=\"button\" type=\"button\" value=\"+\" onClick=\"return add('{$cur['ability_id']}');\">";
 
 		$body .= "<input type=\"hidden\" name=\"".$cur['ability_id']."_min\" value=\"{$cur['value']}\">
