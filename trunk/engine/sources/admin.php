@@ -3730,7 +3730,15 @@
 					if(preg_match("/[a-z]+/", $_POST['id'])){
 						$query = $db->DoQuery("SELECT count(*) AS count FROM {$prefix}ability WHERE id='{$_POST['id']}'");
 						$result = $db->Do_Fetch_Assoc($query);
-						if($result['count'] == 0){
+						$personal = false;
+
+						if($_POST['gremios']=="_personal"){
+							$query_username = $db->DoQuery("SELECT count(*) AS count FROM {$prefix}users WHERE username='{$_POST['username']}'");
+							$result_username = $db->Do_Fetch_Assoc($query_username);
+							$personal = true;
+						}
+
+						if($result['count'] == 0 && (!$personal || $result_username['count']) != 0){
 							$gremios = $_POST['gremios'];
 							if($_POST['gremios'] == $x7c->settings['usergroup_default']){
 								$_POST['gremios']="";
@@ -3746,16 +3754,25 @@
 										'{$_POST['gremios']}'
 										)");
 
-							$query = $db->DoQuery("SELECT DISTINCT username FROM {$prefix}groups WHERE usergroup='$gremios'");
-							while($row = $db->Do_Fetch_Assoc($query)){
+							if(!$personal){
+								$query = $db->DoQuery("SELECT DISTINCT username FROM {$prefix}groups WHERE usergroup='$gremios'");
+								while($row = $db->Do_Fetch_Assoc($query)){
+									$db->DoQuery("INSERT INTO {$prefix}userability (`ability_id`, `username`, `value`)
+											VALUES ('{$_POST['id']}', '$row[username]', '0')");
+								}
+							}
+							else{
 								$db->DoQuery("INSERT INTO {$prefix}userability (`ability_id`, `username`, `value`)
-										VALUES ('{$_POST['id']}', '$row[username]', '0')");
+											VALUES ('{$_POST['id']}','{$_POST['username']}','0')");
 							}
 
 							$body .= "<h3 style=\"color: teal\">Abilit&agrave; inserita correttamente</h3>";
 						}
-						else {
+						else if(!$personal){
 							$body .= "<h3 style=\"color: red\">Errore: id gi&agrave; in uso</h3>";
+						}
+						else {	
+							$body .= "<h3 style=\"color: red\">Errore: utente non esistente</h3>";
 						}
 					}
 					else {
@@ -3798,8 +3815,11 @@
 				$body .= "<option value=\"$row[usergroup]\" $selected>$row[usergroup]</option>\n";
 			}
 			
-
-			$body .= "</select></form></div>";
+			$selected = "";
+			if($_GET['group'] == "_personal")
+				$selected = "SELECTED";
+			$body .= "<option value=\"_personal\" $selected>Ad personam</option>
+					</select></form></div>";
 
 			$body .= '<script language="javascript" type="text/javascript">
                                                     function do_delete(id){
@@ -3807,6 +3827,15 @@
                                                                   return;
                                                           window.location.href=\'index.php?act=adminpanel&cp_page=abilities&group='.$_GET['group'].'&delete=\'+id;
                                                     }
+
+						    function show_personal(value){
+							if(value=="_personal"){
+								document.getElementById("personal").style.visibility = "visible";
+							}
+							else{
+								document.getElementById("personal").style.visibility = "hidden";
+							}
+						    }
 				 </script>';
 
 
@@ -3814,22 +3843,45 @@
 			if($_GET['group'] != $x7c->settings['usergroup_default'])
 				$corp = $_GET['group'];
 
-			$query = "SELECT * FROM {$prefix}ability WHERE corp='$corp'ORDER BY name";
+
+			$view_personal = ($_GET['group']=="_personal");
+
+			if(!$view_personal)
+				$query = "SELECT * FROM {$prefix}ability WHERE corp='$corp'ORDER BY name";
+			else
+				$query = "SELECT * FROM {$prefix}ability ab,
+							{$prefix}userability ua
+						WHERE ab.id = ua.ability_id
+						AND ab.corp = '$corp'
+
+						ORDER BY name";
+
 			$result = $db->DoQuery($query);
                        
+			
+			$personal_col = "";
+			if($view_personal)
+				$personal_col = "<td class=\"col_header\">Utente</td>";
+
 			$body .="<table class=\"inner_table\" width=100%>
                                    <tr>	<td class=\"col_header\">ID</td>
 					<td class=\"col_header\">Nome</td>
 					<td class=\"col_header\">Ab. primaria</td>
 					<td class=\"col_header\">Car. associata</td>
+					$personal_col
 					<td></td></tr>";
+
  
                         while($row = $db->Do_Fetch_Assoc($result)){
+				$personal_col = "";
+				if($view_personal)
+					$personal_col = "<td class=\"dark_row\">$row[username]</td>";
                         	$body .= "<tr>
                          			<td class=\"dark_row\">$row[id]</td>
 						<td class=\"dark_row\">$row[name]</td>
 						<td class=\"dark_row\">$row[dep]</td>
-						<td class=\"dark_row\">$row[char]</td>";
+						<td class=\"dark_row\">$row[char]</td>
+						$personal_col";
 
 				// It is too dangerous allowing deletion of default abilities
 				if($_GET['group'] != $x7c->settings['usergroup_default'])
@@ -3881,7 +3933,7 @@
 					</tr>
 					<tr>
 						<td>Gremios</td>
-						<td><select name=\"gremios\">";
+						<td><select name=\"gremios\" onChange=\"show_personal(this.value)\">";
 						
 			foreach($usergroup_list as $i){
 				$selected = "";
@@ -3889,12 +3941,21 @@
 					$selected = "SELECTED";
 				$body .= "<option value=\"$i\" $selected>$i</option>\n";
 			}
+		
+			$selected = "";
+			if($_GET['group'] == "_personal")
+				$selected = "SELECTED";
 
-			$body .= "</select></td>
+			$body .= "<option value=\"_personal\" $selected>Ad personam</option>
+					</select></td>
+					</tr>
+					<tr id=\"personal\" style=\"visibility: hidden;\">
+						<td>Utente:</td>
+						<td><input type=\"text\" name=\"username\"></td>
 					</tr>
 					<tr><td><input type=\"submit\" value=\"Inserisci\"></td></tr>";
 
-			$body .+ "</form>";
+			$body .= "</form>";
 
                 }elseif($_GET['cp_page'] == "ad"){
 			// A permission denied error occured, Don't show admin menu, only the error
