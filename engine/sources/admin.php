@@ -3943,13 +3943,16 @@
 			}
 		
 			$selected = "";
-			if($_GET['group'] == "_personal")
+			$visibility = "hidden";
+			if($_GET['group'] == "_personal"){
 				$selected = "SELECTED";
+				$visibility = "visible";
+			}
 
 			$body .= "<option value=\"_personal\" $selected>Ad personam</option>
 					</select></td>
 					</tr>
-					<tr id=\"personal\" style=\"visibility: hidden;\">
+					<tr id=\"personal\" style=\"visibility: $visibility;\">
 						<td>Utente:</td>
 						<td><input type=\"text\" name=\"username\"></td>
 					</tr>
