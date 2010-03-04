@@ -84,7 +84,7 @@
 	
 	function object_uses($owner, $obj, $use){
 		global $x7s, $x7c, $prefix, $db;
-		$db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
+		$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
 		if($row = $db->Do_Fetch_assoc($query))	
 			$msg = "<b>CAMBIO USI OGGETTO</b>: l\'utente <b>{$x7s->username} </b> cambia l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 		else
@@ -98,7 +98,7 @@
 	
 	function object_usage($owner, $obj, $use){
 		global $x7s, $x7c, $prefix, $db;
-		$db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
+		$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
 		if($row = $db->Do_Fetch_assoc($query))
 			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 		else	
