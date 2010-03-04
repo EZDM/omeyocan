@@ -133,6 +133,8 @@ if($row['type'] == 2 && (!isset($_GET['frame']) || $_GET['frame']!="update" && $
 								name = 'key_$_GET[room]' AND
 								id = '$_GET[key_used]'
 						");
+					include_once('./lib/alarms.php');
+  					object_usage($x7s->username, $_GET[key_used], $remain);
 				}
 			}
 
