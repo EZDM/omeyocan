@@ -340,7 +340,7 @@
                                                 if($row['uses'] > 0){
                                                         $newusage = $row['uses'] - 1;
                                                         $db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' WHERE id='{$obj[1]}'");
-							include_once('./lib/alarms.php')::
+							include_once('./lib/alarms.php');
 							object_usage($x7s->username, $obj[1], $newusage);
                                                 }
                                         }
