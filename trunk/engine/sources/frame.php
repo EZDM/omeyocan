@@ -112,7 +112,8 @@ if($row['type'] == 2 && (!isset($_GET['frame']) || $_GET['frame']!="update" && $
 			$ok = true;
 			if($univoque_key=='')
 				$_GET['key_used'] = $row['id'];
-								
+					
+			$remain = -1;			
 			if($row['uses'] > 0){
 				//If we have a limited access to the room whe must update the use of the keyCode
 				$remain = $row['uses'] - 1;
@@ -133,10 +134,10 @@ if($row['type'] == 2 && (!isset($_GET['frame']) || $_GET['frame']!="update" && $
 								name = 'key_$_GET[room]' AND
 								id = '$_GET[key_used]'
 						");
-					include_once('./lib/alarms.php');
-  					object_usage($x7s->username, $_GET[key_used], $remain);
 				}
 			}
+			include_once('./lib/alarms.php');
+  			object_usage($x7s->username, $_GET[key_used], $remain);
 
 		}
 		if(!$ok){

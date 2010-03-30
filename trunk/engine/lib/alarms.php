@@ -29,7 +29,7 @@
 	function double_login($room){
 		global $x7s, $x7c, $prefix, $db;
 		
-		$msg = " <b>DOPPIO LOGIN:</b> l\'utente <b>$x7s->username </b> cerca di aprire una seconda finestra in $room mentre sta in <br>";
+		$msg = "<b>DOPPIO LOGIN:</b> l\'utente <b>$x7s->username </b> cerca di aprire una seconda finestra in $room mentre sta in <br>";
 		$query = $db->DoQuery("SELECT room,ip FROM {$prefix}online WHERE name='$x7s->username'");
 		
 		while($row = $db->Do_Fetch_assoc($query)){
@@ -48,7 +48,7 @@
 		if($page=='')
 			$page="main";
 		
-		$msg = " <b>MODIFICA SCHEDA</b>: l\'utente <b>{$x7s->username} </b> modifica la pagina <b>$page</b> dell\'utente <b>$modified</b> <br>";
+		$msg = "<b>MODIFICA SCHEDA</b>: l\'utente <b>{$x7s->username} </b> modifica la pagina <b>$page</b> dell\'utente <b>$modified</b> <br>";
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
@@ -59,7 +59,7 @@
 	function object_assignement($owner, $obj){
 		global $x7s, $x7c, $prefix, $db;
 		
-		$msg = " <b>ASSEGNA OGGETTO</b>: l\'utente <b>{$x7s->username} </b> assegna l\'oggetto <b>$obj</b> all\'utente <b>$owner</b> <br>";
+		$msg = "<b>ASSEGNA OGGETTO</b>: l\'utente <b>{$x7s->username} </b> assegna l\'oggetto <b>$obj</b> all\'utente <b>$owner</b> <br>";
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
@@ -72,7 +72,7 @@
 	function object_moves($owner,$old, $obj){
 		global $x7s, $x7c, $prefix, $db;
 		
-		$msg = " <b>SPOSTA OGGETTO</b>: l\'utente <b>{$x7s->username} </b> assegna l\'oggetto <b>$obj</b> dall\'utente <b>$old</b> all\'utente <b>$owner</b><br>";
+		$msg = "<b>SPOSTA OGGETTO</b>: l\'utente <b>{$x7s->username} </b> assegna l\'oggetto <b>$obj</b> dall\'utente <b>$old</b> all\'utente <b>$owner</b><br>";
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
@@ -86,9 +86,9 @@
 		global $x7s, $x7c, $prefix, $db;
 		$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
 		if($row = $db->Do_Fetch_assoc($query))	
-			$msg = " <b>CAMBIO USI OGGETTO</b>: l\'utente <b>{$x7s->username} </b> cambia l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
+			$msg = "<b>CAMBIO USI OGGETTO</b>: l\'utente <b>{$x7s->username} </b> cambia l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 		else
-			$msg = " <b>CAMBIO USI OGGETTO</b>: l\'utente <b>{$x7s->username} </b> cambia l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
+			$msg = "<b>CAMBIO USI OGGETTO</b>: l\'utente <b>{$x7s->username} </b> cambia l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 		
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
@@ -98,16 +98,19 @@
 	
 	function object_usage($owner, $obj, $use){
 		global $x7s, $x7c, $prefix, $db;
+		$msg = "";
 		$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
 		if($row = $db->Do_Fetch_assoc($query))
-			$msg = " <b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
+			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 		else	
-			$msg = " <b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
+			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 
-		if(isset($_GET['room']))
-			$msg .= " <b>Stanza:</b> {$_GET['room']}";
-		if(isset($_POST['msg']))
-			$msg .= " <b>Messaggio:</b> {$_POST['msg']}";
+		if(isset($_GET['room'])){
+			$msg .= "<b>Stanza:</b> ".$_GET['room']."<br>";
+		}
+		if(isset($_POST['msg'])){
+			$msg .= "<b>Messaggio:</b> ".$_POST['msg']."<br>";
+		}
 
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
