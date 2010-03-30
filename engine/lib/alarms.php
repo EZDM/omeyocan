@@ -104,9 +104,9 @@
 		else	
 			$msg = " <b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 
-		if (isset($_GET['room']))
+		if(isset($_GET['room']))
 			$msg .= " <b>Stanza:</b> {$_GET['room']}";
-		if (isset($_POST['msg']))
+		if(isset($_POST['msg']))
 			$msg .= " <b>Messaggio:</b> {$_POST['msg']}";
 
 		$time = time();
