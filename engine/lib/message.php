@@ -336,13 +336,14 @@
                                                 else{
                                                         $obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']."}</span>";
                                                 }
-                                                        
+                                                
+						$newusage = -1;        
                                                 if($row['uses'] > 0){
                                                         $newusage = $row['uses'] - 1;
                                                         $db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' WHERE id='{$obj[1]}'");
-							include_once('./lib/alarms.php');
-							object_usage($x7s->username, $obj[1], $newusage);
                                                 }
+						include_once('./lib/alarms.php');
+						object_usage($x7s->username, $obj[1], $newusage);
                                         }
 					
 					

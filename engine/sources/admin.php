@@ -3574,7 +3574,7 @@
 				
 			$body = $navigator;
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$body .= date($x7c->settings['date_format_full'],$row['time'])."<b>User: $row[user] </b><br> $row[msg]<br>";
+				$body .= date($x7c->settings['date_format_full'],$row['time'])." <b>User: $row[user] </b><br> $row[msg]<br>";
 			}
 			$body .= $navigator;
 			
