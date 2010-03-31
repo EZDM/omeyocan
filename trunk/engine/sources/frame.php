@@ -137,7 +137,7 @@ if($row['type'] == 2 && (!isset($_GET['frame']) || $_GET['frame']!="update" && $
 				}
 			}
 			include_once('./lib/alarms.php');
-  			object_usage($x7s->username, $_GET[key_used], $remain);
+  			object_usage($x7s->username, $_GET['key_used'], $remain);
 
 		}
 		if(!$ok){
