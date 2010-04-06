@@ -109,7 +109,7 @@
 		if($x7c->room_data['logged'] == 1 && $room != "" && $x7c->settings['enable_logging'] == 1){
 			include_once("./lib/logs.php");
 			$log = new logs(1,$room);
-			$log->add($x7s->username,$body);
+			$log->add($x7s->username,$body_parsed);
 		}
 
 	}
