@@ -105,13 +105,6 @@
 		else	
 			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> assegnando <b>$use</b> usi<br>";
 
-		if(isset($_GET['room'])){
-			$msg .= "<b>Stanza:</b> ".$_GET['room']."<br>";
-		}
-		if(isset($_POST['msg'])){
-			$msg .= "<b>Messaggio:</b> ".$_POST['msg']."<br>";
-		}
-
 		$time = time();
 		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
 		
