@@ -644,9 +644,6 @@
 							$message = "<b>Warning: wrong log format </b>".$entry;
 						}
 
-						// Parse and display
-						$message = parse_message($message);
-												
 						$body .= "<b>$sender</b>[$date]: $message<br>";
 						
 					}
