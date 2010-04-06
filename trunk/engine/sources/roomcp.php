@@ -630,6 +630,7 @@
 					$body .= "$txt[249]  <a href=\"index.php?act=roomcp&cp_page=logs&subact=clear&room=$_GET[room]\">[$txt[250]]</a><Br>{$pages}<hr>";
 					
 					include_once("./lib/message.php");
+					$body .= '<div style="background: black; color: white;">';
 					foreach($contents as $linenum=>$entry){
 						// Get date and sender
 						$messarge="";
@@ -644,11 +645,11 @@
 							$message = "<b>Warning: wrong log format </b>".$entry;
 						}
 
-						$body .= "<b>$sender</b>[$date]: $message<br>";
+						$body .= "<b>$sender</b>[$date]: $message<br><br>";
 						
 					}
 					
-					$body .= "<hr>$pages<Br><Br>";
+					$body .= "</div><hr>$pages<Br><Br>";
 				}
 				
 			}
