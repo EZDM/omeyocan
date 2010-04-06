@@ -169,6 +169,7 @@
 	<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">
 	<LINK REL=\"SHORTCUT ICON\" HREF=\"./favicon.ico\">
 	{$this->style_sheet}
+	{$this->ss_mini}
 </head>");
 			
 			// If this is a frameset page we can't add <body> to it
