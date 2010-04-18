@@ -244,8 +244,7 @@
 													document.getElementById('posta').src = "./graphic/05postasi.jpg";
 													
 													if(!newMail){
-														var tardis = document.getElementById('tardis');
-														tardis.Play();
+														PlayTardis();
 													}
 													
 													newMail = 1;

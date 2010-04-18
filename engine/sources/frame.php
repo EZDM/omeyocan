@@ -761,8 +761,7 @@ switch($_GET['frame']){
 													document.getElementById('posta').src = "./graphic/05postasi.jpg";
 													
 													if(!newMail){
-														var tardis = document.getElementById('tardis');
-														try { tardis.Play(); } catch(e) {}
+														PlayTardis();
 													}
 													
 													newMail = 1;
