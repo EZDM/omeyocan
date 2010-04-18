@@ -1,9 +1,50 @@
+<script language="JavaScript">
+<!--
+// F. Permadi May 2000
+function getFlashMovieObject(movieName)
+{
+  if (window.document[movieName]) 
+  {
+    return window.document[movieName];
+  }
+  if (navigator.appName.indexOf("Microsoft Internet")==-1)
+  {
+    if (document.embeds && document.embeds[movieName])
+      return document.embeds[movieName]; 
+  }
+  else // if (navigator.appName.indexOf("Microsoft Internet")!=-1)
+  {
+    return document.getElementById(movieName);
+  }
+}
+
+function StopTardis()
+{
+	var flashMovie=getFlashMovieObject("tardisFlash");
+	flashMovie.StopPlay();
+}
+
+function PlayTardis()
+{
+	var flashMovie=getFlashMovieObject("tardisFlash");
+	flashMovie.Play();
+}
+
+//-->
+</script>
+
 <div id="debug"></div>
-<embed src="./graphic/tardis.wav" autostart="false" width=0 height=0 id="tardis" enablejavascript="true" />
-<!--  
-<embed src="./graphic/bell.mp3" autostart="false" width=0 height=0 id="bell" enablejavascript="true" />
-<embed src="./graphic/silence.mp3" autostart="yes" width=0 height=0 id="silence" enablejavascript="true" />
--->
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0"
+ id="tardisFlash" width=0 height=0> 
+              <param name=movie value="./graphic/tardis.swf"> 
+              <param name=quality value=high> 
+              <param name=play value=false> 
+              <param name=bgcolor value=#FFFFFF> 
+              <embed play=false swliveconnect="true" name="tardisFlash" src="./graphic/tardis.swf" quality=high bgcolor=#FFFFFF  
+ width=0 height=0 type="application/x-shockwave-flash"  
+ pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"> </embed > 
+ </object >
+
 
       
 	<?PHP 
