@@ -1283,7 +1283,7 @@ function sheet_page_main(){
 											<option value=\"1\" $female>F</option>
 						</select>
 					</div>
-					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"15\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
+					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
 					";
 
 						$time = time();
