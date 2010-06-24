@@ -1,6 +1,6 @@
 <?PHP
 
-	function toggle_heal($pg, $heal){
+    function toggle_heal($pg, $heal){
         global $db, $prefix;
 		$errore='';
 		$time=time();

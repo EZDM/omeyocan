@@ -3622,7 +3622,8 @@
 			}
 			
 			if(isset($_GET['multihurt'])){
-				$db->DoQuery("UPDATE {$prefix}users SET info = info - 1");
+				$time = time();
+				$db->DoQuery("UPDATE {$prefix}users SET info = info - 1, heal_time ='$time'");
 				$msg .= "<b>Hai tolto un PF a tutti!</b>";				
 			}
 			
