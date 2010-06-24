@@ -155,7 +155,7 @@
                     $get_room="&room=$room";
                     
 		if(!$costitution && !$sheet){
-			$query = $db->DoQuery("SELECT username, position, talk,long_name,type,info,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, bio, position, talk,long_name,type,info,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r
                                             WHERE (r.name = u.position
@@ -164,7 +164,7 @@
                                             {$order}");
 		}
 		elseif($sheet){
-			$query = $db->DoQuery("SELECT username, position, talk,long_name,type,info,m_invisible AS invisible
+			$query = $db->DoQuery("SELECT username, bio, position, talk,long_name,type,info,m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r
                                             WHERE (r.name = u.position
@@ -174,7 +174,7 @@
                                             {$order}");
 		}
 		elseif($costitution){
-			$query = $db->DoQuery("SELECT u.username AS username, position,talk,long_name,type,info, m_invisible AS invisible
+			$query = $db->DoQuery("SELECT u.username AS username, bio, position,talk,long_name,type,info, m_invisible AS invisible
                                           FROM {$prefix}users u,
                                             {$prefix}rooms r,
                                             {$prefix}usercharact uc
@@ -321,9 +321,10 @@
 					$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
 				elseif(in_array("Controller", $info->profile['usergroup']))
 					$master_gif='&nbsp;<img src="./graphic/controller_gif.gif" />';
-				
+			
+				$gremios_gif = "<img src=\"".$row['bio']."\">";
 				$list[$cur] .= "\n<tr>
-							<td class=\"dark_row\"><a $barred class=\"$dead_fmt\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
+							<td class=\"dark_row\"><a $barred class=\"$dead_fmt\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']} $gremios_gif$master_gif</a></td>
 							<td class=\"dark_row\">{$position}</td>";
 				
 				if($room!='' && $room!="Mappa")
