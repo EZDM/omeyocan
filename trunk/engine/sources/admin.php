@@ -3621,6 +3621,11 @@
 				$msg .= "<b>Hai distrutto tutti gli oggetti!</b>";				
 			}
 			
+			if(isset($_GET['multihurt'])){
+				$db->DoQuery("UPDATE {$prefix}users SET info = info - 1");
+				$msg .= "<b>Hai tolto un PF a tutti!</b>";				
+			}
+			
 
 			if($x7c->settings['panic']){
 				$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: red; font-weight: bold\">Attivata</span><br>
@@ -3643,10 +3648,17 @@
                                                                   return;
                                                           window.location.href='index.php?act=adminpanel&cp_page=panic&multidestroy=1';
                                                     }
+                                                    
+						    function do_hurt(){
+                                                          if(!confirm('!!!!!!----->>>>>> vuoi davvero ferire tutti ?<<<<<----- !!!!!'))
+                                                                  return;
+                                                          window.location.href='index.php?act=adminpanel&cp_page=panic&multihurt=1';
+                                                    }
 				      </script>";
 			
 			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Uccidi TUTTI!\" onClick=\"javascript: do_kill()\"></p>";
 			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Distruggi tutti gli oggetti!\" onClick=\"javascript: do_destroy()\"></p>";
+			$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Ferisci tutti!\" onClick=\"javascript: do_hurt()\"></p>";
 			
 			$body .= $msg;
 		
