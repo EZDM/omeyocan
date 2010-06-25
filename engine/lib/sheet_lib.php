@@ -30,15 +30,19 @@
     	}
     }
 
-	function toggle_death($pg, $kill){
+	function toggle_death($pg, $kill, $resurgo=true){
 		global $db, $prefix, $x7c;
 		$errore='';
 				if($kill){
-                                        //Morto per 5 giorni
-                                        $death_day=$x7c->settings['death_days'];
-                                        $resurgo = time() + $death_day*24*3600;
-                                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
-
+					if ($resurgo) {
+                                        	//Morto per 5 giorni
+	                                        $death_day=$x7c->settings['death_days'];
+        	                                $resurgo = time() + $death_day*24*3600;
+                	                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
+					} 
+					else {
+                	                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='-11', autoheal='0' WHERE username='$pg'");
+					}
                                         $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
                                         $row = $db->Do_Fetch_Assoc($query);
                                         $cnt = $row['cnt'];

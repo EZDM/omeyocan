@@ -873,7 +873,10 @@ function sheet_page_main(){
 	if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
 		$pg=$_GET['pg'];
 		include_once('./lib/sheet_lib.php');
-		$errore=toggle_death($pg, $_GET['toggle_death']);
+		$resurgo = true;
+		if (isset($_GET['permanent_death']))
+			$resurgo = false;
+		$errore=toggle_death($pg, $_GET['toggle_death'], $resurgo);
 		$reload = true;
 	}
 
@@ -1302,27 +1305,33 @@ function sheet_page_main(){
 
 
 						$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
-				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">";
+				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"> <br>";
 
-						if($row_user['info']!="Morto"){
+						if($row_user['info']!="Morto" && $row_user['info'] >= -10){
 							$body .= "<script language=\"javascript\" type=\"text/javascript\">
                                                     function do_kill(){
                                                           if(!confirm('vuoi davvero uccidere il personaggio?'))
                                                                   return;
                                                           window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg';
                                                     }
+                                                    function do_permanent_kill(){
+                                                          if(!confirm('vuoi davvero uccidere il personaggio?'))
+                                                                  return;
+                                                          window.location.href='index.php?act=sheet&page=main&toggle_death=1&permanent_death=1&pg=$pg';
+                                                    }
 				                  </script>";
 							$body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi\" onClick=\"javascript: do_kill();\" style=\"visibility: visible;\">";
+							$body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi definitivamente\" onClick=\"javascript: do_permanent_kill();\" style=\"visibility: visible;\">";
 						}
 						else{
 							$body .= "<INPUT name=\"ress_button\" class=\"button\" type=\"button\" value=\"Resuscita\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg'\" style=\"visibility: visible;\">";
 						}
 
 						if($row_user['autoheal']){
-							$body .= "<br><INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Disattiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg'\" style=\"visibility: visible;\">";
+							$body .= "<INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Disattiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg'\" style=\"visibility: visible;\">";
 						}
 						else{
-							$body .= "<br><INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Attiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg'\" style=\"visibility: visible;\">";
+							$body .= "<INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Attiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg'\" style=\"visibility: visible;\">";
 						}
 
 						$body .="</div></form>";
@@ -1921,9 +1930,9 @@ function print_sheet($body,$bg){
 			#modify{
 				position: absolute;
 				left: 50px;
-				top: 630px;
+				top: 0px;
 			}
-            #modify2{
+	               #modify2{
 				position: absolute;
 				left: 0px;
 				top: 190px;
