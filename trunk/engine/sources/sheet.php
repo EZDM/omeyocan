@@ -1304,11 +1304,27 @@ function sheet_page_main(){
 				";
 
 
-						$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
-				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\"> <br>";
+					      $body .= "<script language=\"javascript\" type=\"text/javascript\">
 
-						if($row_user['info']!="Morto" && $row_user['info'] >= -10){
-							$body .= "<script language=\"javascript\" type=\"text/javascript\">
+					          function master_action(sel){
+						          switch(sel.options[sel.selectedIndex].value) {
+							  	case 'kill':
+								  do_kill();
+								  break;
+								case 'real_kill':
+								  do_permanent_kill();
+								  break;
+								case 'respawn':
+								  window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg';
+								  break;
+								case 'heal_off':
+								  window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg';
+								  break;
+								case 'heal_on':
+								  window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg';
+								  break;
+							  }
+						    }
                                                     function do_kill(){
                                                           if(!confirm('vuoi davvero uccidere il personaggio?'))
                                                                   return;
@@ -1320,23 +1336,40 @@ function sheet_page_main(){
                                                           window.location.href='index.php?act=sheet&page=main&toggle_death=1&permanent_death=1&pg=$pg';
                                                     }
 				                  </script>";
-							$body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi\" onClick=\"javascript: do_kill();\" style=\"visibility: visible;\">";
-							$body .= "<INPUT name=\"kill_button\" class=\"button\" type=\"button\" value=\"Uccidi definitivamente\" onClick=\"javascript: do_permanent_kill();\" style=\"visibility: visible;\">";
+						$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">"; 
+				
+						$body .="<br>
+				<select class=\"button\" onChange=\"javascript: master_action(this);\">
+					<option>Azioni Master</option>
+					<option>------------</option>";
+
+						if($row_user['info']!="Morto" && $row_user['info'] >= -10){
+							$body .= "<option value=\"kill\">Uccidi</option>";
+							$body .= "<option value=\"real_kill\">Uccidi definitivamente</option>";
 						}
 						else{
-							$body .= "<INPUT name=\"ress_button\" class=\"button\" type=\"button\" value=\"Resuscita\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg'\" style=\"visibility: visible;\">";
+							$body .= "<option value=\"respawn\">Resuscita</option>";
 						}
 
 						if($row_user['autoheal']){
-							$body .= "<INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Disattiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg'\" style=\"visibility: visible;\">";
+							$body .= "<option value=\"heal_off\">Disattiva Auto-Heal</option>";
 						}
 						else{
-							$body .= "<INPUT name=\"heal_button\" class=\"button\" type=\"button\" value=\"Attiva auto-heal\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg'\" style=\"visibility: visible;\">";
+							$body .= "<option value=\"heal_on\">Attiva auto-heal</option>";
+
 						}
 
+						$body .= "</select>";
+						if ($row_user['autoheal']){
+							$body .= "  Autoheal: ON";
+						}
+						else {
+							$body .= "  Autoheal: OFF";
+						}
 						$body .="</div></form>";
 
-								}
+					}
 
 									
 								//Just for the avatar and password modification
@@ -1930,7 +1963,7 @@ function print_sheet($body,$bg){
 			#modify{
 				position: absolute;
 				left: 50px;
-				top: 0px;
+				top: 630px;
 			}
 	               #modify2{
 				position: absolute;
