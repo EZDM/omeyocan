@@ -758,7 +758,7 @@ switch($_GET['frame']){
 											}else if(dataSubArray[0] == '6'){
 												// Number of offline messages update
 												if(dataSubArray[1] > 0) {
-													document.getElementById('posta').src = "./graphic/05postasi.jpg";
+													document.getElementById('posta').src = "./graphic/05postasi.gif";
 													
 													if(!newMail){
 														PlayTardis();
@@ -767,7 +767,7 @@ switch($_GET['frame']){
 													newMail = 1;
 												}
 												else {
-													document.getElementById('posta').src = "./graphic/05postano.jpg";
+													document.getElementById('posta').src = "./graphic/05postano.gif";
 													newMail = 0;
 												}
 													
@@ -1199,7 +1199,7 @@ if($x7c->permissions['admin_panic']){
 ?> <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) --> <?PHP 	if($x7c->room_data['logo'] != '')
 echo '
 				<a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
-  				<img style="position:absolute; top:0px; left:807px;" src="'.$polaroid.'" ></a>'; 
+  				<img style="position:absolute; top:24px; left:806px;" src="'.$polaroid.'" ></a>'; 
 ?>
 
 <div id="message_window"></div>
