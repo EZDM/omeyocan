@@ -125,7 +125,7 @@
   
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   <a onClick="javascript: hndl = window.open('index.php?act=roomdesc&room=Mappa','roomdesc','width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();">
-      <img style="position:absolute; top:0px; left:807px;" src="./graphic/polaroid.jpg">
+      <img style="position:absolute; top:24px; left:806px;" src="./graphic/polaroid.jpg">
   </a>
   <script language="javascript" type="text/javascript">
 						listhash = '';
@@ -241,7 +241,7 @@
 											}else if(dataSubArray[0] == '6'){
 												// Number of offline messages update
 												if(dataSubArray[1] > 0) {
-													document.getElementById('posta').src = "./graphic/05postasi.jpg";
+													document.getElementById('posta').src = "./graphic/05postasi.gif";
 													
 													if(!newMail){
 														PlayTardis();
@@ -250,7 +250,7 @@
 													newMail = 1;
 												}
 												else {
-													document.getElementById('posta').src = "./graphic/05postano.jpg";
+													document.getElementById('posta').src = "./graphic/05postano.gif";
 													newMail = 0;
 												}
 													
