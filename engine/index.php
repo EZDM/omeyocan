@@ -74,7 +74,9 @@
   // Test to make sure the user didn't miss the last install step
   if(@$_GET['act'] != "frame"){
     if(file_exists("./install.php") || file_exists("./upgradev1.php")){
-      print("<div align='center'><font color='red'>You must delete the files install.php and upgradev1.php before using the chatroom.</font></div>");
+      print("<div align='center'><font color='red'>You must delete the files 
+            install.php and upgradev1.php before using the chatroom.
+            </font></div>");
       exit;
     }
   }
@@ -149,7 +151,9 @@
   }
 
   // Now before all else we have to get them logged in if they are not already
-  // We also have to check and make sure they are not trying to register or remember their password which they stupidly forgot or get help or anything like that
+  // We also have to check and make sure they are not trying to register or
+  //remember their password which they stupidly forgot or get help or anything
+  // like that
 
   // THis array contins the functions that you don't hvae to be logged in to do
   $no_login_req[] = "register";
@@ -187,9 +191,10 @@
   
   //This is used to return to flat http after login
   if($_SERVER["SERVER_PORT"] == 443) {
-         header("HTTP/1.1 301 Moved Permanently");
-         header("Location: http://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-         exit();
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: http://" . $_SERVER["SERVER_NAME"] . 
+        $_SERVER["REQUEST_URI"]);
+    exit();
   }
 
   // Prevent their username and room from being deleted
@@ -238,10 +243,12 @@
     if(isset($_POST['room_pw']))
       $_COOKIE[$cookie_name] = $_POST['room_pw'];
 
-    // Check the password returns 1 if correct, 2 if incorrect and 0 if there is no password
+    // Check the password returns 1 if correct, 2 if incorrect and 0
+    // if there is no password
     $result = check_password($_GET['room'],$_COOKIE[$cookie_name]);
     if($result == 1){
-        setcookie($cookie_name,$_COOKIE[$cookie_name],0/*time()+$x7c->settings['cookie_time']*/,$X7CHAT_CONFIG['COOKIE_PATH']);
+        setcookie($cookie_name,$_COOKIE[$cookie_name],0,
+            $X7CHAT_CONFIG['COOKIE_PATH']);
     }elseif($result == 2 && $x7c->permissions['access_pw_rooms'] != 1){
       roomlogin_screen($_GET['room']);
       $print->dump_buffer();
@@ -254,13 +261,20 @@
   if($x7c->settings['log_bandwidth'] == 1){
     include_once("./lib/bandwidth.php");
     $BW_CHECK = check_bandwidth($x7s->username);
-    if($BW_CHECK && ((@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') && (@$_GET['pmf'] != "update" || $_GET['act'] != "pm")))
+    if ($BW_CHECK && 
+        (
+          (@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') &&
+          (@$_GET['pmf'] != "update" || $_GET['act'] != "pm")
+         )
+       ) {
       $_GET['act'] = "bw_error";
+    }
   }
 
 
   // See if the admin has disabled the chat server
-  if($x7c->settings['disable_chat'] == 1 && @$_GET['act'] != "logout"  && $x7c->permissions['access_disabled'] != 1)
+  if ($x7c->settings['disable_chat'] == 1 && @$_GET['act'] != "logout" &&
+      $x7c->permissions['access_disabled'] != 1)
     $_GET['act'] = "disabledchat";
 
   // Time to see what's happening!  The $act variable stored what the
@@ -273,38 +287,53 @@
   $bans = $x7p->bans_on_you;
 
   foreach($bans as $key=>$row){
-    if($row[1] == "*" && ((@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') && (@$_GET['pmf'] != "update" || $_GET['act'] != "pm"))){  // The reason we see if they are getting the update frame is cuz if they are we need to let them so it'll remove them from the room they are in now
-                        if($row[6]){
-                            if( (!isset($_GET['act']) || $_GET['act']=="") && !isset($_GET['errore'])){
-                              //We protect from error of Prigione not existing
-                              $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}rooms WHERE name='Prigione'");
-                              $rr = $db->Do_Fetch_Assoc($query);
+    if($row[1] == "*" && 
+        (
+         (@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') &&
+         (@$_GET['pmf'] != "update" || $_GET['act'] != "pm")
+         )
+        ) { 
+      // The reason we see if they are getting the update frame is cuz if 
+      //they are we need to let them so it'll remove them from the room they are
+      // in now
+      if($row[6]){
+        if((!isset($_GET['act']) || $_GET['act']=="") &&
+            !isset($_GET['errore'])){
+          //We protect from error of Prigione not existing
+          $query = $db->DoQuery("SELECT count(*) AS cnt FROM 
+              {$prefix}rooms WHERE name='Prigione'");
+          $rr = $db->Do_Fetch_Assoc($query);
                               
-                              if($rr['cnt'])
-                                header("Location: index.php?act=frame&room=Prigione");
-                              else{
-                                $_GET['act'] = "sbanned";
-                                    $ban_reason = $row[5];
+          if($rr['cnt'])
+            header("Location: index.php?act=frame&room=Prigione");
+          else{
+            $_GET['act'] = "sbanned";
+             $ban_reason = $row[5];
 
-                    //   Remove them from all online lists
-                    $db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
-                    $db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
-                              }
-                            }
-                        }
-            else if($_GET['act']!="logout"){
-                                $_GET['act'] = "sbanned";
-                                $ban_reason = $row[5];
-
-              // Remove them from all online lists
-              $db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
-              $db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
-                                
-                        }
+            //   Remove them from all online lists
+            $db->DoQuery("DELETE FROM {$prefix}online 
+                WHERE name='$x7s->username'");
+            $db->DoQuery("UPDATE {$prefix}users SET position=''
+                WHERE username='$x7s->username'");
           }
+        }
+      }
+      else if($_GET['act']!="logout"){
+        $_GET['act'] = "sbanned";
+        $ban_reason = $row[5];
+
+        // Remove them from all online lists
+        $db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
+        $db->DoQuery("UPDATE {$prefix}users SET position=''
+            WHERE username='$x7s->username'");
+                                
+      }
+    }
   }
   
-  $query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,talk,panic,max_panic,info,resurgo,m_invisible FROM {$prefix}users WHERE username='{$x7s->username}'");
+  $query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,talk,panic,max_panic,
+      info,resurgo,m_invisible
+      FROM {$prefix}users WHERE username='{$x7s->username}'");
   $row = $db->Do_Fetch_Assoc($query);
       
   $x7s->sheet_ok = $row['sheet_ok'];
@@ -317,7 +346,8 @@
   $x7s->resurgo = $row['resurgo']-time();
   $x7s->invisible = $row['m_invisible'];
   
-  if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" && !$x7c->permissions['admin_panic']){
+  if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" &&
+      !$x7c->permissions['admin_panic']){
     $_GET['act']="buildpg";
   }
 
@@ -326,9 +356,10 @@
     case "logout":
       // The user is leaving us :(
       $db->DoQuery("DELETE FROM {$prefix}online WHERE name='$x7s->username'");
-      $db->DoQuery("UPDATE {$prefix}users SET position='' WHERE username='$x7s->username'");
-      setcookie($auth_ucookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
-      setcookie($auth_pcookie,"",0/*time()-$x7c->settings['cookie_time']-63000000*/,$X7CHAT_CONFIG['COOKIE_PATH']);
+      $db->DoQuery("UPDATE {$prefix}users SET position=''
+          WHERE username='$x7s->username'");
+      setcookie($auth_ucookie,"",0,$X7CHAT_CONFIG['COOKIE_PATH']);
+      setcookie($auth_pcookie,"",0,$X7CHAT_CONFIG['COOKIE_PATH']);
       
       // If the admin has choosen where to send the user to then send them there
       $to_send = $x7c->settings['logout_page'];
@@ -343,7 +374,8 @@
 
     case "panic":
       // Core error (probably database)
-      $print->normal_window($txt[14],"$txt[597]<Br><br><hr><b>Error Dump</b><br>$_GET[dump]<Br>$_GET[source]<Br>");
+      $print->normal_window($txt[14],"$txt[597]<Br><br><hr><
+          b>Error Dump</b><br>$_GET[dump]<Br>$_GET[source]<Br>");
       $print->dump_buffer();
       exit;
     break;
@@ -457,15 +489,6 @@
         include_once("./sources/frame.php");
       }
 
-      /*$debug_start = microtime_float()-$debug_start;
-      if(!isset($data))
-        $data = "";
-      if(!isset($data2))
-        $data2 = "";
-      $fh = fopen("./temp.txt","a");
-      fwrite($fh,"$debug_start [$before_frame] (other: $data :: $data2)\n");
-      fclose($fh);
-      */
       exit;
     break;
 
@@ -491,23 +514,6 @@
       $print->dump_buffer();
       exit;
     break;
-
-    // They are doing some action associated with a private message
-    /*case "pm":
-      // See what they want to do and if we need to long bandwidth
-      if($x7c->settings['log_bandwidth'] == 1){
-        ob_start();
-        include_once("./sources/privatemessage.php");
-        pm_whatshouldicall();
-        $used = ob_get_length();
-        log_bw($used);
-        ob_end_flush();
-      }else{
-        include_once("./sources/privatemessage.php");
-        pm_whatshouldicall();
-      }
-      exit;
-    break;*/
 
     // They want to see someone elses profile, or maybe their own?
     case "view_profile":
@@ -565,7 +571,8 @@
 
     // Display room is full error message
     case "overload":
-      $print->normal_window($txt[14],"$txt[80]<Br><Br><a href=\"index.php\">[$txt[77]]</a>");
+      $print->normal_window($txt[14],"$txt[80]<Br><Br>
+          <a href=\"index.php\">[$txt[77]]</a>");
       $print->dump_buffer();
       exit;
     break;
