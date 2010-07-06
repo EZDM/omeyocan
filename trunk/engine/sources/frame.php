@@ -627,7 +627,7 @@
           break;  
         }
 
-        $tmp=preg_replace("/&[^;];+/i" ,"X",trim($_POST['msg']));
+        $tmp=preg_replace("/&[^;]+;/i" ,"",trim($_POST['msg']));
         if(strlen($tmp) > $x7c->settings['max_post']){
           alert_user($x7s->username,"Messaggio troppo lungo: ".
               strlen($tmp).">".$_POST['msg']."<");
