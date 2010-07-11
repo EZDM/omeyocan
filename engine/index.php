@@ -629,7 +629,11 @@
       include_once("./sources/resurgo.php");
       resurgo_main();
       exit;
-       default:
+		case "shop":
+			include_once("./sources/shop.php");
+			shop_main();
+			exit;
+    default:
       // The default action is to show the room list
       // Clean up old rooms
       cleanup_rooms();
