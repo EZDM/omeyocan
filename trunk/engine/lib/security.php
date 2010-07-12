@@ -44,9 +44,14 @@
 		global $_POST, $_GET, $_COOKIE;
 		// Make POST variables clean
 		foreach($_POST as $name=>$value){
+			// TODO: fix this security bug
+			if (is_array($value))
+				continue;
+
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
-				
+			
+
 			$value = htmlentities($value, ENT_QUOTES);
 					
 			$_POST[$name] = $value;

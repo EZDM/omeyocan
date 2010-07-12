@@ -25,85 +25,137 @@
 ?>
 <?PHP
 
-	function calculate_obj_value($obj) {
-		$value = 20;
+	function calculate_obj_value($obj, $seller, $detailed=false) {
+		global $db, $prefix, $money_name, $shopper, $base_money;
+		
+		$query = $db->DoQuery("SELECT name, uses FROM {$prefix}objects
+				WHERE id='$obj'");
 
-		// la formula deve tenere conto di
-		//  Inflazione (tot denaro circolante)
-		//  disponibilita'/rarita' dell'oggetto
-		//  usi rimasti dell'oggetto rispetto a uno base
-		// Valore negativo se non si puo' valutare l'oggetto
-		return $value;
-	}
-
-	function sell_obj($obj, $pg_from, $pg_to) {
-		global $db, $prefix, $money_name, $shopper;
-
-		// Check seller own the object
-		$db->DoQuery("
-				SELECT count(*) as cnt FROM {$prefix}objects
-				WHERE owner = '$pg_from'
-				AND name = '$obj'");
 		$row = $db->Do_Fetch_Assoc($query);
+		$obj_name = $row['name'];
+		$obj_remain_uses = $row['uses'];
 
-		if ($row['cnt'] <= 0) {
-			return "Oggetto non disponibile";
+		$query_obj = $db->DoQuery("
+				SELECT count(DISTINCT name) as cnt FROM {$prefix}objects
+				WHERE name = '$obj_name'
+				AND owner = '$shopper'
+				");
+		$row = $db->Do_Fetch_Assoc($query_obj);
+		$availability = $row['cnt'];
+
+		$query_obj = $db->DoQuery("
+				SELECT base_value, uses FROM {$prefix}objects
+				WHERE name = '$obj_name'
+				AND owner = ''");
+		$row = $db->Do_Fetch_Assoc($query_obj);
+		$base_value = $row['base_value'];
+		$base_uses = $row['uses'];
+
+		if ($base_value <= 0)
+			return -1;
+
+		if ($seller != $shopper)
+			$availability++;
+		
+		$query_money = $db->DoQuery("
+				SELECT SUM(uses) as cnt FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner <> '' 
+				GROUP BY name;
+				");
+
+		$row = $db->Do_Fetch_Assoc($query_money);
+		$total_money = $row['cnt'];
+
+		$inflaction_factor = $total_money / $base_money;
+		$avail_factor = 1;
+
+		$use_factor = $obj_remain_uses / $base_uses; 
+		if ($base_uses <= 0)
+			$use_factor = 1;
+		else if ($obj_remain_uses < 0) //This object's version is infinite 
+			$use_factor = 4;
+
+
+		if ($availability < 2) {
+			$avail_factor = 3;
+		} else if ($availability < 3) {
+			$avail_factor = 2;
+		} else if ($availability < 6) {
+			$avail_factor = 1.5;
 		}
 
-		$value = calculate_obj_value($obj);
-		if ($value < 0)
-			return "Spiacente, non so valutare questo oggetto";
+		$value = $base_value * $avail_factor * $inflaction_factor *
+			$use_factor;
 
-		if ($pg_to == $shopper)
+		if ($seller != $shopper)
 			$value *= 0.4;
 
 		$value = round($value);
-		
-		// Check if buyer own money 
-		$db->DoQuery("
-				SELECT sum(uses) as cnt FROM {$prefix}objects
-				WHERE owner = '$pg_to'
-				AND name = '$money_name'
-				AND equipped = '1'
-				GROUP BY name");
-		$row = $db->Do_Fetch_Assoc($query);
 
-		if ($row['cnt'] < $value) {
-			return "Denaro non disponibile";
+		if ($detailed) {
+			return "$value<br>
+				Tasso di disponibilita': $avail_factor<br>
+				Tasso di inflazione: $inflaction_factor<br>
+				Tasso di usura: $use_factor";
+		}
+		return $value;
+	}
+
+	function sell_obj($obj, $pg_sell, $pg_buy) {
+		global $db, $prefix, $money_name, $shopper;
+
+		$value = calculate_obj_value($obj, $pg_sell);
+		if ($value < 0)
+			return "Spiacente, non so valutare questo oggetto";
+
+		// Check if money transaction is possible
+		$retval = pay($value, $pg_buy, $pg_sell, $check_only=true);
+		if ($retval) {
+			return $retval;
 		}
 
-		$retval = move_obj($obj, $pg_from, $pg_to);
-
-		if ($retval)
+		// Check if object move is possible
+		$retval = move_obj($obj, $pg_sell, $pg_buy, $check_only=true);
+		if ($retval) {
 			return $retval;
+		}
 		
-		pay($value, $pg_from, $pg_to);
+		pay($value, $pg_buy, $pg_sell);
+		move_obj($obj, $pg_sell, $pg_buy);
 		
 		return "Transazione eseguita con successo";
 
 	}
 
-	function move_obj($obj, $from, $to) {
-		global $db, $prefix;
-
-		$query_user = $db->DoQuery("
-				SELECT spazio FROM {$prefix}users
-				WHERE username = '$to'");
-		$row_user = $db->Do_Fecth_Assoc($query_user);
+	function move_obj($obj, $from, $to, $check_only=false) {
+		global $db, $prefix, $shopper;
 
 		$query_obj = $db->DoQuery("
 				SELECT size FROM {$prefix}objects
 				WHERE id='$obj'
-				AND owner='$from'");
+				AND owner='$from'
+				AND equipped='1'");
 
 		$row_obj = $db->Do_Fetch_Assoc($query_obj);
 
 		if (!$row_obj)
-			return "Oggetto non posseduto";
+			return "Oggetto non posseduto/equipaggiato";
 
-		if ($row_obj['size'] > $row_user['spazio']) {
-			return "Spazio non sufficiente per equipaggiare l'oggetto";
+		// Shopper has infinite space
+		if ($to != $shopper) {
+			$query_user = $db->DoQuery("
+					SELECT spazio FROM {$prefix}users
+					WHERE username = '$to'");
+			$row_user = $db->Do_Fetch_Assoc($query_user);
+
+			if ($row_obj['size'] > $row_user['spazio']) {
+				return "Spazio non sufficiente per equipaggiare l'oggetto";
+			}
 		}
+
+		if ($check_only)
+			return;
 		
 		$db->DoQuery("
 				UPDATE {$prefix}objects
@@ -111,12 +163,178 @@
 				WHERE id='$obj'");
 
 		include_once('./lib/sheet_lib.php');
-		recalculate_space($from);
-		recalculate_space($to);
+		// Shopper has infinite space
+		if ($from != $shopper)
+			recalculate_space($from);
+		if ($to != $shopper)
+			recalculate_space($to);
 	}
 
-	function pay($qty, $from, $to) {
-		// must handle grouping of cogwheels	
+	function pay($qty, $from, $to, $check_only=false, $return_possession=false) {
+		global $db, $prefix, $money_group, $money_group_size, $money_name, $shopper;
+
+		$space_required = (($qty / $money_group) + 1) * $money_group_size;
+
+		// Check if buyer own money 
+		$query = $db->DoQuery("
+				SELECT sum(uses) as cnt FROM {$prefix}objects
+				WHERE owner = '$from'
+				AND name = '$money_name'
+				AND equipped = '1'
+				GROUP BY name");
+		$row = $db->Do_Fetch_Assoc($query);
+		
+		if ($return_possession)
+			return $row['cnt'];
+
+		if ($row['cnt'] < $qty) {
+			return "Denaro non disponibile";
+		}
+	
+		// Shopper has infinite space
+		if ($to != $shopper) {
+			$query_user = $db->DoQuery("
+					SELECT spazio FROM {$prefix}users
+					WHERE username = '$to'");
+			$row_user = $db->Do_Fetch_Assoc($query_user);
+		
+			if ($space_required > $row_user['spazio'])
+				return "Spazio non sufficiente per ricevere i soldi";
+		}
+
+		if ($check_only)
+			return;
+
+
+		assign_money($qty, $to);
+		remove_money($qty, $from);
+		group_money($from);
+		group_money($to);
+
+		return true;
+	}
+
+	function assign_money($qty, $pg) {
+		global $db, $prefix, $money_name, $money_group, $money_group_size, $shopper;
+
+		// Shopper does not split money
+		if ($pg == $shopper) {
+			$db->DoQuery("UPDATE {$prefix}objects
+					SET uses = uses + $qty
+					WHERE name = '$money_name'
+					AND owner = '$pg'");
+			return;
+		}
+
+		$query_money = $db->DoQuery("
+				SELECT * FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner = ''");
+		$row_money = $db->Do_Fetch_Assoc($query_money);
+
+		$to_move = $qty;
+		while ($to_move > 0) {
+			$assign = $to_move;
+			if ($to_move > $money_group)
+				$assign = $money_group;
+			
+			$db->DoQuery("INSERT INTO {$prefix}objects
+					(name, description, owner, uses, image_url, equipped, size)
+					VALUES ('{$row_money['name']}',
+						'{$row_money['description']}',
+						'$pg',
+						'$assign',
+						'{$row_money['image_url']}',
+						'1',
+						'$money_group_size')");	
+
+			$to_move -= $money_group;
+		}
+
+		// Shopper has infinite space
+		if ($pg != $shopper) {
+			include_once('./lib/sheet_lib.php');
+			recalculate_space($pg);
+		}
+	}
+	
+	function remove_money($qty, $pg) {
+		global $db, $prefix, $money_name, $money_group, $money_group_size, $shopper;
+
+		// Shopper does not split money
+		if ($pg == $shopper) {
+			$db->DoQuery("UPDATE {$prefix}objects
+					SET uses = uses - $qty
+					WHERE name = '$money_name'
+					AND owner = '$pg'");
+			return;
+		}
+
+		$query_money = $db->DoQuery("
+				SELECT * FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner = '$pg'");
+		$row_money = $db->Do_Fetch_Assoc($query_money);
+
+		$to_move = $qty;
+		while ($to_move > 0) {
+			$assign = $to_move;
+			
+			if ($to_move >= $row_money['uses']) {
+				$assign = $row_money['uses'];
+				$db->DoQuery("DELETE FROM {$prefix}objects
+						WHERE id='{$row_money['id']}'");
+				
+				$row_money = $db->Do_Fetch_Assoc($query_money);
+				if (!$row_money)
+					die("Incosistent money status");
+			}
+			else {
+				$db->DoQuery("UPDATE {$prefix}objects
+						SET uses = uses - $assign
+						WHERE id = '{$row_money['id']}'");
+			}
+			
+			$to_move -= $assign;
+		}
+
+		// Shopper has infinite space
+		if ($pg != $shopper) {
+			include_once('./lib/sheet_lib.php');
+			recalculate_space($pg);
+		}
+	}
+
+	function group_money($pg) {
+		global $db, $prefix, $money_name, $shopper;
+
+		// Shopper does not split money
+		if ($pg == $shopper)
+			return;
+
+		$query = $db->DoQuery("
+				SELECT sum(uses) as cnt FROM {$prefix}objects
+				WHERE owner = '$pg'
+				AND name = '$money_name'
+				AND equipped = '1'
+				GROUP BY name");
+		$row = $db->Do_Fetch_Assoc($query);
+		
+		$qty = $row['cnt'];
+
+		$db->DoQuery("DELETE FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner = '$pg'
+				AND equipped = '1'");
+
+		assign_money($qty, $pg);
+
+		// Shopper has infinite space
+		if ($pg != $shopper) {
+			include_once('./lib/sheet_lib.php');
+			recalculate_space($pg);
+		}
+
 	}
 
 ?>

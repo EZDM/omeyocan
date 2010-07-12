@@ -220,7 +220,7 @@ function sheet_page_equip(){
 	$body.="<div id=\"objects\">\n";
 
 
-	$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg' ORDER BY equipped DESC");
+	$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg' ORDER BY equipped DESC, name");
 
 	$room='';
 	$piccoli=0;
