@@ -25,16 +25,17 @@ If not, see <http://www.gnu.org/licenses/>
 ?>
 <?PHP
 
-$max_items = 10;
+/*$max_items = 10;
 $shopper = "_shopper_";
 $money_name = "Cogwheels";
 $money_group = 100;
 $money_group_size = 1;
-$base_money = 100000;
+$base_money = 100000;*/
+
+include_once("./lib/shop_lib.php");
 
 function shop_main(){
 	global $x7s, $db, $x7c, $prefix;
-	include_once("./lib/shop_lib.php");
 	$page='';
 
 	$body = show_shop();
@@ -70,7 +71,7 @@ function get_object_list($user, $start_from) {
 				LIMIT $start_limit, $max_items");
 	}
 
-	$tot_money = pay(0, $user, $user, true, true);
+	$tot_money = get_total_user_money($user);
 	$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
 
 	while ($row = $db->Do_Fetch_Assoc($query)) {
