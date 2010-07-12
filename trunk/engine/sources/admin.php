@@ -2231,8 +2231,16 @@ function admincp_master(){
 			if(isset($_POST['letter']))
 				$letter="%".$_POST['letter']."%";
 
-			$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-					WHERE owner='' AND name LIKE '$letter' ORDER BY name");
+			if(!isset($_POST['selling'])) {
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+						WHERE owner='' AND name LIKE '$letter' ORDER BY name");
+			}
+			else {	
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+						WHERE owner='$shopper' AND name LIKE '$letter'
+						GROUP BY name
+						ORDER BY name");
+			}
 
 			$body = "<b style=\"color: orange;\">$error</b><br><br>";
 			$body .= "<div align=\"center\"><input type=\"submit\"
@@ -2241,6 +2249,7 @@ function admincp_master(){
 				<input type=\"submit\" value=\"Crea stanza privata\" class=\"button\"
 				onClick=\"javascript: window.location.href='index.php?act=adminpanel&cp_page=objects&proom=1'\"></div>";
 
+			$sell_checked = isset($_POST['selling']) ? "checked" : "";
 			$body .= "<div align=\"center\"><br><b>Cerca oggetto</b></div><Br>
 				<form action=\"index.php?act=adminpanel&cp_page=objects\"
 				method=\"post\" name=\"quicke\">
@@ -2249,7 +2258,12 @@ function admincp_master(){
 				<tr>
 				<td>Nome oggetto:</td>
 				<td><input type=\"text\" name=\"letter\" class=\"text_input\"></td>
-				<td><div align=\"center\"><input type=\"submit\" value=\"Cerca\" class=\"button\"></div></td>
+				<td><div align=\"center\"><input type=\"submit\" value=\"Cerca\"
+				class=\"button\"></div></td>
+				<td>
+				<input type=\"checkbox\" name=\"selling\" $sell_checked>
+				Oggetti in vendita</input>
+				</td>
 				</tr>
 				</table>
 				</form>";
