@@ -74,6 +74,8 @@ function sheet_page_equip(){
 	$body='';
 	$errore='';
 	include_once('./lib/sheet_lib.php');
+	include_once('./lib/shop_lib.php');
+	global $money_name;
 
 
 	if(isset($_GET['moduse']) && checkIfMaster()){
@@ -81,7 +83,8 @@ function sheet_page_equip(){
 			die("Bad form");
 		}
 			
-		$db->DoQuery("UPDATE {$prefix}objects SET uses='$_POST[use]' WHERE id='$_POST[id]'");
+		$db->DoQuery("UPDATE {$prefix}objects SET uses='$_POST[use]'
+				WHERE id='$_POST[id]'");
 		include_once('./lib/alarms.php');
 		object_uses($pg,$_POST['id'],$_POST['use']);
 			
@@ -94,7 +97,8 @@ function sheet_page_equip(){
 	}
 
 	if(isset($_GET['equiptgl']) && ($x7s->username==$pg || checkIfMaster())){
-		$query = $db->DoQuery("SELECT equipped,name,size FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
+		$query = $db->DoQuery("SELECT equipped,name,size 
+				FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
 		$row = $db->Do_Fetch_Assoc($query);
 		if(!$row)
 		$errore = "Oggetto non esistente";
@@ -102,7 +106,8 @@ function sheet_page_equip(){
 			$valore=0;
 			$azione="depositato";
 			$action_ok=true;
-			$query = $db->DoQuery("SELECT position,spazio FROM {$prefix}users WHERE username='$pg'");
+			$query = $db->DoQuery("SELECT position,spazio 
+					FROM {$prefix}users WHERE username='$pg'");
 			$row_msg=$db->Do_Fetch_Assoc($query);
 
 			if(!$row['equipped']){
@@ -118,17 +123,13 @@ function sheet_page_equip(){
 				}
 				else{
 					$residuo=$row_msg['spazio']-$row['size'];
-					//$db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
 				}
 			}
-			/*else{
-			 $residuo=$row_msg['spazio']+$row['size'];
-			 //$db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$pg'");
-			 }*/
 
 			if($action_ok){
 
-				$db->DoQuery("UPDATE {$prefix}objects SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
+				$db->DoQuery("UPDATE {$prefix}objects 
+						SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
 				recalculate_space($pg);
 
 
@@ -144,18 +145,36 @@ function sheet_page_equip(){
 		}
 	}
 
+	if(isset($_GET['pay']) && ($x7s->username==$pg || checkIfMaster())){
+		if(!isset($_POST['owner']) || !isset($_POST['amount'])){
+			die("Bad form");
+		}
+		$query = $db->DoQuery("SELECT count(*) AS cnt
+				FROM {$prefix}users WHERE username='$_POST[owner]'");
+		$row = $db->Do_Fetch_Assoc($query);
+
+		if(!$row || $row['cnt']==0){
+			$errore = "Utente non esistente";
+		}
+		else {
+			$errore = pay($_POST['amount'], $pg, $_POST['owner']);
+		}
+	}
+
 	if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
 		if(!isset($_POST['owner']) || !isset($_POST['id'])){
 			die("Bad form");
 		}
-		$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}users WHERE username='$_POST[owner]'");
+		$query = $db->DoQuery("SELECT count(*) AS cnt
+				FROM {$prefix}users WHERE username='$_POST[owner]'");
 		$row = $db->Do_Fetch_Assoc($query);
 
 		if(!$row || $row['cnt']==0){
 			$errore = "Utente non esistente";
 		}
 
-		$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_POST[id]' AND owner='$pg'");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+				WHERE id='$_POST[id]' AND owner='$pg'");
 		$row = $db->Do_Fetch_Assoc($query);
 
 		if(!$row || $row['id']==''){
@@ -165,7 +184,8 @@ function sheet_page_equip(){
 			$errore = "Non puoi consegnare un oggetto che non trasporti";
 		}
 
-		$query = $db->DoQuery("SELECT position,spazio FROM {$prefix}users WHERE username='$_POST[owner]'");
+		$query = $db->DoQuery("SELECT position,spazio
+				FROM {$prefix}users WHERE username='$_POST[owner]'");
 		$row_msg=$db->Do_Fetch_Assoc($query);
 
 		if(!$row_msg)
@@ -184,18 +204,25 @@ function sheet_page_equip(){
 			if(preg_match("/^masterkey/", $row['name'])){
 				list($pre, $name)=split("masterkey_", $row['name']);
 				$obj="key_$name";
-				if(!isset($_POST['grants']) || $_POST['grants'] <= 0 || $_POST['grants']== '')
+				if(!isset($_POST['grants']) ||
+						$_POST['grants'] <= 0 || $_POST['grants']== '')
 				$_POST['grants'] = -1;
 					
 				$db->DoQuery("INSERT INTO {$prefix}objects
 							(name, description, owner, uses, image_url, equipped)
-							VALUES ('$obj', '$row[description]', '$_POST[owner]','$_POST[grants]','$row[image_url]','1')
+							VALUES (
+								'$obj',
+								'$row[description]',
+								'$_POST[owner]',
+								'$_POST[grants]',
+								'$row[image_url]','1')
 						");
 			}
 			else{
 				$db->DoQuery("UPDATE {$prefix}objects
 							SET owner='$_POST[owner]'
-							WHERE id='$_POST[id]' AND owner<>''"); //The last is only for protection to pattern objects
+							WHERE id='$_POST[id]' AND owner<>''");
+				//The last is only for protection to pattern objects
 					
 			}
 
@@ -220,7 +247,8 @@ function sheet_page_equip(){
 	$body.="<div id=\"objects\">\n";
 
 
-	$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE owner='$pg' ORDER BY equipped DESC, name");
+	$query = $db->DoQuery("SELECT * FROM {$prefix}objects
+			WHERE owner='$pg' ORDER BY equipped DESC, name");
 
 	$room='';
 	$piccoli=0;
@@ -229,7 +257,8 @@ function sheet_page_equip(){
 
 	while($row=$db->Do_Fetch_Assoc($query)){
 
-		if(($pg!=$x7s->username && $row['equipped']) || ($pg==$x7s->username) || checkIfMaster()){
+		if(($pg!=$x7s->username && $row['equipped']) ||
+				($pg==$x7s->username) || checkIfMaster()){
 			$more_form='';
 			$obj_name = $row['name'];
 			$description = $row['description'];
@@ -259,7 +288,8 @@ function sheet_page_equip(){
 				$grandi++;
 			}
 
-			if(preg_match("/^key_/", $row['name']) || preg_match("/^masterkey_/", $row['name'])) {
+			if(preg_match("/^key_/", $row['name']) ||
+					preg_match("/^masterkey_/", $row['name'])) {
 				$master_key=0;
 				$master_string='';
 				if(preg_match("/^key_/", $row['name']))
@@ -274,15 +304,15 @@ function sheet_page_equip(){
 					//we make clickable only key of my sheet
 					if($master_key){
 						//This a master key
-						$more_form = '
-                                                                <tr>
-                                                                        <td>Usi concessi (vuoto per illimitati):</td>
-                                                                        <td><input type="text" name="grants" class="text_input" size=2></td>
-                                                                </tr>
-                                                        ';
+						$more_form = ' <tr>
+							<td>Usi concessi (vuoto per illimitati):</td>
+							<td><input type="text" name="grants" class="text_input" size=2>
+							</td>
+              </tr>';
 					}
 					else{
-						$remaining_uses = ($row['uses'] == -1) ? "illimitati" : $row['uses'];
+						$remaining_uses = 
+							($row['uses'] == -1) ? "illimitati" : $row['uses'];
 						$description .= "<br>(Usi rimasti: $remaining_uses)";
 					}
 
@@ -294,34 +324,68 @@ function sheet_page_equip(){
 				}
 			}
 
-			$body.= "<table width=100%> <tr> <td class=\"obj\"> <img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
-                                                <div $disabled>
-                                                <b>$obj_name</b>
-                                                <br>Dimensione: $dimensione
-                                                <p>$description</p>
-                                                </div> </td> </tr> </table>";
+			if($row['name'] == $money_name)	{
+					$obj_name .= ": $row[uses]";
+			}
+
+			$body.= "<table width=100%> <tr> <td class=\"obj\">
+				<img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
+        <div $disabled>
+        <b>$obj_name</b>
+        <br>Dimensione: $dimensione
+        <p>$description</p>
+        </div> </td> </tr> </table>";
 
 			if($pg==$x7s->username || checkIfMaster()){
+				$money_qty = "";
+				if($row['name'] == $money_name)	{
+					$money_form= "
+						<form action=\"index.php?act=sheet&page=equip&pg=$pg&pay=1\"
+						method=\"post\" name=\"payment\">
+						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+						<tr>
+						<td>Paga a:</td>
+						<td>
+						<input type=\"text\" name=\"owner\" class=\"text_input\" size=10>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						Ammontare:</td>
+						<td>
+						<input type=\"text\" name=\"amount\" class=\"text_input\" size=5>
+						</td>
+						</tr>
+						<tr>
+						<td><input type=\"submit\" class=\"button\" value=\"Paga\"></td>
+						</tr>
+						</form>";
+				}
+
 				$equip_text="Deposita";
 				if(!$row['equipped']){
 					$equip_text="Equipaggia";
 				}
-				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\" method=\"post\" name=\"object_assign\">
-                                                        <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-                                                        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-                                                                        <tr>
-                                                                                <td>Dai a:</td>
-                                                                                <td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-                                                                                <td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
-                                                                        </tr>
-                                                                        $more_form
-                                                                        <tr>
-                                                                                <td><input type=\"button\" class=\"button\" value=\"Butta\" onClick=\"javascript: confirmDrop($row[id])\">
-                                                                                <input type=\"button\" class=\"button\" value=\"$equip_text\" onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
-                                                                        </tr>
-                                                                        
-                                                                </table>
-                                                </form>";
+				$body.="
+          <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+					<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\"
+					method=\"post\" name=\"object_assign\">
+          <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+          <tr>
+          <td>Dai a:</td>
+          <td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+          <td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
+          </tr>
+          $more_form
+          <tr>
+          <td><input type=\"button\" class=\"button\" value=\"Butta\"
+					onClick=\"javascript: confirmDrop($row[id])\">
+          <input type=\"button\" class=\"button\" value=\"$equip_text\"
+					onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
+          </tr>
+          </form>
+					$money_form
+          </table>";
 			}
 
 			if(checkIfMaster()){
