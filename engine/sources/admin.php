@@ -2321,7 +2321,7 @@ function admincp_master(){
 			}
 			else {
 				assign_money($_POST['amount'], $shopper);
-				$error = "Moneta emessa con successo: $emit_value";
+				$error = "Moneta emessa con successo: {$_POST['amount']}";
 			}
 		}
 
