@@ -25,9 +25,56 @@
 ?>
 <?PHP
 
-	function calculate_obj_value($obj, $seller, $detailed=false) {
-		global $db, $prefix, $money_name, $shopper, $base_money;
-		
+$GLOBALS['max_items'] = 10;
+$GLOBALS['shopper'] = "_shopper_";
+$GLOBALS['money_name'] = "Cogwheels";
+$GLOBALS['money_group'] = 100;
+$GLOBALS['money_group_size'] = 1;
+$GLOBALS['base_money'] = 100000;
+
+	function get_total_money() {
+		global $db, $prefix, $money_name;
+		$query_money = $db->DoQuery("
+				SELECT SUM(uses) as cnt FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner <> '' 
+				GROUP BY name;
+				");
+
+		$row = $db->Do_Fetch_Assoc($query_money);
+		return $row['cnt'];
+
+	}
+	
+	function get_total_user_money($pg) {
+		global $db, $prefix, $money_name;
+		$query_money = $db->DoQuery("
+				SELECT SUM(uses) as cnt FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND owner = '$pg'
+				AND equipped = '1'
+				GROUP BY name;
+				");
+
+		$row = $db->Do_Fetch_Assoc($query_money);
+		return $row['cnt'];
+
+	}
+
+	function get_obj_availability($obj_name) {
+		global $db, $prefix, $shopper;
+
+		$query_obj = $db->DoQuery("
+				SELECT count(*) as cnt FROM {$prefix}objects
+				WHERE name = '$obj_name'
+				AND owner = '$shopper'
+				");
+		$row = $db->Do_Fetch_Assoc($query_obj);
+		return $row['cnt'];
+	}
+
+	function get_obj_name_and_uses($obj, &$obj_name, &$obj_uses) {
+		global $db, $prefix;
 		$query = $db->DoQuery("SELECT name, uses FROM {$prefix}objects
 				WHERE id='$obj'");
 
@@ -35,13 +82,16 @@
 		$obj_name = $row['name'];
 		$obj_remain_uses = $row['uses'];
 
-		$query_obj = $db->DoQuery("
-				SELECT count(DISTINCT name) as cnt FROM {$prefix}objects
-				WHERE name = '$obj_name'
-				AND owner = '$shopper'
-				");
-		$row = $db->Do_Fetch_Assoc($query_obj);
-		$availability = $row['cnt'];
+	}
+
+	function calculate_obj_value($obj, $seller, $detailed=false) {
+		global $db, $prefix, $money_name, $shopper, $base_money;
+
+		$obj_name = '';
+		$obj_remain_uses = 0;
+		get_obj_name_and_uses($obj, $obj_name, $obj_remain_uses);
+
+		$availability = get_obj_availability($obj_name);
 
 		$query_obj = $db->DoQuery("
 				SELECT base_value, uses FROM {$prefix}objects
@@ -57,15 +107,7 @@
 		if ($seller != $shopper)
 			$availability++;
 		
-		$query_money = $db->DoQuery("
-				SELECT SUM(uses) as cnt FROM {$prefix}objects
-				WHERE name = '$money_name'
-				AND owner <> '' 
-				GROUP BY name;
-				");
-
-		$row = $db->Do_Fetch_Assoc($query_money);
-		$total_money = $row['cnt'];
+		$total_money = get_total_money();
 
 		$inflaction_factor = $total_money / $base_money;
 		$avail_factor = 1;
@@ -170,24 +212,14 @@
 			recalculate_space($to);
 	}
 
-	function pay($qty, $from, $to, $check_only=false, $return_possession=false) {
+	function pay($qty, $from, $to, $check_only=false) {
 		global $db, $prefix, $money_group, $money_group_size, $money_name, $shopper;
 
 		$space_required = (($qty / $money_group) + 1) * $money_group_size;
 
 		// Check if buyer own money 
-		$query = $db->DoQuery("
-				SELECT sum(uses) as cnt FROM {$prefix}objects
-				WHERE owner = '$from'
-				AND name = '$money_name'
-				AND equipped = '1'
-				GROUP BY name");
-		$row = $db->Do_Fetch_Assoc($query);
-		
-		if ($return_possession)
-			return $row['cnt'];
-
-		if ($row['cnt'] < $qty) {
+		$money = get_total_user_money($from);	
+		if ($money < $qty) {
 			return "Denaro non disponibile";
 		}
 	
@@ -205,13 +237,12 @@
 		if ($check_only)
 			return;
 
-
 		assign_money($qty, $to);
 		remove_money($qty, $from);
 		group_money($from);
 		group_money($to);
 
-		return true;
+		return "Pagamento effettuato";
 	}
 
 	function assign_money($qty, $pg) {
@@ -311,16 +342,8 @@
 		// Shopper does not split money
 		if ($pg == $shopper)
 			return;
-
-		$query = $db->DoQuery("
-				SELECT sum(uses) as cnt FROM {$prefix}objects
-				WHERE owner = '$pg'
-				AND name = '$money_name'
-				AND equipped = '1'
-				GROUP BY name");
-		$row = $db->Do_Fetch_Assoc($query);
 		
-		$qty = $row['cnt'];
+		$qty = get_total_user_money($pg);
 
 		$db->DoQuery("DELETE FROM {$prefix}objects
 				WHERE name = '$money_name'
