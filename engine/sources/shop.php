@@ -28,6 +28,9 @@ If not, see <http://www.gnu.org/licenses/>
 $max_items = 10;
 $shopper = "_shopper_";
 $money_name = "Cogwheels";
+$money_group = 100;
+$money_group_size = 1;
+$base_money = 100000;
 
 function shop_main(){
 	global $x7s, $db, $x7c, $prefix;
@@ -40,7 +43,7 @@ function shop_main(){
 }
 
 function get_object_list($user, $start_from) {
-	global $db, $prefix, $max_items, $shopper;
+	global $db, $prefix, $max_items, $shopper, $money_name;
 	$body = '<table width=100%>';
 	$trade_action = "sell[]";
 	$start_limit = ($start_from - 1) * $max_items;
@@ -52,6 +55,7 @@ function get_object_list($user, $start_from) {
 		$query = $db->DoQuery("
 				SELECT *, count(*) as qty FROM {$prefix}objects
 				WHERE owner = '$user'
+				AND name <> '$money_name'
 				GROUP BY name
 				ORDER BY name
 				LIMIT $start_limit, $max_items");
@@ -60,12 +64,17 @@ function get_object_list($user, $start_from) {
 		$query = $db->DoQuery("
 				SELECT * FROM {$prefix}objects
 				WHERE owner = '$user'
+				AND name <> '$money_name'
+				AND equipped = '1'
 				ORDER BY name
 				LIMIT $start_limit, $max_items");
 	}
 
+	$tot_money = pay(0, $user, $user, true, true);
+	$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
+
 	while ($row = $db->Do_Fetch_Assoc($query)) {
-		$valore = 20;
+		$valore = calculate_obj_value($row['id'], $user, true);
 		$body .= '
 			<tr>
 				<td>
@@ -88,7 +97,7 @@ function get_object_list($user, $start_from) {
 }
 
 function get_navigator($user) {
-	global $db, $prefix, $max_items, $shopper;
+	global $db, $prefix, $max_items, $shopper, $money_name;
 	$body = '';
 	$url_add = '';
 	$url_base = '';
@@ -115,13 +124,16 @@ function get_navigator($user) {
 		$query = $db->DoQuery("
 				SELECT count(DISTINCT name) as cnt 
 				FROM {$prefix}objects
-				WHERE owner = '$user'");
+				WHERE owner = '$user'
+				AND name <> '$money_name'
+				AND equipped = '1'");
 	}
 	else {
 		$query = $db->DoQuery("
 				SELECT count(*) as cnt 
 				FROM {$prefix}objects
-				WHERE owner = '$user'");
+				WHERE owner = '$user'
+				AND name <> '$money_name'");
 	}
 
 	$row = $db->Do_Fetch_Assoc($query);
@@ -153,14 +165,15 @@ function get_navigator($user) {
 function show_shop() {
 	global $x7s, $shopper;
 	$body = '';
+	$retval = '';
 
 	if (isset($_POST['sell'])) {
 		foreach ($_POST['sell'] as $obj)
-			sell_obj($obj, $x7s->username, $shopper);
+			$retval = sell_obj($obj, $x7s->username, $shopper);
 	}
 	if (isset($_POST['buy'])) {
 		foreach ($_POST['buy'] as $obj)
-			sell_obj($obj, $shopper, $x7s->username);
+			$retval =	sell_obj($obj, $shopper, $x7s->username);
 	}
 
 	$player_list = get_navigator($x7s->username);
@@ -168,10 +181,22 @@ function show_shop() {
 	
 	$shopper_list = get_navigator($shopper);
 	$shopper_list .= get_object_list($shopper, $_GET['shop_start']);
+	
+	if($retval!=''){
+		$body.='<script language="javascript" type="text/javascript">
+			function close_err(){
+				document.getElementById("popup").style.visibility="hidden";
+			}
+		</script>
+			<div id="popup" >'.$retval.'
+			<br><br><input name="ok" type="button" class="button" value="OK"'.
+			'onClick="javascript: close_err(); ">
+			</div>';
+	}
 
 	$body .= '
 		<div id="player">
-			<form action="index.php?action=shop" method="post" name="sell">
+			<form action="./index.php?act=shop" method="post" name="sell">
 				<div id="player_list">
 					__player_list__		
 				</div>
@@ -181,7 +206,7 @@ function show_shop() {
 			</form>
 		</div>
 		<div id="shopper">
-			<form action="index.php?action=shop" method="post" name="sell">
+			<form action="./index.php?act=shop" method="post" name="buy">
 				<div id="shopper_list">
 					__shopper_list__		
 				</div>
@@ -212,9 +237,6 @@ function print_shop($body){
 
 	echo '
 		<style type="text/css">
-			div {
-				border: 1px solid white;
-			}
 			#shop {
 				position: absolute;
 				background: url(./graphic/sfondonegozio.jpg);
@@ -222,6 +244,7 @@ function print_shop($body){
 				left: 0;
 				width: 800px;
 				height: 571px;
+				text-align: center;
 			}
 			#player {
 				float: left;
@@ -253,6 +276,21 @@ function print_shop($body){
 			}
 			#navigator {
 				text-align: center;
+			}
+			#popup {
+				text-align: center;
+				background-color: lightyellow;
+				color: #650000;
+				font-weight: bold;
+				font-size: 10pt;
+				top: 30%;
+				width: 60%;
+				margin-left: 20%;
+				margin-right: 20%;
+				position: absolute;
+				padding: 5px;
+				border: 3px dashed red;
+				text-decoration: none;
 			}
 			
 
