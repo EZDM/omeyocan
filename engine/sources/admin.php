@@ -1936,9 +1936,10 @@ function admincp_master(){
 					else {
 						for ($i = 0; $i < $delta_avail; $i++) {
 							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name,description,uses,image_url,owner,equipped,size)
+								(name,description,uses,image_url,owner,equipped,size,category)
 								VALUES('$row[name]','$row[description]','$row[uses]',
-									'$row[image_url]','$shopper','1','$row[size]')");
+									'$row[image_url]','$shopper','1','$row[size]',
+									'$row[category]')");
 						}
 					}
 				}
@@ -1951,14 +1952,16 @@ function admincp_master(){
 			if(!isset($_POST['owner']) || !isset($_POST['id'])){
 				die("Bad form");
 			}
-			$query = $db->DoQuery("SELECT spazio FROM {$prefix}users WHERE username='$_POST[owner]'");
+			$query = $db->DoQuery("SELECT spazio 
+					FROM {$prefix}users WHERE username='$_POST[owner]'");
 			$row_usr = $db->Do_Fetch_Assoc($query);
 
 			if(!$row_usr){
 				$error = "Utente non esistente";
 			}
 
-			$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_POST[id]'");
+			$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+					WHERE id='$_POST[id]'");
 			$row = $db->Do_Fetch_Assoc($query);
 
 			if(!$row || $row['id']==''){
@@ -1967,13 +1970,15 @@ function admincp_master(){
 
 			$residuo=$row_usr['spazio'] - $row['size'];
 			if($residuo<0)
-				$error = "L'utente non pu&ograve; trasportare l'oggetto; ha solo spazio: $row_usr[spazio] e l'oggetto occupa $row[size]";
+				$error = "L'utente non pu&ograve; trasportare l'oggetto;".
+					"ha solo spazio: $row_usr[spazio] e l'oggetto occupa $row[size]";
 
 			if($error==''){
 				$db->DoQuery("INSERT INTO {$prefix}objects
-						(name,description,uses,image_url,owner,equipped,size)
+						(name,description,uses,image_url,owner,equipped,size,category)
 						VALUES('$row[name]','$row[description]','$row[uses]',
-							'$row[image_url]','$_POST[owner]','1','$row[size]')");
+							'$row[image_url]','$_POST[owner]','1','$row[size]',
+							'$row[category]')");
 
 				include_once('./lib/sheet_lib.php');
 				recalculate_space($_POST['owner']);
@@ -1992,25 +1997,36 @@ function admincp_master(){
 					!isset($_POST['uses']) ||
 					!isset($_POST['image_url'])||
 					!isset($_POST['size'])||
-					!isset($_POST['base_value'])){
+					!isset($_POST['base_value'])||
+					!isset($_POST['category'])){
 
 				die("Bad form");
 			}
 
+			$category = $_POST['category'];
+			if ($_POST['category'] == "_new_" && isset($_POST['new_category']))
+				$category = $_POST['new_category'];
+
 			if($_POST['id']!=-1){
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET name='$_POST[name]',
-						description='$_POST[description]',
-						uses='$_POST[uses]',
-						image_url='$_POST[image_url]',
-						size='$_POST[size]',
-						base_value='$_POST[base_value]'
+							description='$_POST[description]',
+							uses='$_POST[uses]',
+							image_url='$_POST[image_url]',
+							size='$_POST[size]',
+							base_value='$_POST[base_value]',
+							category='$category'
 						WHERE id='$_POST[id]'");
 			}else{
 				$db->DoQuery("INSERT INTO {$prefix}objects 
-						(name, description, uses, image_url, equipped, size, base_value)
-						VALUES('$_POST[name]','$_POST[description]','$_POST[uses]',
-							'$_POST[image_url]','1','$_POST[size]','$_POST[base_value]')");
+						(name, description, uses, image_url,
+						 equipped, size, base_value, category)
+						VALUES(
+							'$_POST[name]',	'$_POST[description]',
+							'$_POST[uses]',	'$_POST[image_url]',
+							'1','$_POST[size]',
+							'$_POST[base_value]', '$category'
+							)");
 			}
 			$error = "Modifica eseguita con successo";
 		}
@@ -2022,7 +2038,8 @@ function admincp_master(){
 
 		if(isset($_GET['proom'])){
 			if(isset($_POST['owner']) && $_POST['owner']!=''){
-				$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE username='$_POST[owner]'");
+				$query = $db->DoQuery("SELECT username 
+						FROM {$prefix}users WHERE username='$_POST[owner]'");
 				$row = $db->Do_Fetch_Assoc($query);
 
 				if($row==null || $row['username']!=$_POST['owner']){
@@ -2033,10 +2050,12 @@ function admincp_master(){
 							FROM {$prefix}rooms WHERE name='$_POST[owner]'");
 
 					$query_obj_master =  $db->DoQuery("SELECT count(*) AS cnt
-							FROM {$prefix}objects WHERE name='masterkey_$_POST[owner]' AND owner=''");
+							FROM {$prefix}objects WHERE name='masterkey_$_POST[owner]' 
+							AND owner=''");
 
 					$query_obj_user =  $db->DoQuery("SELECT count(*) AS cnt
-							FROM {$prefix}objects WHERE name='masterkey_$_POST[owner]' AND owner='$_POST[owner]'");								
+							FROM {$prefix}objects 
+							WHERE name='masterkey_$_POST[owner]' AND owner='$_POST[owner]'");
 						$row_rooms = $db->Do_Fetch_Assoc($query_rooms);
 					$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
 					$row_obj_user = $db->Do_Fetch_Assoc($query_obj_user);
@@ -2045,7 +2064,8 @@ function admincp_master(){
 						//Room creation
 						$db->DoQuery("INSERT INTO {$prefix}rooms
 								(name, type, maxusers, logged, logo, long_name)
-								VALUES ('$_POST[owner]', '2', '1000', '1', './graphic/private_room.jpg','Stanza di $_POST[owner]')");
+								VALUES ('$_POST[owner]', '2', '1000', '1',
+									'./graphic/private_room.jpg','Stanza di $_POST[owner]')");
 						$body .= "Stanza creata con successo<br>";
 
 					}
@@ -2056,7 +2076,9 @@ function admincp_master(){
 						//Copy of the key for the master
 						$db->DoQuery("INSERT INTO {$prefix}objects
 								(name, description, uses, image_url,equipped,size)
-								VALUES ('masterkey_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','1','0')");
+								VALUES ('masterkey_$_POST[owner]',
+									'Chiave della stanza di $_POST[owner]', '-1',
+									'./graphic/private_key.jpg','1','0')");
 						$body .= "Copia master della chiave creata con successo<br>";
 					}
 					else
@@ -2066,10 +2088,13 @@ function admincp_master(){
 						//Cooy of the key for the owner
 						$db->DoQuery("INSERT INTO {$prefix}objects
 								(name, description, uses, image_url, owner,equipped,size)
-								VALUES ('masterkey_$_POST[owner]','Chiave della stanza di $_POST[owner]', '-1', './graphic/private_key.jpg','$_POST[owner]','1','0')");
+								VALUES ('masterkey_$_POST[owner]',
+									'Chiave della stanza di $_POST[owner]', '-1',
+									'./graphic/private_key.jpg','$_POST[owner]','1','0')");
 						$body .= "Copia utente della chiave creata con successo<br>";
 						include_once('./lib/alarms.php');
-						object_assignement($_POST['owner'],"Chiave della stanza di $_POST[owner]");
+						object_assignement($_POST['owner'],
+								"Chiave della stanza di $_POST[owner]");
 					}
 					else
 						$body .= "Copia utente della chiave master gi&agrave; presente<br>";
@@ -2099,7 +2124,8 @@ function admincp_master(){
 
 		if(isset($_GET['edit'])){
 			if($_GET['edit']!=-1){
-				$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_GET[edit]'");
+				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+						WHERE id='$_GET[edit]'");
 				$row = $db->Do_Fetch_Assoc($query);
 				if(!$row)
 					die("Error; should not die here");
@@ -2112,6 +2138,7 @@ function admincp_master(){
 				$row['id']=-1;
 				$row['size']=0;
 				$row['base_value']=-1;
+				$row['category']='';
 
 			}
 			$minuscolo="";
@@ -2128,7 +2155,40 @@ function admincp_master(){
 			if($row['size']==5)
 				$grande="selected";
 
-			$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&modify=1\"
+			$query_cat = $db->DoQuery("SELECT DISTINCT category 
+					FROM {$prefix}objects
+					ORDER BY category");
+			$category_form = '<select class="button" name="category"
+				onChange="javascript: category_select(this);">
+				<option value="">Seleziona la categoria</option>';
+
+			while ($row_category = $db->Do_Fetch_Assoc($query_cat)) {
+				if ($row_category['category']) {
+					$selected = "";
+					if ($row_category['category'] == $row['category'])
+						$selected = "selected";
+					$category_form .= '<option value="'.$row_category['category'].'" 
+						'.$selected.'>'.$row_category['category'].'</option>';
+				}
+			}
+
+			$category_form .= '<option value="_new_">-Crea nuova categoria-</option>
+				</select>';
+
+			$body.="
+				<script language=\"javascript\" type=\"text/javascript\">
+					function category_select(elem) {
+						if (elem.options[elem.selectedIndex].value == '_new_'){
+							document.getElementById('new_category').style.visibility = 
+								'visible';
+						}
+						else {
+							document.getElementById('new_category').style.visibility =
+								'hidden';
+						}
+					}
+				</script>
+				<form action=\"index.php?act=adminpanel&cp_page=objects&modify=1\"
 				method=\"post\">
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 				<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
@@ -2157,6 +2217,7 @@ function admincp_master(){
 				<td>Preview:</td>
 				<td><img id=\"objImg\" src=\"$row[image_url]\"></td>
 				</tr>
+				<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
 				<tr>
 				<td>Dimesione:</td>
 				<td><select class=\"button\" name=\"size\">
@@ -2176,7 +2237,15 @@ function admincp_master(){
 				value=\"$row[base_value]\">
 				</td>
 				</tr>
-				<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
+				<tr>
+				<td>Categoria</td>
+				<td>$category_form</td>
+				</tr>
+				<tr id=\"new_category\" style=\"visibility: hidden;\">
+				<td>Nuova categoria:</td>
+				<td><input type=\"text\" class=\"text_input\" name=\"new_category\">
+				</td>
+				</tr>
 				<tr>
 				<td><input type=\"submit\" class=\"button\" value=\"Crea-Modifica\"></div></td>
 				</tr>
@@ -2187,7 +2256,9 @@ function admincp_master(){
 			$body.="</form>";
 
 			if($_GET['edit']!=-1){
-				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\" method=\"post\">
+				$body.="
+					<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\"
+					method=\"post\">
 					<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 					<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
 					<tr>
@@ -2195,7 +2266,8 @@ function admincp_master(){
 					<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
 					</tr>
 					<tr>
-					<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div></td>
+					<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div>
+					</td>
 					</tr>
 
 					</table>
@@ -2213,7 +2285,8 @@ function admincp_master(){
 					value=\"$availability\"></td>
 					</tr>
 					<tr>
-					<td><input type=\"submit\" class=\"button\" value=\"Metti in vendita\"></div></td>
+					<td><input type=\"submit\" class=\"button\"
+					value=\"Metti in vendita\"></div></td>
 					</tr>
 
 					</table>
@@ -2299,7 +2372,8 @@ function admincp_master(){
 				";
 
 			$body.='<table width="100%">
-				<tr><td><b>Nome oggetto:</b></td><td style="width=10%"><b>Azioni</b></td></tr>
+				<tr><td><b>Nome oggetto:</b></td><td style="width=10%"><b>Azioni</b>
+				</td></tr>
 				<tr><td colspan=2><hr></td></tr>';	
 
 			if(isset($_GET['letter'])||isset($_POST['letter'])){

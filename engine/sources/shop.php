@@ -49,6 +49,10 @@ function get_object_list($user, $start_from) {
 	$trade_action = "sell[]";
 	$start_limit = ($start_from - 1) * $max_items;
 
+	$category_query="";
+	if (isset($_GET['category']) && $_GET['category'])
+		$category_query = "AND category='{$_GET['category']}'";
+
 	if ($user == $shopper)
 		$trade_action = "buy[]";
 
@@ -57,6 +61,7 @@ function get_object_list($user, $start_from) {
 				SELECT *, count(*) as qty FROM {$prefix}objects
 				WHERE owner = '$user'
 				AND name <> '$money_name'
+				$category_query
 				GROUP BY name, uses
 				ORDER BY name
 				LIMIT $start_limit, $max_items");
@@ -119,7 +124,10 @@ function get_navigator($user) {
 		$url_base= "pg_start";
 		$cur_start = $_GET['pg_start'];
 	}
-		
+
+	$category_query="";
+	if (isset($_GET['category']) && $_GET['category'])
+		$category_query = "AND category='{$_GET['category']}'";
 
 	if ($user == $shopper) {
 		$query = $db->DoQuery("
@@ -127,14 +135,15 @@ function get_navigator($user) {
 				FROM {$prefix}objects
 				WHERE owner = '$user'
 				AND name <> '$money_name'
-				AND equipped = '1'");
+				$category_query");
 	}
 	else {
 		$query = $db->DoQuery("
 				SELECT count(*) as cnt 
 				FROM {$prefix}objects
 				WHERE owner = '$user'
-				AND name <> '$money_name'");
+				AND name <> '$money_name'
+				AND equipped = '1'");
 	}
 
 	$row = $db->Do_Fetch_Assoc($query);
@@ -164,7 +173,7 @@ function get_navigator($user) {
 }
 
 function show_shop() {
-	global $x7s, $shopper;
+	global $x7s, $shopper, $db, $prefix;
 	$body = '';
 	$retval = '';
 
@@ -183,16 +192,38 @@ function show_shop() {
 	$shopper_list = get_navigator($shopper);
 	$shopper_list .= get_object_list($shopper, $_GET['shop_start']);
 	
+	$body .= '<script language="javascript" type="text/javascript">
+		function close_err(){
+			document.getElementById("popup").style.visibility="hidden";
+		}
+	  
+	  function category_change(elem) {
+			query = "&category=" + elem.options[elem.selectedIndex].value;
+			window.location.href = "./index.php?act=shop&pg_start='.
+					$_GET['pg_start'].'&shop_start='.$_GET['shop_start'].'" + query;
+		}
+		</script>';
+	
 	if($retval!=''){
-		$body.='<script language="javascript" type="text/javascript">
-			function close_err(){
-				document.getElementById("popup").style.visibility="hidden";
-			}
-		</script>
-			<div id="popup" >'.$retval.'
+			$body .= '<div id="popup" >'.$retval.'
 			<br><br><input name="ok" type="button" class="button" value="OK"'.
 			'onClick="javascript: close_err(); ">
 			</div>';
+	}
+
+	$categories = '';
+	$query = $db->DoQuery("SELECT DISTINCT category 
+			FROM {$prefix}objects
+			ORDER BY category");
+	while ($row = $db->Do_Fetch_Assoc($query)) {
+		if ($row['category']) {
+			$categories .= "<option value=\"{$row['category']}\"";
+			if (isset($_GET['category']) &&
+					$_GET['category'] == $row['category']) {
+				$categories .= " selected";
+			}
+			$categories .= ">{$row['category']}</option>";
+		}
 	}
 
 	$body .= '
@@ -207,6 +238,10 @@ function show_shop() {
 			</form>
 		</div>
 		<div id="shopper">
+			<select class="button" onChange="javascript: category_change(this);">
+			<option value="">Tutto</option>
+			'.$categories.'
+			</select>
 			<form action="./index.php?act=shop" method="post" name="buy">
 				<div id="shopper_list">
 					__shopper_list__		
@@ -298,16 +333,12 @@ function print_shop($body){
 		</style>
 		';
 
-
-
-
 	echo '</head><body>
  			<div id="shop">
 				<div id="shop_head">
 					<img src="./graphic/shop_head.gif">
 				</div>
  			';
-
 
 	echo $body;
 
