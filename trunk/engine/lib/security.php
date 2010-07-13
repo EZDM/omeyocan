@@ -58,6 +58,7 @@
 				recursive_parse($value);
 			}
 		}
+		$recursion--;
 	}
 
 	function parse_incoming(){
@@ -109,17 +110,4 @@
 		return $data;
 	}	
 	
-	// This function converts incoming variables data into something that is safe for printing
-	/*function strip($value){
-		$value = urldecode($value);
-		return htmlspecialchars($value);
-	}
-	
-	// This function converts incoming variables data into something that is safe for SQL queries
-	function strip_sql($value){
-		$value = urldecode($value);
-		$value = eregi_replace("'","\'",$value);
-		return htmlspecialchars($value);
-	}
-	*/
- ?>
+?>
