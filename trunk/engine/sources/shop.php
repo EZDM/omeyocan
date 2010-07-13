@@ -170,11 +170,11 @@ function show_shop() {
 
 	if (isset($_POST['sell'])) {
 		foreach ($_POST['sell'] as $obj)
-			$retval = sell_obj($obj, $x7s->username, $shopper);
+			$retval .= sell_obj($obj, $x7s->username, $shopper);
 	}
 	if (isset($_POST['buy'])) {
 		foreach ($_POST['buy'] as $obj)
-			$retval =	sell_obj($obj, $shopper, $x7s->username);
+			$retval .=	sell_obj($obj, $shopper, $x7s->username);
 	}
 
 	$player_list = get_navigator($x7s->username);
