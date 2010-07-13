@@ -149,7 +149,7 @@ $GLOBALS['base_money'] = 100000;
 
 		$value = calculate_obj_value($obj, $pg_sell);
 		if ($value < 0)
-			return "Spiacente, non so valutare questo oggetto";
+			return "Spiacente, non so valutare questo oggetto<br>";
 
 		// Check if money transaction is possible
 		$retval = pay($value, $pg_buy, $pg_sell, $check_only=true);
@@ -166,7 +166,7 @@ $GLOBALS['base_money'] = 100000;
 		pay($value, $pg_buy, $pg_sell);
 		move_obj($obj, $pg_sell, $pg_buy);
 		
-		return "Transazione eseguita con successo";
+		return "Transazione eseguita con successo<br>";
 
 	}
 
@@ -174,7 +174,7 @@ $GLOBALS['base_money'] = 100000;
 		global $db, $prefix, $shopper;
 
 		$query_obj = $db->DoQuery("
-				SELECT size FROM {$prefix}objects
+				SELECT name, size FROM {$prefix}objects
 				WHERE id='$obj'
 				AND owner='$from'
 				AND equipped='1'");
@@ -182,7 +182,7 @@ $GLOBALS['base_money'] = 100000;
 		$row_obj = $db->Do_Fetch_Assoc($query_obj);
 
 		if (!$row_obj)
-			return "Oggetto non posseduto/equipaggiato";
+			return "Oggetto non posseduto/equipaggiato<br>";
 
 		// Shopper has infinite space
 		if ($to != $shopper) {
@@ -192,7 +192,8 @@ $GLOBALS['base_money'] = 100000;
 			$row_user = $db->Do_Fetch_Assoc($query_user);
 
 			if ($row_obj['size'] > $row_user['spazio']) {
-				return "Spazio non sufficiente per equipaggiare l'oggetto";
+				return "Spazio non sufficiente per equipaggiare l'oggetto ".
+					"$row_obj[name]<br>";
 			}
 		}
 
@@ -220,7 +221,7 @@ $GLOBALS['base_money'] = 100000;
 		// Check if buyer own money 
 		$money = get_total_user_money($from);	
 		if ($money < $qty) {
-			return "Denaro non disponibile";
+			return "Denaro non disponibile<br>";
 		}
 	
 		// Shopper has infinite space
@@ -231,7 +232,7 @@ $GLOBALS['base_money'] = 100000;
 			$row_user = $db->Do_Fetch_Assoc($query_user);
 		
 			if ($space_required > $row_user['spazio'])
-				return "Spazio non sufficiente per ricevere i soldi";
+				return "Spazio non sufficiente per ricevere i soldi<br>";
 		}
 
 		if ($check_only)
@@ -242,7 +243,7 @@ $GLOBALS['base_money'] = 100000;
 		group_money($from);
 		group_money($to);
 
-		return "Pagamento effettuato";
+		return "Pagamento effettuato<br>";
 	}
 
 	function assign_money($qty, $pg) {

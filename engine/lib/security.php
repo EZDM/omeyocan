@@ -39,22 +39,41 @@
 	function strip_outgoing($value){
 		return urlencode($value);
 	}
-	
+
+	function recursive_parse($array) {
+		static $recursion = 0;
+		$recursion++;
+		if ($recursion > 10)
+			die("Safety parsing die to eccessive recursion");
+
+		foreach($array as $name=>$value){
+			if (!is_array($value)) {
+				if(get_magic_quotes_gpc() == 0)
+					$value = addslashes($value);
+			
+				$value = htmlentities($value, ENT_QUOTES);
+				$array[$name] = $value;
+			}
+			else {
+				recursive_parse($value);
+			}
+		}
+	}
+
 	function parse_incoming(){
 		global $_POST, $_GET, $_COOKIE;
 		// Make POST variables clean
 		foreach($_POST as $name=>$value){
-			// TODO: fix this security bug
-			if (is_array($value))
-				continue;
-
-			if(get_magic_quotes_gpc() == 0)
-				$value = addslashes($value);
-			
-
-			$value = htmlentities($value, ENT_QUOTES);
-					
-			$_POST[$name] = $value;
+			if (!is_array($value)) {
+				if(get_magic_quotes_gpc() == 0)
+					$value = addslashes($value);
+		
+				$value = htmlentities($value, ENT_QUOTES);	
+				$_POST[$name] = $value;
+			}
+			else {
+				recursive_parse($value);
+			}
 		}
 		
 		// Mke GET variables clean
