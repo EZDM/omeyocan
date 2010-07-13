@@ -57,7 +57,7 @@ function get_object_list($user, $start_from) {
 				SELECT *, count(*) as qty FROM {$prefix}objects
 				WHERE owner = '$user'
 				AND name <> '$money_name'
-				GROUP BY name
+				GROUP BY name, uses
 				ORDER BY name
 				LIMIT $start_limit, $max_items");
 	}
