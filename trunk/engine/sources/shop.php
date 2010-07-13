@@ -244,13 +244,13 @@ function print_shop($body){
 				top: 0;
 				left: 0;
 				width: 800px;
-				height: 571px;
+				height: 720px;
 				text-align: center;
 			}
 			#player {
 				float: left;
 				width: 380px;
-				height: 360px;
+				height: 500px;
 			}
 			#player_buttons {
 				float: left;
@@ -258,13 +258,13 @@ function print_shop($body){
 				text-align: center;
 			}
 			#player_list {
-				height: 335px;
+				height: 470px;
 				overflow: auto;
 			}
 			#shopper {
 				float: right;
 				width: 380px;
-				height: 360px;
+				height: 500px;
 			}
 			#shopper_buttons {
 				float: right;
@@ -272,7 +272,7 @@ function print_shop($body){
 				text-align: center;
 			}
 			#shopper_list {
-				height: 335px;
+				height: 470px;
 				overflow: auto;
 			}
 			#navigator {
