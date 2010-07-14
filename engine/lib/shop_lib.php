@@ -80,7 +80,7 @@ $GLOBALS['base_money'] = 100000;
 
 		$row = $db->Do_Fetch_Assoc($query);
 		$obj_name = $row['name'];
-		$obj_remain_uses = $row['uses'];
+		$obj_uses = $row['uses'];
 
 	}
 
