@@ -1507,14 +1507,23 @@ function sheet_page_corp(){
 	$body='';
 	$errore='';
 
-	$query = $db->DoQuery("SELECT xp,corp_master,user_group,bio,corp_charge FROM {$prefix}users WHERE username='$pg'");
+	$query = $db->DoQuery("SELECT xp,corp_master,user_group,bio,corp_charge 
+			FROM {$prefix}users WHERE username='$pg'");
 	$row_user = $db->Do_Fetch_Assoc($query);
 
 	if(!$row_user)
 	die("Fatal: error fetching user");
 
+	$query_group = $db->DoQuery("SELECT corp_master FROM {$prefix}groups
+			WHERE username='$pg' AND usergroup='{$row_user['user_group']}'");
+	$row_group = $db->Do_Fetch_Assoc($query_group);
+
+	if(!$row_group)
+		die("Fatal: error fetching group");
+
 	$corp_master=false;
-	if($row_user['corp_master'] && $row_user['user_group']!=$x7c->settings['usergroup_default'])
+	if($row_group['corp_master'] && 
+			$row_user['user_group']!=$x7c->settings['usergroup_default'])
 		$corp_master=true;
 
 	$xp=floor($row_user['xp']/$x7c->settings['xp_ratio']);
@@ -1523,19 +1532,21 @@ function sheet_page_corp(){
 
 	if(isset($_GET['mgmt']) && ($corp_master || checkIfModifySheet())){
 		if(isset($_GET['target']) || isset($_POST['target'])){
+
 			if(isset($_GET['target']))
 				$target = $_GET['target'];
 			if(isset($_POST['target']))
 				$target=$_POST['target'];
 
-			$query=$db->DoQuery("SELECT username, user_group FROM {$prefix}users WHERE username='$target'");
+			$query=$db->DoQuery("SELECT username, user_group 
+					FROM {$prefix}users WHERE username='$target'");
 			$row = $db->Do_Fetch_Assoc($query);
 
 			if($row && $row['username']!=null){
 				include_once('./lib/sheet_lib.php');
 				if($_GET['mgmt']=='add'){
 					if($row['user_group']==$x7c->settings['usergroup_default'])
-					$errore=join_corp($target, $row_user['user_group'], 1);
+						$errore=join_corp($target, $row_user['user_group'], 1);
 					else{
 						$errore="$target fa gia' parte di un altro Gremios";
 					}
@@ -1564,7 +1575,8 @@ function sheet_page_corp(){
 		}
 	}
 
-	if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfModifySheet())){
+	if(isset($_GET['settings_change']) &&
+			($pg==$x7s->username || checkIfModifySheet())){
 		$ok = true;
 			
 		$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
@@ -1575,97 +1587,98 @@ function sheet_page_corp(){
 		if(!$row_user)
 		die("Users not in database");
 			
-		$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
-							FROM 	{$prefix}userability u, 
-							{$prefix}ability a
-							WHERE 
-								u.ability_id = a.id AND
-								username='$pg' AND
-								corp<>''
-							ORDER BY a.name");
-								
-							$ability='';
-							while($row = $db->Do_Fetch_Assoc($query)){
-								$ability[$row['ab_id']]=$row;
-								if(!isset($_POST[$row['ab_id']])){
-									$ok = false;
-									break;
-								}
-							}
-							if(!checkIfModifySheet() && !isset($_POST['xp']))
-							$ok = false;
+		$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id,
+				u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+				FROM 	{$prefix}userability u, 
+				{$prefix}ability a
+				WHERE 
+				u.ability_id = a.id AND
+				username='$pg' AND
+				corp<>''
+				ORDER BY a.name");
 
-							//Controllo se le abilita' non sono state abbassate o superano il massimo
-							//Il master fa quel che gli pare: niente controlli
+		$ability='';
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$ability[$row['ab_id']]=$row;
+			if(!isset($_POST[$row['ab_id']])){
+				$ok = false;
+				break;
+			}
+		}
+		if(!checkIfModifySheet() && !isset($_POST['xp']))
+			$ok = false;
 
-							$tot_used=0;
-							$lvl_gained=0;
-							if(!checkIfModifySheet() && $ok){
-								$max_ab = $x7c->settings['max_ab'];
+		//Controllo se le abilita' non sono state abbassate o superano il massimo
+		//Il master fa quel che gli pare: niente controlli
 
-									
-								foreach($ability as $cur){
-									if($cur['value'] != $_POST[$cur['ab_id']]){
-										if(!in_array($cur['corp'],$x7p->profile['usergroup']) && $cur['corp']!="_personal"){
-											$ok=false;
-											$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
-										}
-										
-										$new_value = $_POST[$cur['ab_id']];
-										while($new_value > $cur['value']){
-											$tot_used+= $new_value;
-											$new_value--;
-										}
-
-										if($cur['value'] > $_POST[$cur['ab_id']]){
-											$errore .= "Errore, non puoi abbassare le caratteristiche<br>";
-											$ok = false;
-											break;
-										}
-										elseif($_POST[$cur['ab_id']] > $max_ab){
-											$errore .= "Errore, non puoi superare il valore massimo<br>";
-											$ok = false;
-											break;
-										}
-									}
-								}
+		$tot_used=0;
+		$lvl_gained=0;
+		if(!checkIfModifySheet() && $ok){
+			$max_ab = $x7c->settings['max_ab'];
 
 
-								if(!checkIfModifySheet()){
-									if($tot_used > $xp_avail){
-										$errore .= "Hai usato troppi PX<br>";
-										$ok = false;
-									}
-								}
+			foreach($ability as $cur){
+				if($cur['value'] != $_POST[$cur['ab_id']]){
+					if(!in_array($cur['corp'],$x7p->profile['usergroup']) && $cur['corp']!="_personal"){
+						$ok=false;
+						$errore="Non puoi modificare l'abilita' $cur[name]; non fai piu' parte di {$cur['corp']}";
+					}
 
-							}
-							$lvl_gained = $tot_used;
+					$new_value = $_POST[$cur['ab_id']];
+					while($new_value > $cur['value']){
+						$tot_used+= $new_value;
+						$new_value--;
+					}
 
-							if($ok){
-								//Ora posso aggiornare
+					if($cur['value'] > $_POST[$cur['ab_id']]){
+						$errore .= "Errore, non puoi abbassare le caratteristiche<br>";
+						$ok = false;
+						break;
+					}
+					elseif($_POST[$cur['ab_id']] > $max_ab){
+						$errore .= "Errore, non puoi superare il valore massimo<br>";
+						$ok = false;
+						break;
+					}
+				}
+			}
 
-								if($pg!=$x7s->username){
-									include_once('./lib/alarms.php');
-									sheet_modification($pg,$_GET['page']);
-								}
 
-								$newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
-								$newlvl = $row_user['lvl']+$lvl_gained;
+			if(!checkIfModifySheet()){
+				if($tot_used > $xp_avail){
+					$errore .= "Hai usato troppi PX<br>";
+					$ok = false;
+				}
+			}
 
-								$db->DoQuery("UPDATE {$prefix}users
-                                                                SET xp='$newxp', lvl='$newlvl'
-                                                                WHERE username='$pg'");
-								foreach($ability as $cur){
-									if($cur['value'] != $_POST[$cur['ab_id']]){
-										$db->DoQuery("UPDATE {$prefix}userability
-                                                                SET value='{$_POST[$cur['ab_id']]}'
-                                                                WHERE username='$pg'
-                                                                  AND ability_id='{$cur['ab_id']}'");
-									}
-								}
-								header("location: index.php?act=sheet&page=corp&pg=$pg");
+		}
+		$lvl_gained = $tot_used;
 
-							}
+		if($ok){
+			//Ora posso aggiornare
+
+			if($pg!=$x7s->username){
+				include_once('./lib/alarms.php');
+				sheet_modification($pg,$_GET['page']);
+			}
+
+			$newxp = $row_user['xp']-($tot_used * $x7c->settings['xp_ratio']);
+			$newlvl = $row_user['lvl']+$lvl_gained;
+
+			$db->DoQuery("UPDATE {$prefix}users
+					SET xp='$newxp', lvl='$newlvl'
+					WHERE username='$pg'");
+			foreach($ability as $cur){
+				if($cur['value'] != $_POST[$cur['ab_id']]){
+					$db->DoQuery("UPDATE {$prefix}userability
+							SET value='{$_POST[$cur['ab_id']]}'
+							WHERE username='$pg'
+							AND ability_id='{$cur['ab_id']}'");
+				}
+			}
+			header("location: index.php?act=sheet&page=corp&pg=$pg");
+
+		}
 
 	}
 
@@ -1715,7 +1728,8 @@ function sheet_page_corp(){
 	include_once('./lib/sheet_lib.php');
 	$body .= build_ability_javascript($max_ab);
 
-	$body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
+	$body .= '<form action="index.php?act=sheet&page=corp&settings_change=1&pg='.
+		$pg.'" method="post" name="sheet_form">';
 
 	if(!$corp_master && !checkIfModifySheet())
 		$body .= '<div id="modifiable3">';
@@ -1725,7 +1739,8 @@ function sheet_page_corp(){
 	$body.='<table align="left" border="0" cellspacing="0" cellpadding="0">';
 	foreach($ability as $cur){
 		$body .= "<tr>";
-		$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
+		$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\"
+			onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
 		
 		if(in_array($cur['corp'],$x7p->profile['usergroup']) || $cur['corp'] == "_personal" || checkIfModifySheet())
@@ -1755,7 +1770,8 @@ function sheet_page_corp(){
 
 	if(!checkIfModifySheet()){
 		$body .='<div id="#xp" align="center">Punti abilit&agrave;:<br>
-							<input type="text" size="2" name="xp_display" value="'.$xp.'" style="text-align: right; color: blue;" disabled>
+							<input type="text" size="2" name="xp_display" value="'.$xp.
+							'" style="text-align: right; color: blue;" disabled>
 							<input type="hidden" name="xp" value="'.$xp.'"></div>
 						';
 	}
@@ -1768,14 +1784,18 @@ function sheet_page_corp(){
 		else
 		$body .= "<div id=\"modify3\">";
 
-		$body .="<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\">
-                           <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
-				</div>";
+		$body .="<INPUT name=\"mod_button\" class=\"button\" type=\"button\"
+			value=\"Modifica\" onClick=\"javascript: modify();\">
+      <INPUT id=\"aggiorna\" name=\"aggiorna\" class=\"button\"
+			type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
+			</div>";
 	}
 
 	$body.= '</form>';
 
-	if(($corp_master && $pg==$x7s->username) || (checkIfModifySheet() && $row_user['user_group'] != $x7c->settings['usergroup_default'])){
+	if(($corp_master && $pg==$x7s->username) ||
+			(checkIfModifySheet() &&
+			 $row_user['user_group'] != $x7c->settings['usergroup_default'])){
 		$body.="<div id=\"corp_mgmt\">
                                 <div id=\"corp_panel\">
                                 Gestione gremios {$row_user['user_group']}

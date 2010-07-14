@@ -2612,10 +2612,6 @@ function admincp_master(){
 					<td width=\"60\">$txt[309]: </td>
 					<td width=\"100\">{$group_options}</td>
 					</tr>
-					<tr>
-					<td width=\"60\">Corp master? </td>
-					<td width=\"100\"><input type=\"checkbox\" name=\"corp_master\" value=\"1\" ";$body .= ($def->profile['corp_master'] == 1) ? "checked":"";$body .= "></td>
-					</tr>
 
 					<tr>
 					<td>Congelato:</td><td><input type=\"checkbox\" name=\"frozen\" value=\"1\" "; $body .= ($def->profile['frozen'] == 1) ? "checked":"";$body .="></td>
@@ -2642,10 +2638,6 @@ function admincp_master(){
 					change_pass($_GET['update'],$_POST['pass1']);
 
 
-				$corp_master=0;
-				if(isset($_POST['corp_master']))
-					$corp_master=1;
-
 				$frozen=0;
 				if(isset($_POST['frozen']))
 					$frozen=1;
@@ -2666,8 +2658,12 @@ function admincp_master(){
 
 				if($ok){
 					$error_group = "";
-					//$db->DoQuery("UPDATE {$prefix}users SET email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',location='$_POST[location]',hobbies='$_POST[hobbies]',bio='$_POST[bio]',gender='$_POST[gender]',user_group='$_POST[usergroup]', username='$_POST[username]', corp_master='$corp_master' WHERE username='$_GET[update]'");
-					$db->DoQuery("UPDATE {$prefix}users SET time='$time',user_group='{$x7c->settings['usergroup_default']}', email='$_POST[email]',avatar='$_POST[avatar]',name='$_POST[rname]',bio='$_POST[bio]', username='$_POST[username]', corp_master='$corp_master', frozen='$frozen' WHERE username='$_GET[update]'");
+					$db->DoQuery("UPDATE {$prefix}users SET time='$time',
+							user_group='{$x7c->settings['usergroup_default']}', 
+							email='$_POST[email]',avatar='$_POST[avatar]',
+							name='$_POST[rname]',bio='$_POST[bio]',
+							username='$_POST[username]', 
+							frozen='$frozen' WHERE username='$_GET[update]'");
 					include_once('./lib/sheet_lib.php');
 
 					$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$_GET[update]'");
