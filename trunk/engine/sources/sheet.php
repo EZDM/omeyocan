@@ -1507,7 +1507,7 @@ function sheet_page_corp(){
 	$body='';
 	$errore='';
 
-	$query = $db->DoQuery("SELECT xp,corp_master,user_group,bio,corp_charge 
+	$query = $db->DoQuery("SELECT xp,user_group,bio,corp_charge 
 			FROM {$prefix}users WHERE username='$pg'");
 	$row_user = $db->Do_Fetch_Assoc($query);
 
