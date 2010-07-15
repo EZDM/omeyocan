@@ -69,6 +69,40 @@
 		
 	}
 	
+	function record_sell($from, $to, $obj){
+		global $x7s, $x7c, $prefix, $db, $shopper;
+		
+		$msg = "<b>VENDITA OGGETTO</b>: l\'utente <b>$from </b> vende l\'oggetto
+			<b>$obj</b> all\'utente <b>$to</b> <br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) 
+				VALUES ('{$x7s->username}','$msg','$time')");
+		include_once("./lib/message.php");
+
+		if ($to != $shopper)
+			send_offline_msg($to,
+					"Hai comprato un oggetto","Hai comprato l\'oggetto: $obj");		
+	}
+
+	function record_payment($from, $to, $qty){
+		global $x7s, $x7c, $prefix, $db, $shopper;
+		
+		$msg = "<b>Pagamento</b>: l\'utente <b>$from </b> paga <b>$qty</b> 
+			all\'utente <b>$to</b> <br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) 
+				VALUES ('{$x7s->username}','$msg','$time')");
+		include_once("./lib/message.php");
+
+		if ($to != $shopper)
+			send_offline_msg($to,
+					"Hai ricevuto dei soldi","Hai ricevuto soldi per $qty");
+		
+		
+	}
+	
 	function object_moves($owner,$old, $obj){
 		global $x7s, $x7c, $prefix, $db;
 		

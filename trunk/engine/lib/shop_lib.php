@@ -113,10 +113,12 @@ $GLOBALS['base_money'] = 100000;
 		$avail_factor = 1;
 
 		$use_factor = $obj_remain_uses / $base_uses; 
-		if ($base_uses <= 0)
-			$use_factor = 1;
-		else if ($obj_remain_uses < 0) //This object's version is infinite 
-			$use_factor = 4;
+		if ($use_factor != 0) {
+			if ($base_uses <= 0)
+				$use_factor = 1;
+			else if ($obj_remain_uses < 0) //This object's version is infinite 
+				$use_factor = 4;
+		}
 
 
 		if ($availability < 2) {
@@ -148,7 +150,8 @@ $GLOBALS['base_money'] = 100000;
 		global $db, $prefix, $money_name, $shopper;
 
 		$value = calculate_obj_value($obj, $pg_sell);
-		if ($value < 0)
+		get_obj_name_and_uses($obj, $obj_name, $uses);
+		if ($value <= 0)
 			return "Spiacente, non so valutare questo oggetto<br>";
 
 		// Check if money transaction is possible
@@ -165,7 +168,9 @@ $GLOBALS['base_money'] = 100000;
 		
 		pay($value, $pg_buy, $pg_sell);
 		move_obj($obj, $pg_sell, $pg_buy);
-		
+	
+		include_once('./lib/alarm.php');
+		record_sell($pg_sell, $pg_buy, $obj_name);
 		return "Transazione eseguita con successo<br>";
 
 	}
@@ -243,6 +248,8 @@ $GLOBALS['base_money'] = 100000;
 		group_money($from);
 		group_money($to);
 
+		include_once("./lib/alarms.php");
+		record_payment($from, $to, $qty);
 		return "Pagamento effettuato<br>";
 	}
 

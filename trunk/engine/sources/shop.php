@@ -238,16 +238,17 @@ function show_shop() {
 			</form>
 		</div>
 		<div id="shopper">
-			<select class="button" onChange="javascript: category_change(this);">
-			<option value="">Tutto</option>
-			'.$categories.'
-			</select>
 			<form action="./index.php?act=shop" method="post" name="buy">
 				<div id="shopper_list">
 					__shopper_list__		
 				</div>
 				<div id="shopper_buttons">
-					<input class="button" type="submit" value="Compra">
+					 <input class="button" type="submit" value="Compra">
+					 Categoria:
+					<select class="button" onChange="javascript: category_change(this);">
+					<option value="">Tutto</option>
+					'.$categories.'
+					</select>
 				</div>
 			</form>
 		</div>
