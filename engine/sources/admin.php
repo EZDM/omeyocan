@@ -1902,7 +1902,7 @@ function admincp_master(){
 
 	}elseif($_GET['cp_page'] == "objects"){
 		include_once('./lib/shop_lib.php');
-		global $shopper;
+		global $shopper, $money_name;
 
 		$head = "Amministrazione oggetti";
 		$navigator='';
@@ -1918,32 +1918,41 @@ function admincp_master(){
 
 				$delta_avail = $_POST['sell_copies'] - $cur_avail;
 
-				if ($delta_avail < 0) {
-					$delta_avail = -$delta_avail;
-					$db->DoQuery("DELETE FROM {$prefix}objects
-							WHERE name = '$obj_name'
-							AND owner = '$shopper'
-							LIMIT $delta_avail");
+				$value = calculate_obj_value($_POST['id'], $shopper);
+
+				if ($value <= 0) {
+					$error = "L'oggetto non ha valore";
 				}
-				else if($delta_avail > 0) {
-
-					$query = $db->DoQuery("SELECT * FROM {$prefix}objects WHERE id='$_POST[id]'");
-					$row = $db->Do_Fetch_Assoc($query);
-
-					if(!$row || $row['id']==''){
-						$error = "Oggetto non esistente";
+				else {
+					if ($delta_avail < 0) {
+						$delta_avail = -$delta_avail;
+						$db->DoQuery("DELETE FROM {$prefix}objects
+								WHERE name = '$obj_name'
+								AND owner = '$shopper'
+								LIMIT $delta_avail");
 					}
-					else {
-						for ($i = 0; $i < $delta_avail; $i++) {
-							$db->DoQuery("INSERT INTO {$prefix}objects
-								(name,description,uses,image_url,owner,equipped,size,category)
-								VALUES('$row[name]','$row[description]','$row[uses]',
-									'$row[image_url]','$shopper','1','$row[size]',
-									'$row[category]')");
+					else if($delta_avail > 0) {
+
+						$query = $db->DoQuery("SELECT * 
+								FROM {$prefix}objects WHERE id='$_POST[id]'");
+						$row = $db->Do_Fetch_Assoc($query);
+
+						if(!$row || $row['id']==''){
+							$error = "Oggetto non esistente";
+						}
+						else {
+							for ($i = 0; $i < $delta_avail; $i++) {
+								$db->DoQuery("INSERT INTO {$prefix}objects
+										(name,description,uses,
+										 image_url,owner,equipped,size,category)
+										VALUES('$row[name]','$row[description]','$row[uses]',
+											'$row[image_url]','$shopper','1','$row[size]',
+											'$row[category]')");
+							}
 						}
 					}
+					$error = "Nuove copie in vendita: {$_POST['sell_copies']}";
 				}
-				$error = "Nuove copie in vendita: {$_POST['sell_copies']}";
 			}
 			
 		}
@@ -2101,11 +2110,14 @@ function admincp_master(){
 
 				}
 
-				$body.="<br><br><a href=\"index.php?act=adminpanel&cp_page=objects\">[Torna agli oggetti]</a>";
+				$body.="<br><br><a href=\"index.php?act=adminpanel&cp_page=objects\">
+					[Torna agli oggetti]</a>";
 			}
 
 			else{
-				$body .= "<form action=\"index.php?act=adminpanel&cp_page=objects&proom=1\" method=\"post\">
+				$body .= "
+					<form action=\"index.php?act=adminpanel&cp_page=objects&proom=1\"
+					method=\"post\">
 					<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 					<tr>
 					<td>Nome del proprietario:</td>
@@ -2311,6 +2323,7 @@ function admincp_master(){
 			else {	
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
 						WHERE owner='$shopper' AND name LIKE '$letter'
+						AND name <> '$money_name'
 						GROUP BY name
 						ORDER BY name");
 			}
@@ -2378,14 +2391,20 @@ function admincp_master(){
 
 			if(isset($_GET['letter'])||isset($_POST['letter'])){
 				while($row = $db->Do_Fetch_Assoc($query)){
-					$body .= "<tr><td><a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">$row[name]</a></td><td style=\"width=10%\"><a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">[Cancella]</a></td></tr>
-						<tr><td colspan=2><hr></td></tr>";
+					$body .= "<tr><td>
+						<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">
+						$row[name]</a></td>";
+
+					if ($row['name'] != $money_name) {
+						$body .= "<td style=\"width=10%\">
+							<a href=\"index.php?act=adminpanel&cp_page=objects&delete=$row[id]\">
+							[Cancella]</a></td>";
+					}
+						
+					$body .= "</tr><tr><td colspan=2><hr></td></tr>";
 				}
 			}
 			$body.='</table>';
-
-
-
 		}
 
 
