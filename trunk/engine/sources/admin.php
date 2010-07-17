@@ -2318,14 +2318,14 @@ function admincp_master(){
 
 			if(!isset($_POST['selling'])) {
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-						WHERE owner='' AND name LIKE '$letter' ORDER BY name");
+						WHERE owner='' AND name LIKE '$letter' ORDER BY category, name");
 			}
 			else {	
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
 						WHERE owner='$shopper' AND name LIKE '$letter'
 						AND name <> '$money_name'
 						GROUP BY name
-						ORDER BY name");
+						ORDER BY category, name");
 			}
 
 			$body = "<b style=\"color: orange;\">$error</b><br><br>";
@@ -2391,9 +2391,12 @@ function admincp_master(){
 
 			if(isset($_GET['letter'])||isset($_POST['letter'])){
 				while($row = $db->Do_Fetch_Assoc($query)){
+					$category = '';
+					if ($row['category'])
+                                          $category = $row['category'].": ";
 					$body .= "<tr><td>
 						<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">
-						$row[name]</a></td>";
+						$category$row[name]</a></td>";
 
 					if ($row['name'] != $money_name) {
 						$body .= "<td style=\"width=10%\">
