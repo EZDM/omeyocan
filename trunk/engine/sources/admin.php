@@ -2309,20 +2309,23 @@ function admincp_master(){
 		}
 		else if(!isset($_GET['proom'])){
 
-			$letter='a%';
+			$letter='AND name LIKE \'a%\'';
 			if(isset($_GET['letter']))
-				$letter=$_GET['letter']."%";									
+				$letter="AND name LIKE '".$_GET['letter']."%'";									
 
 			if(isset($_POST['letter']))
-				$letter="%".$_POST['letter']."%";
+				$letter="AND name LIKE '%".$_POST['letter']."%'";
+
+			if(isset($_GET['category']))
+				$letter="AND category LIKE '{$_GET['category']}'";
 
 			if(!isset($_POST['selling'])) {
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-						WHERE owner='' AND name LIKE '$letter' ORDER BY category, name");
+						WHERE owner='' $letter ORDER BY category, name");
 			}
 			else {	
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-						WHERE owner='$shopper' AND name LIKE '$letter'
+						WHERE owner='$shopper' $letter
 						AND name <> '$money_name'
 						GROUP BY name
 						ORDER BY category, name");
@@ -2384,16 +2387,32 @@ function admincp_master(){
 				</p>
 				";
 
+			$query_category = $db->DoQuery("SELECT DISTINCT category
+					FROM {$prefix}objects ORDER BY category");
+
+			$body .= " <p style=\"text-align: center;\">";
+			while ($row_category = $db->Do_Fetch_Assoc($query_category)) {
+				$long_name = $row_category['category'];
+				if (!$row_category['category'])
+					$long_name = "Senza categoria";
+				$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&category=".
+					$row_category['category']."\">[$long_name] </a>";
+			}
+
+			$body .= "</p>";
+
 			$body.='<table width="100%">
 				<tr><td><b>Nome oggetto:</b></td><td style="width=10%"><b>Azioni</b>
 				</td></tr>
 				<tr><td colspan=2><hr></td></tr>';	
 
-			if(isset($_GET['letter'])||isset($_POST['letter'])){
+			if(isset($_GET['letter']) ||
+					isset($_POST['letter']) ||
+					isset($_GET['category'])){
 				while($row = $db->Do_Fetch_Assoc($query)){
 					$category = '';
 					if ($row['category'])
-                                          $category = $row['category'].": ";
+						$category = $row['category'].": ";
 					$body .= "<tr><td>
 						<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">
 						$category$row[name]</a></td>";
