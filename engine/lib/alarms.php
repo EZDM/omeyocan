@@ -42,6 +42,18 @@
 		
 	}
 	
+	function wrong_login($username){
+		global $x7s, $x7c, $prefix, $db;
+		
+		$msg = "<b>PASSWORD ERRATA:</b> utente: <b>$username </b> IP: 
+			$_SERVER[REMOTE_ADDR]<br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
+		
+		
+	}
+	
 	function sheet_modification($modified, $page){
 		global $x7s, $x7c, $prefix, $db;
 		
