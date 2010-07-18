@@ -27,7 +27,7 @@
 
 $GLOBALS['max_items'] = 10;
 $GLOBALS['shopper'] = "_shopper_";
-$GLOBALS['money_name'] = "Cogwheels";
+$GLOBALS['money_name'] = "Cogs";
 $GLOBALS['money_group'] = 100;
 $GLOBALS['money_group_size'] = 1;
 $GLOBALS['base_money'] = 100000;
