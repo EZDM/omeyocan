@@ -2187,6 +2187,10 @@ function admincp_master(){
 			$category_form .= '<option value="_new_">-Crea nuova categoria-</option>
 				</select>';
 
+			$name_type = "text";
+			if ($row['name'] == $money_name)
+				$name_type = "hidden";
+
 			$body.="
 				<script language=\"javascript\" type=\"text/javascript\">
 					function category_select(elem) {
@@ -2206,7 +2210,7 @@ function admincp_master(){
 				<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
 				<tr>
 				<td>Nome:</td>
-				<td><input type=\"text\" name=\"name\" class=\"text_input\"
+				<td><input type=\"$name_type\" name=\"name\" class=\"text_input\"
 				value=\"$row[name]\"></td>
 				</tr>
 				<tr>
