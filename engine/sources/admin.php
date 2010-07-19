@@ -1944,10 +1944,10 @@ function admincp_master(){
 							for ($i = 0; $i < $delta_avail; $i++) {
 								$db->DoQuery("INSERT INTO {$prefix}objects
 										(name,description,uses,
-										 image_url,owner,equipped,size,category)
+										 image_url,owner,equipped,size,category,base_value)
 										VALUES('$row[name]','$row[description]','$row[uses]',
 											'$row[image_url]','$shopper','1','$row[size]',
-											'$row[category]')");
+											'$row[category]',$row[base_value])");
 							}
 						}
 					}
@@ -2141,6 +2141,13 @@ function admincp_master(){
 				$row = $db->Do_Fetch_Assoc($query);
 				if(!$row)
 					die("Error; should not die here");
+				if($row['owner'] == $shopper) {
+					$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+							WHERE name='$row[name]' AND owner = ''");
+					$row = $db->Do_Fetch_Assoc($query);
+					if(!$row)
+						die("Error; should not die here");
+				}
 			}else{
 				$row['name']='';
 				$row['owner']='';
