@@ -349,13 +349,18 @@ function memberlist(){
 				$getstanza='';
 
 				if($room!='' && $room!="Mappa"){
-					$list[$cur] .= "<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=usr_action&action=dice&user={$row['username']}&room={$row['position']}\">Tira un dado</a></td>";
+					$list[$cur] .= "<td class=\"dark_row\"height=\"25\">
+						<a class=\"dark_link\"
+						href=\"index.php?act=usr_action&action=dice&user=".
+						"{$row['username']}&room={$row['position']}\">Dadi</a></td>";
 				}
 
 				if($room!='')
 					$getstanza="&room";
 
-				$list[$cur].="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\" href=\"index.php?act=memberlist&$action&user={$row['username']}$getstanza\">$new_state</a></td>";
+				$list[$cur].="<td class=\"dark_row\"height=\"25\"><a class=\"dark_link\"
+					href=\"index.php?act=memberlist&$action&user={$row['username']}".
+					"$getstanza\">$new_state</a></td>";
 
 			}
 
