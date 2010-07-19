@@ -31,6 +31,7 @@ $GLOBALS['money_name'] = "Cogs";
 $GLOBALS['money_group'] = 100;
 $GLOBALS['money_group_size'] = 1;
 $GLOBALS['base_money'] = 100000;
+$GLOBALS['evaluate_cost'] = 10;
 
 	function get_total_money() {
 		global $db, $prefix, $money_name;
@@ -144,6 +145,25 @@ $GLOBALS['base_money'] = 100000;
 				Tasso di usura: $use_factor";
 		}
 		return $value;
+	}
+
+	function get_evaluation($obj) {
+		global $evaluate_cost, $shopper, $x7s;
+		$retval = pay($evaluate_cost, $x7s->username, $shopper, true);
+		$name = '';
+		$uses = '';
+		get_obj_name_and_uses($obj, $name, $uses);
+		
+		if (!$retval){
+			pay($evaluate_cost, $x7s->username, $shopper);
+			$message = "L'oggetto $name ha $uses rimasti<br>";
+			if ($uses < 0)
+				$message = "L'oggetto $name ha usi infiniti<br>";
+		}
+		else {
+			$message = "Non hai soldi per valutare l'oggetto $name<br>";
+		}
+		return $message;
 	}
 
 	function sell_obj($obj, $pg_sell, $pg_buy) {
@@ -314,6 +334,8 @@ $GLOBALS['base_money'] = 100000;
 				WHERE name = '$money_name'
 				AND owner = '$pg'");
 		$row_money = $db->Do_Fetch_Assoc($query_money);
+		if (!$row_money)
+			die("Incosistent money status");
 
 		$to_move = $qty;
 		while ($to_move > 0) {
@@ -325,8 +347,6 @@ $GLOBALS['base_money'] = 100000;
 						WHERE id='{$row_money['id']}'");
 				
 				$row_money = $db->Do_Fetch_Assoc($query_money);
-				if (!$row_money)
-					die("Incosistent money status");
 			}
 			else {
 				$db->DoQuery("UPDATE {$prefix}objects

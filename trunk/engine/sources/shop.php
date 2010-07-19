@@ -25,23 +25,16 @@ If not, see <http://www.gnu.org/licenses/>
 ?>
 <?PHP
 
-/*$max_items = 10;
-$shopper = "_shopper_";
-$money_name = "Cogwheels";
-$money_group = 100;
-$money_group_size = 1;
-$base_money = 100000;*/
-
 include_once("./lib/shop_lib.php");
 
 function shop_main(){
-	global $x7s, $db, $x7c, $prefix;
-	$page='';
+		global $x7s, $db, $x7c, $prefix;
+		$page='';
 
-	$body = show_shop();
-		
-	print_shop($body,$page);
-}
+		$body = show_shop();
+
+		print_shop($body,$page);
+	}
 
 function get_object_list($user, $start_from) {
 	global $db, $prefix, $max_items, $shopper, $money_name;
@@ -83,17 +76,17 @@ function get_object_list($user, $start_from) {
 		$valore = calculate_obj_value($row['id'], $user, true);
 		$body .= '
 			<tr>
-				<td>
-					<input type="checkbox" name="'.$trade_action.'"
-					value="'.$row['id'].'">
-				</td>
-				<td>
-					<img width=100 height=100 src="'.$row['image_url'].'" '. 
-					'align="left">
-					<b>'.$row['name'].'</b><br>
-					Valore: '.$valore.'
-					<p>'.$row['description'].'</p>
-				</td>
+			<td>
+			<input type="checkbox" name="'.$trade_action.'"
+			value="'.$row['id'].'">
+			</td>
+			<td>
+			<img width=100 height=100 src="'.$row['image_url'].'" '. 
+			'align="left">
+			<b>'.$row['name'].'</b><br>
+			Valore: '.$valore.'
+			<p>'.$row['description'].'</p>
+			</td>
 			</tr>';
 	}
 
@@ -152,15 +145,15 @@ function get_navigator($user) {
 
 	if ($pages > 1) {
 		$body .= '<div id="navigator">';
-		
+
 		for ($i = 1; $i <= $pages; $i++) {
 			if ($i != $cur_start) {	
 				$body .= '<a href=index.php?act=shop&'.$url_base.'='.$i.'>'.
-						$i.'</a>';
+					$i.'</a>';
 			}
 			else {
 				$body .= '<b><a href=index.php?act=shop&'.$url_base.'='.$i.'>['.
-						$i.']</a></b>';
+					$i.']</a></b>';
 
 			}
 		}
@@ -173,13 +166,22 @@ function get_navigator($user) {
 }
 
 function show_shop() {
-	global $x7s, $shopper, $db, $prefix;
+	global $x7s, $shopper, $db, $prefix, $evaluate_cost;
 	$body = '';
 	$retval = '';
+	$evaluation = '';
+
+	if (!isset($_POST['evaluate']))
+		$_POST['evaluate'] = 0;
 
 	if (isset($_POST['sell'])) {
-		foreach ($_POST['sell'] as $obj)
-			$retval .= sell_obj($obj, $x7s->username, $shopper);
+		foreach ($_POST['sell'] as $obj) {
+			if (!$_POST['evaluate'])
+				$retval .= sell_obj($obj, $x7s->username, $shopper);
+			else {
+				$evaluation .= get_evaluation($obj);
+			}
+		}
 	}
 	if (isset($_POST['buy'])) {
 		foreach ($_POST['buy'] as $obj)
@@ -188,24 +190,36 @@ function show_shop() {
 
 	$player_list = get_navigator($x7s->username);
 	$player_list .= get_object_list($x7s->username, $_GET['pg_start']);
-	
-	$shopper_list = get_navigator($shopper);
-	$shopper_list .= get_object_list($shopper, $_GET['shop_start']);
-	
+
+	if (!$_POST['evaluate']) {
+		$shopper_list = get_navigator($shopper);
+		$shopper_list .= get_object_list($shopper, $_GET['shop_start']);
+	}
+	else {
+		$shopper_list = $evaluation;
+		$shopper_list .= "<p><a href='./index.php?act=shop'>
+			[Torna all'elenco oggetti]</a></p>";
+	}
+
 	$body .= '<script language="javascript" type="text/javascript">
-		function close_err(){
-			document.getElementById("popup").style.visibility="hidden";
+		function send_evaluate() {
+			document.forms["sell"].evaluate.value = 1;
+			document.forms["sell"].submit();
 		}
-	  
-	  function category_change(elem) {
-			query = "&category=" + elem.options[elem.selectedIndex].value;
-			window.location.href = "./index.php?act=shop&pg_start='.
-					$_GET['pg_start'].'&shop_start='.$_GET['shop_start'].'" + query;
-		}
-		</script>';
-	
+
+	function close_err(){
+		document.getElementById("popup").style.visibility="hidden";
+	}
+
+	function category_change(elem) {
+		query = "&category=" + elem.options[elem.selectedIndex].value;
+		window.location.href = "./index.php?act=shop&pg_start='.
+			$_GET['pg_start'].'&shop_start='.$_GET['shop_start'].'" + query;
+	}
+	</script>';
+
 	if($retval!=''){
-			$body .= '<div id="popup" >'.$retval.'
+		$body .= '<div id="popup" >'.$retval.'
 			<br><br><input name="ok" type="button" class="button" value="OK"'.
 			'onClick="javascript: close_err(); ">
 			</div>';
@@ -228,29 +242,33 @@ function show_shop() {
 
 	$body .= '
 		<div id="player">
-			<form action="./index.php?act=shop" method="post" name="sell">
-				<div id="player_list">
-					__player_list__		
-				</div>
-				<div id="player_buttons">
-					<input class="button" type="submit" value="Vendi">
-				</div>
-			</form>
+		<form action="./index.php?act=shop" method="post" name="sell">
+		<input type="hidden" name="evaluate" value="0">
+		<div id="player_list">
+		__player_list__		
+		</div>
+		<div id="player_buttons">
+		<input class="button" type="submit" value="Vendi">
+		<input class="button" type="button" 
+		value="Valuta usi rimanenti (costo: '.$evaluate_cost.')"
+		onClick="javascript: send_evaluate();">
+		</div>
+		</form>
 		</div>
 		<div id="shopper">
-			<form action="./index.php?act=shop" method="post" name="buy">
-				<div id="shopper_list">
-					__shopper_list__		
-				</div>
-				<div id="shopper_buttons">
-					 <input class="button" type="submit" value="Compra">
-					 Categoria:
-					<select class="button" onChange="javascript: category_change(this);">
-					<option value="">Tutto</option>
-					'.$categories.'
-					</select>
-				</div>
-			</form>
+		<form action="./index.php?act=shop" method="post" name="buy">
+		<div id="shopper_list">
+		__shopper_list__		
+		</div>
+		<div id="shopper_buttons">
+		<input class="button" type="submit" value="Compra">
+		Categoria:
+		<select class="button" onChange="javascript: category_change(this);">
+		<option value="">Tutto</option>
+		'.$categories.'
+		</select>
+		</div>
+		</form>
 		</div>
 		</div>
 		';
@@ -274,78 +292,78 @@ function print_shop($body){
 
 	echo '
 		<style type="text/css">
-			#shop {
-				position: absolute;
-				background: url(./graphic/sfondonegozio.jpg);
-				top: 0;
-				left: 0;
-				width: 800px;
-				height: 720px;
+#shop {
+	position: absolute;
+background: url(./graphic/sfondonegozio.jpg);
+top: 0;
+left: 0;
+width: 800px;
+height: 720px;
 				text-align: center;
-			}
-			#player {
-				float: left;
-				width: 380px;
-				height: 500px;
-			}
-			#player_buttons {
-				float: left;
-				width: 370px;
-				text-align: center;
-			}
-			#player_list {
-				height: 470px;
-				overflow: auto;
-			}
-			#shopper {
-				float: right;
-				width: 380px;
-				height: 500px;
-			}
-			#shopper_buttons {
-				float: right;
-				width: 370px;
-				text-align: center;
-			}
-			#shopper_list {
-				height: 470px;
-				overflow: auto;
-			}
-			#navigator {
-				text-align: center;
-			}
-			#popup {
-				text-align: center;
-				background-color: lightyellow;
-				color: #650000;
-				font-weight: bold;
-				font-size: 10pt;
-				top: 30%;
-				width: 60%;
-				margin-left: 20%;
-				margin-right: 20%;
-				position: absolute;
-				padding: 5px;
-				border: 3px dashed red;
+}
+#player {
+float: left;
+width: 380px;
+height: 500px;
+}
+#player_buttons {
+float: left;
+width: 370px;
+			 text-align: center;
+}
+#player_list {
+height: 470px;
+overflow: auto;
+}
+#shopper {
+float: right;
+width: 380px;
+height: 500px;
+}
+#shopper_buttons {
+float: right;
+width: 370px;
+			 text-align: center;
+}
+#shopper_list {
+height: 470px;
+overflow: auto;
+}
+#navigator {
+	text-align: center;
+}
+#popup {
+	text-align: center;
+	background-color: lightyellow;
+color: #650000;
+			 font-weight: bold;
+			 font-size: 10pt;
+top: 30%;
+width: 60%;
+			 margin-left: 20%;
+			 margin-right: 20%;
+position: absolute;
+padding: 5px;
+border: 3px dashed red;
 				text-decoration: none;
-			}
-			
+}
 
-		</style>
-		';
 
-	echo '</head><body>
- 			<div id="shop">
-				<div id="shop_head">
-					<img src="./graphic/shop_head.gif">
-				</div>
- 			';
+</style>
+';
 
-	echo $body;
+echo '</head><body>
+<div id="shop">
+<div id="shop_head">
+<img src="./graphic/shop_head.gif">
+</div>
+';
 
-	echo '</div>
-		</body>
-			</html>';
+echo $body;
+
+echo '</div>
+</body>
+</html>';
 }
 
 function checkIfMaster(){
