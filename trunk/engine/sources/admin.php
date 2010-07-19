@@ -2707,7 +2707,7 @@ function admincp_master(){
 							user_group='{$x7c->settings['usergroup_default']}', 
 							email='$_POST[email]',avatar='$_POST[avatar]',
 							name='$_POST[rname]',bio='$_POST[bio]',
-							username='$_POST[username]', 
+							username='$_POST[username]', m_invisible = '0', 
 							frozen='$frozen' WHERE username='$_GET[update]'");
 					include_once('./lib/sheet_lib.php');
 
