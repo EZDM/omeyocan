@@ -929,7 +929,9 @@
 				if($lastid<$new_msg['id'])
 					$lastid=$new_msg['id'];
 					
-				$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user) VALUES('$new_msg[id]','{$x7s->username}')");
+				$db->DoQuery("INSERT INTO {$prefix}boardunread (id, user)
+						VALUES('$new_msg[id]','{$x7s->username}')
+						ON DUPLICATE KEY UPDATE user=user");
 			}
 		}
 
