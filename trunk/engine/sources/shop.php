@@ -70,7 +70,8 @@ function get_object_list($user, $start_from) {
 	}
 
 	$tot_money = get_total_user_money($user);
-	$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
+	if ($user != $shopper)
+		$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
 
 	while ($row = $db->Do_Fetch_Assoc($query)) {
 		$valore = calculate_obj_value($row['id'], $user, true);
@@ -86,6 +87,7 @@ function get_object_list($user, $start_from) {
 			<b>'.$row['name'].'</b><br>
 			Valore: '.$valore.'
 			<p>'.$row['description'].'</p>
+			<hr>
 			</td>
 			</tr>';
 	}
@@ -188,12 +190,16 @@ function show_shop() {
 			$retval .=	sell_obj($obj, $shopper, $x7s->username);
 	}
 
-	$player_list = get_navigator($x7s->username);
+	$player_nav = get_navigator($x7s->username);
+	$player_list = $player_nav;
 	$player_list .= get_object_list($x7s->username, $_GET['pg_start']);
+	$player_list .= $player_nav;
 
 	if (!$_POST['evaluate']) {
-		$shopper_list = get_navigator($shopper);
+		$shopper_nav = get_navigator($shopper);
+		$shopper_list = $shopper_nav;
 		$shopper_list .= get_object_list($shopper, $_GET['shop_start']);
+		$shopper_list .= $shopper_nav;
 	}
 	else {
 		$shopper_list = $evaluation;
