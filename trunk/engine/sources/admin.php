@@ -2041,7 +2041,11 @@ function admincp_master(){
 		}
 
 		if(isset($_GET['delete'])){
+			$name = '';
+			get_obj_name_and_uses($_GET['delete'], $name, $uses);
 			$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
+			$db->DoQuery("DELETE FROM {$prefix}objects WHERE name='$name'
+					AND owner='$shopper'");
 			$error = "Oggetto eliminato";
 		}
 
