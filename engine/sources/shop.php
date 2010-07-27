@@ -38,7 +38,7 @@ function shop_main(){
 
 function get_object_list($user, $start_from) {
 	global $db, $prefix, $max_items, $shopper, $money_name;
-	$body = '<table width=100%>';
+	$body = '<table width=100% border=1 rules=rows>';
 	$trade_action = "sell[]";
 	$start_limit = ($start_from - 1) * $max_items;
 
@@ -87,7 +87,6 @@ function get_object_list($user, $start_from) {
 			<b>'.$row['name'].'</b><br>
 			Valore: '.$valore.'
 			<p>'.$row['description'].'</p>
-			<hr>
 			</td>
 			</tr>';
 	}
