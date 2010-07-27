@@ -366,7 +366,9 @@
 				$href=$row['link'];
 			}
 			else{
-				$href="javascript: hndl = window.open('$row[link]','sub_location','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
+				$href="javascript: hndl = window.open('$row[link]','sub_location',".
+					"'width=$row[width],height=$row[height], toolbar=no, status=no, ".
+					"location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
 			}
 			
 			$rollover="onMouseOut=\"HidePopup2(this);\" onMouseOver=\"ShowPopup2(this,'$row[descr]');\"";
