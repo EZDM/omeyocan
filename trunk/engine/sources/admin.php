@@ -2017,6 +2017,8 @@ function admincp_master(){
 				$category = $_POST['new_category'];
 
 			if($_POST['id']!=-1){
+				$old_name = '';
+				get_obj_name_and_uses($_POST['id'], $old_name, $uses);
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET name='$_POST[name]',
 							description='$_POST[description]',
@@ -2026,6 +2028,16 @@ function admincp_master(){
 							base_value='$_POST[base_value]',
 							category='$category'
 						WHERE id='$_POST[id]'");
+				
+				$db->DoQuery("UPDATE {$prefix}objects 
+						SET name='$_POST[name]',
+							description='$_POST[description]',
+							uses='$_POST[uses]',
+							image_url='$_POST[image_url]',
+							size='$_POST[size]',
+							base_value='$_POST[base_value]',
+							category='$category'
+						WHERE name='$old_name' AND owner='$shopper'");
 			}else{
 				$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
