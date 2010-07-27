@@ -173,6 +173,8 @@ If not, see <http://www.gnu.org/licenses/>
 		for(i=0; i<document.getElementById('selected_link').length && !found; i++){
 			if(document.getElementById('selected_link').options[i].value==link){
 				document.getElementById('selected_link').selectedIndex=i;
+				document.getElementById('visual_pop_w').style.visibility = 'hidden';
+				document.getElementById('visual_pop_h').style.visibility = 'hidden';
 				found = true;
 			}
 		}
@@ -180,6 +182,8 @@ If not, see <http://www.gnu.org/licenses/>
 		for(i=0; i<document.getElementById('selected_link_static').length && !found; i++){
 			if(document.getElementById('selected_link_static').options[i].value==link){
 				document.getElementById('selected_link_static').selectedIndex=i;
+				document.getElementById('visual_pop_w').style.visibility = 'visible';
+				document.getElementById('visual_pop_h').style.visibility = 'visible';
 				found = true;
 			}
 		}
@@ -206,14 +210,13 @@ If not, see <http://www.gnu.org/licenses/>
 		else
 			document.getElementById('rollover').checked=true;
 
-
 		document.getElementById('edit').value = id;
-    	document.getElementById('add').value = -1;
-    	document.getElementById('delete').value = -1;
+    document.getElementById('add').value = -1;
+    document.getElementById('delete').value = -1;
 
+		document.getElementById('pop_w').value = targ.getAttribute('pop_w');
+		document.getElementById('pop_h').value = targ.getAttribute('pop_h');
 
-    	
-    	
 
     }
 
@@ -255,6 +258,8 @@ If not, see <http://www.gnu.org/licenses/>
     function reset_static(){
         sel = document.getElementById('selected_link_static');
         sel.selectedIndex=0;
+				document.getElementById('visual_pop_w').style.visibility = 'hidden';
+				document.getElementById('visual_pop_h').style.visibility = 'hidden';
 
 		if(document.getElementById('edit').value > 0)
 			edited = 1;
@@ -264,6 +269,8 @@ If not, see <http://www.gnu.org/licenses/>
     function reset_room(){
         sel = document.getElementById('selected_link');
         sel.selectedIndex=0;
+				document.getElementById('visual_pop_w').style.visibility = 'visible';
+				document.getElementById('visual_pop_h').style.visibility = 'visible';
 
 		if(document.getElementById('edit').value > 0)
 			edited = 1;
@@ -403,15 +410,39 @@ If not, see <http://www.gnu.org/licenses/>
       	<div id="form">
 	      	<form name="editor" method="post" action="index.php?act=mapeditor&edited=1">
 		      	<table>
-		      		<tr><td>Descrizione:</td><td><input type="text" id="visual_selected_id" name="descr" onClick="javascript: this.select();"></td></tr>
+		      		<tr><td>Descrizione:</td><td>
+							<input type="text" id="visual_selected_id"
+								name="descr" onClick="javascript: this.select();"></td></tr>
 		      		<tr><td>Coordinata X:</td><td id="visual_selected_x"></td></tr>
 		      		<tr><td>Coordinata Y:</td><td id="visual_selected_y"></td></tr>
-		      		<tr><td>Stanza:</td><td id="visual_selected_link" onChange="javascript: reset_static(this);"><select id="selected_link" name="selected_link"><?php echo $link_selection;?> </select></td></tr>
-		      		<tr><td>Popup:</td><td id="visual_selected_link_static"><select id="selected_link_static" name="selected_link_static" onChange="javascript: reset_room(this);"><?php echo $link_selection_static;?> </select></td></tr>
-		      		<tr><td>Immagine:</td><td id="visual_selected_img"><img id="visual_img_preview" src="./graphic/pulsante.gif"><select id="selected_img" name="selected_img" onChange="javascript: update_img(this);"><?php echo $button_img;?> </select></td></tr>
-		      		<tr><td>Cambia colore<br> di notte?</td><td><input type="checkbox" checked name="night_red" id="night_red"> </td></tr>
-		      		<tr><td>Rollover<br> abilitato?</td><td><input type="checkbox" checked name="rollover" id="rollover"> </td></tr>
-		      		<tr><td><input type="button" id="delete_btn" onClick="javascript: delete_button(event);" value="Cancella pulsante"></td></tr>
+		      		<tr><td>Stanza:</td><td id="visual_selected_link">	
+							<select id="selected_link" name="selected_link"
+								onChange="javascript: reset_static(this);">
+								<?php echo $link_selection;?> </select></td></tr>
+		      		<tr><td>Popup:</td><td id="visual_selected_link_static">
+								<select id="selected_link_static" name="selected_link_static"
+									onChange="javascript: reset_room(this);">
+								<?php echo $link_selection_static;?> </select></td></tr>
+							<tr id="visual_pop_w" style="visibility: hidden;">
+							<td>Larghezza popup:</td>
+								<td><input type="text" id="pop_w" name="pop_w" size=3> px</tr>
+							<tr id="visual_pop_h" style="visibility: hidden;">
+							<td>Altezza popup:</td>
+								<td><input type="text" id="pop_h" name="pop_h" size=3> px</tr>
+		      		<tr><td>Immagine:</td><td id="visual_selected_img">
+								<img id="visual_img_preview" src="./graphic/pulsante.gif">
+								<select id="selected_img" name="selected_img"
+								onChange="javascript: update_img(this);">
+								<?php echo $button_img;?> </select></td></tr>
+		      		<tr><td>Cambia colore<br> di notte?</td><td>
+								<input type="checkbox" checked name="night_red" id="night_red">
+							</td></tr>
+		      		<tr><td>Rollover<br> abilitato?</td><td>
+								<input type="checkbox" checked name="rollover" id="rollover">
+							</td></tr>
+		      		<tr><td><input type="button" id="delete_btn"
+							onClick="javascript: delete_button(event);"
+							value="Cancella pulsante"></td></tr>
 		      		<tr><td><input type="submit" value="Invia modifiche"></td><td><input type="button" id="abort_btn" onClick="javascript: window.location.reload();" value="Annulla modifiche"></td></tr>
 		      		<tr><td><br><input type="button" value="Chiudi editor" onClick="javascript: window.close(self);"></td></tr>
 		      	</table>
