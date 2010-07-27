@@ -425,10 +425,12 @@ If not, see <http://www.gnu.org/licenses/>
 								<?php echo $link_selection_static;?> </select></td></tr>
 							<tr id="visual_pop_w" style="visibility: hidden;">
 							<td>Larghezza popup:</td>
-								<td><input type="text" id="pop_w" name="pop_w" size=3> px</tr>
+								<td><input type="text" id="pop_w" name="pop_w" size=3
+								value=600> px</tr>
 							<tr id="visual_pop_h" style="visibility: hidden;">
 							<td>Altezza popup:</td>
-								<td><input type="text" id="pop_h" name="pop_h" size=3> px</tr>
+								<td><input type="text" id="pop_h" name="pop_h" size=3 
+								value=440> px</tr>
 		      		<tr><td>Immagine:</td><td id="visual_selected_img">
 								<img id="visual_img_preview" src="./graphic/pulsante.gif">
 								<select id="selected_img" name="selected_img"
