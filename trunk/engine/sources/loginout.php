@@ -194,7 +194,7 @@
 
   function logout_page(){
     srand(time()+microtime());
-    $num = rand(1,19);
+    $num = rand(1,20);
 
 
     if(isset($_GET['secret'])){
