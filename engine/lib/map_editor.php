@@ -48,7 +48,16 @@ If not, see <http://www.gnu.org/licenses/>
 			if($row['button']!='')
 				$button=$row['button'];
 			
-			$button_list .= "<img rollover=\"$row[rollover]\" night=\"$row[night_red]\" id=\"$row[id]\" title=\"$row[descr]\" alt=\"$row[link]\" src=\"$button\" onClick=\"javascript: edit_button(event);\" style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
+			$button_list .= "<img rollover=\"$row[rollover]\"
+				night=\"$row[night_red]\" 
+				id=\"$row[id]\" 
+				title=\"$row[descr]\" 
+				alt=\"$row[link]\" 
+				src=\"$button\" 
+				pop_w=\"$row[width]\"
+				pop_h=\"$row[height]\"
+				onClick=\"javascript: edit_button(event);\" 
+				style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
 		}
 		
 		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms ORDER BY long_name");
@@ -94,9 +103,6 @@ If not, see <http://www.gnu.org/licenses/>
 			closedir($dh);
 		}
 		
-		
-		
-		
 		include_once('./sources/map_editor_visual.php');
 	}
 	
@@ -128,12 +134,20 @@ If not, see <http://www.gnu.org/licenses/>
 				
 				$night_red=0;
 				$rollover=0;
+				$pop_w=600;
+				$pop_h=440;
 				
 				if(isset($_POST['night_red']))
 					$night_red=1;
 					
 				if(isset($_POST['rollover']))
 					$rollover=1;	
+
+				if(isset($_POST['pop_w']))
+					$pop_w = $_POST['pop_w'];
+
+				if(isset($_POST['pop_h']))
+					$pop_h = $_POST['pop_h'];
 				
 				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
 					$link_type=0;
@@ -153,7 +167,9 @@ If not, see <http://www.gnu.org/licenses/>
 									link_type = '$link_type',
 									night_red = '$night_red',
 									rollover = '$rollover',
-									descr = '{$_POST['descr']}'
+									descr = '{$_POST['descr']}',
+									width = '$pop_w',
+									height = '$pop_h'
 								WHERE id='{$_POST['edit']}'");
 					
 					header("location: index.php?act=mapeditor");					
@@ -182,12 +198,20 @@ If not, see <http://www.gnu.org/licenses/>
 				
 				$night_red=0;
 				$rollover = 0;
+				$pop_w=600;
+				$pop_h=440;
 				
 				if(isset($_POST['night_red']))
 					$night_red=1;
 					
 				if(isset($_POST['rollover']))
 					$rollover=1;
+				
+				if(isset($_POST['pop_w']))
+					$pop_w = $_POST['pop_w'];
+
+				if(isset($_POST['pop_h']))
+					$pop_h = $_POST['pop_h'];
 					
 				if(isset($_POST['selected_link']) && $_POST['selected_link']!=''){
 					$link_type=0;
@@ -199,9 +223,12 @@ If not, see <http://www.gnu.org/licenses/>
 				}
 					
 				if($link_type!=-1){
-					$db->DoQuery("INSERT INTO {$prefix}map (link, posx, posy, button, link_type, descr, night_red, rollover) 
-									VALUES('$link', '$_POST[selected_x]', '$_POST[selected_y]', '$_POST[selected_img]', 
-									'$link_type', '$_POST[descr]', '$night_red', '$rollover')");
+					$db->DoQuery("INSERT INTO {$prefix}map 
+							(link, posx, posy, button, link_type, descr, night_red, rollover,
+							 width, height) 
+									VALUES('$link', '$_POST[selected_x]', '$_POST[selected_y]',
+										'$_POST[selected_img]',	'$link_type', '$_POST[descr]',
+										'$night_red', '$rollover', '$pop_w', '$pop_h')");
 					header("location: index.php?act=mapeditor");
 					return;
 				}
