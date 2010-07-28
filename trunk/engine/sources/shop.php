@@ -227,7 +227,7 @@ function show_shop() {
 	function category_change(elem) {
 		query = "&category=" + elem.options[elem.selectedIndex].value;
 		window.location.href = "./index.php?act=shop&pg_start='.
-			$_GET['pg_start'].'&shop_start='.$_GET['shop_start'].'" + query;
+			$_GET['pg_start'].'" + query;
 	}
 	</script>';
 
