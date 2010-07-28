@@ -156,11 +156,11 @@ function get_navigator($user) {
 		for ($i = 1; $i <= $pages; $i++) {
 			if ($i != $cur_start) {	
 				$body .= '<a href=index.php?act=shop&'.$url_base.'='.$i.'>'.
-					$i.'</a>';
+					$i.'</a> ';
 			}
 			else {
 				$body .= '<b><a href=index.php?act=shop&'.$url_base.'='.$i.'>['.
-					$i.']</a></b>';
+					$i.']</a></b> ';
 
 			}
 		}
