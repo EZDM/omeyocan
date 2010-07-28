@@ -75,6 +75,8 @@ function get_object_list($user, $start_from) {
 
 	while ($row = $db->Do_Fetch_Assoc($query)) {
 		$valore = calculate_obj_value($row['id'], $user);
+		if ($valore <= 0)
+			$valore = "Senza valore";
 		$body .= '
 			<tr>
 			<td>
