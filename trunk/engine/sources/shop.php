@@ -126,8 +126,10 @@ function get_navigator($user) {
 	}
 
 	$category_query="";
-	if (isset($_GET['category']) && $_GET['category'])
+	if (isset($_GET['category']) && $_GET['category']) {
 		$category_query = "AND category='{$_GET['category']}'";
+		$url_base .= "&category=$_GET[category]";
+	}
 
 	if ($user == $shopper) {
 		$query = $db->DoQuery("
@@ -155,11 +157,11 @@ function get_navigator($user) {
 
 		for ($i = 1; $i <= $pages; $i++) {
 			if ($i != $cur_start) {	
-				$body .= '<a href=index.php?act=shop&'.$url_base.'='.$i.'>'.
+				$body .= '<a href=index.php?act=shop'.$url_add.'&'.$url_base.'='.$i.'>'.
 					$i.'</a> ';
 			}
 			else {
-				$body .= '<b><a href=index.php?act=shop&'.$url_base.'='.$i.'>['.
+				$body .= '<b><a href=index.php?act=shop'.$url_add.'&'.$url_base.'='.$i.'>['.
 					$i.']</a></b> ';
 
 			}
