@@ -128,7 +128,7 @@ function get_navigator($user) {
 	$category_query="";
 	if (isset($_GET['category']) && $_GET['category']) {
 		$category_query = "AND category='{$_GET['category']}'";
-		$url_base .= "&category=$_GET[category]";
+		$url_add .= "&category=$_GET[category]";
 	}
 
 	if ($user == $shopper) {
