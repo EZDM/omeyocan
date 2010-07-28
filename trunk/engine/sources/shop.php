@@ -117,7 +117,7 @@ function get_navigator($user) {
 	if ($user == $shopper) {
 		$url_add .= "&pg_start={$_GET['pg_start']}";
 		$url_base = "shop_start";
-		$cur_start = $_GET['pg_start'];
+		$cur_start = $_GET['shop_start'];
 	}
 	else {
 		$url_add .= "&shop_start={$_GET['shop_start']}";
