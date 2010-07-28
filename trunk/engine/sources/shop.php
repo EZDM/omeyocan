@@ -74,7 +74,7 @@ function get_object_list($user, $start_from) {
 		$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
 
 	while ($row = $db->Do_Fetch_Assoc($query)) {
-		$valore = calculate_obj_value($row['id'], $user, true);
+		$valore = calculate_obj_value($row['id'], $user);
 		$body .= '
 			<tr>
 			<td>
