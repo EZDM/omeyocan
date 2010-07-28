@@ -37,7 +37,7 @@ function shop_main(){
 	}
 
 function get_object_list($user, $start_from) {
-	global $db, $prefix, $max_items, $shopper, $money_name;
+	global $db, $prefix, $max_items, $shopper, $money_name, $x7c;
 	$body = '<table width=100% border=1 rules=rows>';
 	$trade_action = "sell[]";
 	$start_limit = ($start_from - 1) * $max_items;
@@ -74,7 +74,11 @@ function get_object_list($user, $start_from) {
 		$body .= "<tr><td></td><td>Totale $money_name: $tot_money</td></tr>";
 
 	while ($row = $db->Do_Fetch_Assoc($query)) {
-		$valore = calculate_obj_value($row['id'], $user);
+		if ($x7c->permissions['write_master'])
+			$valore = calculate_obj_value($row['id'], $user, true);
+		else
+			$valore = calculate_obj_value($row['id'], $user);
+
 		if ($valore <= 0)
 			$valore = "Senza valore";
 		$body .= '
