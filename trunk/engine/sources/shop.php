@@ -109,9 +109,11 @@ function get_navigator($user) {
 	$url_base = '';
 	$cur_start = 1;
 
-	if (!isset($_GET['pg_start']))
+	if (!isset($_GET['pg_start']) || $_GET['pg_start'] <= 0
+			|| !is_numeric($_GET['pg_start']))
 		$_GET['pg_start'] = 1;
-	if (!isset($_GET['shop_start']))
+	if (!isset($_GET['shop_start']) || $_GET['shop_start'] <=0
+			|| !is_numeric($_GET['shop_start']))
 		$_GET['shop_start'] = 1;
 
 	if ($user == $shopper) {
