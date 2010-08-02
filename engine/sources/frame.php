@@ -1200,7 +1200,8 @@ HREF="./favicon.ico">
     else
       thisKey = window.event.keyCode;
     if(thisKey == "13"){
-      document.chatIn.button_send.click();
+      if(confirm('Inviare il messaggio?'))
+        document.chatIn.button_send.click();
     }
     document.chatIn.counter.value=document.chatIn.msgi.value.length;
 
