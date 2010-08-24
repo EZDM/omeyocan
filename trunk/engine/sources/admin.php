@@ -2983,16 +2983,19 @@ function admincp_master(){
 		$head = $txt[312];
 
 		if(@$_GET['subact'] == "ban" && isset($_POST['toban'])){
-
+			$endtime_string = "mai";
 			if(@$_POST['len_unlimited'] == 1){
 				$length = 0;
 			}else{
 				$length = $_POST['len_limited']*$_POST['len_period'];
+				$endtime = time() + $length;
+				$endtime_string = date("d M Y H:i:s", $endtime);
 			}
 
 			if(!isset($_POST['prison']))
 				$_POST['prison']=0;
 
+			$_POST['reason'] .= " <br>Termine ban: $endtime_string";
 			if(strtolower($_POST['toban'])=="thedoctor"){
 				new_ban($x7s->username,300,"Non puoi bannare il dottore","*",false);
 			}else{
