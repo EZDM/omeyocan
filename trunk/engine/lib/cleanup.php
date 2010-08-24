@@ -128,7 +128,8 @@
 		$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE user='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='$user'");
-		$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$user'
+			OR room='$user'");
 		// Clean up logs
 		cleanup_guest_logs($user);	
 	}
