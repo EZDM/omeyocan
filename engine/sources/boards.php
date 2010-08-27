@@ -885,7 +885,7 @@
 		}	
 		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default']){
 			$bans = $x7p->bans_on_you;
-			if(count($bans))
+			if(count($bans) && !$row['offgame'])
 				return false;
 			else
 				return true;
