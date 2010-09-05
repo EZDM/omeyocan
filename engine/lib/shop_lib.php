@@ -32,6 +32,7 @@ $GLOBALS['money_group'] = 500;
 $GLOBALS['money_group_size'] = 1;
 $GLOBALS['base_money'] = 100000;
 $GLOBALS['evaluate_cost'] = 10;
+$GLOBALS['start_cogs'] = 30;
 
 	function get_total_money() {
 		global $db, $prefix, $money_name;
