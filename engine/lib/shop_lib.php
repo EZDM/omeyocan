@@ -25,7 +25,7 @@
 ?>
 <?PHP
 
-$GLOBALS['max_items'] = 10;
+$GLOBALS['max_items'] = 50;
 $GLOBALS['shopper'] = "_shopper_";
 $GLOBALS['money_name'] = "Cogs";
 $GLOBALS['money_group'] = 500;
