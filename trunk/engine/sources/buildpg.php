@@ -302,6 +302,10 @@
 					$db->DoQuery("UPDATE {$prefix}users
 									SET sheet_ok='1'
 									WHERE username='$pg'");
+
+					include_once('lib/shop_lib.php');
+					global $shopper, $start_cogs;
+					pay($start_cogs, $shopper, $pg);
 						
 					header('Location: ./index.php');
 					return;
