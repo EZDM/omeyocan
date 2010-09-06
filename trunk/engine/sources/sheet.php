@@ -338,6 +338,7 @@ function sheet_page_equip(){
 
 			if($pg==$x7s->username || checkIfMaster()){
 				$money_qty = "";
+				$money_form = "";
 				if($row['name'] == $money_name)	{
 					$money_form= "
 						<form action=\"index.php?act=sheet&page=equip&pg=$pg&pay=1\"
