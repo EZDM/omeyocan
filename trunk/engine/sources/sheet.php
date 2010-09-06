@@ -146,6 +146,7 @@ function sheet_page_equip(){
 	}
 
 	if(isset($_GET['pay']) && ($x7s->username==$pg || checkIfMaster())){
+		global $shopper;
 		if(!isset($_POST['owner']) || !isset($_POST['amount'])){
 			die("Bad form");
 		}
@@ -153,7 +154,7 @@ function sheet_page_equip(){
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
 		$row = $db->Do_Fetch_Assoc($query);
 
-		if(!$row || $row['cnt']==0){
+		if((!$row || $row['cnt']==0) && $_POST['owner'] != $shopper){
 			$errore = "Utente non esistente";
 		}
 		else {
