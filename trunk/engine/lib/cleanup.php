@@ -40,7 +40,7 @@
 		if($x7c->settings['expire_messages'] != 0){
 			//Here I keep max_room_messages for type 1 (normal) and 14 (mastering) messages
 			$exptime = $x7c->settings['max_room_messages'];
-			$room_query = $db->DoQuery("SELECT name FROM ${prefix}rooms");
+			$room_query = $db->DoQuery("SELECT name FROM ${prefix}rooms ORDER BY name");
 			
 			while($room = $db->Do_Fetch_Row($room_query)){
 				$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}messages WHERE (type='1' OR type='14') AND room='$room[0]'");
