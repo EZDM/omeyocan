@@ -396,10 +396,10 @@
       }
 
       $query_gender = $db->DoQuery("
-          SELECT gender, bio, username, name, corp_charge
-          FROM {$prefix}users
-          WHERE username IN 
-          (SELECT user FROM {$prefix}messages WHERE room='$_GET[room]')");
+          SELECT DISTINCT gender, bio, username, name, corp_charge
+          FROM {$prefix}users, {$prefix}messages 
+          WHERE username = user 
+	  AND room='$_GET[room]'");
 
       $genders='';
       $gifs='';
