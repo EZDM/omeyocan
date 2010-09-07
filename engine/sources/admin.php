@@ -2045,10 +2045,10 @@ function admincp_master(){
 			}else{
 				$query_duplicate = $db->DoQuery("
 					SELECT count(*) AS cnt FROM {$prefix}objects
-						WHERE name='$_POST[name]'");
+						WHERE name='$_POST[name]' AND owner = ''");
 				$row = $db->Do_Fetch_Assoc($query_duplicate);
 				if ($row['cnt'] > 0)
-					$errore = "Oggetto gia' esistente";
+					$error = "Oggetto gia' esistente";
 				else {
 					$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
