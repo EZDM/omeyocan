@@ -1920,7 +1920,7 @@ function admincp_master(){
 
 				$value = calculate_obj_value($_POST['id'], $shopper);
 
-				if ($value <= 0) {
+				if ($value <= 0 && $obj_name == $money_name) {
 					$error = "L'oggetto non ha valore";
 				}
 				else {
@@ -1976,6 +1976,10 @@ function admincp_master(){
 			if(!$row || $row['id']==''){
 				$error = "Oggetto non esistente";
 			}
+			
+			get_obj_name_and_uses($_POST['id'], $obj_name, $dummy);
+			if ($obj_name == $money_name)
+				$error = "Non puoi assegnare soldi da questo pannello";
 
 			$residuo=$row_usr['spazio'] - $row['size'];
 			if($residuo<0)
@@ -2039,7 +2043,14 @@ function admincp_master(){
 							category='$category'
 						WHERE name='$old_name' AND owner='$shopper'");
 			}else{
-				$db->DoQuery("INSERT INTO {$prefix}objects 
+				$query_duplicate = $db->DoQuery("
+					SELECT count(*) AS cnt FROM {$prefix}objects
+						WHERE name='$_POST[name]'");
+				$row = $db->Do_Fetch_Assoc($query_duplicate);
+				if ($row['cnt'] > 0)
+					$errore = "Oggetto gia' esistente";
+				else {
+					$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
 						 equipped, size, base_value, category)
 						VALUES(
@@ -2048,8 +2059,10 @@ function admincp_master(){
 							'1','$_POST[size]',
 							'$_POST[base_value]', '$category'
 							)");
+				}
 			}
-			$error = "Modifica eseguita con successo";
+			if (!$errore)
+				$error = "Modifica eseguita con successo";
 		}
 
 		if(isset($_GET['delete'])){
@@ -2081,7 +2094,7 @@ function admincp_master(){
 					$query_obj_user =  $db->DoQuery("SELECT count(*) AS cnt
 							FROM {$prefix}objects 
 							WHERE name='masterkey_$_POST[owner]' AND owner='$_POST[owner]'");
-						$row_rooms = $db->Do_Fetch_Assoc($query_rooms);
+					$row_rooms = $db->Do_Fetch_Assoc($query_rooms);
 					$row_obj_master = $db->Do_Fetch_Assoc($query_obj_master);
 					$row_obj_user = $db->Do_Fetch_Assoc($query_obj_user);
 
@@ -2295,41 +2308,43 @@ function admincp_master(){
 			$body.="</form>";
 
 			if($_GET['edit']!=-1){
-				$body.="
-					<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\"
-					method=\"post\">
-					<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-					<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-					<tr>
-					<td>Assegna a:</td>
-					<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-					</tr>
-					<tr>
-					<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div>
-					</td>
-					</tr>
+				if ($row['name'] != $money_name) {
+					$body.="
+						<form action=\"index.php?act=adminpanel&cp_page=objects&assign=1\"
+						method=\"post\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+						<tr>
+						<td>Assegna a:</td>
+						<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+						</tr>
+						<tr>
+						<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div>
+						</td>
+						</tr>
+	
+						</table>
+					</form>";
+	
+					$availability = get_obj_availability($row['name']);
 
-					</table>
-				</form>";
-
-				$availability = get_obj_availability($row['name']);
-
-				$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&sell=1\"
-					method=\"post\">
-					<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-					<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-					<tr>
-					<td>Copie in negozio:</td>
-					<td><input type=\"text\" name=\"sell_copies\" class=\"text_input\"
-					value=\"$availability\"></td>
-					</tr>
-					<tr>
-					<td><input type=\"submit\" class=\"button\"
-					value=\"Metti in vendita\"></div></td>
-					</tr>
-
-					</table>
-				</form>";
+					$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&sell=1\"
+						method=\"post\">
+						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+						<tr>
+						<td>Copie in negozio:</td>
+						<td><input type=\"text\" name=\"sell_copies\" class=\"text_input\"
+						value=\"$availability\"></td>
+						</tr>
+						<tr>
+						<td><input type=\"submit\" class=\"button\"
+						value=\"Metti in vendita\"></div></td>
+						</tr>
+	
+						</table>
+						</form>";
+				}
 			}
 
 
