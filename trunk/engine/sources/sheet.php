@@ -390,7 +390,7 @@ function sheet_page_equip(){
           </table>";
 			}
 
-			if(checkIfMaster()){
+			if(checkIfMaster() && $row['name'] != $money_name){
 				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\" method=\"post\" name=\"object_moduse\">
                                                         <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
                                                                 <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
