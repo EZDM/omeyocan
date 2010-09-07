@@ -2061,7 +2061,7 @@ function admincp_master(){
 							)");
 				}
 			}
-			if (!isset($errore))
+			if (!isset($error))
 				$error = "Modifica eseguita con successo";
 		}
 
