@@ -81,8 +81,11 @@ $GLOBALS['start_cogs'] = 30;
 				WHERE id='$obj'");
 
 		$row = $db->Do_Fetch_Assoc($query);
-		$obj_name = $row['name'];
-		$obj_uses = $row['uses'];
+
+		if ($row) {
+			$obj_name = $row['name'];
+			$obj_uses = $row['uses'];
+		}
 
 	}
 
