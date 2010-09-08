@@ -40,16 +40,18 @@
 		if($x7c->settings['expire_messages'] != 0){
 			//Here I keep max_room_messages for type 1 (normal) and 14 (mastering) messages
 			$exptime = $x7c->settings['max_room_messages'];
-			$room_query = $db->DoQuery("SELECT name FROM ${prefix}rooms");
+			$room_query = $db->DoQuery("
+				SELECT room, count(*) AS num 
+				FROM {$prefix}messages 
+				WHERE (type='1' OR type='14') 
+				GROUP BY room
+				HAVING count(*) > $exptime");
 			
-			while($room = $db->Do_Fetch_Row($room_query)){
-				$query = $db->DoQuery("SELECT count(*) AS num FROM {$prefix}messages WHERE (type='1' OR type='14') AND room='$room[0]'");
-				$row = $db->Do_Fetch_Assoc($query);
-			
-				if($row['num'] > $exptime){
-	                        	$toDelete = $row['num'] - $exptime;
-                        		$db->DoQuery("DELETE FROM {$prefix}messages WHERE (type='1' OR type='14') AND room='$room[0]' ORDER BY time LIMIT $toDelete");
-				}
+			while($room = $db->Do_Fetch_Assoc($room_query)){
+	                        	$toDelete = $room['num'] - $exptime;
+                        		$db->DoQuery("DELETE FROM {$prefix}messages 
+						WHERE (type='1' OR type='14') 
+						AND room='$room[room]' ORDER BY time LIMIT $toDelete");
 			}
 			
 			//Here I delete all other messages
