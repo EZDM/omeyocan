@@ -61,7 +61,7 @@ function memberlist(){
 	if(isset($_GET['room'])){
 		$query = $db->DoQuery("SELECT position FROM {$prefix}users WHERE username='$x7s->username'");
 		$row = $db->Do_Fetch_Assoc($query);
-		$room =$row['position'];
+		$room = $row['position'];
 
 		//Se sono qui devo per forza essere in land... per lo meno in mappa
 		//Non dovrebbe mai essere vero il branch che segue
@@ -148,6 +148,10 @@ function memberlist(){
 
 	if($letter!=''){
 		$more_query .= " AND username LIKE '$letter%' ";
+	}
+
+	if (isset($_GET['room'])) {
+		$more_query .= " AND position <> ''";
 	}
 
 	$get_room='';
