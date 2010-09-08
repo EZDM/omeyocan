@@ -108,7 +108,6 @@
 
 			.throw_eval{
                                 border: 1px solid;
-                                spacing: 0;
                                 text-align: center;
                                 font-weight: bold;
 			}
@@ -179,7 +178,6 @@
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				color: white;
-				link: white;
 			}
 			#board_body {
 				position: absolute;
@@ -513,7 +511,7 @@
 			
 			#panicwrap {
 				position: absolute;
-				align: center;
+				text-align: center;
 				top: 580px;
 				left: 0px;
 			}
