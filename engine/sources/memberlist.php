@@ -158,12 +158,11 @@ function memberlist(){
 	if($room!='')
 		$get_room="&room=$room";
 
-	if(!$costitution && !$sheet){
+	if(!$costitution && !$sheet && isset($_GET['room'])){
 		$query = $db->DoQuery("SELECT username, bio, position, talk,long_name,type,info,m_invisible AS invisible
 				FROM {$prefix}users u,
 				{$prefix}rooms r
-				WHERE (r.name = u.position
-					OR (u.position='' AND r.name='Mappa'))
+				WHERE (r.name = u.position)
 				{$more_query}
 				{$order}");
 	}
@@ -188,6 +187,15 @@ function memberlist(){
 				AND uc.charact_id = 'rob'
 				AND uc.value <= '6'
 				AND sheet_ok = '1'
+				{$more_query}
+				{$order}");
+	}
+	else {
+		$query = $db->DoQuery("SELECT username, bio, position, talk,long_name,type,info,m_invisible AS invisible
+				FROM {$prefix}users u,
+				{$prefix}rooms r
+				WHERE (r.name = u.position
+					OR (u.position='' AND r.name='Mappa'))
 				{$more_query}
 				{$order}");
 	}
