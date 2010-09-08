@@ -291,7 +291,6 @@
 							FROM {$prefix}usercharact uc , {$prefix}characteristic c
 							WHERE uc.charact_id=c.id
 							 AND uc.username='$x7s->username' 
-							 AND c.id!='fort'
 							 AND uc.charact_id='$charact[1]'");
 			 
 				if($row = $db->Do_Fetch_Assoc($query)){					
