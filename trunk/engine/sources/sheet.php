@@ -506,6 +506,7 @@ function sheet_page_background(){
 	global $db,$x7c,$prefix,$x7s,$print;
 	$pg=$_GET['pg'];
 	$body='';
+	$visual='';
 
 
 	if(isset($_GET['settings_change']) && ($pg==$x7s->username || checkIfMaster())){
@@ -2299,12 +2300,24 @@ function print_sheet($body,$bg){
 	echo $body;
 
 	echo '
-		<a href="./index.php?act=sheet&page=main&pg='.$pg.'"><div class="sheetnav" style="left: 313px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=ability&pg='.$pg.'"><div class="sheetnav" style="left: 337px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=background&pg='.$pg.'"><div class="sheetnav" style="left: 367px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'"><div class="sheetnav" style="left: 399px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=master&pg='.$pg.'"><div class="sheetnav" style="left: 424px; top: 638px;"></div></a>
-		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'"><div class="sheetnav" style="left: 451px; top: 638px;"></div></a>
+		<a href="./index.php?act=sheet&page=main&pg='.$pg.'">
+			<div class="sheetnav" style="left: 313px; top: 638px;">&nbsp;</div>
+		</a>
+		<a href="./index.php?act=sheet&page=ability&pg='.$pg.'">
+			<div class="sheetnav" style="left: 337px; top: 638px;">&nbsp;</div>
+		</a>
+		<a href="./index.php?act=sheet&page=background&pg='.$pg.'">
+			<div class="sheetnav" style="left: 367px; top: 638px;">&nbsp;</div>
+		</a>
+		<a href="./index.php?act=sheet&page=equip&pg='.$pg.'">
+			<div class="sheetnav" style="left: 399px; top: 638px;">&nbps;</div>
+		</a>
+		<a href="./index.php?act=sheet&page=master&pg='.$pg.'">
+			<div class="sheetnav" style="left: 424px; top: 638px;">&nbsp;</div>
+		</a>
+		<a href="./index.php?act=sheet&page=corp&pg='.$pg.'">
+			<div class="sheetnav" style="left: 451px; top: 638px;">&nbsp;</div>
+		</a>
 		</div>
 		</body>
 			</html>';
