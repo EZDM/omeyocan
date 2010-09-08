@@ -639,7 +639,6 @@
 			#message_window {
 				position: absolute;
 				padding: 5px;
-				blue: blue;
 				height: 1%;
 				/*border: 1px solid $data[ChatBorder];*/
 				overflow-y: scroll;
