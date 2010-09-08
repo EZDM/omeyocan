@@ -80,7 +80,7 @@
 						}
 						else{
 							if($_POST['to'] == "all")
-								$query = "SELECT username FROM {$prefix}users";
+								$query = "SELECT username FROM {$prefix}users WHERE sheet_ok = 1";
 							else
 								$query = "SELECT username FROM {$prefix}groups WHERE usergroup = '$_POST[to]'";
 								
@@ -334,7 +334,7 @@
 				}
 
 				$accounts='';
-				$query = "SELECT username FROM {$prefix}users";
+				$query = "SELECT username FROM {$prefix}users WHERE sheet_ok = 1";
 				$result = $db->DoQuery($query);
 
 				while($row = $db->Do_Fetch_Assoc($result)){
