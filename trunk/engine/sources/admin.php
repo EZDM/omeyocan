@@ -2016,6 +2016,8 @@ function admincp_master(){
 				die("Bad form");
 			}
 
+			$_POST['name'] = trim($_POST['name']);
+
 			$category = $_POST['category'];
 			if ($_POST['category'] == "_new_" && isset($_POST['new_category']))
 				$category = $_POST['new_category'];
