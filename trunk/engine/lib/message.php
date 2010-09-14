@@ -364,7 +364,7 @@
 						$size = getimagesize($file);
 						$width= $size[0];
 												
-						$img_msg="<br>
+						$img_msg="<br><br>
 									<object>
 									<param name=\"movie\" width=\"$size[0]\" height=\"$size[1]\" value=\"".$img_url[1]."\">
 									<param name=\"quality\" value=\"high\">
@@ -372,10 +372,10 @@
 									<embed src=\"".$img_url[1]."\" width=\"$size[0]\" height=\"$size[1]\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\">
 									</embed>
 									</object>						
-									<br>";	
+									<br><br>";	
 					}
 					else{
-						$img_msg="<br><img src=\"".$img_url[1]."\" ><br>";
+						$img_msg="<br><br><img src=\"".$img_url[1]."\" ><br><br>";
 					}
 				}
 					
