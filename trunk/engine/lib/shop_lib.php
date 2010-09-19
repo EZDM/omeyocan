@@ -193,7 +193,7 @@ $GLOBALS['start_cogs'] = 30;
 		pay($value, $pg_buy, $pg_sell);
 		move_obj($obj, $pg_sell, $pg_buy);
 	
-		include_once('./lib/alarm.php');
+		include_once('./lib/alarms.php');
 		record_sell($pg_sell, $pg_buy, $obj_name);
 		return "Transazione eseguita con successo<br>";
 
