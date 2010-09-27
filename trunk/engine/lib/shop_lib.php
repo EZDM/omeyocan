@@ -48,13 +48,17 @@ $GLOBALS['start_cogs'] = 30;
 
 	}
 	
-	function get_total_user_money($pg) {
+	function get_total_user_money($pg, $only_equipped=true) {
 		global $db, $prefix, $money_name;
+		$more_query = '';
+		if ($only_equipped)
+			$more_query = "AND equipped = 1";
+
 		$query_money = $db->DoQuery("
 				SELECT SUM(uses) as cnt FROM {$prefix}objects
 				WHERE name = '$money_name'
 				AND owner = '$pg'
-				AND equipped = '1'
+				$more_query
 				GROUP BY name;
 				");
 
@@ -242,13 +246,13 @@ $GLOBALS['start_cogs'] = 30;
 			recalculate_space($to);
 	}
 
-	function pay($qty, $from, $to, $check_only=false) {
+	function pay($qty, $from, $to, $check_only=false, $only_equipped=true) {
 		global $db, $prefix, $money_group, $money_group_size, $money_name, $shopper;
 
 		$space_required = (($qty / $money_group) + 1) * $money_group_size;
 
 		// Check if buyer own money 
-		$money = get_total_user_money($from);	
+		$money = get_total_user_money($from, $only_equipped);	
 		if ($money < $qty) {
 			return "Denaro non disponibile<br>";
 		}
