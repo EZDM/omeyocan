@@ -1910,8 +1910,13 @@ function admincp_master(){
 		$error='';
 
 		if (isset($_GET['sell'])) {
-			if($_POST['sell_copies'] < 0)
+			if($_POST['sell_copies'] < 0) {
 				$error = "Errore: il numero di copie deve essere positivo";
+			}
+			else if(!$x7c->permissions["admin_panic"]) {
+				// Only masters can change the shop
+				$error = "Errore: operazione non permessa";
+			}
 			else {
 				get_obj_name_and_uses($_POST['id'], $obj_name, $dummy);
 				$cur_avail = get_obj_availability($obj_name);
@@ -2330,22 +2335,24 @@ function admincp_master(){
 	
 					$availability = get_obj_availability($row['name']);
 
-					$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&sell=1\"
-						method=\"post\">
-						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-						<tr>
-						<td>Copie in negozio:</td>
-						<td><input type=\"text\" name=\"sell_copies\" class=\"text_input\"
-						value=\"$availability\"></td>
-						</tr>
-						<tr>
-						<td><input type=\"submit\" class=\"button\"
-						value=\"Metti in vendita\"></div></td>
-						</tr>
+					if ($x7c->permissions["admin_panic"])	{
+						$body.="<form action=\"index.php?act=adminpanel&cp_page=objects&sell=1\"
+							method=\"post\">
+							<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+							<td>Copie in negozio:</td>
+							<td><input type=\"text\" name=\"sell_copies\" class=\"text_input\"
+							value=\"$availability\"></td>
+							</tr>
+							<tr>
+							<td><input type=\"submit\" class=\"button\"
+							value=\"Metti in vendita\"></div></td>
+							</tr>
 	
-						</table>
-						</form>";
+							</table>
+							</form>";
+					}
 				}
 			}
 
