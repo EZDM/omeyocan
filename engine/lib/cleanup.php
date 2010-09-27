@@ -114,7 +114,15 @@
 	}
 	
 	function delete_user($user){
-		global $db, $prefix;
+		include('./lib/shop_lib.php');
+		global $db, $prefix, $shopper;
+		
+		// Returning money
+		$money = get_total_user_money($user, false);
+		if ($money > 0) {
+			pay($money, $user, $shopper, false, false);
+		}
+
 		$query = $db->DoQuery("SELECT id FROM {$prefix}users WHERE username='$user'");
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$db->DoQuery("DELETE FROM {$prefix}banned WHERE id='$row[id]'");
@@ -127,6 +135,7 @@
 		// Delete character sheet
 		$db->DoQuery("DELETE FROM {$prefix}userability WHERE username='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}usercharact WHERE username='$user'");
+
 		$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}boardmsg WHERE user='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE user='$user'");
