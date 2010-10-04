@@ -237,10 +237,8 @@
         #login{
           height: 700px;
           '.$sfondo.'
+					background-repeat: no-repeat;
           position: relative; 
-          width: 1026px; 
-          left: 50%; 
-          margin-left: -513px;
       }
 
       #inner_login{
