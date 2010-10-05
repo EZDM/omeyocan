@@ -234,6 +234,9 @@
     $login_style = '
       <LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
       <style type="text/css">
+			  body {
+          overflow: hidden;
+				}
         #login{
           height: 700px;
           '.$sfondo.'
