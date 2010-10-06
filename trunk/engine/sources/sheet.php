@@ -444,6 +444,11 @@ function sheet_page_master(){
 
 			$master = eregi_replace("\n","<Br>",$_POST['master']);
 			$master_private = eregi_replace("\n","<Br>",$_POST['master_private']);
+			$master = preg_replace("/\[img\]([^\[]*)\[\/img\]/i",
+					"<img src=\"$1\">",$master);
+			$master_private = preg_replace("/\[img\]([^\[]*)\[\/img\]/i",
+					"<img src=\"$1\">",$master_private);
+
 			$db->DoQuery("UPDATE {$prefix}users SET master='$master', master_private='$master_private' WHERE username='$pg'");
 		}
 	}
@@ -452,6 +457,8 @@ function sheet_page_master(){
 	$row = $db->Do_Fetch_Assoc($query);
 
 	if($row){
+		$modify_master = "";
+		$modify_master_private = "";
 
 		if(checkIfMaster()){
 			$body .= '<script language="javascript" type="text/javascript">
@@ -468,6 +475,11 @@ function sheet_page_master(){
 							
 							document.forms[0].elements["aggiorna"].style.visibility="visible";
 							document.forms[0].elements["mod_button"].style.visibility="hidden";
+							
+							document.getElementById("inner_master").style.visibility="hidden";
+							document.getElementById("inner_private").style.visibility="hidden";
+							document.getElementById("master_text").style.visibility="visible";
+							document.getElementById("master_private_text").style.visibility="visible";
 						}
 					}
 				</script>
@@ -478,23 +490,32 @@ function sheet_page_master(){
 
 			$master = eregi_replace("<Br>","\n",$row['master']);
 			$master_private = eregi_replace("<Br>","\n",$row['master_private']);
+			$master = preg_replace("/<img src=\"([^\"]*)\">/i",
+					"[img]$1[/img]", $master);
+			$master_private = preg_replace("/<img src=\"([^\"]*)\">/i",
+					"[img]$1[/img]", $master_private);
 
-			$body .= '<div class="indiv" id="master"><textarea name="master" id="master_text" class="sheet_text" autocomplete="off" disabled>'.$master.'</textarea></div>';
-			$body .= '<div class="indiv" id="master_private">Annotazioni private:<div class=\"inner_private\"><textarea name="master_private" id="master_private_text" class="sheet_text" autocomplete="off" disabled>'.$master_private.'</textarea></div></div>';
+			$modify_master = '<div id="master_text" style="visibility: hidden;"><textarea name="master" class="sheet_text" autocomplete="off">'.$master.'</textarea></div>';
+			$modify_master_private = '<div id="master_private_text" style="visibility: hidden;"><textarea name="master_private" class="sheet_text" autocomplete="off">'.$master_private.'</textarea></div>';
 
+
+		}
+		
+		$body .= '<div class="indiv" id="masterdiv">'.
+			'<div id="inner_master">'.$row['master'].'</div>'.$modify_master.'</div>';
+
+		if(checkIfMaster() || $x7s->username == $pg)
+			$body .= '<div class="indiv" id="masterdiv_private">
+				Annotazioni private:<div class="inner_private" id="inner_private">'.$row['master_private'].
+				'</div>'.$modify_master_private.'cazzo</div>';
+		
+		if(checkIfMaster()){
 			$body .= "<div id=\"modify\">
 								<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
 								<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">		
 						</div>";
 
 			$body .="</form>\n";
-
-		}
-		else{
-			$body .= '<div class="indiv" id="masterdiv">'.$row['master'].'</div>';
-
-			if(checkIfMaster() || $x7s->username == $pg)
-			$body .= '<div class="indiv" id="masterdiv_private">Annotazioni private:<div class="inner_private">'.$row['master_private'].'</div></div>';
 		}
 
 	}
@@ -1946,37 +1967,27 @@ function print_sheet($body,$bg){
 			}';
 		
 
-	if(checkIfMaster() || $x7s->username==$pg){
-		echo'#master, #masterdiv{
+		echo '#master, #masterdiv{
 				top: 60px;
 				left: 50px;
 				width: 400px;
 				height: 220px;
 			}
 			
-			#master_private, #masterdiv_private{
+      #master_private, #masterdiv_private{
 				top: 300px;
 				left: 50px;
 				width: 400px;
 				height: 220px;
 				overflow: hidden;
 			}
-			.inner_private{
+      #master_private_text, #inner_private, .inner_private{
 				height: 200px;
 				width: 400px;
 				overflow: auto;
+				position: absolute;
 			}
 			';
-	}
-
-	else{
-		echo '#master, #masterdiv{
-				top: 60px;
-				left: 50px;
-				width: 400px;
-				height: 550px;
-			}';
-	}
 		
 	echo '
 			.sheet_text{
