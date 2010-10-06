@@ -58,7 +58,7 @@
   $debug_start = microtime_float();
 
   // First we need to set up a nice environment
-  error_reporting(E_ALL);
+  //error_reporting(E_ALL);
   set_magic_quotes_runtime(0);
 
   // Import the configuration file
