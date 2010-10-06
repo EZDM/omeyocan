@@ -507,7 +507,7 @@ function sheet_page_master(){
 		if(checkIfMaster() || $x7s->username == $pg)
 			$body .= '<div class="indiv" id="masterdiv_private">
 				Annotazioni private:<div class="inner_private" id="inner_private">'.$row['master_private'].
-				'</div>'.$modify_master_private.'cazzo</div>';
+				'</div>'.$modify_master_private.'</div>';
 		
 		if(checkIfMaster()){
 			$body .= "<div id=\"modify\">
