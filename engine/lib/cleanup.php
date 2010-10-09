@@ -114,7 +114,7 @@
 	}
 	
 	function delete_user($user){
-		include('./lib/shop_lib.php');
+		include_once('./lib/shop_lib.php');
 		global $db, $prefix, $shopper;
 		
 		// Returning money
