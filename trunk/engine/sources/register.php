@@ -76,7 +76,7 @@
 				$error = $txt[25];
 			if($_POST['pass1'] != $_POST['pass2'])
 				$error = $txt[26];
-			if($_POST['username'] == "" || eregi("\.|'|,|;| |\"|[^a-zA-Z0-9\-_]",$_POST['username']) || (strlen($_POST['username']) > $x7c->settings['maxchars_username'] && $x7c->settings['maxchars_username'] != 0)){
+			if($_POST['username'] == "" || eregi("\.|'|,|;| |\"|[^a-zA-Z\-_]",$_POST['username']) || (strlen($_POST['username']) > $x7c->settings['maxchars_username'] && $x7c->settings['maxchars_username'] != 0)){
 				$txt[23] = eregi_replace("_n","{$x7c->settings['maxchars_username']}",$txt[23]);
 				$error = $txt[23];
 			}
