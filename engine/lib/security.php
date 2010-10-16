@@ -51,7 +51,7 @@
 				if(get_magic_quotes_gpc() == 0)
 					$value = addslashes($value);
 			
-				$value = htmlentities($value, ENT_QUOTES, "UTF-8", false);
+				$value = htmlentities($value, ENT_QUOTES);
 				$array[$name] = $value;
 			}
 			else {
@@ -69,7 +69,7 @@
 				if(get_magic_quotes_gpc() == 0)
 					$value = addslashes($value);
 		
-				$value = htmlentities($value, ENT_QUOTES, "UTF-8", false);	
+				$value = htmlentities($value, ENT_QUOTES);	
 				$_POST[$name] = $value;
 			}
 			else {
@@ -82,7 +82,7 @@
 			if(get_magic_quotes_gpc() == 0)
 				$value = addslashes($value);
 			
-			$value = htmlentities($value, ENT_QUOTES, "UTF-8", false);
+			$value = htmlentities($value, ENT_QUOTES);
 			
 			$_GET[$name] = $value;
 		}
