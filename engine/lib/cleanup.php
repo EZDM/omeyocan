@@ -153,10 +153,11 @@
 		$del_list='';
 		$del_day='';
 		$time = time();
-		$one_day = 86400;
 
 		//We do this check once per day
-		if($time < $x7c->settings['last_cleanup'] + $one_day){
+		$now = date("d/m/Y");
+		$before = date("d/m/Y", $x7c->settings['last_cleanup']); 
+		if($now == $before){
 			return;
 		}
 
