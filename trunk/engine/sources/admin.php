@@ -3323,12 +3323,77 @@ function admincp_master(){
 		// See if logging is enabled or disabled
 		if($x7c->settings['enable_logging'] == 1){
 			// Logging is enabled, tell them so
-			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&cp_page=logs&able=1\">",$txt[485]);
+			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&".
+					"cp_page=logs&able=1\">",$txt[485]);
 			$body = $txt[485]."<Br><br>";
 
 			// Give them a link to edit log settings
-			$body .= "<div align=\"center\"><a href=\"index.php?act=adminpanel&cp_page=settings&settings_page=logs\">$txt[486]</a><Br><Br></div>";
+			$body .= "<div align=\"center\"><a href=\"index.php?act=adminpanel&".
+				"cp_page=settings&settings_page=logs\">$txt[486]</a><Br><Br></div>";
 
+			// Daily stats for users
+			$body .= "User's posts
+				<table align=\"center\"  width=\"95%\" border=\"0\" ".
+				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				<tr>
+				<td height=\"25\">Username</td>
+				<td width=\"33%\" height=\"25\">Posts odierni</td>
+				<td width=\"33%\" height=\"25\">Loto nero</td>
+				</tr>
+				</table>
+				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
+				"cellpadding=\"0\" class=\"inside_table\">";
+
+			$query_daily = $db->DoQuery("SELECT username, daily_post
+					FROM {$prefix}users 
+					WHERE daily_post > 0
+					ORDER BY username");
+
+			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
+				$query_lotus = $db->DoQuery("SELECT daily_use
+						FROM {$prefix}objects 
+						WHERE owner = '$row_daily[username]'
+						AND name = 'Loto nero'");
+				$row_lotus = $db->Do_Fetch_Assoc($query_lotus);
+
+				$lotus = "no";
+				if ($row_lotus && $row_lotus['daily_use'] > 0)
+					$lotus = "yes";
+				$body .= "<tr>
+					<td height=\"25\">$row_daily[username]</td>
+					<td width=\"33%\" height=\"25\">$row_daily[daily_post]</td>
+					<td width=\"33%\" height=\"25\">$lotus</td>
+					</tr>";
+			}
+			$body .= "</table>";
+			
+			// Daily stats for rooms
+			$body .= "Room's posts
+				<table align=\"center\"  width=\"95%\" border=\"0\" ".
+				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				<tr>
+				<td height=\"25\">Room</td>
+				<td width=\"33%\" height=\"25\">Posts odierni</td>
+				</tr>
+				</table>
+				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
+				"cellpadding=\"0\" class=\"inside_table\">";
+			
+			$query_daily = $db->DoQuery("SELECT name, daily_post
+					FROM {$prefix}rooms 
+					WHERE daily_post > 0
+					ORDER BY name");
+
+			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
+				$body .= "<tr>
+					<td height=\"25\">
+					<a href=\"index.php?act=roomcp&cp_page=logs&room=$row_daily[name]\">
+					$row_daily[name]</a></td>
+					<td width=\"33%\" height=\"25\">$row_daily[daily_post]</td>
+					</tr>";
+			}
+
+			$body .= "</table>";
 
 			// Display a table of all rooms showing if logging is enabled giving a Manage/View link
 			include_once("./lib/rooms.php");
