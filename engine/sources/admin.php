@@ -3332,7 +3332,7 @@ function admincp_master(){
 				"cp_page=settings&settings_page=logs\">$txt[486]</a><Br><Br></div>";
 
 			// Daily stats for users
-			$body .= "User's posts
+			$body .= "<b>User's daily posts (".date("d/m/Y").")</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
@@ -3368,7 +3368,7 @@ function admincp_master(){
 			$body .= "</table>";
 			
 			// Daily stats for rooms
-			$body .= "Room's posts
+			$body .= "<b>Room's daily posts (".date("d/m/Y").")</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
