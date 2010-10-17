@@ -68,7 +68,13 @@
 
 		$body_parsed = parse_message($body);
 		if($sussurro == 0){
-			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','1','$body','$body_parsed','$room','$time')");
+			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username',
+				'1','$body','$body_parsed','$room','$time')");
+
+			$db->DoQuery("UPDATE {$prefix}users SET daily_post = daily_post + 1
+					WHERE username='$x7s->username'");
+			$db->DoQuery("UPDATE {$prefix}rooms SET daily_post = daily_post + 1
+					WHERE name='$room'");
 			
 			//If we are in panic... do panic update
 			if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
@@ -323,29 +329,33 @@
 			 
 				if($row = $db->Do_Fetch_Assoc($query)){
 				        if(!$row['equipped']){
-				                $obj_msg="<span class=\"break\">{L\'oggetto ".$row['name']." non &egrave; equipaggiato}</span>";
+				                $obj_msg="<span class=\"break\">{L\'oggetto ".
+													$row['name']." non &egrave; equipaggiato}</span>";
 				        }
 				        else{
-                                                if($row['uses'] > 1 || $row['uses'] == -1){
-                                                        $obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".$row['name']."}</span>";
-                                                }
-                                                else if($row['uses'] == 1){
-                                                        $obj_msg="<span class=\"break\">{Usa l\'oggetto ".$row['name']." che diventa inutilizzabile subito dopo l\'azione}</span>";
-                                                }
-                                                else{
-                                                        $obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un oggetto inutilizzabile: ".$row['name']."}</span>";
-                                                }
-                                                
-						$newusage = -1;        
-                                                if($row['uses'] > 0){
-                                                        $newusage = $row['uses'] - 1;
-                                                        $db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' WHERE id='{$obj[1]}'");
-                                                }
-						include_once('./lib/alarms.php');
-						object_usage($x7s->username, $obj[1], $newusage);
-                                        }
-					
-					
+									if($row['uses'] > 1 || $row['uses'] == -1){
+										$obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".
+											$row['name']."}</span>";
+									}
+									else if($row['uses'] == 1){
+										$obj_msg="<span class=\"break\">{Usa l\'oggetto ".
+											$row['name']." che diventa inutilizzabile subito dopo ".
+											"l\'azione}</span>";
+									}
+									else{
+										$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un".
+											" oggetto inutilizzabile: ".$row['name']."}</span>";
+									}
+
+									$newusage = -1;        
+									if($row['uses'] > 0){
+										$newusage = $row['uses'] - 1;
+										$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' 
+												WHERE id='{$obj[1]}'");
+									}
+									include_once('./lib/alarms.php');
+									object_usage($x7s->username, $obj[1], $newusage);
+								}	
 				}
 
 				$message = preg_replace($obj_regexp, $obj_msg, $message, 1);
