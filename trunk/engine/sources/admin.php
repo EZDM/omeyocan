@@ -3322,6 +3322,25 @@ function admincp_master(){
 
 		// See if logging is enabled or disabled
 		if($x7c->settings['enable_logging'] == 1){
+
+			if (isset($_GET['punish'])) {
+				include_once("./sources/warnings.php");
+				include_once("./lib/message.php");
+				$time = time();
+				$row_punish = $db->Do_Fetch_Assoc($db->DoQuery("
+							SELECT last_punish FROM {$prefix}users
+							WHERE username = '$_GET[punish]'"));
+
+				if($row_punish && 
+						date("d/m/Y") != date("d/m/Y", $row_punish['last_punish'])) {
+					$db->DoQuery("UPDATE {$prefix}users SET last_punish = $time, 
+							xp = xp - 5
+							WHERE username = '$_GET[punish]'");
+					send_offline_msg($_GET['punish'], "Non hai usato il loto nero",
+							$punishment_warn, $x7s->username);
+				}
+
+			}
 			// Logging is enabled, tell them so
 			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&".
 					"cp_page=logs&able=1\">",$txt[485]);
@@ -3344,7 +3363,7 @@ function admincp_master(){
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 
-			$query_daily = $db->DoQuery("SELECT username, daily_post
+			$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish
 					FROM {$prefix}users 
 					WHERE daily_post > 0
 					ORDER BY username");
@@ -3359,10 +3378,20 @@ function admincp_master(){
 				$lotus = "no";
 				if ($row_lotus && $row_lotus['daily_use'] > 0)
 					$lotus = "yes";
+
+				$now = date("d/m/Y"); 
+				$last_punish = date("d/m/Y", $row_daily['last_punish']);
+				$punish_button = '';
+				if ($now != $last_punish && $lotus == "no") {
+					$punish_button = '<input type="button" class="button" value="-5PX"'.
+						'onClick="javascript: window.location=\'index.php?act=adminpanel'.
+						'&cp_page=logs&punish='.$row_daily['username'].'\'" />';
+				}
+
 				$body .= "<tr>
 					<td height=\"25\">$row_daily[username]</td>
 					<td width=\"33%\" height=\"25\">$row_daily[daily_post]</td>
-					<td width=\"33%\" height=\"25\">$lotus</td>
+					<td width=\"33%\" height=\"25\">$lotus $punish_button</td>
 					</tr>";
 			}
 			$body .= "</table>";
