@@ -164,7 +164,7 @@
 		$db->DoQuery("UPDATE {$prefix}settings SET setting = '$time' WHERE variable = 'last_cleanup'");
 
 		// Reset daily counters
-		$db->DoQuery("UPDATE {$prefix}users SET daily_post = 0");
+		$db->DoQuery("UPDATE {$prefix}users SET daily_post = 0, daily_lotus = 0");
 		$db->DoQuery("UPDATE {$prefix}rooms SET daily_post = 0");
 		$db->DoQuery("UPDATE {$prefix}objects SET daily_use = 0");
 
