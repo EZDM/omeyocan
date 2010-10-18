@@ -160,6 +160,12 @@
 				VALUES ('{$x7s->username}','$msg','$time')");
 		$db->DoQuery("UPDATE {$prefix}objects SET daily_use = daily_use + 1
 				WHERE id = '$obj'");
+
+		//Very ugly temp code for lotus
+		if($row['name'] == "Loto nero") {
+			$db->DoQuery("UPDATE {$prefix}users SET daily_lotus = 1
+					WHERE username = '$owner'");
+		}
 		
 		
 	}

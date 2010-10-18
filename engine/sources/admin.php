@@ -3363,21 +3363,15 @@ function admincp_master(){
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 
-			$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish
+			$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish, 
+					daily_lotus
 					FROM {$prefix}users 
 					WHERE daily_post > 0
 					ORDER BY username");
 
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
-				$query_lotus = $db->DoQuery("SELECT sum(daily_use) AS daily_use
-						FROM {$prefix}objects 
-						WHERE owner = '$row_daily[username]'
-						AND name = 'Loto nero'
-						GROUP BY name");
-				$row_lotus = $db->Do_Fetch_Assoc($query_lotus);
-
 				$lotus = "no";
-				if ($row_lotus && $row_lotus['daily_use'] > 0)
+				if ($row_daily['daily_lotus'] > 0)
 					$lotus = "yes";
 
 				$now = date("d/m/Y"); 
