@@ -3369,10 +3369,11 @@ function admincp_master(){
 					ORDER BY username");
 
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
-				$query_lotus = $db->DoQuery("SELECT daily_use
+				$query_lotus = $db->DoQuery("SELECT sum(daily_use) AS daily_use
 						FROM {$prefix}objects 
 						WHERE owner = '$row_daily[username]'
-						AND name = 'Loto nero'");
+						AND name = 'Loto nero'
+						GROUP BY name");
 				$row_lotus = $db->Do_Fetch_Assoc($query_lotus);
 
 				$lotus = "no";
