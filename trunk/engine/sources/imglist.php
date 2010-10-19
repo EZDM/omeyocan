@@ -88,7 +88,7 @@ function file_list($path,$url){
 					if(opener.name == "admincp")
 						opener.document.forms[0].image_url.value=url;
 					else
-    						opener.document.chatIn.msgi.value=opener.document.chatIn.msgi.value +" £"+ url +" ";
+    						opener.document.chatIn.msgi.value=opener.document.chatIn.msgi.value +" £"+ url +"; ";
     					window.close(self);
 				}
 
