@@ -254,7 +254,7 @@
 			$message = preg_replace("/^@.*@/i","",$message);
 			
 			//Perform ability
-			$action_regexp = "/&sect;([^[:space:]]+)/i";
+			$action_regexp = "/&sect;([^;]+);/i";
 			
 			srand(time()+microtime());
 			
@@ -288,7 +288,7 @@
 			}
 			
 			//Perform characteristic
-			$charact_regexp = "/%([^[:space:]]+)/i";
+			$charact_regexp = "/%([^;]+);/i";
 			
 			while(preg_match($charact_regexp,$message, $charact)){
 													
@@ -317,7 +317,7 @@
 			}
 			
 			//Perform objects
-			$obj_regexp = "/&deg;([^[:space:]]+)/i";
+			$obj_regexp = "/&deg;([^;]+);/i";
 			
 			while(preg_match($obj_regexp,$message, $obj)){
 									
@@ -363,7 +363,7 @@
 			}			
 			
 			//Perform image
-			$img_regexp = "/&pound;([^[:space:]]+)/i";
+			$img_regexp = "/&pound;([^;]+);/i";
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
@@ -394,7 +394,7 @@
 			}
 			
 			//Perform generic dice
-			$dice_regexp = "/\~([^[:space:]]+)/i";
+			$dice_regexp = "/\~([^;]+);/i";
 			
 			while(preg_match($dice_regexp,$message, $dice_value)){
 				$dice_msg="";

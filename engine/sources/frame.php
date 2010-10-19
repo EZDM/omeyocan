@@ -1361,7 +1361,7 @@ _gaq.push(['_trackPageview']);
         ORDER BY a.name");
 
     while($row = $db->Do_Fetch_Assoc($query)){
-      $string = "<option value=\"§".$row['id']."\">".$row['name']." ".
+      $string = "<option value=\"§".$row['id'].";\">".$row['name']." ".
         (floor($row['value_a']*2+$row['value_c']/2))."</option>\n";
       echo $string;
     }
@@ -1381,7 +1381,7 @@ _gaq.push(['_trackPageview']);
         ORDER BY c.name");
 
     while($row = $db->Do_Fetch_Assoc($query)){
-      $string = "<option value=\"%".$row['id']."\">".$row['name']." ".
+      $string = "<option value=\"%".$row['id'].";\">".$row['name']." ".
         $row['value']."</option>\n";
       echo $string;
     }
@@ -1398,7 +1398,7 @@ _gaq.push(['_trackPageview']);
         ORDER BY name");
 
     while($row = $db->Do_Fetch_Assoc($query)){
-      $string = "<option value=\"°".$row['id']."\">".$row['name']."</option>\n";
+      $string = "<option value=\"°".$row['id'].";\">".$row['name']."</option>\n";
       echo $string;
     }
 ?>
@@ -1406,14 +1406,14 @@ _gaq.push(['_trackPageview']);
     onChange="javascript: return action_select(this);">
     <option value="">Dadi</option>
     <option value="">----</option>
-    <option value="~2">d2</option>
-    <option value="~4">d4</option>
-    <option value="~6">d6</option>
-    <option value="~8">d8</option>
-    <option value="~10">d10</option>
-    <option value="~12">d12</option>
-    <option value="~20">d20</option>
-    <option value="~100">d100</option> 
+    <option value="~2;">d2</option>
+    <option value="~4;">d4</option>
+    <option value="~6;">d6</option>
+    <option value="~8;">d8</option>
+    <option value="~10;">d10</option>
+    <option value="~12;">d12</option>
+    <option value="~20;">d20</option>
+    <option value="~100;">d100</option> 
     </select>
 
 
