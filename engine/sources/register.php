@@ -111,10 +111,10 @@
 				$default_start_xp=$x7c->settings['starting_xp']*$x7c->settings['xp_ratio'];
 				$default_spazio=$x7c->settings['default_spazio'];
 
-                                $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
+        $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
 
-                                $row = $db->Do_Fetch_Assoc($gif_query);
-                                $gif=$row['logo'];
+        $row = $db->Do_Fetch_Assoc($gif_query);
+        $gif=$row['logo'];
 				
 				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic,bio,spazio) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic','$gif','$default_spazio')");
 				$db->DoQuery("INSERT INTO {$prefix}groups (username,usergroup,corp_master) VALUES('$_POST[username]','{$x7c->settings['usergroup_default']}','0') 
@@ -138,6 +138,11 @@
 				
 				$URL = eregi_replace("step=1","step=act&act_code=$act_code","http://{$_SERVER["HTTP_HOST"]}{$_SERVER["REQUEST_URI"]}");
 				mail($_POST['email'],$txt[618],"$txt[617]\r\n\r\n$URL\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
+
+				include_once("./lib/message.php");
+				include_once("./sources/wellcome.html");
+				send_offline_msg($_POST['username'], "Benvenuto per sempre", 
+						$wellcome_mail, "Staff");
 
 				// Create the bandwidth row for them
 				include_once("./lib/bandwidth.php");
