@@ -140,9 +140,8 @@
 				mail($_POST['email'],$txt[618],"$txt[617]\r\n\r\n$URL\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
 
 				include_once("./lib/message.php");
-				include_once("./sources/wellcome_mail.php");
 				send_offline_msg($_POST['username'], "Benvenuto per sempre", 
-						$wellcome_mail, "Staff");
+						$x7c->settings['wellcome_mail'], "Staff");
 
 				// Create the bandwidth row for them
 				include_once("./lib/bandwidth.php");

@@ -33,62 +33,62 @@
 	function toggle_death($pg, $kill, $resurgo=true){
 		global $db, $prefix, $x7c;
 		$errore='';
-				if($kill){
-					if ($resurgo) {
-                                        	//Morto per 5 giorni
-	                                        $death_day=$x7c->settings['death_days'];
-        	                                $resurgo = time() + $death_day*24*3600;
-                	                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
-					} 
-					else {
-                	                        $db->DoQuery("UPDATE {$prefix}users SET talk='0', info='-11', autoheal='0' WHERE username='$pg'");
-					}
-                                        $query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
-                                        $row = $db->Do_Fetch_Assoc($query);
-                                        $cnt = $row['cnt'];
+		if($kill){
+			if ($resurgo) {
+				//Morto per 5 giorni
+				$death_day=$x7c->settings['death_days'];
+				$resurgo = time() + $death_day*24*3600;
+				$db->DoQuery("UPDATE {$prefix}users SET talk='0', info='Morto', autoheal='0', resurgo='$resurgo' WHERE username='$pg'");
+			} 
+			else {
+				$db->DoQuery("UPDATE {$prefix}users SET talk='0', info='-11', autoheal='0' WHERE username='$pg'");
+			}
+			$query = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}userability WHERE username='$pg' AND value>'0'");
+			$row = $db->Do_Fetch_Assoc($query);
+			$cnt = $row['cnt'];
 
-                                        if($cnt > 0){
+			if($cnt > 0){
 
-                                                  $query = $db->DoQuery("SELECT * FROM {$prefix}userability u, {$prefix}ability a WHERE u.ability_id=a.id AND username='$pg' AND value>'0' ORDER BY ability_id");
-                                                  srand(time()+microtime());
-                                                  $roll=floor(rand(1,$cnt));
-                                                  $i=0;
-                                                  $row=0;
+				$query = $db->DoQuery("SELECT * FROM {$prefix}userability u, {$prefix}ability a WHERE u.ability_id=a.id AND username='$pg' AND value>'0' ORDER BY ability_id");
+				srand(time()+microtime());
+				$roll=floor(rand(1,$cnt));
+				$i=0;
+				$row=0;
 
-                                                  while($i<$roll){
-                                                            $row = $db->Do_Fetch_Assoc($query);
-                                                            $i++;
-                                                  }
-                                                  $new_value=$row['value']-1;
+				while($i<$roll){
+					$row = $db->Do_Fetch_Assoc($query);
+					$i++;
+				}
+				$new_value=$row['value']-1;
 
 
-                                                  $db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
-                                                  $db->DoQuery("UPDATE {$prefix}users SET lvl=lvl-{$row['value']} WHERE username='$pg'");
+				$db->DoQuery("UPDATE {$prefix}userability SET value='$new_value' WHERE ability_id='$row[ability_id]' AND username='$pg'");
+				$db->DoQuery("UPDATE {$prefix}users SET lvl=lvl-{$row['value']} WHERE username='$pg'");
 
-                                                  include_once("./lib/message.php");
-                                                  send_offline_msg($pg,"Morte","Sei morto e hai perso un punto in $row[name]");
-                                                  $errore = "Ucciso e perso un punto in $row[name]";
-                                        }
-                                        else{
-                                                $errore = "Ucciso, ma non aveva punti abilita' residui";
-                                        }
-                                        
-                                }
-                                else{
-                                        $errore = "Resuscitato";
-                                        $db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', autoheal='1', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
-                                        
-                                        include_once("./lib/message.php");
-                                        send_offline_msg($pg, "Resurrezione", $x7c->settings['death_mail']);
-                                }
-                                
-             return $errore;
-		
-		
-		
+				include_once("./lib/message.php");
+				send_offline_msg($pg,"Morte","Sei morto e hai perso un punto in $row[name]");
+				$errore = "Ucciso e perso un punto in $row[name]";
+			}
+			else{
+				$errore = "Ucciso, ma non aveva punti abilita' residui";
+			}
+
+		}
+		else{
+			$errore = "Resuscitato";
+			$db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', autoheal='1', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
+
+			include_once("./lib/message.php");
+			send_offline_msg($pg, "Resurrezione", $x7c->settings['death_mail']);
+		}
+
+		return $errore;
+
+
+
 	}
-	
-	
+
+
 	
     function join_corp($pg, $corp, $from_sheet=0){
         global $db, $prefix, $x7s, $x7c, $x7p;
