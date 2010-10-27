@@ -153,7 +153,7 @@
 
 				$replybody = remove_chattags($msgbody);
 				$replybody = eregi_replace("<br>","\n",$replybody);
-				$_POST['msg'] = "\n\n$txt[174]\n\n".$replybody;
+				$_POST['msg'] = " \n\n$txt[174]\n\n".$replybody;
 
 				//$msgbody = parse_message($msgbody);
 
@@ -296,7 +296,7 @@
 					
 					$replybody = remove_chattags($msgbody);
 					$replybody = eregi_replace("<br>","\n",$replybody);
-					$replybody = "\n\n$txt[174]\n\n".$replybody;
+					$replybody = " \n\n$txt[174]\n\n".$replybody;
 				}
 				
 				$to = "<p style=\"text-align: center\">
