@@ -43,7 +43,12 @@ function imglist_main(){
 			file_upload($file_path);
 		}
 		elseif(isset($_GET['delete'])){
-			file_delete($file_path);
+			file_delete($file_path.$_GET['delete']);
+		}
+		elseif(isset($_POST['multidel'])){
+			foreach ($_POST['multidel'] as $file){
+				file_delete($file_path.$file);
+			}
 		}
 			
 		$site_path=dirname($_SERVER['PHP_SELF']).$image_dir;
@@ -68,7 +73,7 @@ function file_list($path,$url){
 	$body=$path."<br>\n";
 	$subdir="";
 	if(isset($_GET['subdir']) && $_GET['subdir']!=""){
-		$subdir="&subdir=".$_GET['subdir'];
+		$subdir=$_GET['subdir'];
 		$head.=$_GET['subdir'];
 	}
 
@@ -78,7 +83,7 @@ function file_list($path,$url){
 		$phpmaxsize = ini_get('upload_max_filesize')."B";
 
 		$body='	<div id="uploadtitle"><strong>File Upload</strong> (Max Filesize: '.$phpmaxsize.')</div>
-				<form method="post" action="index.php?act=images&file=1'.$subdir.'" enctype="multipart/form-data">
+				<form method="post" action="index.php?act=images&file=1&subdir='.$subdir.'" enctype="multipart/form-data">
 				<input type="file" name="file" /> <input type="submit" value="Upload" />
 				</form>';
 	}
@@ -93,9 +98,13 @@ function file_list($path,$url){
 				}
 
 				function do_delete(url){
-                                        if(confirm("Vuoi davvero cancellare il file?\n\nATTENTO: se il file è parte di un oggetto o e\' ancora visualizzato in qualche stanza, comparira il box di \"oggetto mancante\""))
-                                                window.location.href=url;
-                                }
+          if(confirm("Vuoi davvero cancellare il file?\n\nATTENTO: se il file è parte di un oggetto o e\' ancora visualizzato in qualche stanza, comparira il box di \"oggetto mancante\""))
+          window.location.href=url;
+        }  
+				
+				function do_multidelete(url){
+          return confirm("Vuoi davvero cancellare i files?\n\nATTENTO: se i files sono parte di un oggetto o sono ancora visualizzati in qualche stanza, comparira il box di \"oggetto mancante\"");
+        }  
 				</script>';
 
 
@@ -118,7 +127,9 @@ function file_list($path,$url){
 			
 		$dir.="<li><a href=\"index.php?act=images&subdir=$previous\">../</a></li>";
 	}
-	$img="";
+	$img="<form action=\"./index.php?act=images&subdir=".$subdir.
+		"\" method=\"post\" name=\"multidelete\" onSubmit=\"return do_multidelete();\">
+		<tr><td><input type=\"submit\" value=\"Multi delete\"></td></tr>";
 
 	if($dh = opendir($path)){
 		while (($file = readdir($dh)) !== false) {
@@ -130,16 +141,18 @@ function file_list($path,$url){
 		$sep="";
 		if($subdir!="")
 			$sep="/";
-		
+	
 		for($fp=0; $fp<count($file_array); $fp++){
 
 			if($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])!="dir"){
 				if($i % $maxcol == 0){
 					$img.="<tr>";
 				}
-					
+				
 				if(preg_match("/swf$/i", $path.$file_array[$fp])){
-					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\">
+					$img.= "			
+						<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\">
+						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file_array[$fp]\">
 								<object>
 									<param name=\"movie\" value=\"".$url.$file_array[$fp]."\" width=\"100\" height=\"100\">
 									<param name=\"quality\" value=\"high\">
@@ -148,10 +161,13 @@ function file_list($path,$url){
 									<embed src=\"".$url.$file_array[$fp]."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width=\"100\" height=\"100\">
 									</embed>
 								</object>					
-								<br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+								<br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
 				}
 				else{
-					$img.= "<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\"><img src=\"$url$file_array[$fp]\" width=\"100\"> <br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images{$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+					$img.= "
+						<td align=\"center\" width=\"110\">
+						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file_array[$fp]\">
+						<a onClick=\"putimage('$url$file_array[$fp]');\"><img src=\"$url$file_array[$fp]\" width=\"100\"> <br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
 				}
 					
 				$i++;
@@ -170,6 +186,7 @@ function file_list($path,$url){
 		closedir($dh);
 	}
 
+	$img .= "</form>";
 	$dir.="</ul><hr></td></tr>";
 
 	$body.=$dir.$img;
@@ -205,8 +222,8 @@ function file_upload($path){
 function file_delete($path){
 	global $print;
 
-	if(isset ($_GET['delete']) && unlink($path.$_GET['delete'])){
-		$print->normal_window("Delete ok",$_GET['delete']);
+	if(unlink($path)){
+		$print->normal_window("Delete ok",$path);
 	}
 	else{
 		$print->normal_window("Errore", "Impossibile cancellare il file specificato");
