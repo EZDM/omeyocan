@@ -53,14 +53,14 @@ function PlayTardis()
 <?PHP 
   if($x7c->permissions['admin_panic'] ||$x7c->permissions['admin_objects']){
     echo '
-      <div id="adminbtn" style="position: absolute; top: 10px; left: 20px;">
+      <div id="adminbtn" style="position: absolute; top: 10px; left: 1px;">
         <a onClick="javascript: hndl=window.open(\'index.php?act=admincp\', \'admincp\',\'width=800,height=620, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\');
           hndl.focus();";>Administration
         </a>
       </div>';
 
     echo '
-      <div id="anagrafe" style="position: absolute; top: 30px; left: 20px;">
+      <div id="anagrafe" style="position: absolute; top: 30px; left: 1px;">
         <a onClick="javascript: hndl=window.open(\'index.php?act=memberlist\', \'memberlist\',\'width=450,height=500, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\'); 
           hndl.focus();";>Anagrafe
         </a>
@@ -68,7 +68,7 @@ function PlayTardis()
     
 
 		echo '
-      <div id="shop_debug" style="position: absolute; top: 50px; left: 20px;">
+      <div id="shop_debug" style="position: absolute; top: 50px; left: 1px;">
         <a onClick="javascript: hndl=window.open(\'index.php?act=shop\', \'shop\',\'width=800,height=720, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\');
           hndl.focus();";>Shop
         </a>
@@ -99,35 +99,43 @@ function PlayTardis()
 
 <!-- PULSANTI -->
 <a href="index.php">
-  <img style="position:absolute; top:313px; left:873px;" 
-    src="./graphic/01mappa.jpg">
+  <img style="position:absolute; top:313px; left:891px;" 
+    src="./graphic/01mappa.jpg"
+		onMouseOver="javascript: this.src='./graphic/01mappa_over.jpg'"
+		onMouseOut="javascript: this.src='./graphic/01mappa.jpg'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=boards','board',
   'width=800,height=620, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();"> 
-  <img style="position:absolute; top:377px; left:877px;"
-    src="./graphic/02bacheca.jpg">
+  <img style="position:absolute; top:377px; left:891px;"
+    src="./graphic/02bacheca.jpg" 
+		onMouseOver="javascript: this.src='./graphic/02bacheca_over.jpg'"
+		onMouseOut="javascript: this.src='./graphic/02bacheca.jpg'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=memberlist&room',
   'memberlist','width=450,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();">
-  <img style="position:absolute; top:442px; left:878px;"
-    src="./graphic/03presenti.jpg">
+  <img style="position:absolute; top:431px; left:894px;"
+    src="./graphic/03presenti.jpg"
+		onMouseOver="javascript: this.src='./graphic/03presenti_over.jpg'"
+		onMouseOut="javascript: this.src='./graphic/03presenti.jpg'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=sheet','sheet',
   'width=500,height=680, toolbar=no, status=no, location=no, menubar=no,resizable=no, status=no');
   hndl.focus();">
-  <img style="position:absolute; top:508px; left:890px;" 
-  src="./graphic/04scheda.jpg">
+  <img style="position:absolute; top:485px; left:893px;" 
+  src="./graphic/04scheda.jpg"
+	onMouseOver="javascript: this.src='./graphic/04scheda_over.jpg'"
+	onMouseOut="javascript: this.src='./graphic/04scheda.jpg'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=mail','MsgCenter',
   'location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=493,height=655');
   hndl.focus();">
-  <img id="posta" style="position:absolute; top:573px; left:883px;"
+  <img id="posta" style="position:absolute; top:573px; left:911px;"
   src="./graphic/05postano.gif">
 </a>
     

@@ -117,7 +117,7 @@ _gaq.push(['_trackPageview']);
 	include_once('./sources/layout.html');
 
 	if($x7c->permissions['admin_panic']){
-		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 20px;"><a onClick="javascript: window.open(\'index.php?act=mapeditor\',\'mapeditor\',\'width=scree.width,height=screen.height, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Map editor </a></div>';
+		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 1px;"><a onClick="javascript: window.open(\'index.php?act=mapeditor\',\'mapeditor\',\'width=scree.width,height=screen.height, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Map editor </a></div>';
 	}
 		
 	if(isset($_GET['errore'])){
@@ -140,7 +140,7 @@ _gaq.push(['_trackPageview']);
   
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   <a onClick="javascript: hndl = window.open('index.php?act=roomdesc&room=Mappa','roomdesc','width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();">
-      <img style="position:absolute; top:24px; left:806px;" src="./graphic/polaroid.jpg">
+      <img style="position:absolute; top:0px; left:834px;" src="./graphic/polaroid.jpg">
   </a>
   <script language="javascript" type="text/javascript">
 						listhash = '';

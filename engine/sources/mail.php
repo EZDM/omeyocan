@@ -157,7 +157,7 @@
 
 				//$msgbody = parse_message($msgbody);
 
-				$body .= "<Br><Br>
+				$body .= "
 						<div> 
 						<table class=\"inside_table\" width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 						<Tr>
@@ -182,6 +182,7 @@
 						</div>
 						
 						<br>
+						<div id=\"menu\">
 						<a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a>
 						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_POST['subject']}&to={$_POST['to']}\">[Rispondi]</a>
 						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_POST['subject']}\">[Inoltra]</a>
@@ -189,6 +190,7 @@
 					<Br><Br><div align=\"center\">
 					<div align=\"left\">
 					<a href=\"index.php?act=mail\">[Elenco]</a>
+					</div
 					
 					</div>";
 
@@ -396,8 +398,8 @@
 		
 		$sfondo="./graphic/sfondoposta.jpg";
 		
-		if($x7c->settings['panic'])
-	 		$sfondo="./graphic/sfondopostaobscure.jpg";
+		/*if($x7c->settings['panic'])
+	 		$sfondo="./graphic/sfondopostaobscure.jpg";*/
 		
 		$mail_style = '
 		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
@@ -421,8 +423,8 @@
 			.floater {
 			position: absolute;
 			z-index:2;
-			left: 110px;
-			top: 60px;
+			left: 125px;
+			top: 45px;
 			margin-top: 0;
 			margin-left: 0;
 			display:none;
@@ -487,10 +489,10 @@
 			
 			#inner_mail {
 				width: 408px; 
-				height: 580px;
+				height: 330px;
 				position: absolute;
 				left: 45px;
-				top: 60px;
+				top: 140px;
 				color: #660000;
 			}
 			
@@ -502,14 +504,14 @@
 			
 			#msg_body {
 				width: 400px; 
-				height: 280px;
+				height: 270px;
 				overflow: auto;
 			}
-                        .msg_txt{
-                                color: #660000;
-                                font-size: 8pt;
-                                font-weight: bold;
-                        }
+     .msg_txt{
+        color: #660000;
+        font-size: 8pt;
+        font-weight: bold;
+     }
 			.dark_row{
 				background: transparent;
 				font-size: 8pt;
@@ -533,14 +535,14 @@
 			
 			#sysmsg{
 				position: absolute;
-				left: 20px;
-				top: 520px;
+				left: 0px;
+				top: 380px;
 				color: red;
 			}
 			#menu{
 				position: absolute;
 				left: 0px;
-				top: 400px;			
+				top: 340px;			
 			}
 			
 		</style>

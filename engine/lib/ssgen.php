@@ -471,38 +471,37 @@
 			}
 			#inputchatdiv {
 				position: absolute;
-				top: 590px;
+				top: 505px;
 				left: 190px;
 			}
 			#clean_chat{
 				position: absolute;
 				top: 70px;
-				left: 20px;
+				left: 1px;
 			}
 
 			#invisible_master{
 				position: absolute;
 				top: 90px;
-				left: 20px;
+				left: 1px;
 			}
 			
 			#shadow_room{
 				position: absolute;
 				top: 110px;
-				left: 20px;
+				left: 1px;
 			}
 			
 			#cmddiv {
 				position: absolute;
-				top: 680px;
-				left: 0px;
+				top: 610px;
+				left: 30px;
 				width: 870px;
-				text-align: center;
 			}
 			#action_countdown{
 				position: absolute;
-				top: 650px;
-				left: 770px;
+				top: 647px;
+				left: 798px;
 				width: 100px;
 				text-align: center;
 				font-size: 10pt;
@@ -549,9 +548,9 @@
 				position: absolute;
 				font-size: 7pt;
 				top: 675px;
-				left: 890px;
+				left: 920px;
 				text-align: center;
-				width: 120px;
+				width: 90px;
 			}
 		</style>";
 		
@@ -638,14 +637,13 @@
 			} 
 			#message_window {
 				position: absolute;
-				padding: 5px;
-				height: 1%;
+				padding: 0px;
 				/*border: 1px solid $data[ChatBorder];*/
 				overflow-y: scroll;
-				top: 165px;
-				left: 117px;
-				width: 640px;
-				height: 405px;
+				top: 90px;
+				left: 112px;
+				width: 680px;
+				height: 408px;
 			}
 			span {
 			 position: relative;
