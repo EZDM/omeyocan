@@ -1291,7 +1291,7 @@ _gaq.push(['_trackPageview']);
   if($x7c->room_data['logo'] != '')
     echo '
       <a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
-      <img style="position:absolute; top:24px; left:806px;" src="'.$polaroid.'" >
+      <img style="position:absolute; top:0px; left:834px;" src="'.$polaroid.'" >
       </a>'; 
 ?>
 
@@ -1416,13 +1416,22 @@ _gaq.push(['_trackPageview']);
     <option value="~100;">d100</option> 
     </select>
 
+    <input name="speech_btn" type="button" class="button" value="Parlato"
+    onClick="javascript: speech();" /> 
+    <input name="button_send" type="submit" class="send_button" 
+      style="cursor: pointer;
+        background: url(<?PHP echo $print->image_path; ?>send.gif);
+        border: none;height: 20px;width: 55px;
+        text-align: center;font-weight: bold;"
+      onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'"
+      onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 
 <?PHP
     if($x7c->permissions['write_master']){
-      echo "  <input name=\"img_btn\" type=\"button\" class=\"button\"
+      echo "<br><input name=\"img_btn\" type=\"button\" class=\"button\"
         value=\"Immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
 
-      echo "  <input name=\"img_btn\" type=\"button\" class=\"button\"
+      echo "<input name=\"img_btn\" type=\"button\" class=\"button\"
         value=\"Master\"
         onClick=\"document.chatIn.msgi.value ='* ';
         document.chatIn.msgi.focus();\">";
@@ -1434,15 +1443,6 @@ _gaq.push(['_trackPageview']);
     }
 
 ?> 
-    <input name="speech_btn" type="button" class="button" value="Parlato"
-    onClick="javascript: speech();" /> 
-    <input name="button_send" type="submit" class="send_button" 
-      style="cursor: pointer;
-        background: url(<?PHP echo $print->image_path; ?>send.gif);
-        border: none;height: 20px;width: 55px;
-        text-align: center;font-weight: bold;"
-      onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'"
-      onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
     </td>
     </tr>
   </table>
