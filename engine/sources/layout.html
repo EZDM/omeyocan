@@ -75,10 +75,14 @@ function PlayTardis()
       </div>';
   }
 
-  if($x7c->settings['panic'])
-    $logout_src="./graphic/06logoutobscure.gif";
-  else
-    $logout_src="./graphic/06logout.gif";
+  if($x7c->settings['panic']) {
+    $logout_src="./graphic/06logoutobscure.jpg";
+    $logout_over_src="./graphic/06logoutobscure_over.jpg";
+	}
+  else {
+    $logout_src="./graphic/06logout.jpg";
+    $logout_over_src="./graphic/06logout_over.jpg";
+	}
 
    if($x7s->status=="Morto"){
     echo '
@@ -89,9 +93,11 @@ function PlayTardis()
     }
 ?>
    
-<div id="logoutbtn" style="position: absolute; top: 250px; left: 905px;">
+<div id="logoutbtn" style="position: absolute; top: 235px; left: 932px;">
   <a onClick="javascript: window.location.href='index.php?act=logout';">
-    <img src="<?PHP echo $logout_src;?>" />
+    <img src="<?PHP echo $logout_src;?>"
+		onMouseOver="javascript: this.src='<?PHP echo $logout_over_src;?>'"
+		onMouseOut="javascript: this.src='<?PHP echo $logout_src; ?>'">
   </a> 
 </div>
 
@@ -99,7 +105,7 @@ function PlayTardis()
 
 <!-- PULSANTI -->
 <a href="index.php">
-  <img style="position:absolute; top:313px; left:891px;" 
+  <img style="position:absolute; top:313px; left:893px;" 
     src="./graphic/01mappa.jpg"
 		onMouseOver="javascript: this.src='./graphic/01mappa_over.jpg'"
 		onMouseOut="javascript: this.src='./graphic/01mappa.jpg'">
@@ -108,7 +114,7 @@ function PlayTardis()
 <a onClick="javascript: hndl = window.open('index.php?act=boards','board',
   'width=800,height=620, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();"> 
-  <img style="position:absolute; top:377px; left:891px;"
+  <img style="position:absolute; top:377px; left:893px;"
     src="./graphic/02bacheca.jpg" 
 		onMouseOver="javascript: this.src='./graphic/02bacheca_over.jpg'"
 		onMouseOut="javascript: this.src='./graphic/02bacheca.jpg'">
@@ -117,7 +123,7 @@ function PlayTardis()
 <a onClick="javascript: hndl = window.open('index.php?act=memberlist&room',
   'memberlist','width=450,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();">
-  <img style="position:absolute; top:431px; left:894px;"
+  <img style="position:absolute; top:431px; left:893px;"
     src="./graphic/03presenti.jpg"
 		onMouseOver="javascript: this.src='./graphic/03presenti_over.jpg'"
 		onMouseOut="javascript: this.src='./graphic/03presenti.jpg'">
