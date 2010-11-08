@@ -271,10 +271,12 @@ $GLOBALS['start_cogs'] = 30;
 		if ($check_only)
 			return;
 
-		assign_money($qty, $to);
 		remove_money($qty, $from);
-		group_money($from);
-		group_money($to);
+		assign_money($qty, $to);
+		
+		// We do not do this anymore for splitting purpose
+		//group_money($from);
+		//group_money($to);
 
 		include_once("./lib/alarms.php");
 		record_payment($from, $to, $qty);
@@ -317,6 +319,48 @@ $GLOBALS['start_cogs'] = 30;
 
 			$to_move -= $money_group;
 		}
+
+		// Shopper has infinite space
+		if ($pg != $shopper) {
+			include_once('./lib/sheet_lib.php');
+			recalculate_space($pg);
+		}
+	}
+	
+  function split_money($qty, $pg, $group) {
+		global $db, $prefix, $money_name, $money_group, $money_group_size, $shopper;
+
+		// Shopper does not split money
+		if ($pg == $shopper) {
+			$db->DoQuery("UPDATE {$prefix}objects
+					SET uses = uses - $qty
+					WHERE name = '$money_name'
+					AND owner = '$pg'");
+			return;
+		}
+
+		$query_money = $db->DoQuery("
+				SELECT * FROM {$prefix}objects
+				WHERE name = '$money_name'
+				AND id = '$group'
+				AND owner = '$pg'");
+		$row_money = $db->Do_Fetch_Assoc($query_money);
+		if (!$row_money)
+			die("Incosistent money status");
+
+		$to_move = $qty;
+		if ($to_move > 0) {
+			$assign = $to_move;
+			
+			if ($to_move >= $row_money['uses'])
+				return "Quantita' troppo elevata";
+
+			$db->DoQuery("UPDATE {$prefix}objects
+					SET uses = uses - $assign
+					WHERE id = '{$row_money['id']}'");
+		}
+
+		assign_money($qty, $pg);
 
 		// Shopper has infinite space
 		if ($pg != $shopper) {

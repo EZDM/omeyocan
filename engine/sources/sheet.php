@@ -162,6 +162,17 @@ function sheet_page_equip(){
 		}
 	}
 
+	if(isset($_GET['split']) && ($x7s->username==$pg || checkIfMaster())){
+		if(!isset($_POST['amount']) || !isset($_POST['group']))
+			die("Bad form");
+
+		$errore = split_money($_POST['amount'], $pg, $_POST['group']);
+	}
+
+	if(isset($_GET['group_money']) && ($x7s->username==$pg || checkIfMaster())){
+		group_money($pg);
+	}
+
 	if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
 		if(!isset($_POST['owner']) || !isset($_POST['id'])){
 			die("Bad form");
@@ -341,27 +352,44 @@ function sheet_page_equip(){
 				$money_qty = "";
 				$money_form = "";
 				if($row['name'] == $money_name)	{
-					$money_form= "
-						<form action=\"index.php?act=sheet&page=equip&pg=$pg&pay=1\"
-						method=\"post\" name=\"payment\">
-						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-						<tr>
-						<td>Paga a:</td>
-						<td>
-						<input type=\"text\" name=\"owner\" class=\"text_input\" size=10>
-						</td>
-						</tr>
-						<tr>
-						<td>
-						Ammontare:</td>
-						<td>
-						<input type=\"text\" name=\"amount\" class=\"text_input\" size=5>
-						</td>
-						</tr>
-						<tr>
-						<td><input type=\"submit\" class=\"button\" value=\"Paga\"></td>
-						</tr>
-						</form>";
+					if ($row['equipped']) {
+						$money_form= "
+							<form action=\"index.php?act=sheet&page=equip&pg=$pg&split=1\"
+							method=\"post\" name=\"split\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+							<td>
+							<input type=\"button\" class=\"button\" value=\"Raggruppa tutti\"
+							onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&group_money'\">
+							</td>
+							<td>
+							<input type=\"submit\" class=\"button\" value=\"Dividi\">".
+							"<input type=\"text\" name=\"amount\" class=\"text_input\" size=5>
+							<input type=\"hidden\" name=\"group\" value=\"$row[id]\">
+							</td>
+							</tr>
+							</form>
+							<form action=\"index.php?act=sheet&page=equip&pg=$pg&pay=1\"
+							method=\"post\" name=\"payment\">
+							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+							<tr>
+							<td>Paga a:</td>
+							<td>
+							<input type=\"text\" name=\"owner\" class=\"text_input\" size=10>
+							</td>
+							</tr>
+							<tr>
+							<td>
+							Ammontare:</td>
+							<td>
+							<input type=\"text\" name=\"amount\" class=\"text_input\" size=5>
+							</td>
+							</tr>
+							<tr>
+							<td><input type=\"submit\" class=\"button\" value=\"Paga\"></td>
+							</tr>
+							</form>";
+					}
 				}
 
 				$equip_text="Deposita";
@@ -378,6 +406,7 @@ function sheet_page_equip(){
           <td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
           <td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
           </tr>
+          </form>
           $more_form
           <tr>
           <td><input type=\"button\" class=\"button\" value=\"Butta\"
@@ -385,22 +414,22 @@ function sheet_page_equip(){
           <input type=\"button\" class=\"button\" value=\"$equip_text\"
 					onClick=\"javascript: location.href='index.php?act=sheet&page=equip&pg=$pg&equiptgl=$row[id]'\"></td>
           </tr>
-          </form>
 					$money_form
           </table>";
 			}
 
 			if(checkIfMaster() && $row['name'] != $money_name){
-				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\" method=\"post\" name=\"object_moduse\">
-                                                        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-                                                                <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
-                                                                <tr>
-                                                                                <td>Usi:</td>
-                                                                                <td><input type=\"text\" name=\"use\" class=\"text_input\" size=2 value=\"$row[uses]\"></td>
-                                                                                <td><input type=\"submit\" class=\"button\" value=\"Cambia\"></div></td>
-                                                                </tr>
-                                                        </table>
-                                                ";
+				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\"".
+					" method=\"post\" name=\"object_moduse\">
+          <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+          <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
+          <tr>
+          <td>Usi:</td>
+          <td><input type=\"text\" name=\"use\" class=\"text_input\" size=2 value=\"$row[uses]\"></td>
+          <td><input type=\"submit\" class=\"button\" value=\"Cambia\"></div></td>
+          </tr>
+          </table>
+          ";
 
 				$body.="</form>\n";
 			}
