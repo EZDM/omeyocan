@@ -75,14 +75,7 @@ function PlayTardis()
       </div>';
   }
 
-  if($x7c->settings['panic']) {
-    $logout_src="./graphic/06logoutobscure.jpg";
-    $logout_over_src="./graphic/06logoutobscure_over.jpg";
-	}
-  else {
-    $logout_src="./graphic/06logout.jpg";
-    $logout_over_src="./graphic/06logout_over.jpg";
-	}
+	include_once('./sources/graphic_elements.php');
 
    if($x7s->status=="Morto"){
     echo '
@@ -106,43 +99,43 @@ function PlayTardis()
 <!-- PULSANTI -->
 <a href="index.php">
   <img style="position:absolute; top:313px; left:893px;" 
-    src="./graphic/01mappa.jpg"
-		onMouseOver="javascript: this.src='./graphic/01mappa_over.jpg'"
-		onMouseOut="javascript: this.src='./graphic/01mappa.jpg'">
+    src="<?PHP echo $mappa;?>"
+		onMouseOver="javascript: this.src='<?PHP echo $mappa_over;?>'"
+		onMouseOut="javascript: this.src='<?PHP echo $mappa;?>'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=boards','board',
   'width=800,height=620, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();"> 
-  <img style="position:absolute; top:377px; left:893px;"
-    src="./graphic/02bacheca.jpg" 
-		onMouseOver="javascript: this.src='./graphic/02bacheca_over.jpg'"
-		onMouseOut="javascript: this.src='./graphic/02bacheca.jpg'">
+  <img style="position:absolute; top:376px; left:893px;"
+    src="<?PHP echo $bacheca;?>" 
+		onMouseOver="javascript: this.src='<?PHP echo $bacheca_over;?>'"
+		onMouseOut="javascript: this.src='<?PHP echo $bacheca;?>'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=memberlist&room',
   'memberlist','width=450,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
   hndl.focus();">
   <img style="position:absolute; top:431px; left:893px;"
-    src="./graphic/03presenti.jpg"
-		onMouseOver="javascript: this.src='./graphic/03presenti_over.jpg'"
-		onMouseOut="javascript: this.src='./graphic/03presenti.jpg'">
+    src="<?PHP echo $presenti;?>"
+		onMouseOver="javascript: this.src='<?PHP echo $presenti_over;?>'"
+		onMouseOut="javascript: this.src='<?PHP echo $presenti;?>'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=sheet','sheet',
   'width=500,height=680, toolbar=no, status=no, location=no, menubar=no,resizable=no, status=no');
   hndl.focus();">
   <img style="position:absolute; top:485px; left:893px;" 
-  src="./graphic/04scheda.jpg"
-	onMouseOver="javascript: this.src='./graphic/04scheda_over.jpg'"
-	onMouseOut="javascript: this.src='./graphic/04scheda.jpg'">
+  src="<?PHP echo $scheda;?>"
+	onMouseOver="javascript: this.src='<?PHP echo $scheda_over;?>'"
+	onMouseOut="javascript: this.src='<?PHP echo $scheda;?>'">
 </a>
       
 <a onClick="javascript: hndl = window.open('index.php?act=mail','MsgCenter',
   'location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=493,height=655');
   hndl.focus();">
   <img id="posta" style="position:absolute; top:573px; left:911px;"
-  src="./graphic/05postano.gif">
+  src="<?PHP $posta_no; ?>">
 </a>
     
 <div align="center" id="copyrigth" style="visibility: visible;">

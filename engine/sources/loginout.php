@@ -247,8 +247,8 @@
       #inner_login{
         position: absolute;
         color: white;
-        margin-left: 60px;
-        margin-top: 50px;
+        margin-left: 0px;
+        margin-top: 0px;
         width: 100%;
       }
 
@@ -300,9 +300,49 @@
         width: 290px;
         height: 240px;
         top: 80px;
-        left: 650px;
+        left: 680px;
         overflow: auto;
       }
+
+			#register_banner {
+				position: absolute;
+				background: black;
+				top: 0px;
+				left: 0px;
+				text-align: center;
+				width:100%;
+			}
+
+			#citizen_popup, #uncitizen_popup {
+				position: absolute;
+				font-weight: bold;
+				font-size: 12pt;
+				visibility: hidden;
+				border: 1px solid white;
+				opacity: 0.6;
+				background-color: white;
+				color: black;
+				padding: 30px;
+			}
+
+			#citizen_popup {	
+				top: 320px;
+				left: 220px;
+			}
+
+			#uncitizen_popup {
+				top: 320px;
+				left: 720px;
+			}
+
+			.citizen_banner {
+				opacity: 0.4;
+			}
+
+			#register_table {
+				margin: 50px 50px;
+			}
+
     </style>
     ';
 

@@ -111,13 +111,25 @@
 				$default_start_xp=$x7c->settings['starting_xp']*$x7c->settings['xp_ratio'];
 				$default_spazio=$x7c->settings['default_spazio'];
 
-        $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
+        $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions 
+						WHERE usergroup='{$_POST['base_group']}'");
 
         $row = $db->Do_Fetch_Assoc($gif_query);
+
+				if (!$row)
+					die("Invalid base group, sfhoudl not happen");
+
         $gif=$row['logo'];
 				
-				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,iscr,max_panic,bio,spazio) VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]','$txt[150]','{$x7c->settings['usergroup_default']}','$time','$settings','0','$ip','$act_code','0','$default_start_xp','$time','$default_max_panic','$gif','$default_spazio')");
-				$db->DoQuery("INSERT INTO {$prefix}groups (username,usergroup,corp_master) VALUES('$_POST[username]','{$x7c->settings['usergroup_default']}','0') 
+				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,
+					status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,
+					iscr,max_panic,bio,spazio,base_group) 
+						VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]',
+							'$txt[150]','{$_POST['base_group']}','$time','$settings','0',
+							'$ip','$act_code','0','$default_start_xp','$time',
+							'$default_max_panic','$gif','$default_spazio','{$_POST['base_group']}')");
+				$db->DoQuery("INSERT INTO {$prefix}groups (username,usergroup,corp_master) 
+						VALUES('$_POST[username]','{$_POST['base_group']}','0') 
 						ON DUPLICATE KEY UPDATE username=username");
 				
 				$query_ab = $db->DoQuery("SELECT * FROM {$prefix}ability WHERE corp=''");
@@ -157,19 +169,51 @@
 		
 			$body = activate_account();
 				
+		}else if(!isset($_GET['base_group'])) {
+			$body = '
+				<script type="text/javascript">
+			
+				function over(img, popup) {
+					img.style.opacity = 1;
+				}
+
+				function restore(img, popup){
+					img.style.opacity = 0.4;
+				}
+				</script>
+
+				<div id="register_banner">
+				<table width=100%>
+				<tr>
+				  <td>
+					<a href="index.php?act=register&base_group=Cittadino">
+					<img src="./graphic/banner_citizen.jpg" class="citizen_banner"
+					onMouseOver="javascript: over(this);"
+					onMouseOut="javascript: restore(this)"></a></td>
+					</a></td>
+				  <td>
+					<a href="index.php?act=register&base_group=Non Cittadino">
+					<img src="./graphic/banner_uncitizen.jpg" class="citizen_banner"
+					onMouseOver="javascript: over(this);"
+					onMouseOut="javascript: restore(this)"></a></td>
+				</tr>
+				</table>
+				</div>
+				';
 		}else{
 		
 			// No, they still need to fill out this form:
 			// If we make it here then the admin wants all the user's they can get!
 			$body = "	<form action=\"index.php?act=register&step=1\" method=\"post\" name=\"registerform\">
-						<table border=\"0\" width=\"400\" cellspacing=\"0\" cellpadding=\"0\">
+						<table border=\"0\" width=\"400\" cellspacing=\"0\" cellpadding=\"0\"
+						id=\"register_table\">
 							<tr valign=\"top\">
 								<td width=\"400\" style=\"text-align: center\" colspan=\"4\">$txt[19]<Br><Br></td>
 							</tr>
 							<tr valign=\"top\">
 								<td width=\"50\">&nbsp;</td>
 								<td width=\"120\" style=\"vertical-align: middle;\">$txt[2]:<br>
-                                   <b>Questo nome verra' utilizzato per il login, la posta e per la lista presenti</b></td>
+                <b>Questo nome verra' utilizzato per il login, la posta e per la lista presenti</b></td>
 								<td width=\"175\" height=\"25\"><input type=\"text\" class=\"text_input\" name=\"username\"></td>
 								<td width=\"50\">&nbsp;</td>
 							</tr>
@@ -195,6 +239,7 @@
 								<td width=\"400\" style=\"text-align: center\" colspan=\"4\"><input type=\"submit\" value=\"$txt[18]\" class=\"button\"></td>
 							</tr>
 						</table>
+						<input type=\"hidden\" name=\"base_group\" value=\"$_GET[base_group]\">
 						</form>
 						<div align=\"center\">$txt[22]<Br><Br><a href=\"./index.php\">[$txt[77]]</a></div>
 					";

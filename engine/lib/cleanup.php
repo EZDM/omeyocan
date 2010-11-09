@@ -129,6 +129,7 @@
 		}
 					
 		$db->DoQuery("DELETE FROM {$prefix}banned WHERE user_ip_email='$user'");
+		$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$user'");
 		$db->DoQuery("DELETE FROM {$prefix}users WHERE username='$user'");
 		// Delete bandwidth info
 		$db->DoQuery("DELETE FROM {$prefix}bandwidth WHERE user='$user'");

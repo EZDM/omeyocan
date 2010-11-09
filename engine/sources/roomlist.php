@@ -256,7 +256,7 @@ _gaq.push(['_trackPageview']);
 											}else if(dataSubArray[0] == '6'){
 												// Number of offline messages update
 												if(dataSubArray[1] > 0) {
-													document.getElementById('posta').src = "./graphic/05postasi.gif";
+													document.getElementById('posta').src = "<?PHP echo $posta_si;?>";
 													
 													if(!newMail){
 														PlayTardis();
@@ -265,7 +265,7 @@ _gaq.push(['_trackPageview']);
 													newMail = 1;
 												}
 												else {
-													document.getElementById('posta').src = "./graphic/05postano.gif";
+													document.getElementById('posta').src = "<?PHP echo $posta_no;?>";
 													newMail = 0;
 												}
 													

@@ -714,6 +714,8 @@
       echo $print->ss_chatinput;
       echo $print->ss_uc;
 
+			include_once('./sources/graphic_elements.php');
+
 ?>
 
 <LINK REL="SHORTCUT ICON"
@@ -835,7 +837,7 @@ _gaq.push(['_trackPageview']);
               // Number of offline messages update
               if(dataSubArray[1] > 0) {
                 document.getElementById('posta').src = 
-                  "./graphic/05postasi.gif";
+                  "<?PHP echo $posta_si;?>";
 
                 if(!newMail){
                   PlayTardis();
@@ -845,7 +847,7 @@ _gaq.push(['_trackPageview']);
               }
               else {
                 document.getElementById('posta').src = 
-                  "./graphic/05postano.gif";
+                  "<?PHP echo $posta_no;?>";
                 newMail = 0;
               }
 
@@ -1251,11 +1253,11 @@ _gaq.push(['_trackPageview']);
     include_once('./sources/layout.html');
 
     $polaroid=$x7c->room_data['logo'];
-    if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
+    /*if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
       $pos=stripos($polaroid,".jpg");
       $polaroid = substr($polaroid, 0, $pos);
       $polaroid.="ob.jpg";
-    }
+    }*/
 
     if($x7c->permissions['admin_panic']){
       if($x7s->invisible)
@@ -1290,9 +1292,25 @@ _gaq.push(['_trackPageview']);
 <?PHP  
   if($x7c->room_data['logo'] != '')
     echo '
-      <a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">
-      <img style="position:absolute; top:0px; left:834px;" src="'.$polaroid.'" >
-      </a>'; 
+      <a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">';
+		if (!$x7c->settings['panic'])
+      echo '<img class="polaroid" src="'.$polaroid.'" >';
+		else
+			echo '
+				<div class="polaroid">
+				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="180" height="190">
+				<param name="movie" value="./graphic/polaroid_dark.swf">
+				<param name="quality" value="high">
+				<param name="allowScriptAccess" value="sameDomain" />
+				<param name="allowFullScreen" value="True" />
+				<embed src="./graphic/polaroid_dark.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="180" height="190" allowScriptAccess="sameDomain" allowFullScreen="True">
+				</embed>
+				</object>
+				</div>
+				';
+
+		echo '</a>'; 
+
 ?>
 
     <div id="message_window"></div>
