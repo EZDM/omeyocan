@@ -1560,7 +1560,7 @@ function sheet_page_corp(){
 	$body='';
 	$errore='';
 
-	$query = $db->DoQuery("SELECT xp,user_group,bio,corp_charge 
+	$query = $db->DoQuery("SELECT xp,user_group,bio,corp_charge,base_group 
 			FROM {$prefix}users WHERE username='$pg'");
 	$row_user = $db->Do_Fetch_Assoc($query);
 
@@ -1576,7 +1576,7 @@ function sheet_page_corp(){
 
 	$corp_master=false;
 	if($row_group['corp_master'] && 
-			$row_user['user_group']!=$x7c->settings['usergroup_default'])
+			$row_user['user_group']!=$row_user['base_group'])
 		$corp_master=true;
 
 	$xp=floor($row_user['xp']/$x7c->settings['xp_ratio']);
@@ -1591,14 +1591,14 @@ function sheet_page_corp(){
 			if(isset($_POST['target']))
 				$target=$_POST['target'];
 
-			$query=$db->DoQuery("SELECT username, user_group 
+			$query=$db->DoQuery("SELECT username, user_group, base_group
 					FROM {$prefix}users WHERE username='$target'");
 			$row = $db->Do_Fetch_Assoc($query);
 
 			if($row && $row['username']!=null){
 				include_once('./lib/sheet_lib.php');
 				if($_GET['mgmt']=='add'){
-					if($row['user_group']==$x7c->settings['usergroup_default'])
+					if($row['user_group']==$row['base_group'])
 						$errore=join_corp($target, $row_user['user_group'], 1);
 					else{
 						$errore="$target fa gia' parte di un altro Gremios";
@@ -1750,7 +1750,7 @@ function sheet_page_corp(){
 	$body .="<div id=\"corp_name\">$row_user[user_group]</div>\n";
 	$body .="<div id=\"corp_symbol\"><img src=\"$row_user[bio]\" /></div>\n";
 	
-	if($row_user['corp_charge'] != $x7c->settings['usergroup_default'])
+	if($row_user['corp_charge'] != $row_user['base_group'])
 		$body .="<div id=\"corp_charge\">$row_user[corp_charge]</div>";
 
 	$body.="<div id=\"corp\">\n";
@@ -1848,7 +1848,7 @@ function sheet_page_corp(){
 
 	if(($corp_master && $pg==$x7s->username) ||
 			(checkIfModifySheet() &&
-			 $row_user['user_group'] != $x7c->settings['usergroup_default'])){
+			 $row_user['user_group'] != $row_user['base_group'])){
 		$body.="<div id=\"corp_mgmt\">
                                 <div id=\"corp_panel\">
                                 Gestione gremios {$row_user['user_group']}

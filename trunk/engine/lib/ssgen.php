@@ -511,8 +511,8 @@
 			#panicwrap {
 				position: absolute;
 				text-align: center;
-				top: 580px;
-				left: 0px;
+				top: 565px;
+				left: 26px;
 			}
 			#panic_text {
 				position: absolute;
@@ -551,6 +551,13 @@
 				left: 920px;
 				text-align: center;
 				width: 90px;
+			}
+
+			.polaroid {
+				position:absolute; 
+				top: 0px; 
+				left: 834px;
+				padding: 0;
 			}
 		</style>";
 		

@@ -8,6 +8,14 @@
 
     }
     
+		function get_base_group($user){
+    	global $db, $prefix, $x7c; 
+    	$query = $db->DoQuery("SELECT base_group FROM {$prefix}users WHERE username = '$user'");
+    	
+    	$row = $db->Do_Fetch_Assoc($query);
+			return $row['base_group'];
+		}
+    
     function can_join($user, $gremios){
     	global $db, $prefix, $x7c; 
     	$query = $db->DoQuery("SELECT gremios FROM {$prefix}permissions WHERE usergroup = '$gremios'");
@@ -18,10 +26,10 @@
     		return true;
     		
     	else{
-    		$query = $db->DoQuery("SELECT user_group FROM {$prefix}users WHERE username='$user'");
+    		$query = $db->DoQuery("SELECT user_group,base_group FROM {$prefix}users WHERE username='$user'");
     		$row = $db->Do_Fetch_Assoc($query);
-    		if(	$gremios != $x7c->settings['usergroup_default'] && 
-    			$row['user_group']!=$x7c->settings['usergroup_default'] &&
+    		if(	$gremios != $row['base_group'] &&
+    			$row['user_group']!=$row['base_group'] &&
     			$row['user_group'] != $gremios){
     			return false; 
     			}
@@ -131,8 +139,9 @@
         $db->DoQuery("UPDATE {$prefix}users SET bio='$gif' WHERE username='$pg'");
         
         if(is_gremios($corp)){
-        		$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$pg' AND usergroup='{$x7c->settings['usergroup_default']}'");
-            	$db->DoQuery("UPDATE {$prefix}users SET user_group='$corp', bio='$gif' WHERE username='$pg'");
+						$base_group = get_base_group($pg);
+        		$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$pg' AND usergroup='{$base_group}'");
+            $db->DoQuery("UPDATE {$prefix}users SET user_group='$corp', bio='$gif' WHERE username='$pg'");
         }
         
         $db->DoQuery("INSERT INTO {$prefix}groups (usergroup, username, corp_master) VALUES('$corp', '$pg','0')
@@ -143,6 +152,7 @@
         global $db, $prefix, $x7s, $x7c, $x7p;
         $query = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$target' AND usergroup='$corp'");
         $row = $db->Do_Fetch_Assoc($query);
+				$base_group = get_base_group($target);
 
         //We can remove only members that belong to our corp
         if(in_array($corp, $x7p->profile['usergroup']) || checkIfMaster()){
@@ -157,7 +167,7 @@
                         return "Non sei autorizzato a gestire questo gremios";
                 }
                 
-                $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='{$x7c->settings['usergroup_default']}'");
+                $gif_query = $db->DoQuery("SELECT logo FROM {$prefix}permissions WHERE usergroup='{$base_group}'");
                 $row=$db->Do_Fetch_Assoc($gif_query);
                 $gif=$row['logo'];
         
@@ -166,8 +176,8 @@
                 
             
 	            if(is_gremios($corp)){
-    	        	$db->DoQuery("UPDATE {$prefix}users SET user_group='{$x7c->settings['usergroup_default']}' WHERE username='$target'");
-    	        	$db->DoQuery("INSERT INTO {$prefix}groups (usergroup, username, corp_master) VALUES('{$x7c->settings['usergroup_default']}', '$target','0')
+    	        	$db->DoQuery("UPDATE {$prefix}users SET user_group='{$base_group}' WHERE username='$target'");
+    	        	$db->DoQuery("INSERT INTO {$prefix}groups (usergroup, username, corp_master) VALUES('{$base_group}', '$target','0')
         					ON DUPLICATE KEY UPDATE usergroup=usergroup, username=username");
 	            }
         }

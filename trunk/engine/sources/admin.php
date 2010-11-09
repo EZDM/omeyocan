@@ -2750,16 +2750,18 @@ function admincp_master(){
 
 				if($ok){
 					$error_group = "";
+					include_once('./lib/sheet_lib.php');
+					$base_group = get_base_group($_GET['update']);
+
 					$db->DoQuery("UPDATE {$prefix}users SET time='$time',
-							user_group='{$x7c->settings['usergroup_default']}', 
+							user_group='{$base_group}', 
 							email='$_POST[email]',avatar='$_POST[avatar]',
 							name='$_POST[rname]',bio='$_POST[bio]',
 							username='$_POST[username]', m_invisible = '0', 
 							frozen='$frozen' WHERE username='$_GET[update]'");
-					include_once('./lib/sheet_lib.php');
 
 					$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$_GET[update]'");
-					$error_group .= join_corp($_GET['update'], $x7c->settings['usergroup_default']);
+					$error_group .= join_corp($_GET['update'], $base_group);
 
 					$query_group = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions");
 					while($row_g = $db->Do_Fetch_Assoc($query_group))
