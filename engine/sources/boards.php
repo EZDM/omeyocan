@@ -167,7 +167,11 @@
 			$options='';
 			
 			while($row = $db->Do_Fetch_Assoc($query)){
-				$options.="<option value=\"{$row['usergroup']}\">{$row['usergroup']}</option>";
+				$display = $row['usergroup'];
+				if ($row['usergroup'] == $x7c->settings['usergroup_default'])
+					$display = "Tutti";
+
+				$options.="<option value=\"{$row['usergroup']}\">{$display}</option>";
 			}
 			
 			$head="Crea board";
