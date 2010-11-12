@@ -200,14 +200,16 @@ function sheet_page_equip(){
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
 		$row_msg=$db->Do_Fetch_Assoc($query);
 
-		if(!$row_msg)
-		die("Utente non esistente");
-
-		if($row_msg['spazio']<$row['size']){
-			$errore="Il destinatario non puo' equipaggiare l'oggetto";
+		if(!$row_msg) {
+			$errore = "Utente non esistente";
 		}
-		else{
-			$residuo=$row_msg['spazio']-$row['size'];
+		else {
+			if($row_msg['spazio']<$row['size']){
+				$errore="Il destinatario non puo' equipaggiare l'oggetto";
+			}
+			else{
+				$residuo=$row_msg['spazio']-$row['size'];
+			}
 		}
 
 		$obj=$row['name'];
