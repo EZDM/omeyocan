@@ -70,229 +70,235 @@ If not, see <http://www.gnu.org/licenses/>
     </style>
 
     <script language="javascript" type="text/javascript">
-    edited = 0;
-    added = 0;
-    deleted = 0;
-    new_id=-1;
-    
-    
-    function place_button(e) {
-		if(deleted || edited){
-			alert("Non puoi aggiungere un nuovo pulsante finche' non invii le modifiche effettuate finora");
-			return;
+		edited = 0;
+		added = 0;
+		deleted = 0;
+		new_id=-1;
+		current_selected=-1;
+
+
+		function place_button(e) {
+			if(deleted){
+				alert("Non puoi aggiungere un nuovo pulsante finche' non invii le modifiche effettuate finora");
+				return;
+			}
+
+			var posx = -1;
+			var posy = -1;
+			if (!e) var e = window.event;
+			if (e.pageX || e.pageY) 	{
+				posx = e.pageX;
+				posy = e.pageY;
+			}
+			else if (e.clientX || e.clientY) 	{
+				posx = e.clientX + document.body.scrollLeft
+					+ document.documentElement.scrollLeft;
+				posy = e.clientY + document.body.scrollTop
+					+ document.documentElement.scrollTop;
+			}
+
+			//Correction for button size
+			posx-=9;
+			posy-=9;
+
+			document.getElementById('visual_selected_x').innerHTML=posx;
+			document.getElementById('visual_selected_y').innerHTML=posy;
+			document.getElementById('selected_x').value=posx;
+			document.getElementById('selected_y').value=posy;
+
+			if (current_selected == new_id) {
+				document.getElementById('selected_link_static').selectedIndex=0;
+				document.getElementById('selected_link').selectedIndex=0;
+				document.getElementById('visual_selected_id').value="<Nome da visualizzare>";
+				document.getElementById('selected_id').value=new_id;
+			}
+
+			if(!added && current_selected == new_id){
+				var new_button=document.createElement('img');
+				pulsante_img = './graphic/pulsante.gif';
+
+				el = document.getElementById('selected_img');
+				if(el.options[el.selectedIndex].value != '')
+					pulsante_img = el.options[el.selectedIndex].value;
+
+				new_button.setAttribute('src', pulsante_img);
+				new_button.setAttribute('style', 'position: absolute; top:'+posy+'; left:'+posx+';');
+				new_button.setAttribute('id', new_id);
+				new_button.setAttribute('onClick', 'javascript: edit_button(event)');
+
+
+				document.getElementById('selected_link_static').selectedIndex=0;
+				document.getElementById('selected_link').selectedIndex=0;
+
+				document.getElementById('map').appendChild(new_button);
+				added = 1;
+				current_selected = -1;
+				document.getElementById('add').value = 1;
+				document.getElementById('edit').value = -1;
+				document.getElementById('delete').value = -1;
+			}
+			else{
+				var new_button=document.getElementById(current_selected);
+				new_button.setAttribute('style', 'position: absolute; top:'+posy+'; left:'+posx+';');
+				edited = 1;
+			}
+
 		}
-        
-    	var posx = -1;
-    	var posy = -1;
-    	if (!e) var e = window.event;
-    	if (e.pageX || e.pageY) 	{
-    		posx = e.pageX;
-    		posy = e.pageY;
-    	}
-    	else if (e.clientX || e.clientY) 	{
-    		posx = e.clientX + document.body.scrollLeft
-    			+ document.documentElement.scrollLeft;
-    		posy = e.clientY + document.body.scrollTop
-    			+ document.documentElement.scrollTop;
-    	}
 
-    	//Correction for button size
-    	posx-=9;
-    	posy-=9;
+		function edit_button(e){
+			var targ;
+			if (!e) 
+				var e = window.event;
 
-    	document.getElementById('selected_link_static').selectedIndex=0;
-  		document.getElementById('selected_link').selectedIndex=0;
+			if (e.stopPropagation) 
+				e.stopPropagation();
 
-		document.getElementById('visual_selected_x').innerHTML=posx;
-		document.getElementById('visual_selected_y').innerHTML=posy;
-		document.getElementById('visual_selected_id').value="<Nome da visualizzare>";
+			if(e.target)
+				targ = e.target;
+			else if (e.srcElement) 
+				targ = e.srcElement;
 
-		document.getElementById('selected_x').value=posx;
-		document.getElementById('selected_y').value=posy;
-		document.getElementById('selected_id').value=new_id;
-
-		if(!added){
-			var new_button=document.createElement('img');
-			pulsante_img = './graphic/pulsante.gif';
-
-			el = document.getElementById('selected_img');
-			if(el.options[el.selectedIndex].value != '')
-				pulsante_img = el.options[el.selectedIndex].value;
-				
-			new_button.setAttribute('src', pulsante_img);
-			new_button.setAttribute('style', 'position: absolute; top:'+posy+'; left:'+posx+';');
-			new_button.setAttribute('id', new_id);
-			new_button.setAttribute('onClick', 'javascript: edit_button(event)');
-	
-	
-	    	document.getElementById('selected_link_static').selectedIndex=0;
-	    	document.getElementById('selected_link').selectedIndex=0;
+			id=targ.id;
+			link=targ.getAttribute('alt');
 			
-			document.getElementById('map').appendChild(new_button);
-			added = 1;
-			document.getElementById('add').value = 1;
-        	document.getElementById('edit').value = -1;
-        	document.getElementById('delete').value = -1;
-		}
-		else{
-			var new_button=document.getElementById('-1');
-			new_button.setAttribute('style', 'position: absolute; top:'+posy+'; left:'+posx+';');
-		}
-
-    }
-
-    function edit_button(e){
-    	var targ;
-    	if (!e) 
-        	var e = window.event;
-
-        if (e.stopPropagation) 
-            e.stopPropagation();
-    	
-    	if(e.target)
-        	targ = e.target;
-    	else if (e.srcElement) 
-        	targ = e.srcElement;
-
-    	id=targ.id;
-    	link=targ.getAttribute('alt');
-
-		if((added || edited || deleted) && id!=document.getElementById('selected_id').value){
-			alert("Non puoi modificare un pulsante finche' non invii le modifiche effettuate finora");
-			return;
-		}
-
-		document.getElementById('selected_link_static').selectedIndex=0;
-  		document.getElementById('selected_link').selectedIndex=0;
-
-		document.getElementById('visual_selected_x').innerHTML=targ.offsetLeft;
-		document.getElementById('visual_selected_y').innerHTML=targ.offsetTop;
-		document.getElementById('visual_selected_id').value=targ.getAttribute('title');
-
-		found = false;
-		for(i=0; i<document.getElementById('selected_link').length && !found; i++){
-			if(document.getElementById('selected_link').options[i].value==link){
-				document.getElementById('selected_link').selectedIndex=i;
-				document.getElementById('visual_pop_w').style.visibility = 'hidden';
-				document.getElementById('visual_pop_h').style.visibility = 'hidden';
-				found = true;
+			if((added || edited || deleted) && id!=document.getElementById('selected_id').value){
+				alert("Non puoi modificare un pulsante finche' non invii le modifiche effettuate finora");
+				return;
 			}
-		}
 
-		for(i=0; i<document.getElementById('selected_link_static').length && !found; i++){
-			if(document.getElementById('selected_link_static').options[i].value==link){
-				document.getElementById('selected_link_static').selectedIndex=i;
-				document.getElementById('visual_pop_w').style.visibility = 'visible';
-				document.getElementById('visual_pop_h').style.visibility = 'visible';
-				found = true;
+			current_selected = id;
+
+			document.getElementById('selected_link_static').selectedIndex=0;
+			document.getElementById('selected_link').selectedIndex=0;
+
+			document.getElementById('visual_selected_x').innerHTML=targ.offsetLeft;
+			document.getElementById('visual_selected_y').innerHTML=targ.offsetTop;
+			document.getElementById('visual_selected_id').value=targ.getAttribute('title');
+
+			found = false;
+			for(i=0; i<document.getElementById('selected_link').length && !found; i++){
+				if(document.getElementById('selected_link').options[i].value==link){
+					document.getElementById('selected_link').selectedIndex=i;
+					document.getElementById('visual_pop_w').style.visibility = 'hidden';
+					document.getElementById('visual_pop_h').style.visibility = 'hidden';
+					found = true;
+				}
 			}
-		}
 
-		for(i=0; i<document.getElementById('selected_img').length; i++){
-			if(document.getElementById('selected_img').options[i].value==targ.getAttribute('src')){
-				document.getElementById('selected_img').selectedIndex=i;
-		    	img = document.getElementById('visual_img_preview');
-				img.setAttribute('src', document.getElementById('selected_img').options[i].value);
+			for(i=0; i<document.getElementById('selected_link_static').length && !found; i++){
+				if(document.getElementById('selected_link_static').options[i].value==link){
+					document.getElementById('selected_link_static').selectedIndex=i;
+					document.getElementById('visual_pop_w').style.visibility = 'visible';
+					document.getElementById('visual_pop_h').style.visibility = 'visible';
+					found = true;
+				}
 			}
+
+			for(i=0; i<document.getElementById('selected_img').length; i++){
+				if(document.getElementById('selected_img').options[i].value==targ.getAttribute('src')){
+					document.getElementById('selected_img').selectedIndex=i;
+					img = document.getElementById('visual_img_preview');
+					img.setAttribute('src', document.getElementById('selected_img').options[i].value);
+				}
+			}
+
+			document.getElementById('selected_x').value=targ.offsetLeft;
+			document.getElementById('selected_y').value=targ.offsetTop;
+			document.getElementById('selected_id').value=id;
+
+			if(targ.getAttribute('night') ==0)
+				document.getElementById('night_red').checked=false;
+			else
+				document.getElementById('night_red').checked=true;
+
+			if(targ.getAttribute('rollover') ==0)
+				document.getElementById('rollover').checked=false;
+			else
+				document.getElementById('rollover').checked=true;
+
+			document.getElementById('edit').value = id;
+			document.getElementById('add').value = -1;
+			document.getElementById('delete').value = -1;
+
+			document.getElementById('pop_w').value = targ.getAttribute('pop_w');
+			document.getElementById('pop_h').value = targ.getAttribute('pop_h');
+
+
 		}
 
-		document.getElementById('selected_x').value=targ.offsetLeft;
-		document.getElementById('selected_y').value=targ.offsetTop;
-		document.getElementById('selected_id').value=id;
+	function delete_button(e){
+		if (e.stopPropagation) 
+			e.stopPropagation();
 
-		if(targ.getAttribute('night') ==0)
-			document.getElementById('night_red').checked=false;
-		else
-			document.getElementById('night_red').checked=true;
-
-		if(targ.getAttribute('rollover') ==0)
-			document.getElementById('rollover').checked=false;
-		else
-			document.getElementById('rollover').checked=true;
-
-		document.getElementById('edit').value = id;
-    document.getElementById('add').value = -1;
-    document.getElementById('delete').value = -1;
-
-		document.getElementById('pop_w').value = targ.getAttribute('pop_w');
-		document.getElementById('pop_h').value = targ.getAttribute('pop_h');
-
-
-    }
-
-    function delete_button(e){
-        if (e.stopPropagation) 
-            e.stopPropagation();
-        
-        id = document.getElementById('selected_id').value;
-        btn = document.getElementById(id);
+		id = document.getElementById('selected_id').value;
+		btn = document.getElementById(id);
 
 		if((added || deleted) && id !=-1){
 			alert("Non puoi cancellare un pulsante finche' non invii le modifiche effettuate finora");
 			return;
 		}
 
-        if(btn){         
-        	document.getElementById('map').removeChild(btn);
-        	if(id == -1){
-        		added = 0;
-        		document.getElementById('add').value = -1;
-            	document.getElementById('edit').value = -1;
-            	document.getElementById('delete').value = -1;
-        	}
-        	else{
-            	deleted = 1;
-            	document.getElementById('delete').value = id;
-            	document.getElementById('add').value = -1;
-            	document.getElementById('edit').value = -1;
-        	}
+		if(btn){         
+			document.getElementById('map').removeChild(btn);
+			if(id == -1){
+				added = 0;
+				document.getElementById('add').value = -1;
+				document.getElementById('edit').value = -1;
+				document.getElementById('delete').value = -1;
+			}
+			else{
+				deleted = 1;
+				document.getElementById('delete').value = id;
+				document.getElementById('add').value = -1;
+				document.getElementById('edit').value = -1;
+			}
 
-      		document.getElementById('selected_link_static').selectedIndex=0;
-      		document.getElementById('selected_link').selectedIndex=0;
-            	
-        }
+			document.getElementById('selected_link_static').selectedIndex=0;
+			document.getElementById('selected_link').selectedIndex=0;
+
+		}
 
 
-    }
+	}
 
-    function reset_static(){
-        sel = document.getElementById('selected_link_static');
-        sel.selectedIndex=0;
-				document.getElementById('visual_pop_w').style.visibility = 'hidden';
-				document.getElementById('visual_pop_h').style.visibility = 'hidden';
-
-		if(document.getElementById('edit').value > 0)
-			edited = 1;
-
-    }
-
-    function reset_room(){
-        sel = document.getElementById('selected_link');
-        sel.selectedIndex=0;
-				document.getElementById('visual_pop_w').style.visibility = 'visible';
-				document.getElementById('visual_pop_h').style.visibility = 'visible';
+	function reset_static(){
+		sel = document.getElementById('selected_link_static');
+		sel.selectedIndex=0;
+		document.getElementById('visual_pop_w').style.visibility = 'hidden';
+		document.getElementById('visual_pop_h').style.visibility = 'hidden';
 
 		if(document.getElementById('edit').value > 0)
 			edited = 1;
-    }
 
-    function update_img(el){
+	}
+
+	function reset_room(){
+		sel = document.getElementById('selected_link');
+		sel.selectedIndex=0;
+		document.getElementById('visual_pop_w').style.visibility = 'visible';
+		document.getElementById('visual_pop_h').style.visibility = 'visible';
+
+		if(document.getElementById('edit').value > 0)
+			edited = 1;
+	}
+
+	function update_img(el){
 		img = document.getElementById('visual_img_preview');
 		img.setAttribute('src', el.options[el.selectedIndex].value);
 
 		id = document.getElementById('selected_id').value;
 		if(id){
-        	btn = document.getElementById(id);
-        	if(btn){
-            	btn.setAttribute('src', el.options[el.selectedIndex].value);
+			btn = document.getElementById(id);
+			if(btn){
+				btn.setAttribute('src', el.options[el.selectedIndex].value);
 
-        		if(document.getElementById('edit').value > 0)
-        			edited = 1;
-        	}
+				if(document.getElementById('edit').value > 0)
+					edited = 1;
+			}
 		}
 
-		
-    }
+
+}
 
     </script>
 
