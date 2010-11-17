@@ -250,6 +250,7 @@
         margin-left: 0px;
         margin-top: 0px;
         width: 100%;
+				height: 100%;
       }
 
       #login_form{
@@ -310,7 +311,8 @@
 				top: 0px;
 				left: 0px;
 				text-align: center;
-				width:100%;
+				width: 100%;
+				height: 100%;
 			}
 
 			#citizen_popup, #uncitizen_popup {

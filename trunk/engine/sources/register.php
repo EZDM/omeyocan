@@ -152,8 +152,14 @@
 				mail($_POST['email'],$txt[618],"$txt[617]\r\n\r\n$URL\r\n","From: {$x7c->settings['site_name']} <{$x7c->settings['admin_email']}>\r\n" ."Reply-To: {$x7c->settings['admin_email']}\r\n" ."X-Mailer: PHP/" . phpversion());
 
 				include_once("./lib/message.php");
+
+				$wellcome_mail = $x7c->settings['citizen_wellcome_mail'];
+				if($_POST['base_group'] != $x7c->settings['usergroup_default']) {
+					$wellcome_mail = $x7c->settings['uncitizen_wellcome_mail'];
+				}
+
 				send_offline_msg($_POST['username'], "Benvenuto per sempre", 
-						$x7c->settings['wellcome_mail'], "Staff");
+						$wellcome_mail, "Staff");
 
 				// Create the bandwidth row for them
 				include_once("./lib/bandwidth.php");
@@ -169,6 +175,14 @@
 		
 			$body = activate_account();
 				
+		}else if(!isset($_GET['disclaimer_done']) && !isset($_GET['base_group'])){
+			$body = '
+				<div id="register_banner">
+					<a href="index.php?act=register&disclaimer_done">
+						<img src="./graphic/choose_page.jpg">
+					</a>
+				</div>
+				';
 		}else if(!isset($_GET['base_group'])) {
 			$body = '
 				<script type="text/javascript">
@@ -187,13 +201,13 @@
 				<tr>
 				  <td>
 					<a href="index.php?act=register&base_group=Cittadino">
-					<img src="./graphic/banner_citizen.jpg" class="citizen_banner"
+					<img src="./graphic/citizen_choice.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 					</a></td>
 				  <td>
 					<a href="index.php?act=register&base_group=Non Cittadino">
-					<img src="./graphic/banner_uncitizen.jpg" class="citizen_banner"
+					<img src="./graphic/uncitizen_choice.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 				</tr>

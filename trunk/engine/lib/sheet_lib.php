@@ -86,14 +86,24 @@
 			$errore = "Resuscitato";
 			$db->DoQuery("UPDATE {$prefix}users u SET resurgo='0', autoheal='1', talk='1', info=(SELECT 2*value FROM {$prefix}usercharact uc WHERE uc.username='$pg' AND charact_id='rob') WHERE username='$pg'");
 
+			$query = $db->DoQuery("SELECT base_group FROM {$prefix}users 
+					WHERE username='$pg'");
+			$row_user = $db->Do_Fetch_Assoc($query);
+
+			if(!$row_user)
+				die("User not in database: should not happen");
+
 			include_once("./lib/message.php");
-			send_offline_msg($pg, "Resurrezione", $x7c->settings['death_mail']);
+
+			if ($row_user['base_group'] == $x7c->settings['usergroup_default'])
+				send_offline_msg($pg, "Resurrezione", 
+						$x7c->settings['citizen_death_mail']);
+			else
+				send_offline_msg($pg, "Resurrezione", 
+						$x7c->settings['uncitizen_death_mail']);
 		}
 
 		return $errore;
-
-
-
 	}
 
 
