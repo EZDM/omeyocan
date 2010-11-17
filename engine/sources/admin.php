@@ -3041,7 +3041,7 @@ function admincp_master(){
 			if($row[0] == "")
 				$body = "$txt[239]<Br><Br>";
 			else
-				$body = "$txt[107] <b>$row[0]</b><Br><Br>";
+				$body = "$txt[107] <b><a href=\"http://whatismyipaddress.com/ip/$row[0]\" target=\"_blank\">$row[0]</a></b><Br><Br>";
 
 		}else{
 			$body = "";
