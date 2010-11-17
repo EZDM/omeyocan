@@ -82,7 +82,9 @@
 					if(!isset($ACTIVATION_ERROR) && !isset($FROZEN_ERROR)){
 						$this->loggedin = 1;
 						$this->username = $_COOKIE[$auth_ucookie];
-						$db->DoQuery("UPDATE {$prefix}users SET ip='{$_SERVER['REMOTE_ADDR']}'");
+						$db->DoQuery("UPDATE {$prefix}users 
+								SET ip='{$_SERVER['REMOTE_ADDR']}' 
+								WHERE username = '{$this->username}'");
 					}
 					
 					if(isset($ACTIVATION_ERROR))
@@ -178,4 +180,3 @@
 	}
 
 ?>
-
