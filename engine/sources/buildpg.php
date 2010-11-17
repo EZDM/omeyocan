@@ -80,17 +80,16 @@
 			$ok=true;
 			$pg=$x7s->username;
 			include_once('./lib/sheet_lib.php');
+				
+			$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
+			$row_user = $db->Do_Fetch_Assoc($query);
+			if(!$row_user)
+				die("Users not in database: should not happen");
 			
 			if(isset($_GET['build'])){
-				$query = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
-				$row_user = $db->Do_Fetch_Assoc($query);
 
 				$starting_xp = $x7c->settings['starting_xp'];
-				$xp_avail=$starting_xp;
-				
-				
-				if(!$row_user)
-					die("Users not in database");
+				$xp_avail=$starting_xp;	
 				
 				$query = $db->DoQuery("SELECT u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
 							FROM 	{$prefix}userability u, 
@@ -184,10 +183,6 @@
 						$ok = false;
 						$errore .= "Non hai specificato il nome<br>";
 					}
-					if($_POST['surname']==''){
-						$ok = false;
-						$errore .= "Non hai specificato il cognome<br>";
-                                        } 
 					if($_POST['age']=='' || $_POST['age']<16){
 						$ok = false;
 						$errore .= "Et&agrave; non valida... deve essere maggiore di 16<br>";
@@ -264,7 +259,7 @@
 
                                         $pf = $_POST['rob'] * 2;
 					$db->DoQuery("UPDATE {$prefix}users SET
-								name='$_POST[name] $_POST[surname]',
+								name='$_POST[name]',
 								age='$_POST[age]',
 								nat='$_POST[nat]',
 								marr='$marr',
@@ -303,9 +298,11 @@
 									SET sheet_ok='1'
 									WHERE username='$pg'");
 
-					include_once('lib/shop_lib.php');
-					global $shopper, $start_cogs;
-					pay($start_cogs, $shopper, $pg);
+					if ($row_user['base_group'] == $x7c->settings['usergroup_default']) {
+						include_once('lib/shop_lib.php');
+						global $shopper, $start_cogs;
+						pay($start_cogs, $shopper, $pg);
+					}
 						
 					header('Location: ./index.php');
 					return;
@@ -407,7 +404,23 @@
 					}
 				}
 			}
+			
+			$full_name_form='	
+					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();"*/'>
+						<td>Nome e Cognome:</td>
+						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
+					</tr>
+					<tr>
+						<td>
+						<b>NOTA:</b> Nome e cognome verranno utilizzati<br>
+						per identificare il vostro personaggio nelle stanze 
+						</td>
+					</tr>
 
+			';
+			if ($row_user['base_group'] != $x7c->settings['usergroup_default']) {
+				$full_name_form='<input type="hidden" name="name" value="'.$row_user['username'].'">';	
+			}
 
 			$body ='
 			<script language="javascript" type="text/javascript">
@@ -489,22 +502,7 @@
 			<form action="index.php?act=buildpg&build" method="post" name="sheet_form">
 				<div class="overflow" id="all">
 				<table>
-					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();"*/'>
-						<td>Nome:</td>
-						<td><input class="sheet_input" type="text" name="name" size="16" /></td>
-					</tr>
-					
-					<tr './*onMouseOver="javascript: show_desc(\'nome\');" onMouseOut="javascript: hide_desc();"*/'>
-						<td>Cognome:</td>
-						<td><input class="sheet_input" type="text" name="surname" size="16" /></td>
-					</tr>
-					
-					<tr>
-						<td>
-						NOTA: Nome e cognome verranno utilizzati per identificare il vostro personaggio nelle stanze 
-						</td>
-					</tr>
-
+					'.$full_name_form.'	
 					<tr>
 						<td>Et&agrave;</td>
 						<td><input class="sheet_input" type="text" name="age" value="16" size="2" style="text-align: right;" /></td>
