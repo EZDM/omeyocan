@@ -910,12 +910,8 @@ _gaq.push(['_trackPageview']);
                 hndl.moveTo(leftx, topy); 
                 hndl.focus();
               }
-              else
-                messaggio="L'oscurita' se ne va";
-
-              if(messaggio!='')
-                Alert(messaggio);
-              window.location.href = window.location.href;
+              
+							window.location.href = window.location.href;
             }else if(dataSubArray[0] == '13'){
               //Delete message
               document.getElementById('message_window').innerHTML ='';

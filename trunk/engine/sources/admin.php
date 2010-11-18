@@ -4089,34 +4089,53 @@ function admincp_master(){
 		}
 
 
-		if($x7c->settings['panic']){
-			$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: red; font-weight: bold\">Attivata</span><br>
-				<input class=\"button\" type=\"button\" value=\"Disattiva oscurit&agrave;\" onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=panic&switch=1'\"></p>";
-		}
-		else{
-			$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: green; font-weight: bold\">Disattivata</span><br>
-				<input class=\"button\" type=\"button\" value=\"Attiva oscurit&agrave;\" onClick=\"javascript: window.location='./index.php?act=adminpanel&cp_page=panic&switch=1'\"></p>";
+		$confirm_code = rand(1,10000);
+		$body .= "<script language=\"javascript\" type=\"text/javascript\">
+		var confirm_code = $confirm_code;
+
+		function security_question(txt) {
+			var number = prompt(txt + '\\n\\nInserisci questo numero per confermare: $confirm_code');
+			if (number != confirm_code) {
+				alert('codice di conferma errato. Azione interrotta');
+				return false;
+			}
+			return true;
 		}
 
-		$body .= "<script language=\"javascript\" type=\"text/javascript\">
-			function do_kill(){
-				if(!confirm('!!!!!!----->>>>>> vuoi davvero uccidere TUTTI i personaggi ?<<<<<----- !!!!!'))
-					return;
-				window.location.href='index.php?act=adminpanel&cp_page=panic&multikill=1';
-			}
+		function do_kill(){
+			if(!security_question('Vuoi davvero uccidere TUTTI i personaggi?'))
+				return;
+			window.location.href='index.php?act=adminpanel&cp_page=panic&multikill=1';
+		}
 
 		function do_destroy(){
-			if(!confirm('!!!!!!----->>>>>> vuoi davvero distruggere TUTTI gli oggetti ?<<<<<----- !!!!!'))
+			if(!security_question('Vuoi davvero distruggere TUTTI gli oggetti?'))
 				return;
 			window.location.href='index.php?act=adminpanel&cp_page=panic&multidestroy=1';
 		}
 
 		function do_hurt(){
-			if(!confirm('!!!!!!----->>>>>> vuoi davvero ferire tutti ?<<<<<----- !!!!!'))
+			if(!security_question('Vuoi davvero togliere 1PF a tutti?'))
 				return;
 			window.location.href='index.php?act=adminpanel&cp_page=panic&multihurt=1';
 		}
+		
+		function do_panic(txt){
+			if(!security_question('Vuoi davvero ' + txt + ' l\'oscurita\'?'))
+				return;
+			window.location='./index.php?act=adminpanel&cp_page=panic&switch=1';
+		}
 		</script>";
+		
+		if($x7c->settings['panic']){
+			$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: red; font-weight: bold\">Attivata</span><br>
+				<input class=\"button\" type=\"button\" value=\"Disattiva oscurit&agrave;\" onClick=\"javascript: do_panic('disattivare');\"></p>";
+		}
+		else{
+			$body .= "<p align=\"center\">Ora l'oscurit&agrave; &egrave;: <span style=\"color: green; font-weight: bold\">Disattivata</span><br>
+				<input class=\"button\" type=\"button\" value=\"Attiva oscurit&agrave;\" onClick=\"javascript: do_panic('attivare');\"></p>";
+		}
+		
 
 		$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Uccidi TUTTI!\" onClick=\"javascript: do_kill()\"></p>";
 		$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Distruggi tutti gli oggetti!\" onClick=\"javascript: do_destroy()\"></p>";
