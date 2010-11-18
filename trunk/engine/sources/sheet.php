@@ -1741,7 +1741,8 @@ function sheet_page_corp(){
 
 	$query=$db->DoQuery("SELECT * FROM {$prefix}ability ab, {$prefix}userability ua
                                       WHERE ab.id=ua.ability_id
-                                        AND ua.username='$pg' AND ab.corp<>''");
+                                        AND ua.username='$pg' AND ab.corp<>''
+																				ORDER BY ab.name");
 
 
 	$ability=array();
