@@ -197,7 +197,7 @@ _gaq.push(['_trackPageview']);
 						function do_initial_refresh(){
 							// Create object
 							if(window.self.name == ''){
-								hndl = <?PHP
+								<?PHP
 									echo popup_open(1024, 723, '/engine','main'); ?>
 								window.self.location.href='/courtesy.html';
 							}
