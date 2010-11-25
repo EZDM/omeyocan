@@ -113,7 +113,7 @@ function PlayTardis()
 		onMouseOut="javascript: this.src='<?PHP echo $presenti;?>'">
 </a>
       
-<a onClick="<?PHP echo popup_open(500, 680, "index.php?act=sheet", "sheet"); ?>">
+<a onClick="<?PHP echo popup_open(500, 680, "index.php?act=sheet", "sheet_other"); ?>">
   <img style="position:absolute; top:485px; left:896px;" 
   src="<?PHP echo $scheda;?>"
 	onMouseOver="javascript: this.src='<?PHP echo $scheda_over;?>'"
@@ -122,7 +122,7 @@ function PlayTardis()
       
 <a onClick="<?PHP echo popup_open(493, 655, "index.php?act=mail", "MsgCenter"); ?>">
   <img id="posta" style="position:absolute; top:573px; left:911px;"
-  src="<?PHP $posta_no; ?>">
+  src="<?PHP echo $posta_no; ?>">
 </a>
     
 <div align="center" id="copyrigth" style="visibility: visible;">

@@ -57,7 +57,7 @@
 			$width += 10;
 		}
 
-		$js_string = "javascript: hndl=window.open('$target', ".
+		$js_string = "hndl=window.open('$target', ".
 			"'$name','width=$width,height=$height, toolbar=no, status=yes, ".
 			"location=no, menubar=no, resizable=yes, status=no, scrollbars=no'); ".
 			"hndl.focus();";
