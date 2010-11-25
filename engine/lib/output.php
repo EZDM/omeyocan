@@ -51,6 +51,20 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 
+	function popup_open($width, $height, $target, $name) {
+		if (preg_match("/chrome/i", $_SERVER['HTTP_USER_AGENT'])) {
+			$height += 60;
+			$width += 10;
+		}
+
+		$js_string = "javascript: hndl=window.open('$target', ".
+			"'$name','width=$width,height=$height, toolbar=no, status=yes, ".
+			"location=no, menubar=no, resizable=yes, status=no, scrollbars=no'); ".
+			"hndl.focus();";
+
+		return $js_string;
+	}
+
 	// This class handles the loading and output of skins and data
 	class load_skin {
 		var $buffer;		// Holds the data we are going to print

@@ -1,3 +1,7 @@
+<?PHP
+	include_once('engine/lib/output.php');
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -110,13 +114,17 @@
 					<td colspan="2">
 					<div id="main_img">
 										
-					<a onClick="javascript: hndl = window.open('engine','main','width=1024,height=723, toolbar=no, status=no, location=no, menubar=no, resizable=no, status=no'); hndl.focus();" href="#"><div id="enter"></div></a>
+					<a onClick="<?PHP echo popup_open(1024, 723, 'engine','main');?>" href="#"><div id="enter"></div></a>
 					
 					<a href="forum/"><div id="forum"></div></a>
 					<a href="manual/"><div id="rules"></div></a>
 					
-					<a onClick="javascript: hndl = window.open('citizen.html','citizen','width=482,height=700, toolbar=no, status=no, location=no, menubar=no, resizable=no, status=no'); hndl.focus();" href="#"><div id="citizen"></div></a>
-					<a onClick="javascript: hndl = window.open('uncitizen.html','citizen','width=482,height=700, toolbar=no, status=no, location=no, menubar=no, resizable=no, status=no'); hndl.focus();" href="#"><div id="uncitizen"></div></a>
+					<a onClick="<?PHP 
+						echo popup_open(500, 715, 'citizen.html','citizen');?>" href="#">
+						<div id="citizen"></div></a>
+					<a onClick="<?PHP
+						echo popup_open(500, 715, 'uncitizen.html','citizen'); ?>" href="#">
+						<div id="uncitizen"></div></a>
 					</div>
 					</td>
 				</tr>
