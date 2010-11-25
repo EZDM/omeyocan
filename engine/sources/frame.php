@@ -458,10 +458,9 @@
 
             $toout='';
             if($x7c->permissions['admin_panic']){
-              $toout = "$gif<a onClick=\"javascript:
-                window.open('index.php?act=sheet&pg={$row[0]}','sheet_other',".
-                    "'width=500,height=680, toolbar=no, status=yes, ".
-                    "location=no, menubar=no, resizable=no, status=yes');\" >
+              $toout = "$gif<a onClick=\"".
+								popup_open(500, 680, "index.php?act=sheet&pg=$row[0]",
+										'sheet_other')."\">
                   <span class=$gender>$long_name ($row[0]) $timestamp:</span>
                 </a>";
               $toout .= "<a onClick=\"javascript: do_delete($row[4])\">
@@ -469,10 +468,9 @@
               $toout.="$row[2]<br>";
             }
             else{
-              $toout = "$gif<a onClick=\"javascript:
-                window.open('index.php?act=sheet&pg={$row[0]}','sheet_other',".
-                    "'width=500,height=680, toolbar=no, status=yes, ".
-                    "location=no, menubar=no, resizable=no, status=yes');\" >
+              $toout = "$gif<a onClick=\"".
+								popup_open(500, 680, "index.php?act=sheet&pg=$row[0]",
+										'sheet_other')."\">
                 <span class=$gender>$long_name $timestamp:</span></a>";
 
               if(!$x7c->room_data['shadow'] ||
@@ -906,8 +904,10 @@ _gaq.push(['_trackPageview']);
                 var leftx = (screen.width/2)-(300/2);
                 var topy = (screen.height/2)-(200/2);
 
-                hndl = window.open('./sources/oscurita_popup.html','oscurita','width=300,height=200, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
-                hndl.moveTo(leftx, topy); 
+                <?PHP
+									echo popup_open(300, 200, './sources/oscurita_popup.html',
+											'oscurita'); ?>
+								hndl.moveTo(leftx, topy); 
                 hndl.focus();
               }
               
@@ -1288,7 +1288,8 @@ _gaq.push(['_trackPageview']);
 <?PHP  
   if($x7c->room_data['logo'] != '')
     echo '
-      <a onClick="javascript: hndl = window.open(\'index.php?act=roomdesc&room='.$_GET['room'].'\',\'roomdesc\',\'width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no\'); hndl.focus();">';
+      <a onClick="'.popup_open(550, 500, 
+			'index.php?act=roomdesc&room='.$_GET['room'],'roomdesc').'">';
 		if (!$x7c->settings['panic'])
       echo '<img class="polaroid" src="'.$polaroid.'" >';
 		else
@@ -1443,7 +1444,10 @@ _gaq.push(['_trackPageview']);
 <?PHP
     if($x7c->permissions['write_master']){
       echo "<br><input name=\"img_btn\" type=\"button\" class=\"button\"
-        value=\"Immagine\" onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">";
+        value=\"Immagine\" onClick=\"".popup_open(
+				$x7c->settings['tweak_window_large_width'],
+				$x7c->settings['tweak_window_large_height'],
+				'index.php?act=images','Images')."\">";
 
       echo "<input name=\"img_btn\" type=\"button\" class=\"button\"
         value=\"Master\"

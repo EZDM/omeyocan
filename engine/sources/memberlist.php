@@ -336,7 +336,10 @@ function memberlist(){
 
 			$gremios_gif = "<img src=\"".$row['bio']."\" height=15 width=15>";
 			$list[$cur] .= "\n<tr>
-				<td class=\"dark_row\">$gremios_gif<a $barred class=\"$dead_fmt\" onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['username']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\">{$row['username']}$master_gif</a></td>
+				<td class=\"dark_row\">$gremios_gif<a $barred class=\"$dead_fmt\" 
+				onClick=\"".
+				popup_open(500, 680, "index.php?act=sheet&pg={$row['username']}",
+						'sheet_other')."\">{$row['username']}$master_gif</a></td>
 				<td class=\"dark_row\">{$position}</td>";
 
 			if($room!='' && $room!="Mappa")

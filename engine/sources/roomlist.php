@@ -117,7 +117,8 @@ _gaq.push(['_trackPageview']);
 	include_once('./sources/layout.html');
 
 	if($x7c->permissions['admin_panic']){
-		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 1px;"><a onClick="javascript: window.open(\'index.php?act=mapeditor\',\'mapeditor\',\'width=scree.width,height=screen.height, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes\')";>Map editor </a></div>';
+		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 1px;">
+			<a onClick="'.popup_open(1424, 763, "index.php?act=mapeditor", "mapeditor").'">Map editor </a></div>';
 	}
 		
 	if(isset($_GET['errore'])){
@@ -139,7 +140,8 @@ _gaq.push(['_trackPageview']);
 ?>
   
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
-  <a onClick="javascript: hndl = window.open('index.php?act=roomdesc&room=Mappa','roomdesc','width=550,height=500, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();">
+  <a onClick="<?PHP
+	echo popup_open(550, 500, 'index.php?act=roomdesc&room=Mappa','roomdesc'); ?>">
       <img style="position:absolute; top:0px; left:834px;" src="./graphic/polaroid.jpg">
   </a>
   <script language="javascript" type="text/javascript">
@@ -195,7 +197,8 @@ _gaq.push(['_trackPageview']);
 						function do_initial_refresh(){
 							// Create object
 							if(window.self.name == ''){
-								hndl = window.open('/engine','main','width=1024,height=723, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();
+								hndl = <?PHP
+									echo popup_open(1024, 723, '/engine','main'); ?>
 								window.self.location.href='/courtesy.html';
 							}
 							if(window.self.name == 'sheet'){
@@ -287,7 +290,9 @@ _gaq.push(['_trackPageview']);
                           var leftx = (screen.width/2)-(300/2);
 													var topy = (screen.height/2)-(200/2);
 													
-													hndl = window.open('./sources/oscurita_popup.html','oscurita','width=300,height=200, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no');
+													hndl = <?PHP
+														echo popup_open(300, 200,
+																'./sources/oscurita_popup.html','oscurita'); ?>
 													hndl.moveTo(leftx, topy); 
 													hndl.focus();
                         }
@@ -371,9 +376,8 @@ _gaq.push(['_trackPageview']);
 				$href=$row['link'];
 			}
 			else{
-				$href="javascript: hndl = window.open('$row[link]','sub_location',".
-					"'width=$row[width],height=$row[height], toolbar=no, status=no, ".
-					"location=no, menubar=no, resizable=yes, status=no'); hndl.focus();";
+				$href=popup_open($row['width'], $row['height'], $row['link'],
+						'sub_location');
 			}
 			
 			$rollover="onMouseOut=\"HidePopup2(this);\" onMouseOver=\"ShowPopup2(this,'$row[descr]');\"";
