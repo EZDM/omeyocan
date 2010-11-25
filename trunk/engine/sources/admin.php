@@ -2616,7 +2616,8 @@ function admincp_master(){
 				$body = "<div align=\"center\">$txt[463]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 			}else{
 				// Get the default user group
-				$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions WHERE gremios=0");
+				$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions 
+						WHERE gremios=0 ORDER BY usergroup");
 				$group_options = "";
 				while($row = $db->Do_Fetch_Row($query)){
 					if(in_array($row[0], $def->profile['usergroup']))
@@ -2625,7 +2626,8 @@ function admincp_master(){
 						$group_options .= "<input type=\"checkbox\" name=\"$row[0]\" value=\"$row[0]\">$row[0]<br>";
 				}
 
-				$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions WHERE gremios=1");
+				$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions 
+						WHERE gremios=1 ORDER BY usergroup");
 				while($row = $db->Do_Fetch_Row($query)){
 					if(in_array($row[0], $def->profile['usergroup']))
 						$group_options .= "<input type=\"radio\" name=\"gremios\" value=\"$row[0]\" checked>$row[0]<br>";
