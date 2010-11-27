@@ -1300,7 +1300,7 @@ _gaq.push(['_trackPageview']);
 				<param name="quality" value="high">
 				<param name="allowScriptAccess" value="sameDomain" />
 				<param name="allowFullScreen" value="True" />
-				<embed src="./graphic/polaroid_dark.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="180" height="190" allowScriptAccess="sameDomain" allowFullScreen="True">
+				<embed src="./graphic/polaroid_dark.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="190" height="236" allowScriptAccess="sameDomain" allowFullScreen="True">
 				</embed>
 				</object>
 				</div>
@@ -1401,7 +1401,8 @@ _gaq.push(['_trackPageview']);
       echo $string;
     }
 ?>
-    </select> <select class="button" name="objects" style="width: 150px;"
+    </select> 
+		<select class="button" name="objects" style="width: 150px;"
     onChange="javascript: return action_select(this);">
     <option value="">Oggetti...</option>
     <option value="">------------------</option>
@@ -1431,8 +1432,8 @@ _gaq.push(['_trackPageview']);
     <option value="~100;">d100</option> 
     </select>
 
-    <input name="speech_btn" type="button" class="button" value="Parlato"
-    onClick="javascript: speech();" /> 
+    <!--<input name="speech_btn" type="button" class="button" value="Parlato"
+    onClick="javascript: speech();" /> -->
     <input name="button_send" type="submit" class="send_button" 
       style="cursor: pointer;
         background: url(<?PHP echo $print->image_path; ?>send.gif);
