@@ -494,7 +494,7 @@
 			
 			#cmddiv {
 				position: absolute;
-				top: 610px;
+				top: 595px;
 				left: 30px;
 				width: 870px;
 			}
