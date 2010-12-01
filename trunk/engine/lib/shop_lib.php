@@ -384,7 +384,8 @@ $GLOBALS['start_cogs'] = 30;
 		$query_money = $db->DoQuery("
 				SELECT * FROM {$prefix}objects
 				WHERE name = '$money_name'
-				AND owner = '$pg'");
+				AND owner = '$pg'
+				AND equipped = 1");
 		$row_money = $db->Do_Fetch_Assoc($query_money);
 		if (!$row_money)
 			die("Incosistent money status");
