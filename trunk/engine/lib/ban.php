@@ -39,7 +39,12 @@
 			if($x7p->profile['email'] != "")
 				$xp = " OR user_ip_email='{$x7p->profile['email']}'";
 		
+		$return = array();
+
 		/* Divide the IP address up so we can test it seperatly for sections */
+		if (!preg_match("/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]/", $_SERVER['REMOTE_ADDR']))
+			return $return;
+
 		$ip_addr = explode(".",$_SERVER['REMOTE_ADDR']);
 		$ip[0] = $ip_addr[0].".".$ip_addr[1].".".$ip_addr[2].".".$ip_addr[3];
 		$ip[1] = $ip_addr[0].".".$ip_addr[1].".".$ip_addr[2].".*";
@@ -48,7 +53,6 @@
 		
 		$query = $db->DoQuery("SELECT * FROM {$prefix}banned WHERE user_ip_email='$ip[0]' OR user_ip_email='$ip[1]' OR user_ip_email='$ip[2]' OR user_ip_email='$ip[3]'{$xu}{$xp}");	
 		
-		$return = array();
 		while($row = $db->Do_Fetch_row($query)){
 			$return[] = $row;
 		}
