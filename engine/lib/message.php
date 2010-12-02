@@ -322,7 +322,7 @@
 			while(preg_match($obj_regexp,$message, $obj)){
 									
 				$obj_msg="";
-				$query = $db->DoQuery("SELECT name, uses, equipped
+				$query = $db->DoQuery("SELECT name, uses, equipped, visible_uses
 							FROM {$prefix}objects
 							WHERE id='$obj[1]'
 							 AND owner='$x7s->username'");
@@ -333,9 +333,20 @@
 													$row['name']." non &egrave; equipaggiato}</span>";
 				        }
 				        else{
+									$newusage = -1;        
+									if($row['uses'] > 0){
+										$newusage = $row['uses'] - 1;
+										$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' 
+												WHERE id='{$obj[1]}'");
+									}
+
+									$left_usage = '';
+									if($row['visible_uses'] && $newusage >= 0)
+										$left_usage = " (usi rimasti: $newusage)";
+
 									if($row['uses'] > 1 || $row['uses'] == -1){
 										$obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".
-											$row['name']."}</span>";
+											$row['name'].$left_usage."}</span>";
 									}
 									else if($row['uses'] == 1){
 										$obj_msg="<span class=\"break\">{Usa l\'oggetto ".
@@ -347,12 +358,6 @@
 											" oggetto inutilizzabile: ".$row['name']."}</span>";
 									}
 
-									$newusage = -1;        
-									if($row['uses'] > 0){
-										$newusage = $row['uses'] - 1;
-										$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' 
-												WHERE id='{$obj[1]}'");
-									}
 									include_once('./lib/alarms.php');
 									object_usage($x7s->username, $obj[1], $newusage);
 								}	

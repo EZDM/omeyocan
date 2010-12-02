@@ -1949,10 +1949,11 @@ function admincp_master(){
 							for ($i = 0; $i < $delta_avail; $i++) {
 								$db->DoQuery("INSERT INTO {$prefix}objects
 										(name,description,uses,
-										 image_url,owner,equipped,size,category,base_value)
+										 image_url,owner,equipped,size,category,base_value,
+										 visible_uses)
 										VALUES('$row[name]','$row[description]','$row[uses]',
 											'$row[image_url]','$shopper','1','$row[size]',
-											'$row[category]',$row[base_value])");
+											'$row[category]',$row[base_value],'$row[visible_uses]')");
 							}
 						}
 					}
@@ -1993,10 +1994,11 @@ function admincp_master(){
 
 			if($error==''){
 				$db->DoQuery("INSERT INTO {$prefix}objects
-						(name,description,uses,image_url,owner,equipped,size,category)
+						(name,description,uses,image_url,owner,equipped,size,category,
+						 visible_uses)
 						VALUES('$row[name]','$row[description]','$row[uses]',
 							'$row[image_url]','$_POST[owner]','1','$row[size]',
-							'$row[category]')");
+							'$row[category]','$row[visible_uses]')");
 
 				include_once('./lib/sheet_lib.php');
 				recalculate_space($_POST['owner']);
@@ -2022,6 +2024,9 @@ function admincp_master(){
 			}
 
 			$_POST['name'] = trim($_POST['name']);
+			$visible_uses = false;
+			if(isset($_POST['visible_uses']))
+				$visible_uses = true;
 
 			$category = $_POST['category'];
 			if ($_POST['category'] == "_new_" && isset($_POST['new_category']))
@@ -2037,7 +2042,8 @@ function admincp_master(){
 							image_url='$_POST[image_url]',
 							size='$_POST[size]',
 							base_value='$_POST[base_value]',
-							category='$category'
+							category='$category',
+							visible_uses='$visible_uses'
 						WHERE id='$_POST[id]'");
 				
 				$db->DoQuery("UPDATE {$prefix}objects 
@@ -2047,7 +2053,8 @@ function admincp_master(){
 							image_url='$_POST[image_url]',
 							size='$_POST[size]',
 							base_value='$_POST[base_value]',
-							category='$category'
+							category='$category',
+							visible_uses='$visible_uses'
 						WHERE name='$old_name' AND owner='$shopper'");
 			}else{
 				$query_duplicate = $db->DoQuery("
@@ -2059,12 +2066,12 @@ function admincp_master(){
 				else {
 					$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
-						 equipped, size, base_value, category)
+						 equipped, size, base_value, category, visible_uses)
 						VALUES(
 							'$_POST[name]',	'$_POST[description]',
 							'$_POST[uses]',	'$_POST[image_url]',
 							'1','$_POST[size]',
-							'$_POST[base_value]', '$category'
+							'$_POST[base_value]', '$category', '$visible_uses'
 							)");
 				}
 			}
@@ -2194,12 +2201,17 @@ function admincp_master(){
 				$row['size']=0;
 				$row['base_value']=-1;
 				$row['category']='';
+				$row['visible_uses']='';
 
 			}
 			$minuscolo="";
 			$piccolo="";
 			$medio="";
 			$grande="";
+			$visible_uses_checked='';
+
+			if($row['visible_uses'])
+				$visible_uses_checked = "checked";
 
 			if($row['size']==0)
 				$minuscolo="selected";
@@ -2265,6 +2277,12 @@ function admincp_master(){
 				<td>Usi (-1 per usi infiniti):</td>
 				<td><input type=\"text\" name=\"uses\" class=\"text_input\"
 				value=\"$row[uses]\"></td>
+				</tr>
+				<tr>
+				<td>Gli usi rimasti sono visibili?
+				</td>
+				<td><input type=\"checkbox\" class=\"text_input\" name=\"visible_uses\" $visible_uses_checked>
+				</td>
 				</tr>
 				<tr>
 				<td>URL immagine:</td>

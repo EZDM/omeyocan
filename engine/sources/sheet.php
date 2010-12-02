@@ -342,11 +342,16 @@ function sheet_page_equip(){
 					$obj_name .= ": $row[uses]";
 			}
 
+			$visible_uses = '';
+			if($row['visible_uses'] && $row['uses'] >= 0)
+				$visible_uses = "<br>Usi rimasti: $row[uses]";
+
 			$body.= "<table width=100%> <tr> <td class=\"obj\">
 				<img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
         <div $disabled>
         <b>$obj_name</b>
         <br>Dimensione: $dimensione
+				$visible_uses
         <p>$description</p>
         </div> </td> </tr> </table>";
 
