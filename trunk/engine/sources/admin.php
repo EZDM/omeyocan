@@ -2046,6 +2046,7 @@ function admincp_master(){
 							visible_uses='$visible_uses'
 						WHERE id='$_POST[id]'");
 				
+				// Update not sold copies
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET name='$_POST[name]',
 							description='$_POST[description]',
@@ -2056,6 +2057,50 @@ function admincp_master(){
 							category='$category',
 							visible_uses='$visible_uses'
 						WHERE name='$old_name' AND owner='$shopper'");
+
+				// Sync existing objects 
+				// we do not sync uses
+				if (isset($_POST['sync']) && $_POST['sync'] == 1) {
+					$db->DoQuery("UPDATE {$prefix}objects 
+							SET name = '$_POST[name]',
+								description='$_POST[description]',
+								image_url='$_POST[image_url]',
+								size='$_POST[size]',
+								base_value='$_POST[base_value]',
+								category='$category',
+								visible_uses='$visible_uses'
+							WHERE name='$old_name'");
+
+					$query_count_obj = $db->DoQuery("SELECT count(*) AS cnt
+							FROM {$prefix}objects
+							WHERE name='$_POST[name]'");
+
+					$query_user_sync = $db->DoQuery("SELECT owner
+							FROM {$prefix}objects 
+							WHERE name='$_POST[name]'
+							AND equipped = 1
+							AND owner <> ''
+							AND owner <> '$shopper'");
+
+					$db->DoQuery("UPDATE {$prefix}objects 
+							SET equipped = 0
+							WHERE name='$_POST[name]'
+							AND equipped = 1
+							AND owner <> ''
+							AND owner <> '$shopper'");
+
+					include_once('./lib/sheet_lib.php');
+					$disequipped = 0;
+					while($row_user_sync = $db->Do_Fetch_Assoc($query_user_sync)) {
+						$disequipped++;
+						recalculate_space($row_user_sync['owner']);
+					}
+
+					$row_count_obj = $db->Do_Fetch_Assoc($query_count_obj);
+					$error = "Modifica eseguita e sincronizzati $row_count_obj[cnt]
+						oggetti esistenti.<br>A $disequipped utenti e' stato disequipaggiato
+						l'oggetto.";
+				}
 			}else{
 				$query_duplicate = $db->DoQuery("
 					SELECT count(*) AS cnt FROM {$prefix}objects
@@ -2178,7 +2223,9 @@ function admincp_master(){
 		}
 
 		if(isset($_GET['edit'])){
+			$new_object = true;
 			if($_GET['edit']!=-1){
+				$new_object = false;
 				$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
 						WHERE id='$_GET[edit]'");
 				$row = $db->Do_Fetch_Assoc($query);
@@ -2246,8 +2293,26 @@ function admincp_master(){
 			if ($row['name'] == $money_name)
 				$name_type = "hidden";
 
+			$submit_value = "Crea oggetto";
+			$sync_button = '';
+			if (!$new_object) {
+				$submit_value = "Modifica oggetto";
+				$sync_button = "<td><input type=\"button\" class=\"button\" 
+				value=\"Modifica e sincronizza\" onClick=\"sync_request();\"></td></tr>
+				<tr><td>&nbsp;</td><td>
+				<br>Con questo tasto vengono riflesse le modifiche dell'oggetto vengono 
+				<br>riflesse anche alle copie gia' assegnate.
+				<br>Gli usi rimanenti non vengono mai riassegnati.
+				<br>Tutti gli oggetti modificati vengono disequipaggiati.</td>
+				</td>";
+			}
+
 			$body.="
 				<script language=\"javascript\" type=\"text/javascript\">
+				  function sync_request() {
+						document.getElementById('sync_field').value = 1;
+						document.forms.main_form.submit();
+					}
 					function category_select(elem) {
 						if (elem.options[elem.selectedIndex].value == '_new_'){
 							document.getElementById('new_category').style.visibility = 
@@ -2260,7 +2325,7 @@ function admincp_master(){
 					}
 				</script>
 				<form action=\"index.php?act=adminpanel&cp_page=objects&modify=1\"
-				method=\"post\">
+				method=\"post\" name=\"main_form\">
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 				<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
 				<tr>
@@ -2324,7 +2389,9 @@ function admincp_master(){
 				</td>
 				</tr>
 				<tr>
-				<td><input type=\"submit\" class=\"button\" value=\"Crea-Modifica\"></div></td>
+				<input id=\"sync_field\" type=\"hidden\" name=\"sync\" value=\"0\">
+				<td><input type=\"submit\" class=\"button\" value=\"$submit_value\"></td>
+				$sync_button
 				</tr>
 				</table>
 				";
@@ -2340,10 +2407,9 @@ function admincp_master(){
 						<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 						<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
 						<tr>
+						<hr>
 						<td>Assegna a:</td>
 						<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
-						</tr>
-						<tr>
 						<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div>
 						</td>
 						</tr>
@@ -2359,11 +2425,10 @@ function admincp_master(){
 							<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 							<input type=\"hidden\" name=\"id\" value=\"$row[id]\">
 							<tr>
+							<hr>
 							<td>Copie in negozio:</td>
 							<td><input type=\"text\" name=\"sell_copies\" class=\"text_input\"
 							value=\"$availability\"></td>
-							</tr>
-							<tr>
 							<td><input type=\"submit\" class=\"button\"
 							value=\"Metti in vendita\"></div></td>
 							</tr>
