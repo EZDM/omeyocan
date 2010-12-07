@@ -261,7 +261,7 @@
 		
 		// Save the body to the print buffer
 		include_once('./sources/loginout.php');
-		print_loginout($body);
+		print_loginout($body, true);
 		return 1;
 	}
 	
