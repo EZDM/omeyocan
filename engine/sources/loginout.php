@@ -69,28 +69,29 @@
     }
 
     // Print the login form that the user must enter username and password
-    $body = "	<div class=\"center\"><img src=\"./graphic/benvenuti.jpg\"></div>
+    $body = "	<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
       <div id=\"login_form\">
       <form action=\"index.php\" method=\"post\" name=\"loginform\">
       <input type=\"hidden\" name=\"dologin\" value=\"dologin\">
       <table align=\"center\" border=\"0\" width=\"225\" cellspacing=\"0\" 
       cellpadding=\"4\">
-      <tr valign=\"top\">
-      <td width=\"225\" style=\"text-align: center\" colspan=\"2\"
-      class=\"error\">$failmsg<Br><Br></td>
-      </tr>
-      <tr valign=\"top\">
-      <td width=\"80\">Username: </td>
-      <td width=\"175\"><input type=\"text\" class=\"text_input\"
+      <tr>
+      <td>Username: </td>
+			</tr>
+			<tr>
+      <td>
+			<input type=\"text\" class=\"text_input\"
       name=\"username\"></td>
       </tr>
-      <tr valign=\"top\">
-      <td width=\"80\">$txt[3]: </td>
-      <td width=\"175\"><input type=\"password\" class=\"text_input\"
+      <tr>
+      <td>$txt[3]: </td>
+			</tr>
+			<tr>
+      <td><input type=\"password\" class=\"text_input\"
       name=\"password\"></td>
       </tr>
-      <tr valign=\"top\">
-      <td width=\"225\" style=\"text-align: center\" colspan=\"2\">
+      <tr>
+      <td>
       <input type=\"submit\" value=\"Entra\" class=\"button\">
       <Br>
       <Br>
@@ -102,21 +103,18 @@
 
     include('sources/disclaimer.txt');
     $body .= 	"</tr>
-      <tr><td>&nbsp;</td></tr>
-      <tr><td>&nbsp;</td></tr>
       <tr>
-      <td colspan=2>
-      <div id=\"disclaimer\">".
-      $disc	
-      ."</div>
-      </td>
+      <td class=\"error\"><br>$failmsg</td>
       </tr>
       </table>
       </form></div>
+      <div id=\"disclaimer\">".
+      $disc	
+      ."</div>
       ";
 
     include('sources/wellcome.html');
-    $body .= "<div id=\"wellcome_text\">$wellcome</div>";
+//    $body .= "<div id=\"wellcome_text\">$wellcome</div>";
 
     // See if there is any news to show
     if($x7c->settings['news'] != "")
@@ -255,13 +253,18 @@
 
       #login_form{
         width: 300px;
-        margin-left: 42px;
-        margin-top: 0px;
+        margin-left: 380px;
+        margin-top: 300px;
       }
 
       td{
         color: white;
       }
+
+			#login_form td{
+				valign: top;
+				text-align: center;
+			}
 
       .text_input{
         border: solid 1px white;
@@ -293,6 +296,9 @@
       #disclaimer{
         width: 300px;
         height: 200px;
+				top: 500px;
+				left: 60px;
+				position: absolute;
         overflow: auto;
       }
 
