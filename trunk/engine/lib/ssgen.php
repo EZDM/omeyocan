@@ -75,7 +75,6 @@
 				background: black;
 				margin: 0 auto;
 				padding: 0px;
-				overflow: hidden;
 			}
 			TD {
 				color: white;
