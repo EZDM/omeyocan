@@ -114,7 +114,7 @@
 					<td colspan="2">
 					<div id="main_img">
 										
-					<a onClick="<?PHP echo popup_open(1024, 723, 'engine','main');?>" href="#"><div id="enter"></div></a>
+					<a onClick="<?PHP echo popup_open(1025, 725, 'engine','main');?>" href="#"><div id="enter"></div></a>
 					
 					<a href="forum/"><div id="forum"></div></a>
 					<a href="manual/"><div id="rules"></div></a>
