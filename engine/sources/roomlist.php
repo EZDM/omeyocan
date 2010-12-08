@@ -198,7 +198,7 @@ _gaq.push(['_trackPageview']);
 							// Create object
 							if(window.self.name == ''){
 								<?PHP
-									echo popup_open(1024, 723, '/engine','main'); ?>
+									echo popup_open(1025, 725, '/engine','main'); ?>
 								window.self.location.href='/courtesy.html';
 							}
 							if(window.self.name == 'sheet'){
