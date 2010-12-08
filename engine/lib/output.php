@@ -52,10 +52,10 @@
 ?><?PHP
 
 	function popup_open($width, $height, $target, $name) {
-		if (preg_match("/chrome/i", $_SERVER['HTTP_USER_AGENT'])) {
+		/*if (preg_match("/chrome/i", $_SERVER['HTTP_USER_AGENT'])) {
 			$height += 60;
 			$width += 10;
-		}
+		}*/
 
 		$js_string = "hndl=window.open('$target', ".
 			"'$name','width=$width,height=$height, toolbar=no, status=yes, ".
