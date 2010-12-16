@@ -498,7 +498,7 @@
 			
 			#message_tbl {
 				width: 400px; 
-				height: 380px;
+				height: 100%;
 				overflow: auto;
 			}
 			
