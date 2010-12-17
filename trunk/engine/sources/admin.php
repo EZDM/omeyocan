@@ -4163,7 +4163,14 @@ function admincp_master(){
 		}
 
 		if(isset($_GET['multidestroy'])){
+			include_once('./lib/sheet_lib.php');
 			$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner<>''");
+
+			$query = $db->DoQuery("SELECT username FROM {$prefix}users");
+			while($row = $db->Do_Fetch_Assoc($query)) {
+				recalculate_space($row['username']);
+			}
+
 			$msg .= "<b>Hai distrutto tutti gli oggetti!</b>";				
 		}
 
