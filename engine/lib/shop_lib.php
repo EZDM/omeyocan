@@ -285,13 +285,39 @@ $GLOBALS['start_cogs'] = 30;
 
 	function assign_money($qty, $pg) {
 		global $db, $prefix, $money_name, $money_group, $money_group_size, $shopper;
-
+		
 		// Shopper does not split money
 		if ($pg == $shopper) {
-			$db->DoQuery("UPDATE {$prefix}objects
+			$query = $db->DoQuery("SELECT count(*) AS cnt
+					FROM  {$prefix}objects
+					WHERE name = '$money_name'
+					AND owner = '$pg'");
+			$row = $db->Do_Fetch_Assoc($query);
+
+			if ($row['cnt']) {
+				$db->DoQuery("UPDATE {$prefix}objects
 					SET uses = uses + $qty
 					WHERE name = '$money_name'
 					AND owner = '$pg'");
+			}
+			else {
+				$query_money = $db->DoQuery("
+						SELECT * FROM {$prefix}objects
+						WHERE name = '$money_name'
+						AND owner = ''");
+				$row_money = $db->Do_Fetch_Assoc($query_money);
+
+				$db->DoQuery("INSERT INTO {$prefix}objects
+					(name, description, owner, uses, image_url, equipped, size)
+					VALUES ('{$row_money['name']}',
+						'{$row_money['description']}',
+						'$pg',
+						'$qty',
+						'{$row_money['image_url']}',
+						'1',
+						'$money_group_size')");	
+
+			}
 			return;
 		}
 
@@ -300,6 +326,7 @@ $GLOBALS['start_cogs'] = 30;
 				WHERE name = '$money_name'
 				AND owner = ''");
 		$row_money = $db->Do_Fetch_Assoc($query_money);
+
 
 		$to_move = $qty;
 		while ($to_move > 0) {
