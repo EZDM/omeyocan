@@ -278,7 +278,7 @@ function memberlist(){
 			$position='';
 			if($row['long_name']!="Mappa" && $row['long_name']!=''){
 				if($x7c->permissions['admin_panic']){
-					$position = '<a class="dark_link" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
+					$position = '<a class="dark_link" href=\"#\" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
 				}
 				else{
 					$position = $row['long_name'];
@@ -336,7 +336,7 @@ function memberlist(){
 
 			$gremios_gif = "<img src=\"".$row['bio']."\" height=15 width=15>";
 			$list[$cur] .= "\n<tr>
-				<td class=\"dark_row\">$gremios_gif<a $barred class=\"$dead_fmt\" 
+				<td class=\"dark_row\">$gremios_gif<a $barred href=\"#\" class=\"$dead_fmt\" 
 				onClick=\"".
 				popup_open(500, 680, "index.php?act=sheet&pg={$row['username']}",
 						'sheet_other')."\">{$row['username']}$master_gif</a></td>
@@ -344,7 +344,7 @@ function memberlist(){
 
 			if($room!='' && $room!="Mappa")
 				if($row['position'] != '' && $row['position']==$room && $position!="Ovunque")
-					$list[$cur] .= "<td class=\"dark_row\"><a class=\"dark_link\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Sussurra</a></td>";
+					$list[$cur] .= "<td class=\"dark_row\"><a class=\"dark_link\" href=\"#\" onClick=\"javascript: opener.document.chatIn.msgi.value='@{$row['username']}@ ';\">Sussurra</a></td>";
 				else
 					$list[$cur] .= "<td class=\"dark_row\">&nbsp;</td>";
 
@@ -422,76 +422,73 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
 		body{
-margin: 0;
-overflow: hidden;
+			margin: 0;
+			overflow: hidden;
 		}
 
-#member{
-width: 450px;
-height: 500px;
-				background-image:url('.$sfondo.');
-}
+		#member{
+			width: 450px;
+			height: 500px;
+			background-image:url('.$sfondo.');
+		}
 
-#navigator{
-position: relative;
-top: 10px;
-width: 100%;
-			 text-align: center;
-			 font-weight: bold;
-color: black;
-}
+		#navigator{
+			position: relative;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			font-weight: bold;
+			color: white;
+		}
 
-#navigator a{
-color: black;
-}
+		#navigator a{
+			color: white;
+		}
 
-.dark_row{
-	font-size: 10pt;
-color: black;
-background: transparent;
-						border-bottom: solid 1px gray;
-}
+		.dark_row{
+			font-size: 10pt;
+			color: white;
+			background: transparent;
+			border-bottom: solid 1px gray;
+		}
 
-.dark_link_red{
-	font-style: italic;
-color: red;
-}
+		.dark_link_red{
+			font-style: italic;
+			color: red;
+		}
 
-table{
-width: 90%;
-			 margin-top: 20px;
-border: solid 2px gray;
-}
+		table{
+			width: 90%;
+			margin-top: 20px;
+			border: solid 2px gray;
+		}
 
-.dark_link{
-	font-style: italic;
-color: black;
-}
+		.dark_link{
+			font-style: italic;
+			color: white;
+		}
 
-.col_header{
-background: transparent;
-						margin-top: 10px;
-border: 0;
-				//border-top: solid 2px gray;
-				//border-bottom: solid 2px gray;
-}
+		.col_header{
+			background: transparent;
+			margin-top: 10px;
+			border: 0;
+			color: white;
+		}
 
-a:hover{
-color: red;
-	}
+		a:hover{
+			color: red;
+		}
 
-.bold_red{
-color: red;
-			 font-weight: bold;
-}
+		.bold_red{
+			color: red;
+			font-weight: bold;
+		}
 
-#inner_member{
-width: 440px;
-height: 480px;
-overflow: auto;
-}
-
-
+		#inner_member{
+			width: 440px;
+			height: 480px;
+			overflow: auto;
+		}
 
 </style>
 ';
