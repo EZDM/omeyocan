@@ -203,11 +203,11 @@
 					if($date){
 						if($start<0){
 							if($date == $_POST['date']){
-								$start = $i;
+								$start = $i ? $i - 1 : $i;
 							}
 						}else{
 							if($date != $_POST['date']){
-								$end = $i;
+								$end = $i - $start + 1;
 								break;
 							}
 						}
