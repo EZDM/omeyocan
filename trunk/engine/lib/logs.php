@@ -214,8 +214,9 @@
 								$start = $i ? $i - 1 : $i;
 							}
 						}else{
+							$end++;
 							if($date != $_POST['date']){
-								$end = $i - $start + 1;
+								$end++;
 								break;
 							}
 						}
