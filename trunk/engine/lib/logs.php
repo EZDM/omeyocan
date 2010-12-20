@@ -188,10 +188,14 @@
 			$data = file($logfile);
 			
 			$start=-1;
-			$end=-1;
+			$prev_offset=-1;
+			$end=1;
 			
 			if(!isset($_POST['date']))
 				$_POST['date']=date("j/n/Y", time());
+
+			list($d, $m, $y) = explode('/', $_POST['date']);
+			$unix_time = mktime(0, 0, 0, $m, $d, $y);
 
 			$i=0;
 			foreach($data as $linenum=>$entry){
@@ -201,6 +205,10 @@
 				
 					$date = date("j/n/Y",$match[1]);
 					if($date){
+						if ($match[1] < $unix_time) {
+							$prev_offset = $i;
+						}
+
 						if($start<0){
 							if($date == $_POST['date']){
 								$start = $i ? $i - 1 : $i;
@@ -216,6 +224,9 @@
 						
 				$i++;		
 						
+			}
+			if ($start < 0) {
+				$start = $prev_offset;
 			}
 			
 			//die($start." ".$end);
