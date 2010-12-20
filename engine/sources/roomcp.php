@@ -621,7 +621,14 @@
 						$selected_date="value=\"$_POST[date]\"";
 					
 					$pages = '<script language="javascript" type="text/javascript" src="lib/datetimepicker.js" ></script>
-					<form id="dateform" action="index.php?act=roomcp&cp_page=logs&room='.$_GET['room'].'" method="post">
+					<script language="javascript" type="text/javascript">
+						function jump_to_date(date_str) {
+							document.getElementById(\'demo1\').value = date_str;
+							document.forms[0].submit();
+
+						}
+					</script>
+					<form id="dateform" name="dateform1" action="index.php?act=roomcp&cp_page=logs&room='.$_GET['room'].'" method="post">
 						<input type="Text" name="date" id="demo1" maxlength="15" size="15" '.$selected_date.'><a href="javascript:NewCal(\'demo1\',\'ddmmyyyy\',false,24)"><img src="graphic/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
 					</form>
 					';
@@ -631,9 +638,13 @@
 					
 					include_once("./lib/message.php");
 					$body .= '<div style="background: black; color: white;">';
-					foreach($contents as $linenum=>$entry){
+					$header = false;
+					$count = 0;
+					foreach($contents as $linenum=>$entry) {
 						// Get date and sender
-						$messarge="";
+						$count++;
+						$message="";
+						$match="";
 						if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
 							$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
 							$date = date($x7c->settings['date_format_full'],$match[1]);
@@ -644,8 +655,23 @@
 						else{
 							$message = "<b>Warning: wrong log format </b>".$entry;
 						}
-
-						$body .= "<b>$sender</b>[$date]: $message<br><br>";
+						if (!$header) {
+							if ($match) {
+								$date_short = date("j/n/Y", $match[1]);
+								$body .= "<a href=\"#\" onClick=\"javascript: jump_to_date('$date_short');\"> &lt;&lt;&lt; $date_short</a><br><br>";
+							}
+							$header = true;
+						}
+						else if ($count == sizeof($contents)) {
+							if ($match) {
+								$date_short = date("j/n/Y", $match[1]);
+								$body .= "<a href=\"#\" onClick=\"javascript: jump_to_date('$date_short');\">$date_short &gt;&gt;&gt;</a><br><br>";
+							}
+							
+						}
+						else {
+							$body .= "<b>$sender</b>[$date]: $message<br><br>";
+						}
 						
 					}
 					
