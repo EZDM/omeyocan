@@ -78,7 +78,7 @@
 				$this->log_file = "{$x7c->settings['logs_path']}/$roomuser/$file_name.log";
 				
 				// Make sure this file exists, if not create it
-				if(!file_exists($this->log_file))
+				if(!file_exists(dirname($this->log_file)))
 					if(!$this->create())
 						return 0;
 					
@@ -151,8 +151,7 @@
 				}
 			}
 
-			$fh = fopen($this->log_file,"a");
-			fclose($fh);
+			return 1;
 		}
 		
 		// Clears a log
