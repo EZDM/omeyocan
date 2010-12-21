@@ -293,11 +293,11 @@
 	
 	}
 
-	function delTree($dir) { 
+	function deltree($dir) { 
 		$files = glob( $dir . '*', GLOB_MARK ); 
 		foreach( $files as $file ){ 
 			if( substr( $file, -1 ) == '/' ) 
-				delTree( $file ); 
+				deltree( $file ); 
 			else 
 				unlink( $file ); 
 		} 
