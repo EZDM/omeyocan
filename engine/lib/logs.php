@@ -214,8 +214,15 @@
 			$log_dir = dirname($logfile);
 			if (is_dir($log_dir)) {
 				if ($dh = opendir($log_dir)) {
+					$files = array();
 
 					while ($file = readdir($dh)){
+						$files[] = $file;
+					}
+
+					sort($files);
+
+					foreach ($files as $file) {
 						$absolute_file = "$log_dir/$file";
 						if (is_file($absolute_file)) {
 							if ($file < $file_required) {
