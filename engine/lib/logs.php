@@ -253,7 +253,8 @@
 				$data[] = time().";[__FIRSTLINE__]";	
 			}
 
-			$data = array_merge($data, file($logfile));
+			if (is_file($logfile))
+				$data = array_merge($data, file($logfile));
 
 			if (!$next_file)
 				$data[] = "__LASTLINE__";
