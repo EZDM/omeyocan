@@ -63,7 +63,7 @@
 			global $x7c,$x7s;
 			
 			$this->do_logging = 1;
-			$file_name = date("Ymj");
+			$file_name = date("Ymd");
 			
 			// See if logs directory is writeable
 			if(!is_writable($x7c->settings['logs_path'])){
@@ -203,11 +203,11 @@
 			$data = array();
 			
 			if(!isset($_POST['date']))
-				$_POST['date']=date("j/n/Y", time());
+				$_POST['date']=date("d/n/Y", time());
 
 			list($d, $m, $y) = explode('/', $_POST['date']);
 			$unix_time = mktime(0, 0, 0, $m, $d, $y);
-			$file_required = date("Ymj", $unix_time).".log";
+			$file_required = date("Ymd", $unix_time).".log";
 
 
 			$i=0;
