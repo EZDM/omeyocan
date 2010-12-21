@@ -190,6 +190,7 @@
 			$start=-1;
 			$prev_offset=-1;
 			$end=1;
+			$break = false;
 			
 			if(!isset($_POST['date']))
 				$_POST['date']=date("j/n/Y", time());
@@ -217,6 +218,7 @@
 							$end++;
 							if($date != $_POST['date']){
 								$end++;
+								$break = true;
 								break;
 							}
 						}
@@ -226,12 +228,18 @@
 				$i++;		
 						
 			}
+
+			if (!$break)
+				$end++;
 			if ($start < 0) {
 				$start = $prev_offset;
 			}
 			
 			//die($start." ".$end);
 			$data = array_slice($data, $start, $end);
+
+			if (!$break)
+				$data[] = "__LASTLINE__";
 			
 			$this->number_of_pages = count($data);
 				
