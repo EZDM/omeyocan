@@ -63,6 +63,7 @@
 			global $x7c,$x7s;
 			
 			$this->do_logging = 1;
+			$file_name = date("Ymj");
 			
 			// See if logs directory is writeable
 			if(!is_writable($x7c->settings['logs_path'])){
@@ -74,14 +75,21 @@
 			// See whether its a room log or a PM log
 			if($logtype == 1){
 				// Room log
-				$this->log_file = "{$x7c->settings['logs_path']}/$roomuser.log";
+				$this->log_file = "{$x7c->settings['logs_path']}/$roomuser/$file_name.log";
 				
 				// Make sure this file exists, if not create it
 				if(!file_exists($this->log_file))
-					$this->create();
+					if(!$this->create())
+						return 0;
 					
 				// Check log size to make sure it isn't over
-				$this->log_size = filesize($this->log_file);
+				$this->log_size = 0;
+				$dir = dir("{$x7c->settings['logs_path']}/$roomuser");
+				while($file = $dir->read()){
+					if($file != "." && $file != "..")
+						$this->log_size += filesize("{$x7c->settings['logs_path']}/$roomuser/$file");
+				}
+				
 				if($this->log_size > $x7c->settings['max_log_room'] && $x7c->settings['max_log_room'] != 0){
 					$this->error = 4;
 					$this->do_logging = 0;
@@ -93,13 +101,9 @@
 				$this->log_file = "{$x7c->settings['logs_path']}/$x7s->username/$roomuser.log";
 				
 				// If the user directory doesn't exist then create it
-				if(!is_dir("{$x7c->settings['logs_path']}/$x7s->username/")){
-					if(!mkdir("{$x7c->settings['logs_path']}/$x7s->username/")){
-						$this->error = 3;
-						$this->do_logging = 0;
+				if(!file_exists($this->log_file))
+					if(!$this->create())
 						return 0;
-					}
-				}
 				
 				// Check logs size to make sure it isn't over
 				$this->log_size = 0;
@@ -139,6 +143,14 @@
 		
 		// Creates a log file
 		function create(){
+			if(!is_dir(dirname($this->log_file))){
+				if(!mkdir(dirname($this->log_file))){
+					$this->error = 3;
+					$this->do_logging = 0;
+					return 0;
+				}
+			}
+
 			$fh = fopen($this->log_file,"a");
 			fclose($fh);
 		}
@@ -149,7 +161,7 @@
 			if($logfile == "")
 				$logfile = $this->log_file;
 				
-			unlink($logfile);
+			deltree(dirname($logfile));
 			
 			if($this->log_file == $logfile){
 				$this->create();
@@ -185,61 +197,68 @@
 			if($logfile == "")
 				$logfile = $this->log_file;
 			
-			$data = file($logfile);
 			
-			$start=-1;
-			$prev_offset=-1;
-			$end=1;
-			$break = false;
+			$prev_file="";
+			$next_file="";
+			$data = array();
 			
 			if(!isset($_POST['date']))
 				$_POST['date']=date("j/n/Y", time());
 
 			list($d, $m, $y) = explode('/', $_POST['date']);
 			$unix_time = mktime(0, 0, 0, $m, $d, $y);
+			$file_required = date("Ymj", $unix_time).".log";
+
 
 			$i=0;
-			foreach($data as $linenum=>$entry){
-				// Get date and sender
-				if(preg_match("/^(.+?);\[(.+?)\]/",$entry,$match)){
-					//$entry = preg_replace("/^(.+?);\[(.+?)\]/","",$entry);
-				
-					$date = date("j/n/Y",$match[1]);
-					if($date){
-						if ($match[1] < $unix_time) {
-							$prev_offset = $i;
-						}
+			$log_dir = dirname($logfile);
+			if (is_dir($log_dir)) {
+				if ($dh = opendir($log_dir)) {
 
-						if($start<0){
-							if($date == $_POST['date']){
-								$start = $i ? $i - 1 : $i;
+					while ($file = readdir($dh)){
+						$absolute_file = "$log_dir/$file";
+						if (is_file($absolute_file)) {
+							if ($file < $file_required) {
+								$prev_file = $file;
 							}
-						}else{
-							$end++;
-							if($date != $_POST['date']){
-								$end++;
-								$break = true;
+							else if ($file == $file_required) {
+								$logfile = "$log_dir/$file";
+							}
+							else {
+								$next_file = $file;
 								break;
 							}
 						}
 					}
+
+					closedir($dh);
 				}
-						
-				$i++;		
-						
 			}
 
-			if (!$break)
-				$end++;
-			if ($start < 0) {
-				$start = $prev_offset;
+	
+			if ($prev_file) {
+				list($prev_date, $ext) = explode('.', $prev_file);
+				$m = substr($prev_date, 4, 2); 
+				$d = substr($prev_date, 6, 2);
+				$y = substr($prev_date, 0, 4);
+				$prev_date = mktime(0, 0, 0, $m, $d, $y);
+				$data[] = "$prev_date;[__FIRSTLINE__]";
+			} else {
+				$data[] = time().";[__FIRSTLINE__]";	
 			}
-			
-			//die($start." ".$end);
-			$data = array_slice($data, $start, $end);
 
-			if (!$break)
+			$data = array_merge($data, file($logfile));
+
+			if (!$next_file)
 				$data[] = "__LASTLINE__";
+			else {
+				list($next_date, $ext) = explode('.', $next_file);
+				$m = substr($next_date, 4, 2); 
+				$d = substr($next_date, 6, 2);
+				$y = substr($next_date, 0, 4);
+				$next_date = mktime(0, 0, 0, $m, $d, $y);
+				$data[] = "$next_date;[__LASTLINE__]";
+			}
 			
 			$this->number_of_pages = count($data);
 				
@@ -265,6 +284,19 @@
 			return $return;
 		}
 	
+	}
+
+	function delTree($dir) { 
+		$files = glob( $dir . '*', GLOB_MARK ); 
+		foreach( $files as $file ){ 
+			if( substr( $file, -1 ) == '/' ) 
+				delTree( $file ); 
+			else 
+				unlink( $file ); 
+		} 
+
+		if (is_dir($dir)) rmdir( $dir ); 
+
 	}
 	
 ?> 
