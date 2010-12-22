@@ -317,7 +317,7 @@
 			}
 			
 			//Perform objects
-			$obj_regexp = "/&deg;([^;]+);/i";
+			$obj_regexp = "/&deg;([0-9]+);/i";
 			
 			while(preg_match($obj_regexp,$message, $obj)){
 									
