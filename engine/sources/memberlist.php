@@ -329,8 +329,10 @@ function memberlist(){
 			include_once('./lib/load.php');
 			$info = new profile_info($row['username']);
 
-			if(in_array("Master", $info->profile['usergroup']) || in_array("Administrator", $info->profile['usergroup']))
+			if(in_array("Master", $info->profile['usergroup']))
 				$master_gif='&nbsp;<img src="./graphic/master_gif.gif" />';
+			elseif(in_array("Administrator", $info->profile['usergroup']))
+				$master_gif='&nbsp;<img src="./graphic/admincoin.gif" />';
 			elseif(in_array("Controller", $info->profile['usergroup']))
 				$master_gif='&nbsp;<img src="./graphic/controller_gif.gif" />';
 
