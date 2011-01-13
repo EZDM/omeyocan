@@ -59,7 +59,7 @@
 
 		$js_string = "hndl=window.open('$target', ".
 			"'$name','width=$width,height=$height, toolbar=no, status=yes, ".
-			"location=no, menubar=no, resizable=yes, status=no, scrollbars=no'); ".
+			"location=no, menubar=no, resizable=yes, status=no, scrollbars=yes'); ".
 			"hndl.focus();";
 
 		return $js_string;
