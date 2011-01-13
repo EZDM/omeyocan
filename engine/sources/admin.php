@@ -2300,7 +2300,7 @@ function admincp_master(){
 				$sync_button = "<td><input type=\"button\" class=\"button\" 
 				value=\"Modifica e sincronizza\" onClick=\"sync_request();\"></td></tr>
 				<tr><td>&nbsp;</td><td>
-				<br>Con questo tasto vengono riflesse le modifiche dell'oggetto vengono 
+				<br>Con questo tasto le modifiche dell'oggetto vengono 
 				<br>riflesse anche alle copie gia' assegnate.
 				<br>Gli usi rimanenti non vengono mai riassegnati.
 				<br>Tutti gli oggetti modificati vengono disequipaggiati.</td>
