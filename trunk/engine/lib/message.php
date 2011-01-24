@@ -532,9 +532,6 @@
 		return $url;
 	}
 
-	// Include the private message handling function
-	include_once("./lib/private_chat.php");
-
 	// The following functions handle offline messages
 
 	// This function sends an offline message
