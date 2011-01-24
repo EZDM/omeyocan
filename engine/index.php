@@ -257,21 +257,6 @@
 
   }
 
-  // See if a bandwidth error is occuring
-  if($x7c->settings['log_bandwidth'] == 1){
-    include_once("./lib/bandwidth.php");
-    $BW_CHECK = check_bandwidth($x7s->username);
-    if ($BW_CHECK && 
-        (
-          (@$_GET['frame'] != 'update' || $_GET['act'] != 'frame') &&
-          (@$_GET['pmf'] != "update" || $_GET['act'] != "pm")
-         )
-       ) {
-      $_GET['act'] = "bw_error";
-    }
-  }
-
-
   // See if the admin has disabled the chat server
   if ($x7c->settings['disable_chat'] == 1 && @$_GET['act'] != "logout" &&
       $x7c->permissions['access_disabled'] != 1)
@@ -387,17 +372,6 @@
       exit;
     break;
 
-    // They have exceeded the allowed bandwidth for this day/month
-    case "bw_error":
-      if($x7c->settings['default_bandwidth_type'] == 1)
-        $body = $txt[480];
-      else
-        $body = $txt[481];
-      $print->normal_window($txt[14],$body);
-      $print->dump_buffer();
-      exit;
-    break;
-
     // They have been kicked from that room
     case "kicked":
       $print->normal_window($txt[14],$txt[118]);
@@ -458,20 +432,7 @@
     // Handle the many frames
     case "frame":
       $before_frame = microtime_float()-$debug_start;
-
-      // See if bandwidth logging is on
-      if($x7c->settings['log_bandwidth'] == 1){
-        ob_start();
-        include_once("./sources/frame.php");
-        $used = ob_get_length();
-        log_bw($used);
-        ob_end_flush();
-      //}elseif(@$_GET['frame'] == "update"){
-      //  include_once("./sources/update.php");
-      }else{
-        include_once("./sources/frame.php");
-      }
-
+      include_once("./sources/frame.php");
       exit;
     break;
 
