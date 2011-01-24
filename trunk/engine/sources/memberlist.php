@@ -278,7 +278,7 @@ function memberlist(){
 			$position='';
 			if($row['long_name']!="Mappa" && $row['long_name']!=''){
 				if($x7c->permissions['admin_panic']){
-					$position = '<a class="dark_link" href=\"#\" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
+					$position = '<a class="dark_link" href="#" onClick="javascript: window.opener.location.href=\'index.php?act=frame&room='.$row['position'].'\';">'.$row['long_name'].'</a>';
 				}
 				else{
 					$position = $row['long_name'];
