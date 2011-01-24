@@ -272,12 +272,6 @@
 		}
 				
 		// See if they have used up all their allowed bandwidth
-		if($x7c->settings['log_bandwidth'] == 1){
-			if($BW_CHECK){
-				$script .= "window.parent.location='./index.php'\r\n";
-			}
-		}
-		
 		// Tell them about any new PMs that they have
 		if(!isset($PM_COUNT))
 			$PM_COUNT = "-";
