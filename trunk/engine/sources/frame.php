@@ -583,14 +583,6 @@
           }
         }
       }
-
-      // See if they have used up all their allowed bandwidth
-      if($x7c->settings['log_bandwidth'] == 1){
-        if($BW_CHECK){
-          echo "9;;./index.php|";
-        }
-      }
-
       break;
     case "send":
       //Check if user is online in this room
