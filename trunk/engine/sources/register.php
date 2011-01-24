@@ -161,10 +161,6 @@
 				send_offline_msg($_POST['username'], "Benvenuto per sempre", 
 						$wellcome_mail, "Staff");
 
-				// Create the bandwidth row for them
-				include_once("./lib/bandwidth.php");
-				bw_first_time($_POST['username']);
-				
 				$body = $txt[28];
 				
 				if($act_code != 1)
