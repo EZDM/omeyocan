@@ -387,15 +387,6 @@
       exit;
     break;
 
-    // Chat is disabled and user is not an admin
-    case "support_sit":
-      include_once("./sources/support.php");
-      support_mainpage();
-      $print->dump_buffer();
-      exit;
-    break;
-
-
     // They have exceeded the allowed bandwidth for this day/month
     case "bw_error":
       if($x7c->settings['default_bandwidth_type'] == 1)
@@ -432,14 +423,6 @@
     case "memberlist":
       include_once("./sources/memberlist.php");
       memberlist();
-      exit;
-    break;
-
-    // They want to see whats up
-    case "calendar":
-      include_once("./sources/calendar.php");
-      calendar();
-      $print->dump_buffer();
       exit;
     break;
 
@@ -511,28 +494,6 @@
     case "forgotmoipass":
       include_once("./sources/forgotpass.php");
       forgot_pass();
-      $print->dump_buffer();
-      exit;
-    break;
-
-    // They want to see someone elses profile, or maybe their own?
-    case "view_profile":
-      include_once("./sources/profile.php");
-
-      // If no user is specified we will show them their own profile
-      if(!isset($_GET['user']))
-        $_GET['user'] = $x7s->username;
-
-      // Get the page source
-      view_profile($_GET['user']);
-      $print->dump_buffer();
-      exit;
-    break;
-
-    // Dispay a small information popup window
-    case "sm_window":
-      include_once("./sources/info_box.php");
-      mini_page();
       $print->dump_buffer();
       exit;
     break;
