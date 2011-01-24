@@ -1117,16 +1117,6 @@ _gaq.push(['_trackPageview']);
 
       message = message.replace(/</gi,"&lt;");
 
-
-
-
-<?PHP
-      // Do Keyword parsing, Smilie parsing and filter parsing
-      include_once("./lib/filter.php");
-      $msg_filter = new filters($_GET['room']);
-      echo $msg_filter->filter_javascript();
-?>
-
       // Add styles to message
       message = starttags+message+endtags;
 
