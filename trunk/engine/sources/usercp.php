@@ -106,45 +106,6 @@
 				<input type=\"submit\" class=\"button\" value=\"$txt[160]\">
 			</form></div>";
 
-		}elseif($_GET['cp_page'] == "wfilter"){
-
-			$head = $txt[143];
-			include_once("./lib/filter.php");
-			$filters = new filters();
-
-			if(isset($_GET['add']) && isset($_GET['add2'])){
-				$txt[162] = eregi_replace("_w",$_GET['add'],$txt[162]);
-				$body = "$txt[162]<Br><Br>";
-				$filters->add_filter(5,$_GET['add'],$_GET['add2']);
-				$filters->reload();
-			}elseif(isset($_GET['remove'])){
-				$txt[163] = eregi_replace("_w",$_GET['remove'],$txt[163]);
-				$body = "$txt[163]<Br><Br>";
-				$filters->remove_user_filter($_GET['remove']);
-				$filters->reload();
-			}else{
-				$body = "";
-			}
-
-			$body .= "$txt[145]<Br>";
-			$type5s = $filters->get_filter_by_type(5);
-			foreach($type5s as $key=>$val){
-				if(!eregi("<a href=",$val[1])){
-					$body .= "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./index.php?act=userpanel&cp_page=wfilter&remove=$val[0]\">$val[0] ($val[1])</a><Br>";
-				}
-			}
-
-			$body .= "<Br><Br>
-			<form action=\"./index.php\" method=\"get\">
-				<input type=\"hidden\" name=\"act\" value=\"userpanel\">
-				<input type=\"hidden\" name=\"cp_page\" value=\"wfilter\">
-				<b>$txt[164]</b><Br>
-				&nbsp;&nbsp;&nbsp;&nbsp;$txt[165] <input type=\"text\" name=\"add\" class=\"text_input\"><Br>
-				&nbsp;&nbsp;&nbsp;&nbsp;$txt[166] <input type=\"text\" name=\"add2\" class=\"text_input\"><Br>
-				&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" class=\"button\" value=\"$txt[160]\">
-
-			</form>";
-
 		}elseif($_GET['cp_page'] == "msgcenter"){
 
 			$head = $txt[142];
