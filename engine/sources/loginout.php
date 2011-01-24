@@ -173,19 +173,6 @@
 
     }
 
-    // See if the admin wants the upcoming events to show
-    if($x7c->settings['show_events'] == 1){
-      include_once("./lib/events.php");
-
-      if($x7c->settings['events_show3day'] == 1){
-        $body .= cal_threedays()."<Br><br>";
-      }
-
-      if($x7c->settings['events_showmonth'] == 1){
-        $body .= cal_minimonth();
-      }
-    }
-
     print_loginout($body);
 
   }

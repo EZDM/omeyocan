@@ -66,35 +66,6 @@
 			$head = $txt[135];
 			$body = $txt[136];
 
-		}elseif($_GET['cp_page'] == "status"){
-			// Do the status page
-			include_once("./lib/status.php");
-			$head = $txt[140];
-			if(isset($_GET['new_status'])){
-				set_status($_GET['new_status']);
-				$body = "$txt[148]: <i>";
-			}else{
-				$body = "$txt[146]: <i>";
-			}
-
-			$maxchars = $x7c->settings['maxchars_status'];
-			$body .= "{$x7p->profile['status']}</i><br><Br>
-					$txt[147]:<Br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./index.php?act=userpanel&cp_page=status&new_status=$txt[149]\">$txt[149]</a><Br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./index.php?act=userpanel&cp_page=status&new_status=$txt[150]\">$txt[150]</a><Br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./index.php?act=userpanel&cp_page=status&new_status=$txt[151]\">$txt[151]</a><Br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./index.php?act=userpanel&cp_page=status&new_status=$txt[152]\">$txt[152]</a><Br>
-					<Br>
-					<form action=\"index.php\" method=\"get\">
-						&nbsp;&nbsp;&nbsp;&nbsp;$txt[153]:
-						<input type=\"hidden\" name=\"act\" value=\"userpanel\">
-						<input type=\"hidden\" name=\"cp_page\" value=\"status\">
-						<input type=\"text\" class=\"text_input\" name=\"new_status\" size=\"20\">
-						<input type=\"submit\" class=\"button\" value=\"$txt[154]\"><Br>
-						&nbsp;&nbsp;&nbsp;&nbsp;$txt[155] ($maxchars)
-					</form>
-					";
-
 		}elseif($_GET['cp_page'] == "blocklist"){
 			$head = $txt[141];
 
@@ -442,35 +413,6 @@
 						</table><Br>";
 
 			}
-
-		}elseif($_GET['cp_page'] == "upload"){
-
-			$head = $txt[192];
-
-			if(isset($_GET['uploaded'])){
-				// Do the upload
-				include_once("./lib/uploads.php");
-				$returned = handle_uploaded_avatar();
-
-				if($returned == 1){
-					$body = $txt[195];
-				}elseif($returned == 2){
-					$body = $txt[196];
-				}elseif($returned == 3){
-					$body = $txt[197];
-				}elseif($returned == 4){
-					$body = $txt[198];
-				}else{
-					$db->DoQuery("UPDATE {$prefix}users SET avatar='$returned' WHERE username='$x7s->username'");
-					$body = $txt[194];
-					$body .= "\n\n
-						<script language=\"javascript\" type=\"text/javascript\">
-							if(opener.document.profileform.avatar.value){
-								opener.document.profileform.avatar.value = '$returned';
-							}
-						</script>";
-				}
-
 
 			}else{
 				// Print the upload form
