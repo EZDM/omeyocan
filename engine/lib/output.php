@@ -51,7 +51,7 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 
-	function popup_open($width, $height, $target, $name) {
+	function popup_open($width, $height, $target, $name, $scrollbar="no") {
 		/*if (preg_match("/chrome/i", $_SERVER['HTTP_USER_AGENT'])) {
 			$height += 60;
 			$width += 10;
@@ -59,7 +59,7 @@
 
 		$js_string = "hndl=window.open('$target', ".
 			"'$name','width=$width,height=$height, toolbar=no, status=no, ".
-			"location=no, menubar=no, resizable=no'); ".
+			"location=no, menubar=no, resizable=no, scrollbars=$scrollbar'); ".
 			"hndl.focus();";
 
 		return $js_string;
