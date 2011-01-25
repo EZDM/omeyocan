@@ -575,8 +575,10 @@
 		preg_match("/^(.+?)::/i",$body,$match);
 		$return[1] = $match[1];
 		$tmp=preg_replace("/^(.+?)::/i","",$body);
-		preg_match("/^(.+?)::/i",$tmp,$match);
-		$return[2] = date($x7c->settings['date_format_full'], $match[1]);
+		if(preg_match("/^(.+?)::/i",$tmp,$match))
+			$return[2] = date($x7c->settings['date_format_full'], $match[1]);
+		else
+			$return[2] = "";
 
 		return $return;
 	}

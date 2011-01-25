@@ -40,6 +40,7 @@
 	function perfom_mail(){
 			global $txt, $x7c, $x7s, $print, $db, $prefix, $x7p;
 			$sys_msg="";
+			$body="";
 			include_once("./lib/message.php");
 
 
