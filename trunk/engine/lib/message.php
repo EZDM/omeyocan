@@ -575,7 +575,7 @@
 		preg_match("/^(.+?)::/i",$body,$match);
 		$return[1] = $match[1];
 		$tmp=preg_replace("/^(.+?)::/i","",$body);
-		if(preg_match("/^(.+?)::/i",$tmp,$match))
+		if(preg_match("/^(.+?)::/i",$tmp,$match) && is_numeric($match[1]))
 			$return[2] = date($x7c->settings['date_format_full'], $match[1]);
 		else
 			$return[2] = "";
