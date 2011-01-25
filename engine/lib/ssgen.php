@@ -150,12 +150,9 @@
 				margin: 0 auto;
 			}
 			.board_cell{
-				border-color: white;
-				border-style: solid;
-				border-width: 2px;
+				border-bottom: 2px solid white;
 				text-align: center;
 				padding: 5px;
-				border-collapse: collapse;
 			}
 			#board_head{
 				position: absolute;
@@ -170,28 +167,28 @@
 			}
 			#board_index{
 				position: absolute;
-				width: 33%;
+				width: 26%;
 				float: right;
-				right: 55px;
-				top: 50px;
+				right: 65px;
+				top: 60px;
+				height: 400px;
 				text-align: center;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				color: white;
+				overflow: auto;
 			}
 			#board_body {
 				position: absolute;
 				float: left;
-				top: 50px;
-				left: 30px;
+				top: 60px;
+				left: 40px;
 				width: 420px;
-				height: 480px;
+				height: 390px;
 				color: white;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				text-align: center;
-				border-style: solid;
-				border-width: 2px;
 				padding: 5px;
 				overflow: auto;
 			}
