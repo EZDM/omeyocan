@@ -81,7 +81,7 @@
     }
     else{
       $db->DoQuery("DELETE FROM {$prefix}messages
-          WHERE room='{$_GET[room]}' AND type<>'6'");
+          WHERE room='{$_GET['room']}' AND type<>'6'");
       delete_communication('all',$_GET['room']);
     }
     return;
