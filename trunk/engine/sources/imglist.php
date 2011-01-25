@@ -212,7 +212,7 @@ function file_upload($path){
 			
 		move_uploaded_file($_FILES['file']['tmp_name'],$path.$_FILES['file']['name']);
 			
-		$print->normal_window("Upload ok",$path.$_FILES['file']['name']);
+		$print->normal_window("Upload ok",$_FILES['file']['name']);
 	}
 	else{
 		$print->normal_window("Errore", "Tipo di file errato");
@@ -223,7 +223,7 @@ function file_delete($path){
 	global $print;
 
 	if(unlink($path)){
-		$print->normal_window("Delete ok",$path);
+		$print->normal_window("Delete ok", basename($path));
 	}
 	else{
 		$print->normal_window("Errore", "Impossibile cancellare il file specificato");
