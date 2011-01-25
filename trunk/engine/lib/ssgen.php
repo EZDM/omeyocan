@@ -148,6 +148,7 @@
 				height: 571px;
 				position:relative;
 				margin: 0 auto;
+				color: black;
 			}
 			.board_cell{
 				border-bottom: 2px solid white;
@@ -175,7 +176,6 @@
 				text-align: center;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
-				color: white;
 				overflow: auto;
 			}
 			#board_body {
@@ -185,7 +185,6 @@
 				left: 40px;
 				width: 420px;
 				height: 390px;
-				color: white;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				text-align: center;
@@ -290,12 +289,14 @@
 				border-bottom: 1px solid white;
 				vertical-align: top;
 				padding: 5px;
+				color: black;
 			}
 			.msg_avatar{
 				border-bottom: 1px solid white;
 				vertical-align: top;
 				padding: 5px;
 				width: 110px;
+				color: black;
 			}
 		</style>";
 		
