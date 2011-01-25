@@ -985,7 +985,7 @@ function sheet_page_main(){
 	if(isset($_GET['daily_px']) && checkIfMaster()){
 			
 		$time = time();
-		$day = date("j/n/Y", $row['daily_px']);
+		$day = date("j/n/Y", $row_user['daily_px']);
 		if($row_user['daily_px'] < $time && $day != date("j/n/Y", $time)){
 			$db->DoQuery("UPDATE {$prefix}users SET xp=xp+1, daily_px='$time' WHERE username='$pg'");
 			$errore = "PX Giornaliero assegnato correttamente";
