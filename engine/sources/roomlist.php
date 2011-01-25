@@ -373,11 +373,11 @@ _gaq.push(['_trackPageview']);
 				$button="./graphic/pulsante.gif";
 				
 			if($row['link_type']==0){
-				$href=$row['link'];
+				$link_action='href="'.$row['link'].'"';
 			}
 			else{
-				$href=popup_open($row['width'], $row['height'], $row['link'],
-						'sub_location');
+				$link_action='onClick="'.popup_open($row['width'], $row['height'], $row['link'],
+						'sub_location').'"';
 			}
 			
 			$rollover="onMouseOut=\"HidePopup2(this);\" onMouseOver=\"ShowPopup2(this,'$row[descr]');\"";
@@ -385,7 +385,7 @@ _gaq.push(['_trackPageview']);
 				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\"";
 			}
 			
-			$button_list .= "<a href=\"$href\">
+			$button_list .= "<a $link_action>
 			<img src=\"$button\" $rollover style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
 		}
 		
