@@ -186,7 +186,7 @@
 
       if($x7c->permissions['admin_panic']){
         $query=$db->DoQuery("SELECT shadow FROM {$prefix}rooms
-            WHERE name='{$_GET[room]}'");
+            WHERE name='{$_GET['room']}'");
         $row=$db->Do_Fetch_Assoc($query);
 
         if(!$row)
@@ -195,7 +195,7 @@
         $new_shadow=!$row['shadow'];
 
         $db->DoQuery("UPDATE {$prefix}rooms SET shadow='$new_shadow'
-            WHERE name='{$_GET[room]}'");
+            WHERE name='{$_GET['room']}'");
       }
       break;
 
