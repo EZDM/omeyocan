@@ -155,6 +155,15 @@
 				$replybody = $msgbody;
 				$replybody = eregi_replace("<br>","\n",$replybody);
 				$_POST['msg'] = " \n\n$txt[174]\n\n".$replybody;
+				$fwd = "Fwd: ";
+				$rply = "Re: ";
+
+				if (preg_match("/^Re:/", $subject)) {
+					$rply = "";
+				}
+				elseif (preg_match("/^Fwd: /", $subject)) {
+					$fwd = "";
+				}
 
 
 				$body .= "
@@ -184,8 +193,8 @@
 						<br>
 						<div id=\"menu\">
 						<a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=Re: {$_POST['subject']}&to={$_POST['to']}\">[Rispondi]</a>
-						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=I: {$_POST['subject']}\">[Inoltra]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=$rply{$_POST['subject']}&to={$_POST['to']}\">[Rispondi]</a>
+						<a href=\"index.php?act=mail&write&back={$_GET['read']}&subject=$fwd{$_POST['subject']}\">[Inoltra]</a>
 					
 					<Br><Br><div align=\"center\">
 					<div align=\"left\">
