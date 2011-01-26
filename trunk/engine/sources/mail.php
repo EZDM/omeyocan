@@ -152,11 +152,10 @@
 
 				$_POST['subject'] = $subject;
 
-				$replybody = remove_chattags($msgbody);
+				$replybody = $msgbody;
 				$replybody = eregi_replace("<br>","\n",$replybody);
 				$_POST['msg'] = " \n\n$txt[174]\n\n".$replybody;
 
-				//$msgbody = parse_message($msgbody);
 
 				$body .= "
 						<div> 
@@ -297,7 +296,7 @@
 					$msgbody = $nb[0];
 					$subject = $nb[1];
 					
-					$replybody = remove_chattags($msgbody);
+					$replybody = $msgbody;
 					$replybody = eregi_replace("<br>","\n",$replybody);
 					$replybody = " \n\n$txt[174]\n\n".$replybody;
 				}

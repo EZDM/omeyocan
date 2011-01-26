@@ -175,7 +175,7 @@
 				else
 					$_GET['subject'] = $subject;
 
-				$replybody = remove_chattags($msgbody);
+				$replybody = $msgbody;
 				$replybody = eregi_replace("<br>","\n",$replybody);
 				$_GET['msg'] = "\n\n$txt[174]\n".$replybody;
 
