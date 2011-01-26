@@ -59,13 +59,7 @@
 	function send_message($body,$room,$sussurro=0){
 		global $x7s, $db, $prefix, $x7c, $txt;
 		$time = time();
-
-		// Check message size limit
-		/*if($x7c->settings['maxchars_msg'] != 0 && strlen($body) > $x7c->settings['maxchars_msg']){
-			alert_user($x7s->username,$txt[252]);
-			return 0;
-		}*/
-
+		
 		$body_parsed = parse_message($body);
 		if($sussurro == 0){
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username',
@@ -216,8 +210,6 @@
 		if($sysmsg == 1)
 			$styles_off = 1;
 
-			$message = remove_chattags($message);
-
 			//Action parse
 			$pos = stripos($message,"&lt;");
 			$open=0;
@@ -245,10 +237,6 @@
 
 			$message = preg_replace("/&gt;/i","",$message);
 			$message = preg_replace("/&lt;/i","",$message);
-			
-			//Location parse
-			//$message = preg_replace("/\]/i","]</span>",$message);
-			//$message = preg_replace("/\[/i","<span class=\"locazione_display\">[",$message);
 			
 			//Delete sussurro dest
 			$message = preg_replace("/^@.*@/i","",$message);
@@ -432,83 +420,6 @@
 		return $message;
 	}
 
-	// Strips chat tags out and returns raw message
-	function remove_chattags($message){
-		// Look for simple style tags (b, i, u)
-		$message = preg_replace("/\[b\](.+?)\[\/b\]/i","$1",$message);
-		$message = preg_replace("/\[u\](.+?)\[\/u\]/i","$1",$message);
-		$message = preg_replace("/\[i\](.+?)\[\/i\]/i","$1",$message);
-
-		// Color Tag
-		while(preg_match("/\[color=([^\]]+)\](.+?)\[\/color\]/i",$message))
-			$message = preg_replace("/\[color=([^\]]+)\](.+?)\[\/color\]/i","$2",$message);
-
-		// Size Tag
-		while(preg_match("/\[size=([^\]]+)\](.+?)\[\/size\]/i",$message))
-			$message = preg_replace("/\[size=([^\]]+)\](.+?)\[\/size\]/i","$2",$message);
-
-		// Font Tag
-		while(preg_match("/\[font=([^\]]+)\](.+?)\[\/font\]/i",$message))
-			$message = preg_replace("/\[font=([^\]]+)\](.+?)\[\/font\]/i","$2",$message);
-
-		return $message;
-	}
-
-	// Security functions for message parsing
-	function check_font_size($size,$text,$mode=1){
-		global $x7c;
-		$size = eregi_replace("[A-z ]","",$size);
-		if($size > $x7c->settings['style_max_size'] && $x7c->settings['style_max_size'] != 0)
-			$size = $x7c->settings['style_max_size'];
-		if($size < $x7c->settings['style_min_size'])
-			$size = $x7c->settings['style_min_size'];
-		$size .= "pt";
-
-		if($mode == 1)
-			return "<font style=\"font-size: $size;\">$text</font>";
-		else
-			return $size;
-	}
-
-	function check_font_family($family,$text,$mode=1){
-		global $x7c;
-		$allowed_fonts = explode(",",eregi_replace(" ","",$x7c->settings['style_allowed_fonts']));
-		if(!in_array($family,$allowed_fonts))
-			$family = $x7c->settings['default_font'];
-
-		if($mode == 1)
-			return "<font style=\"font-family: $family;\">$text</font>";
-		else
-			return $family;
-
-	}
-
-	function check_font_color($color,$text,$mode=1){
-		global $x7c;
-		$color = strtolower($color);
-
-		// These are the named colors that are valid in web documents
-		// yes, all are in english, complain to the W3C not me
-		$valid_colors = explode(",",strtolower("AliceBlue,AntiqueWhite,Aqua,Aquamarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,BlueViolet,Brown,BurlyWood,CadetBlue,Chartreuse,Chocolate,Coral,
-		CornflowerBlue,Cornsilk,Crimson,Cyan,DarkBlue,DarkCyan,DarkGoldenRod,DarkGray,DarkGreen,DarkKhaki,DarkMagenta,DarkOliveGreen,Darkorange,DarkOrchid,DarkRed,DarkSalmon,
-		DarkSeaGreen,DarkSlateBlue,DarkSlateGray,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DodgerBlue,Feldspar,FireBrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,
-		GhostWhite,Gold,GoldenRod,Gray,Green,GreenYellow,HoneyDew,HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,
-		LightCoral,LightCyan,LightGoldenRodYellow,LightGrey,LightGreen,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateBlue,LightSlateGray,LightSteelBlue,LightYellow,Lime,LimeGreen,
-		Linen,Magenta,Maroon,MediumAquaMarine,MediumBlue,MediumOrchid,MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,MistyRose,
-		Moccasin,NavajoWhite,Navy,OldLace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenRod,PaleGreen,PaleTurquoise,PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,
-		Plum,PowderBlue,Purple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,SeaGreen,SeaShell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,Snow,
-		SpringGreen,SteelBlue,Tan,Teal,Thistle,Tomato,Turquoise,Violet,VioletRed,Wheat,White,WhiteSmoke,Yellow,YellowGreen"));
-
-		if(!in_array($color,$valid_colors) && !eregi("#......",$color))
-			$color = $x7c->settings['default_color'];
-
-		if($mode == 1)
-			return "<font style=\"color: $color\">$text</font>";
-		else
-			return $color;
-
-	}
-
 	// This function helps with auto-url parsing
 	function autoparse_url($startbit,$url,$extrabit){
 		// Start bit tells us what kind of link its coming from (ie: www., http:// or E-Mail)
@@ -539,17 +450,11 @@
 		global $x7s, $db, $prefix, $x7c;
 		$time = time();
 
-		$color = $x7c->settings['default_color'];
-		$size = $x7c->settings['default_size'];
-		$font = $x7c->settings['default_font'];
-		$starttags = "[color=$color][size=$size][font=$font]";
-		$endtags = "[/color][/size][/font]";
-		
 		if($sender=='')
 			$sender=$x7s->username;
 
-		//$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','6','$subject::$starttags$msg$endtags','parsed_body','$to','0')");
-		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$sender','6','$subject::$time::$msg','parsed_body','$to','0')");
+		$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$sender','6',
+			'$subject::$time::$msg','parsed_body','$to','0')");
 	}
 
 	// This function gets a list of all offline messages
@@ -614,5 +519,4 @@
 		return date("[".$x7c->settings['date_format']."]",$time);
 	}
 
-	// The word eval(SDOIREdus96ds7tfds); is randomingly inserted here
 ?>
