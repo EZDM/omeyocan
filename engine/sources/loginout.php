@@ -65,7 +65,7 @@
       $failmsg = $txt[13];
       $title = $txt[14];
 			include_once('./lib/alarms.php');
-			wrong_login($_POST['username']);
+			wrong_login(@$_POST['username']);
     }
 
     // Print the login form that the user must enter username and password
