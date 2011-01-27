@@ -500,40 +500,6 @@ function admincp_master(){
 					<input type=\"submit\" value=\"$txt[187]\" class=\"button\">
 					</form></div>";
 
-			}elseif($_GET['settings_page'] == "support"){
-				// The chat support page
-				$file = eregi_replace("/index\.php","",$_SERVER['PHP_SELF']);
-				$html = "<a target=\"_blank\" href=\"http://$_SERVER[SERVER_NAME]$file/support.php\"><img src=\"http://$_SERVER[SERVER_NAME]$file/support.php?img=1\" border=\"0\"></a>";
-
-				$body = "<Br><div align=\"center\">$txt[604]<Br><Br>
-					<form action=\"./index.php?act=adminpanel&cp_page=settings&settings_page=support&update_settings=1\" method=\"POST\">
-					<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">
-					<tr>
-					<td width=\"100\">$txt[605]*: </td>
-					<td width=\"100\"><input type=\"text\" name=\"support_personel\" value=\"{$def_settings['support_personel']}\" class=\"text_input\"></td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[606]: </td>
-					<td width=\"100\"><input type=\"text\" name=\"support_message\" value=\"{$def_settings['support_message']}\" class=\"text_input\"></td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[607]: </td>
-					<td width=\"100\"><input type=\"text\" name=\"support_image_online\" value=\"{$def_settings['support_image_online']}\" class=\"text_input\"></td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[608]: </td>
-					<td width=\"100\"><input type=\"text\" name=\"support_image_offline\" value=\"{$def_settings['support_image_offline']}\" class=\"text_input\"></td>
-					</tr>
-					</table>
-					<input type=\"submit\" value=\"$txt[187]\" class=\"button\"><Br><Br>
-					<b>*: $txt[609]</b><br><Br>
-					<b>Copy this HTML code anywhere onto your website to display the live help image.</b><Br>
-					<textarea cols=\"30\" rows=\"5\">{$html}</textarea><Br><Br>
-					Preview: <br>
-					{$html}
-				<Br><Br>
-					</form></div>";
-
 			}elseif($_GET['settings_page'] == "logs"){
 
 				// Get defaults
