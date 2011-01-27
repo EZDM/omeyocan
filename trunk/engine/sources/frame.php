@@ -1463,7 +1463,7 @@ _gaq.push(['_trackPageview']);
         value=\"Immagine\" onClick=\"".popup_open(
 				$x7c->settings['tweak_window_large_width'],
 				$x7c->settings['tweak_window_large_height'],
-				'index.php?act=images','Images')."\">";
+				'index.php?act=images','Images', "yes")."\">";
 
       echo "<input name=\"img_btn\" type=\"button\" class=\"button\"
         value=\"Master\"
