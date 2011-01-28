@@ -642,11 +642,11 @@
 			} 
 			#message_window {
 				position: absolute;
-				padding: 5px;
+				padding-right: 5px;
 				overflow-y: scroll;
 				top: 90px;
 				left: 112px;
-				width: 670px;
+				width: 675px;
 				height: 408px;
 			}
 			span {
