@@ -1761,7 +1761,10 @@ function admincp_master(){
 				<td>Preview:</td>
 				<td><img id=\"objImg\" src=\"$row[image_url]\"></td>
 				</tr>
-				<tr><td><a onClick=\"javascript: window.open('index.php?act=images','Images','location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,width={$x7c->settings['tweak_window_large_width']},height={$x7c->settings['tweak_window_large_height']}');\">[Carica immagine]</a></td></tr>
+				<tr><td><a onClick=\"".popup_open('index.php?act=images','Images', 
+						$x7c->settings['tweak_window_large_width'],
+						$x7c->settings['tweak_window_large_height'],"yes").
+						";\">[Carica immagine]</a></td></tr>
 				<tr>
 				<td>Dimesione:</td>
 				<td><select class=\"button\" name=\"size\">
