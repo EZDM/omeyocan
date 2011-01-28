@@ -814,28 +814,6 @@ function sheet_page_ability(){
 		$ability[$row['ability_id']]=$row;
 	}
 		
-	/*$body .='	<script language="javascript" type="text/javascript">
-	 var descr = new Array();
-			
-	 	
-	 ';
-	 	
-	 foreach($ability as $cur){
-	 $body .= "descr['$cur[ability_id]']=\"$cur[descr]\";\n";
-	 }
-	 	
-	 $body .= 'function show_desc(el){
-	 document.getElementById("descr").innerHTML = descr[el];
-	 document.getElementById("descr").style.visibility = "visible";
-	 }
-
-	 function hide_desc(){
-	 document.getElementById("descr").style.visibility = "hidden";
-	 }
-	 </script>
-	 ';*/
-
-		
 	$body .= "<div id=\"visual\"><table>";
 	foreach($ability as $cur){
 		if($cur['dep'] == ""){
@@ -975,7 +953,7 @@ function sheet_page_main(){
 	$ok = true;
 	$reload = false;
 	$char;
-		
+
 	$query_usr = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
 	$row_user = $db->Do_Fetch_Assoc($query_usr);
 	if(!$row_user){
@@ -983,7 +961,7 @@ function sheet_page_main(){
 	}
 
 	if(isset($_GET['daily_px']) && checkIfMaster()){
-			
+
 		$time = time();
 		$day = date("j/n/Y", $row_user['daily_px']);
 		if($row_user['daily_px'] < $time && $day != date("j/n/Y", $time)){
@@ -992,7 +970,7 @@ function sheet_page_main(){
 			$reload = true;
 		}
 		else
-		$errore ="PX gironaliero gia' assegnato";
+			$errore ="PX gironaliero gia' assegnato";
 	}
 	if(isset($_GET['toggle_death']) && isset($_GET['pg'])&& checkIfMaster()){
 		$pg=$_GET['pg'];
@@ -1012,17 +990,17 @@ function sheet_page_main(){
 	}
 
 	if(isset($_GET['settings_change']) && checkIfMaster()){
-			
+
 		//We are modifiyng character sheet
 		if(isset($_POST['name']) &&
-		isset($_POST['age'])&&
-		isset($_POST['hobbies'])&&
-		isset($_POST['nat']) &&
-		isset($_POST['marr']) &&
-		isset($_POST['gender']) &&
-		isset($_POST['avatar_in'])) {
-				
-				
+				isset($_POST['age'])&&
+				isset($_POST['hobbies'])&&
+				isset($_POST['nat']) &&
+				isset($_POST['marr']) &&
+				isset($_POST['gender']) &&
+				isset($_POST['avatar_in'])) {
+
+
 			if($_POST['name']==''){
 				$ok = false;
 				$errore .= "Non hai specificato il nome<br>";
@@ -1035,7 +1013,7 @@ function sheet_page_main(){
 				$ok = false;
 				$errore .= "Non hai specificato la nazionalit&agrave;<br>";
 			}
-				
+
 
 		}
 		else{
@@ -1061,15 +1039,15 @@ function sheet_page_main(){
 			}
 
 			$db->DoQuery("UPDATE {$prefix}users SET
-							name='$_POST[name]',
-							age='$_POST[age]',
-							nat='$_POST[nat]',
-							marr='$_POST[marr]',
-							hobbies='$_POST[hobbies]',
-							gender='$_POST[gender]',
-							avatar='$_POST[avatar_in]'
-							WHERE username='$pg'");
-			
+					name='$_POST[name]',
+					age='$_POST[age]',
+					nat='$_POST[nat]',
+					marr='$_POST[marr]',
+					hobbies='$_POST[hobbies]',
+					gender='$_POST[gender]',
+					avatar='$_POST[avatar_in]'
+					WHERE username='$pg'");
+
 
 			if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
 
@@ -1095,9 +1073,9 @@ function sheet_page_main(){
 						if($_POST['info']!=$row_user['info']){
 							$time=time();
 							$db->DoQuery("UPDATE {$prefix}users
-											SET info='$_POST[info]',
-												heal_time='$time'
-										 	WHERE username='$pg'");
+									SET info='$_POST[info]',
+									heal_time='$time'
+									WHERE username='$pg'");
 						}
 					}
 					else{
@@ -1108,7 +1086,7 @@ function sheet_page_main(){
 				if(isset($_POST['xp'])){
 					$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
 				}
-					
+
 
 				foreach($char as $cur){
 					if(!isset($_POST[$cur['id']])){
@@ -1117,28 +1095,28 @@ function sheet_page_main(){
 					}
 
 					$db->DoQuery("UPDATE {$prefix}usercharact
-									SET value='{$_POST[$cur['id']]}'
-									WHERE username='$pg'
-									 AND charact_id='{$cur['id']}'");
+							SET value='{$_POST[$cur['id']]}'
+							WHERE username='$pg'
+							AND charact_id='{$cur['id']}'");
 				}
 
 			}
 
 		}
-			
+
 
 	}
 	else if(isset($_GET['settings_change']) && !checkIfMaster() && $x7s->username==$pg){
-			
+
 		if(isset($_POST['avatar_in'])){
 			$db->DoQuery("UPDATE {$prefix}users SET
-						avatar='$_POST[avatar_in]'
-						WHERE username='$pg'");
+					avatar='$_POST[avatar_in]'
+					WHERE username='$pg'");
 			$reload = true;
 		}
 
 		if(isset($_POST['pwd1']) && isset($_POST['pwd2']) && $_POST['pwd1']!='' && $_POST['pwd2']!=''){
-				
+
 			if($_POST['pwd1'] != $_POST['pwd2']){
 				$errore .= "Non hai digitato correttamente la password";
 			}
@@ -1153,7 +1131,7 @@ function sheet_page_main(){
 			}
 		}
 	}
-	
+
 	if($reload){
 		$query_usr = $db->DoQuery("SELECT * FROM {$prefix}users WHERE username='$pg'");
 		$row_user = $db->Do_Fetch_Assoc($query_usr);
@@ -1161,403 +1139,404 @@ function sheet_page_main(){
 			die("User not in Database");
 		}
 	}
-		
-		
-		
+
+
+
 	$gender = $row_user['gender'] == 0 ? "M":"F";
 	$group = $row_user['user_group'];
 	$date = date("j/n/Y",$row_user['iscr']);
 
-		
+
 	if(checkIfMaster()){
 		$body .= '		<script language="javascript" type="text/javascript">
-							mod=false;
-							
-							function modify(){
-								if(!mod){
-									mod=true;
-									document.forms[0].elements["name"].style.color="blue";
-									document.forms[0].elements["age"].style.color="blue";
-									document.forms[0].elements["nat"].style.color="blue";
-									document.forms[0].elements["marr"].style.color="blue";
-									document.forms[0].elements["gender"].style.color="blue";
-									document.forms[0].elements["avatar_in"].style.color="blue";
-								
-									document.forms[0].elements["name"].style.border="1px solid";
-									document.forms[0].elements["age"].style.border="1px solid";
-									document.forms[0].elements["nat"].style.border="1px solid";
-									document.forms[0].elements["marr"].style.border="1px solid";
-									document.forms[0].elements["gender"].style.border="1px solid";
-									document.forms[0].elements["avatar_in"].style.border="1px solid";
-								
-									document.forms[0].elements["name"].style.background="white";
-									document.forms[0].elements["age"].style.background="white";
-									document.forms[0].elements["nat"].style.background="white";
-									document.forms[0].elements["marr"].style.background="white";
-									document.forms[0].elements["gender"].style.background="white";
-									document.forms[0].elements["avatar_in"].style.background="white";
-								
-									document.forms[0].elements["name"].disabled=false;
-									document.forms[0].elements["age"].disabled=false;
-									document.forms[0].elements["nat"].disabled=false;
-									document.forms[0].elements["marr"].disabled=false;
-									document.forms[0].elements["avatar_in"].disabled=false;
-									document.forms[0].elements["gender"].disabled=false;
-									document.forms[0].elements["marr"].disabled=false;
-								
-									document.forms[0].elements["avatar_in"].style.visibility="visible";
-									document.forms[0].elements["aggiorna"].style.visibility="visible";
-									document.forms[0].elements["mod_button"].style.visibility="hidden";
-									
-									document.forms[0].elements["pwd1"].style.color="blue";
-									document.forms[0].elements["pwd1"].style.border="1px solid";
-									document.forms[0].elements["pwd1"].style.background="white";
-									document.forms[0].elements["pwd1"].disabled=false;
-									document.forms[0].elements["pwd1"].style.visibility="visible";
-									
-									document.forms[0].elements["pwd2"].style.color="blue";
-									document.forms[0].elements["pwd2"].style.border="1px solid";
-									document.forms[0].elements["pwd2"].style.background="white";
-									document.forms[0].elements["pwd2"].disabled=false;
-									document.forms[0].elements["pwd2"].style.visibility="visible";
-									
-									document.getElementById("pwd1").style.visibility="visible";
-									document.getElementById("pwd2").style.visibility="visible";
-									
-									
-									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
+			mod=false;
 
-								document.forms[0].elements["info"].style.color="blue";
-								document.forms[0].elements["info"].style.border="1px solid";
-								document.forms[0].elements["info"].style.background="white";
-								document.forms[0].elements["info"].disabled=false;
-								
-								document.forms[0].elements["hobbies"].style.color="blue";
-								document.forms[0].elements["hobbies"].style.border="1px solid";
-								document.forms[0].elements["hobbies"].style.background="white";
-								document.forms[0].elements["hobbies"].disabled=false;
+		function modify(){
+			if(!mod){
+				mod=true;
+				document.forms[0].elements["name"].style.color="blue";
+				document.forms[0].elements["age"].style.color="blue";
+				document.forms[0].elements["nat"].style.color="blue";
+				document.forms[0].elements["marr"].style.color="blue";
+				document.forms[0].elements["gender"].style.color="blue";
+				document.forms[0].elements["avatar_in"].style.color="blue";
 
-								document.forms[0].elements["xp"].style.color="blue";
-								document.forms[0].elements["xp"].style.background="white";
-								document.forms[0].elements["xp"].disabled=false;
-								}
-							}
-					
-					</script>';
+				document.forms[0].elements["name"].style.border="1px solid";
+				document.forms[0].elements["age"].style.border="1px solid";
+				document.forms[0].elements["nat"].style.border="1px solid";
+				document.forms[0].elements["marr"].style.border="1px solid";
+				document.forms[0].elements["gender"].style.border="1px solid";
+				document.forms[0].elements["avatar_in"].style.border="1px solid";
+
+				document.forms[0].elements["name"].style.background="white";
+				document.forms[0].elements["age"].style.background="white";
+				document.forms[0].elements["nat"].style.background="white";
+				document.forms[0].elements["marr"].style.background="white";
+				document.forms[0].elements["gender"].style.background="white";
+				document.forms[0].elements["avatar_in"].style.background="white";
+
+				document.forms[0].elements["name"].disabled=false;
+				document.forms[0].elements["age"].disabled=false;
+				document.forms[0].elements["nat"].disabled=false;
+				document.forms[0].elements["marr"].disabled=false;
+				document.forms[0].elements["avatar_in"].disabled=false;
+				document.forms[0].elements["gender"].disabled=false;
+				document.forms[0].elements["marr"].disabled=false;
+
+				document.forms[0].elements["avatar_in"].style.visibility="visible";
+				document.forms[0].elements["aggiorna"].style.visibility="visible";
+				document.forms[0].elements["mod_button"].style.visibility="hidden";
+
+				document.forms[0].elements["pwd1"].style.color="blue";
+				document.forms[0].elements["pwd1"].style.border="1px solid";
+				document.forms[0].elements["pwd1"].style.background="white";
+				document.forms[0].elements["pwd1"].disabled=false;
+				document.forms[0].elements["pwd1"].style.visibility="visible";
+
+				document.forms[0].elements["pwd2"].style.color="blue";
+				document.forms[0].elements["pwd2"].style.border="1px solid";
+				document.forms[0].elements["pwd2"].style.background="white";
+				document.forms[0].elements["pwd2"].disabled=false;
+				document.forms[0].elements["pwd2"].style.visibility="visible";
+
+				document.getElementById("visual_modify").style.visibility="visible";
+				document.getElementById("pwd1").style.visibility="visible";
+				document.getElementById("pwd2").style.visibility="visible";
+
+
+				document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
+
+				document.forms[0].elements["info"].style.color="blue";
+				document.forms[0].elements["info"].style.border="1px solid";
+				document.forms[0].elements["info"].style.background="white";
+				document.forms[0].elements["info"].disabled=false;
+
+				document.forms[0].elements["hobbies"].style.color="blue";
+				document.forms[0].elements["hobbies"].style.border="1px solid";
+				document.forms[0].elements["hobbies"].style.background="white";
+				document.forms[0].elements["hobbies"].disabled=false;
+
+				document.forms[0].elements["xp"].style.color="blue";
+				document.forms[0].elements["xp"].style.background="white";
+				document.forms[0].elements["xp"].disabled=false;
+			}
+		}
+
+		</script>';
 	}
-		
+
 	//Here everithing tha is untouchable by anyone
 	$body .= "
-				<div class=\"indiv\" id=\"login\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">$row_user[username]</a></div>
-				<div class=\"indiv\" id=\"group\">$group</div>
-				<div class=\"indiv\" id=\"date\">$date</div>
-				<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
-				<div class=\"indiv\" id=\"avatar\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">
-			";
-		
+		<div class=\"indiv\" id=\"login\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">$row_user[username]</a></div>
+		<div class=\"indiv\" id=\"group\">$group</div>
+		<div class=\"indiv\" id=\"date\">$date</div>
+		<div class=\"indiv\" id=\"lvl\">$row_user[lvl]</div>
+		<div class=\"indiv\" id=\"avatar\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">
+		";
+
 	if($row_user['avatar']!='')
-	$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
-		
+		$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
+
 	$body.='</a></div>';
-		
-	if(!checkIfMaster()){
-		$body.= "
-					<div class=\"indiv\" id=\"status\">$row_user[info]</div>
-					<div class=\"indiv\" id=\"real_status\">$row_user[hobbies]</div>
-					<div class=\"indiv\" id=\"xp_point\">$row_user[xp]</div>
-				";
-	}
-		
-		
-		
+
+	$body.= "
+		<div class=\"indiv\" id=\"status\">$row_user[info]</div>
+		<div class=\"indiv\" id=\"real_status\">$row_user[hobbies]</div>
+		<div class=\"indiv\" id=\"xp_point\">$row_user[xp]</div>
+		";
+
+
+
 	$query_char = $db->DoQuery("SELECT uc.value AS value, c.name AS name, c.id AS id
-								FROM 	{$prefix}usercharact uc,
-								{$prefix}characteristic c
-								WHERE	c.id=uc.charact_id
-								  AND 	uc.username='$pg'");
+			FROM 	{$prefix}usercharact uc,
+			{$prefix}characteristic c
+			WHERE	c.id=uc.charact_id
+			AND 	uc.username='$pg'");
 
-								while($row_ch = $db->Do_Fetch_Assoc($query_char)){
-									$charact[$row_ch['id']]=$row_ch;
-								}
-
-									
-								//Auto heal_button
-								$rob=$charact['rob']['value'];
-									
-								if($row_user['autoheal'] && $row_user['info']!="Morto" && $row_user['info']<($rob*2)){
-									$time=time();
-									$elapsed=$time-$row_user['heal_time'];
-									$rec_rate=(13-$rob)*3600*24;
-
-									$rec_value=floor($elapsed/$rec_rate);
-
-									if($rec_value>0){
-										$new_status=$row_user['info']+$rec_value;
-										$new_status= ($new_status > $rob*2) ? $rob*2 : $new_status;
-
-										$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', info='$new_status' WHERE username='$pg'");
-										$row_user['info']=$new_status;
-									}
-								}
-									
-									
-								if(!checkIfMaster()){
-									$ability='';
-
-									$body .="<div class=\"indiv\" id=\"name\">$row_user[name]</div>
-					<div class=\"indiv\" id=\"age\">$row_user[age]</div>
-					<div class=\"indiv\" id=\"nat\">$row_user[nat]</div>
-					<div class=\"indiv\" id=\"marr\">$row_user[marr]</div>
-					<div class=\"indiv\" id=\"gender\">$gender</div>
-					";
-
-									foreach($charact as $cur_ch){
-										$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
-									}
+	while($row_ch = $db->Do_Fetch_Assoc($query_char)){
+		$charact[$row_ch['id']]=$row_ch;
+	}
 
 
+	//Auto heal_button
+	$rob=$charact['rob']['value'];
 
-								}
-								else{
-									foreach($charact as $cur_ch){
-										$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
-									}
+	if($row_user['autoheal'] && $row_user['info']!="Morto" && $row_user['info']<($rob*2)){
+		$time=time();
+		$elapsed=$time-$row_user['heal_time'];
+		$rec_rate=(13-$rob)*3600*24;
 
-									//Modified script for master modification that can everything
+		$rec_value=floor($elapsed/$rec_rate);
 
-									$body .= '
-					<script language="javascript" type="text/javascript">
-						function add_ch(ch_name){
-							var value = parseInt(document.sheet_form[ch_name].value);
-							document.sheet_form[ch_name].value = value + 1;
+		if($rec_value>0){
+			$new_status=$row_user['info']+$rec_value;
+			$new_status= ($new_status > $rob*2) ? $rob*2 : $new_status;
 
-							do_ch_form_refresh(ch_name);
-						}
-
-						function sub_ch(ch_name){
-							var value = parseInt(document.sheet_form[ch_name].value);
-							document.sheet_form[ch_name].value = value -1;
-
-							do_ch_form_refresh(ch_name);
-						}
-
-						function do_ch_form_refresh(ch_name){
-							document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
-							modify();
-						}
-
-				</script>';
-										
-
-									$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
+			$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', info='$new_status' WHERE username='$pg'");
+			$row_user['info']=$new_status;
+		}
+	}
 
 
-									$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
+	$ability='';
+
+	$body .="<div class=\"indiv\" id=\"name\">$row_user[name]</div>
+		<div class=\"indiv\" id=\"age\">$row_user[age]</div>
+		<div class=\"indiv\" id=\"nat\">$row_user[nat]</div>
+		<div class=\"indiv\" id=\"marr\">$row_user[marr]</div>
+		<div class=\"indiv\" id=\"gender\">$gender</div>
+		";
+
+	foreach($charact as $cur_ch){
+		$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
+	}
+
+
+	if(checkIfMaster()){
+		foreach($charact as $cur_ch){
+			$body .= "<div id=\"".$cur_ch['name']."\">".$cur_ch['value']."</div>\n";
+		}
+
+		//Modified script for master modification that can everything
+
+		$body .= '
+			<script language="javascript" type="text/javascript">
+			function add_ch(ch_name){
+				var value = parseInt(document.sheet_form[ch_name].value);
+				document.sheet_form[ch_name].value = value + 1;
+
+				do_ch_form_refresh(ch_name);
+			}
+
+		function sub_ch(ch_name){
+			var value = parseInt(document.sheet_form[ch_name].value);
+			document.sheet_form[ch_name].value = value -1;
+
+			do_ch_form_refresh(ch_name);
+		}
+
+		function do_ch_form_refresh(ch_name){
+			document.sheet_form[ch_name+"_display"].value = document.sheet_form[ch_name].value;
+			modify();
+		}
+
+		</script>';
+
+
+		$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.
+			'" method="post" name="sheet_form">
+			<div id="visual_modify">';
+
+
+		$ch = $x7c->settings['starting_ch'] - (($x7c->settings['min_ch'])*sizeof($charact));
 
 
 
-									foreach($charact as $cur_ch){
-										$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
+		foreach($charact as $cur_ch){
+			$ch -= $cur_ch['value'] - $x7c->settings['min_ch'];
 
-										$body .= "
-					<div id=\"{$cur_ch['name']}\">
-					<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
-					<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
-					<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
-					<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
-									}
-
-
-									if($gender=="M"){
-										$male="selected";
-										$female="";
-											
-										if($row_user['marr']=="Libero")
-										$marr_opt="<option value=\"Libero\" selected>Libero</option>
-						<option value=\"Sposato\">Sposato</option>";
-										else
-										$marr_opt="<option value=\"Libero\">Libero</option>
-						<option value=\"Sposato\" selected>Sposato</option>";
-									}
-									else{
-										$male="";
-										$female="selected";
-											
-										if($row_user['marr']=="Libera")
-										$marr_opt="<option value=\"Libera\" selected>Libera</option>
-							<option value=\"Sposata\">Sposata</option>";
-										else
-										$marr_opt="<option value=\"Libera\">Libera</option>
-							<option value=\"Sposata\" selected>Sposata</option>";
-									}
-
-									$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
-
-									$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
-
-									$body .= "
-					<div class=\"indiv\" id=\"name\"><input class=\"sheet_input\" type=\"text\" name=\"name\" value=\"$row_user[name]\" size=\"16\" disabled /></div>
-					<div class=\"indiv\" id=\"age\"><input class=\"sheet_input\" type=\"text\" name=\"age\" value=\"$row_user[age]\" size=\"2\" style=\"text-align: right;\" disabled /></div>
-					<div class=\"indiv\" id=\"nat\"><input class=\"sheet_input\" type=\"text\" name=\"nat\" value=\"$row_user[nat]\" size=\"16\" disabled /></div>
-					<div class=\"indiv\" id=\"marr\">
-						<select class=\"button\" name=\"marr\" disabled>
-						$marr_opt
-						</select>
-					</div>
-					<div class=\"indiv\" id=\"gender\">
-						<select class=\"button\" name=\"gender\" disabled>
-											<option value=\"0\" $male>M</option>
-											<option value=\"1\" $female>F</option>
-						</select>
-					</div>
-					<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
-					";
-
-						$time = time();
-						$day=date("j/n/Y", $row_user['daily_px']);
-						$extra='';
-
-						if(checkIfMaster() && $row_user['daily_px'] < $time && $day!=date("j/n/Y", $time)){
-							$extra= "<INPUT name=\"daily_px\" class=\"button\" type=\"button\" value=\"PX Giornaliero\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&daily_px=1&pg=$pg';\" style=\"visibility: visible;\">";
-						}
-							
-						$body.= "
-					<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"5\" disabled /></div>
-					<div class=\"indiv\" id=\"real_status\"><input class=\"sheet_input\" type=\"text\" name=\"hobbies\" value=\"$row_user[hobbies]\" size=\"10\" disabled /></div>
-					<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
-				";
+			$body .= "
+				<div id=\"{$cur_ch['name']}\">
+				<input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub_ch('{$cur_ch['id']}');\">
+				<input type=\"text\" name=\"{$cur_ch['id']}_display\" value=\"{$cur_ch['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
+				<input type=\"hidden\" name=\"{$cur_ch['id']}\" value=\"{$cur_ch['value']}\"/>
+				<input class=\"button\" type=\"button\" value=\"+\" onMouseDown=\"return add_ch('{$cur_ch['id']}');\"></div>\n";
+		}
 
 
-					      $body .= "<script language=\"javascript\" type=\"text/javascript\">
+		if($gender=="M"){
+			$male="selected";
+			$female="";
 
-					          function master_action(sel){
-						          switch(sel.options[sel.selectedIndex].value) {
-							  	case 'kill':
-								  do_kill();
-								  break;
-								case 'real_kill':
-								  do_permanent_kill();
-								  break;
-								case 'respawn':
-								  window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg';
-								  break;
-								case 'heal_off':
-								  window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg';
-								  break;
-								case 'heal_on':
-								  window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg';
-								  break;
-							  }
-						    }
-                                                    function do_kill(){
-                                                          if(!confirm('vuoi davvero uccidere il personaggio?'))
-                                                                  return;
-                                                          window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg';
-                                                    }
-                                                    function do_permanent_kill(){
-                                                          if(!confirm('vuoi davvero uccidere il personaggio?'))
-                                                                  return;
-                                                          window.location.href='index.php?act=sheet&page=main&toggle_death=1&permanent_death=1&pg=$pg';
-                                                    }
-				                  </script>";
-						$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
-				<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">"; 
-				
-						$body .="<br>
-				<select class=\"button\" onChange=\"javascript: master_action(this);\">
-					<option>Azioni Master</option>
-					<option>------------</option>";
+			if($row_user['marr']=="Libero")
+				$marr_opt="<option value=\"Libero\" selected>Libero</option>
+					<option value=\"Sposato\">Sposato</option>";
+			else
+				$marr_opt="<option value=\"Libero\">Libero</option>
+					<option value=\"Sposato\" selected>Sposato</option>";
+		}
+		else{
+			$male="";
+			$female="selected";
 
-						if($row_user['info']!="Morto" && $row_user['info'] >= -10){
-							$body .= "<option value=\"kill\">Uccidi</option>";
-							$body .= "<option value=\"real_kill\">Uccidi definitivamente</option>";
-						}
-						else{
-							$body .= "<option value=\"respawn\">Resuscita</option>";
-						}
+			if($row_user['marr']=="Libera")
+				$marr_opt="<option value=\"Libera\" selected>Libera</option>
+					<option value=\"Sposata\">Sposata</option>";
+			else
+				$marr_opt="<option value=\"Libera\">Libera</option>
+					<option value=\"Sposata\" selected>Sposata</option>";
+		}
 
-						if($row_user['autoheal']){
-							$body .= "<option value=\"heal_off\">Disattiva Auto-Heal</option>";
-						}
-						else{
-							$body .= "<option value=\"heal_on\">Attiva auto-heal</option>";
+		$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
 
-						}
+		$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
 
-						$body .= "</select>";
-						if ($row_user['autoheal']){
-							$body .= "  Autoheal: ON";
-						}
-						else {
-							$body .= "  Autoheal: OFF";
-						}
-						$body .="</div></form>";
+		$body .= "
+			<div class=\"indiv\" id=\"name\"><input class=\"sheet_input\" type=\"text\" name=\"name\" value=\"$row_user[name]\" size=\"16\" disabled /></div>
+			<div class=\"indiv\" id=\"age\"><input class=\"sheet_input\" type=\"text\" name=\"age\" value=\"$row_user[age]\" size=\"2\" style=\"text-align: right;\" disabled /></div>
+			<div class=\"indiv\" id=\"nat\"><input class=\"sheet_input\" type=\"text\" name=\"nat\" value=\"$row_user[nat]\" size=\"16\" disabled /></div>
+			<div class=\"indiv\" id=\"marr\">
+			<select class=\"button\" name=\"marr\" disabled>
+			$marr_opt
+			</select>
+			</div>
+			<div class=\"indiv\" id=\"gender\">
+			<select class=\"button\" name=\"gender\" disabled>
+			<option value=\"0\" $male>M</option>
+			<option value=\"1\" $female>F</option>
+			</select>
+			</div>
+			<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
+			";
 
-					}
+		$time = time();
+		$day=date("j/n/Y", $row_user['daily_px']);
+		$extra='';
 
-									
-								//Just for the avatar and password modification
-								if(!checkIfMaster() && $x7s->username==$pg){
-										
-									$body .='		<script language="javascript" type="text/javascript">
-							mod=false;
-							
-							function modify(){
-								if(!mod){
-									mod=true;
-									document.forms[0].elements["avatar_in"].style.color="blue";
-									document.forms[0].elements["avatar_in"].style.border="1px solid";
-									document.forms[0].elements["avatar_in"].style.background="white";
-									document.forms[0].elements["avatar_in"].disabled=false;
-									document.forms[0].elements["avatar_in"].style.visibility="visible";
-									
-									document.forms[0].elements["pwd1"].style.color="blue";
-									document.forms[0].elements["pwd1"].style.border="1px solid";
-									document.forms[0].elements["pwd1"].style.background="white";
-									document.forms[0].elements["pwd1"].disabled=false;
-									document.forms[0].elements["pwd1"].style.visibility="visible";
-									
-									document.forms[0].elements["pwd2"].style.color="blue";
-									document.forms[0].elements["pwd2"].style.border="1px solid";
-									document.forms[0].elements["pwd2"].style.background="white";
-									document.forms[0].elements["pwd2"].disabled=false;
-									document.forms[0].elements["pwd2"].style.visibility="visible";
-									
-									document.getElementById("pwd1").style.visibility="visible";
-									document.getElementById("pwd2").style.visibility="visible";
-									
-									document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
-									document.forms[0].elements["aggiorna"].style.visibility="visible";
-									document.forms[0].elements["mod_button"].style.visibility="hidden";
-								}
-							}
-							</script>';
-										
-									$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
-									$body .= "<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+		if(checkIfMaster() && $row_user['daily_px'] < $time && $day!=date("j/n/Y", $time)){
+			$extra= "<INPUT name=\"daily_px\" class=\"button\" type=\"button\" value=\"PX Giornaliero\" onClick=\"javascript: window.location.href='index.php?act=sheet&page=main&daily_px=1&pg=$pg';\" style=\"visibility: visible;\">";
+		}
 
-									$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
-									$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+		$body.= "
+			<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"5\" disabled /></div>
+			<div class=\"indiv\" id=\"real_status\"><input class=\"sheet_input\" type=\"text\" name=\"hobbies\" value=\"$row_user[hobbies]\" size=\"10\" disabled /></div>
+			<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
+			";
 
-									$body .= "<div id=\"modify\">
-											<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
-											<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
-						</div></form>";
-								}
 
-								$body .= "<div id=\"descr\"> </div>";
-								if($errore!=''){
-									$body.='<script language="javascript" type="text/javascript">
-					function close_err(){
-						document.getElementById("errore").style.visibility="hidden";
-					}
-				</script>
-				<div id="errore" class="errore">'.$errore.'
-				<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
-				</div>';
-								}
-									
-								return $body;
+		$body .= "<script language=\"javascript\" type=\"text/javascript\">
+
+			function master_action(sel){
+				switch(sel.options[sel.selectedIndex].value) {
+					case 'kill':
+						do_kill();
+						break;
+					case 'real_kill':
+						do_permanent_kill();
+						break;
+					case 'respawn':
+						window.location.href='index.php?act=sheet&page=main&toggle_death=0&pg=$pg';
+						break;
+					case 'heal_off':
+						window.location.href='index.php?act=sheet&page=main&toggle_heal=0&pg=$pg';
+						break;
+					case 'heal_on':
+						window.location.href='index.php?act=sheet&page=main&toggle_heal=1&pg=$pg';
+						break;
+				}
+			}
+		function do_kill(){
+			if(!confirm('vuoi davvero uccidere il personaggio?'))
+				return;
+			window.location.href='index.php?act=sheet&page=main&toggle_death=1&pg=$pg';
+		}
+		function do_permanent_kill(){
+			if(!confirm('vuoi davvero uccidere il personaggio?'))
+				return;
+			window.location.href='index.php?act=sheet&page=main&toggle_death=1&permanent_death=1&pg=$pg';
+		}
+		</script>
+			
+		</div>";
+
+		$body .= "<div id=\"modify\"><INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+			<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">"; 
+
+		$body .="<br>
+			<select class=\"button\" onChange=\"javascript: master_action(this);\">
+			<option>Azioni Master</option>
+			<option>------------</option>";
+
+		if($row_user['info']!="Morto" && $row_user['info'] >= -10){
+			$body .= "<option value=\"kill\">Uccidi</option>";
+			$body .= "<option value=\"real_kill\">Uccidi definitivamente</option>";
+		}
+		else{
+			$body .= "<option value=\"respawn\">Resuscita</option>";
+		}
+
+		if($row_user['autoheal']){
+			$body .= "<option value=\"heal_off\">Disattiva Auto-Heal</option>";
+		}
+		else{
+			$body .= "<option value=\"heal_on\">Attiva auto-heal</option>";
+
+		}
+
+		$body .= "</select>";
+		if ($row_user['autoheal']){
+			$body .= "  Autoheal: ON";
+		}
+		else {
+			$body .= "  Autoheal: OFF";
+		}
+		$body .="</div></form>";
+
+	}
+
+
+	//Just for the avatar and password modification
+	if(!checkIfMaster() && $x7s->username==$pg){
+
+		$body .='		<script language="javascript" type="text/javascript">
+			mod=false;
+
+		function modify(){
+			if(!mod){
+				mod=true;
+				document.forms[0].elements["avatar_in"].style.color="blue";
+				document.forms[0].elements["avatar_in"].style.border="1px solid";
+				document.forms[0].elements["avatar_in"].style.background="white";
+				document.forms[0].elements["avatar_in"].disabled=false;
+				document.forms[0].elements["avatar_in"].style.visibility="visible";
+
+				document.forms[0].elements["pwd1"].style.color="blue";
+				document.forms[0].elements["pwd1"].style.border="1px solid";
+				document.forms[0].elements["pwd1"].style.background="white";
+				document.forms[0].elements["pwd1"].disabled=false;
+				document.forms[0].elements["pwd1"].style.visibility="visible";
+
+				document.forms[0].elements["pwd2"].style.color="blue";
+				document.forms[0].elements["pwd2"].style.border="1px solid";
+				document.forms[0].elements["pwd2"].style.background="white";
+				document.forms[0].elements["pwd2"].disabled=false;
+				document.forms[0].elements["pwd2"].style.visibility="visible";
+
+				document.getElementById("pwd1").style.visibility="visible";
+				document.getElementById("pwd2").style.visibility="visible";
+
+				document.getElementById("avatar").innerHTML="<br><br><br>Specifica l\'URL del tuo avatar nel campo qui sopra";
+				document.forms[0].elements["aggiorna"].style.visibility="visible";
+				document.forms[0].elements["mod_button"].style.visibility="hidden";
+			}
+		}
+		</script>';
+
+		$body.='<form action="index.php?act=sheet&settings_change=1&pg='.$pg.'" method="post" name="sheet_form">';
+		$body .= "<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+
+		$body .= "<div class=\"indiv\" id=\"pwd1\" style=\"visibility: hidden;\">Nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd1\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+		$body .= "<div class=\"indiv\" id=\"pwd2\" style=\"visibility: hidden;\">Ripeti nuova password:<br><input class=\"sheet_input\" type=\"password\" name=\"pwd2\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>\n";
+
+		$body .= "<div id=\"modify\">
+			<INPUT name=\"mod_button\" class=\"button\" type=\"button\" value=\"Modifica\" onClick=\"javascript: modify();\" style=\"visibility: visible;\">
+			<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">
+			</div></form>";
+	}
+
+	$body .= "<div id=\"descr\"> </div>";
+	if($errore!=''){
+		$body.='<script language="javascript" type="text/javascript">
+			function close_err(){
+				document.getElementById("errore").style.visibility="hidden";
+			}
+		</script>
+			<div id="errore" class="errore">'.$errore.'
+			<br><input name="ok" type="button" class="button" value="OK" onClick="javascript: close_err();">
+			</div>';
+	}
+
+	return $body;
 
 }
 
@@ -2270,6 +2249,9 @@ function print_sheet($body,$bg){
 				top: 0;
 				left:0;
 				width: 400px;
+			}
+			#visual_modify{
+				visibility: hidden;
 			}
 			#visual2{
 				position: absolute;
