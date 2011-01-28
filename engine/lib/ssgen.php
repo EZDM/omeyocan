@@ -642,12 +642,11 @@
 			} 
 			#message_window {
 				position: absolute;
-				padding: 0px;
-				/*border: 1px solid $data[ChatBorder];*/
+				padding: 5px;
 				overflow-y: scroll;
 				top: 90px;
 				left: 112px;
-				width: 680px;
+				width: 670px;
 				height: 408px;
 			}
 			span {
