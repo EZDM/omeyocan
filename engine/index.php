@@ -99,13 +99,6 @@
   // Load the server variables
   $x7c = new settings();
 
-  // Clean up the database a tad
-  include_once("./lib/cleanup.php");
-  cleanup_banned();
-
-  //Resurgo
-  resurgo();
-
   // Include the authentication functions
   include_once("./lib/auth.php");
 
@@ -146,7 +139,11 @@
   $print = new load_skin($x7c->settings['default_skin']);
 
   // Run these cleanups only if you are not part of a frame
-  if(@$_GET['act'] != "frame"){
+	include_once("./lib/cleanup.php");
+  
+	if(@$_GET['act'] != "frame"){
+		cleanup_banned();
+	  resurgo();
     cleanup_messages();
   }
 
@@ -198,16 +195,17 @@
   }
 
   // Prevent their username and room from being deleted
-  prevent_cleanup();
   
   if(@$_GET['act'] != "frame"){
+		prevent_cleanup();
     cleanup_inactive_users();
+	
+		// If the user has just entered as a guest then we need to remove old logs
+	  // This variable is set in lib/auth.php IF it is set at all
+		if(isset($remove_old_guest_logs))
+			cleanup_guest_logs($x7s->username);
   }
 
-  // If the user has just entered as a guest then we need to remove old logs
-  // This variable is set in lib/auth.php IF it is set at all
-  if(isset($remove_old_guest_logs))
-    cleanup_guest_logs($x7s->username);
 
   // Prevent errors
   if(!isset($_GET['act']))
