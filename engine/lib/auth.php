@@ -102,7 +102,26 @@
 				$this->loggedin = 0;
 			}
 		}
-		
+	
+		function load_user_info() {
+			global $db, $prefix;
+
+			$query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,talk,panic,max_panic,
+					info,resurgo,m_invisible
+					FROM {$prefix}users WHERE username='{$this->username}'");
+			$row = $db->Do_Fetch_Assoc($query);
+
+			$this->sheet_ok = $row['sheet_ok'];
+			$this->user_group = $row['user_group'];
+			$this->reg_date = $row['iscr'];
+			$this->talk = $row['talk'];
+			$this->panic = $row['panic'];
+			$this->max_panic = $row['max_panic'];
+			$this->status = $row['info'];
+			$this->resurgo = $row['resurgo']-time();
+			$this->invisible = $row['m_invisible'];
+		}
+
 		function dologin(){
 			global $X7CHAT_CONFIG,$db,$auth_ucookie,$auth_pcookie,$x7c,$x7s,$prefix,$g_default_settings,$remove_old_guest_logs,$txt,$ACTIVATION_ERROR,$FROZEN_ERROR;
 			

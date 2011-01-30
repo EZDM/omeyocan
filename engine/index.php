@@ -313,22 +313,9 @@
       }
     }
   }
-  
-  $query = $db->DoQuery("SELECT sheet_ok,user_group,iscr,talk,panic,max_panic,
-      info,resurgo,m_invisible
-      FROM {$prefix}users WHERE username='{$x7s->username}'");
-  $row = $db->Do_Fetch_Assoc($query);
-      
-  $x7s->sheet_ok = $row['sheet_ok'];
-  $x7s->user_group = $row['user_group'];
-  $x7s->reg_date = $row['iscr'];
-  $x7s->talk = $row['talk'];
-  $x7s->panic = $row['panic'];
-  $x7s->max_panic = $row['max_panic'];
-  $x7s->status = $row['info'];
-  $x7s->resurgo = $row['resurgo']-time();
-  $x7s->invisible = $row['m_invisible'];
-  
+ 
+	$x7s->load_user_info();
+
   if(!$x7s->sheet_ok && $x7s->loggedin && $_GET['act']!="logout" &&
       !$x7c->permissions['admin_panic']){
     $_GET['act']="buildpg";
