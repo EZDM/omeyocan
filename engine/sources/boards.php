@@ -793,7 +793,7 @@
 		$body.="<a href=\"index.php?act=boards&board=".$board['id']."\">Torna alla board</a><br>";
 		
 		$body .= $navigator;
-		$head="Board ".$board['name']." messaggio: ".$object;
+		$object = "";
 		$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
 
 		$body .="<table width=\"100%\" cellspacing=0>";
@@ -853,6 +853,7 @@
 		$body.="<a href=\"index.php?act=boards&board=".$board['id']."\">Torna alla board</a><br>";
 		
 		$body.=$navigator;
+		$head = "Board ".$board['name']." messaggio: ".$object;
 		
 		$print->board_window($head,$body,$indice);
 		
