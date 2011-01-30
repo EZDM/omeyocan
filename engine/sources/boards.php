@@ -354,127 +354,130 @@
 
 			}
 			$msg = eregi_replace("\n","<Br>",$msg);
+
+			$anonymous = 0;
+			if(isset($_POST['anonymous']) && $_POST['anonymous'])
+				$anonymous = 1;
 				
 			
 			//Do the real send (master can always send and modify even if readonly)
 			if((checkAuth($board['id']) && !$board['readonly']) || checkIfMaster()){
-                                if(isset($_GET['modify'])){
-                                      $query = $db->DoQuery("SELECT user FROM {$prefix}boardmsg WHERE id='{$_GET['modify']}'");
-                                      $row = $db->Do_Fetch_Assoc($query);
+				if(isset($_GET['modify'])){
+					$query = $db->DoQuery("SELECT user FROM {$prefix}boardmsg WHERE id='{$_GET['modify']}'");
+					$row = $db->Do_Fetch_Assoc($query);
 
-                                      if(!$row){
-                                            $body="La conversaizone non esiste
-					           <A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
-			
-                                            $head="Errore";
-                                            $print->board_window($head,$body,$indice);
-                                            return;
-                                      }
-                                      elseif(!checkIfMaster() && $row['user']!=$x7s->username){
-                                            $body="Operazione non permessa
-					           <A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
-			
-                                            $head="Errore";
-                                            $print->board_window($head,$body,$indice);
-                                            return;
+					if(!$row){
+						$body="La conversaizone non esiste
+							<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 
-                                      }
-                                      
-                                      $db->DoQuery("UPDATE {$prefix}boardmsg SET body='$subject::$msg' WHERE id='{$_GET['modify']}'");
-                                      
-                                }
-                                else{
-                                            $time = time();
-                                            
-                                            
-                                            
-                                            $db->DoQuery("INSERT INTO {$prefix}boardmsg (father, user, body, board, time, replies,last_update)
-                                                            VALUES('$father','{$x7s->username}','$subject::$msg','$toboard','$time','0','$time')");
+						$head="Errore";
+						$print->board_window($head,$body,$indice);
+						return;
+					}
+					elseif(!checkIfMaster() && $row['user']!=$x7s->username){
+						$body="Operazione non permessa
+							<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 
-                                            $db->DoQuery("UPDATE {$prefix}boardmsg SET last_update='$time' WHERE id='$father'");
-                                            
-                                            if(isset($_GET['reply']))
-                                                    $db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
-                              }
+						$head="Errore";
+						$print->board_window($head,$body,$indice);
+						return;
+
+					}
+
+					$db->DoQuery("UPDATE {$prefix}boardmsg 
+							SET body='$subject::$msg', anonymous='$anonymous'
+							WHERE id='{$_GET['modify']}'");
+
+				}
+				else{
+					$time = time();
+					$db->DoQuery("INSERT INTO {$prefix}boardmsg 
+							(father, user, body, board, time, replies, last_update, anonymous)
+							VALUES('$father','{$x7s->username}','$subject::$msg','$toboard',
+								'$time','0','$time', '$anonymous')");
+
+					$db->DoQuery("UPDATE {$prefix}boardmsg SET last_update='$time' WHERE id='$father'");
+
+					if(isset($_GET['reply']))
+						$db->DoQuery("UPDATE {$prefix}boardmsg SET replies='$replies' WHERE id='$reply'");
+				}
 			}
 			else{
 				$body="Operazione non permessa
 					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
-			
+
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
-		        	return;
+				return;
 			}
-		
+
 			//We return to board or conversation
 			$location='Location: ./index.php?act=boards&board='.$board['id'];
 			if(isset($_GET['reply']) && $_GET['reply']!=0)
 				$location .= '&message='.$_GET['reply'];
-			
+
 			header($location);
 			return;
-			
+
 		}
 		
 		//In this case the user want to send a message
 		$old_msg="";
-		//$onsubmit=" onSubmit=\"document.msg.body.value=document.msg.body.value.replace(/\+/gi,'%2B'); \"";
 		$onsubmit="";
 		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$head = "Nuova comunicazione su ".$board['name'];
 			$body .= "<div align=\"center\">
-			                 <form name=\"msg\" action=\"./index.php?act=boards&send=$board[id]\" method=\"post\" $onsubmit>";
+				<form name=\"msg\" action=\"./index.php?act=boards&send=$board[id]\" method=\"post\" $onsubmit>";
 		}
 		else{
-		        if(isset($_GET['modify'])){
-		              $modify = $_GET['modify'];
-		              $head = "Modifica alla comunicazione: ";
-		              $body .= "<div align=\"center\">
-			                 <form name =\"msg\" action=\"./index.php?act=boards&send=$board[id]&modify=$modify\" method=\"post\" $onsubmit>";
-                        }
-                        else{
-                              $modify = $_GET['reply'];
-                              $head = "Risposta alla comunicazione: ";
-                              $body .= "<div align=\"center\">
-			                 <form name=\"msg\"  action=\"./index.php?act=boards&send=$board[id]&reply=$modify\" method=\"post\" $onsubmit>";
-                        }
+			if(isset($_GET['modify'])){
+				$modify = $_GET['modify'];
+				$head = "Modifica alla comunicazione: ";
+				$body .= "<div align=\"center\">
+					<form name =\"msg\" action=\"./index.php?act=boards&send=$board[id]&modify=$modify\" method=\"post\" $onsubmit>";
+			}
+			else{
+				$modify = $_GET['reply'];
+				$head = "Risposta alla comunicazione: ";
+				$body .= "<div align=\"center\">
+					<form name=\"msg\"  action=\"./index.php?act=boards&send=$board[id]&reply=$modify\" method=\"post\" $onsubmit>";
+			}
 
-                        
-                        $query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$modify'");
-                        $row = $db->Do_Fetch_Assoc($query);
-                        if(!$row){
+
+			$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE id='$modify'");
+			$row = $db->Do_Fetch_Assoc($query);
+			if(!$row){
 				$body="La conversazione non esiste
 					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
-			
+
 				$head="Errore";
 				$print->board_window($head,$body,$indice);
 				return;
 			}
 			$rawtext = $row['body'];
-			
+
 			$nb = board_msg_split($rawtext);
 			$msg = $nb[0];
 			$subject = $nb[1];
 			$head.=$subject;
 
 			if(isset($_GET['modify'])){
-                                $old_msg = eregi_replace("<Br>","\n",$msg);
-                        }
-			
-                }
-		
-		
-			
+				$old_msg = eregi_replace("<Br>","\n",$msg);
+			}
+
+		}
+
 		if(!isset($_GET['reply']) && !isset($_GET['modify'])){
 			$body .= "Oggetto: <input class=\"text_input\" size=40 type=\"text\" name=\"subject\" value=\"$subject\"><br>";
 		}
 		else
 			$body .= "<input type=\"hidden\" name=\"subject\" value=\"$subject\">";
-			
+
 		$body .= "<textarea name=\"body\" class=\"text_input\" cols=\"40\" rows=\"20\">$old_msg</textarea><Br>
-			<input type=\"submit\" value=\"Invia\" class=\"button\">
+			<input type=\"submit\" value=\"Invia\" class=\"button\"><br>
+			<input type=\"checkbox\" name=\"anonymous\" class=\"button\">Invio anonimo
 			</form></div>";
-		
+
 		$indice = indice_board();
 		$print->board_window($head,$body, $indice);
 	}
@@ -523,26 +526,26 @@
 				}
 	
 				if(!$row['offgame']){
-	                                $body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
-	                                
-	                                if(checkIfMaster()){
-	                                        $body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
-	                                }
-	                                
-	                                $body.="</td></tr>";
-	
+					$body.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+
+					if(checkIfMaster()){
+						$body.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+					}
+
+					$body.="</td></tr>";
+
 				}
-	
+
 				else{
-	                                $body_offgame.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
-	                                
-	                                if(checkIfMaster()){
-	                                        $body_offgame.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
-	                                }
-	                                
-	                                $body_offgame.="</td></tr>";
+					$body_offgame.='<tr class="board_cell"><td class="board_cell"><a href="./index.php?act=boards&board='.$row['id'].'"><b>'.$row['name'].' '.$new_cnt.' </b></a>';
+
+					if(checkIfMaster()){
+						$body_offgame.='<a href="./index.php?act=boards&delboard='.$row['id'].'">[Delete]</a>';
+					}
+
+					$body_offgame.="</td></tr>";
 				}
-			
+
 			}
 		}
 		$body.="</table>";
@@ -658,7 +661,9 @@
 		$limit_min = $limit * $maxmsg;
 		$limit_max = $maxmsg;		
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg WHERE board='{$board['id']}' AND father='0' ORDER BY last_update DESC LIMIT $limit_min, $limit_max");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}boardmsg 
+				WHERE board='{$board['id']}' 
+				AND father='0' ORDER BY last_update DESC LIMIT $limit_min, $limit_max");
 
 		
 		if(!$board['readonly'] || checkIfMaster()){
@@ -687,15 +692,23 @@
 			$object = $nb[1];
 			$msgid=$row['id'];
 			$user=$row['user'];
+
+			if ($row['anonymous']) {
+				if (checkIfMaster()) {
+					$user .= " (anonimo)";
+				}
+				else {
+					$user = "Anonimo";
+				}
+			}
 			
-			$body.="<p>".$row['user']."<br><a href=./index.php?act=boards&board=".$board['id']."&message=".$row['id'].">
+			$body.="<p>".$user."<br><a href=./index.php?act=boards&board=".$board['id']."&message=".$row['id'].">
 				 <b>".$object."</b> ".$unread."</a>";
 				
-			//if($user == $x7s->username || checkIfMaster()){
 			if(checkIfMaster()){
 				$body.=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=$msgid')\">[Delete]</a>";
 				$body.=" <a href=./index.php?act=boards&move=$msgid>[Sposta]</a>";
-                        }
+      }
 			
 			$body.="</p><hr>";
 		
@@ -704,8 +717,6 @@
 		if(!$board['readonly'] || checkIfMaster()){
 			$body .="<br><br><a href=./index.php?act=boards&send=".$board['id'].">Nuova comunicazione</a><br>";
 		}
-		
-		//$body.="<a href=\"index.php?act=boards\">Torna all'indice</a>";
 		
 		$print->board_window($head,$body,$indice);
 		
@@ -765,14 +776,14 @@
 						b.board AS board,
 						b.time AS time,
 						b.replies AS replies,
-						u.avatar AS avatar
+						u.avatar AS avatar,
+						b.anonymous as anonymous
 					FROM {$prefix}boardmsg b, {$prefix}users u
 					WHERE	b.user = u.username AND
 						(b.id='{$id}' OR father='{$id}')
 						ORDER BY time DESC LIMIT $limit_min, $maxmsg");
 		
 		//Head message
-		$row = $db->Do_Fetch_Assoc($query);
 		
 		$nb = board_msg_split($row['body']);
 		$msg = $nb[0];
@@ -780,10 +791,6 @@
 
 		$unread='';
 		$unreads = get_unread();
-		if(isset($unreads[$row['id']])){
-			$unread = "<b>(Nuovo)</b>";
-			$db->DoQuery("DELETE FROM {$prefix}boardunread WHERE id='{$row['id']}' AND user='{$x7s->username}'");
-		}
 
 		if(!$board['readonly'] || checkIfMaster()){
 			$body .="<a href=./index.php?act=boards&send=".$board['id']."&reply=".$id.">Replica</a><br>";
@@ -792,31 +799,10 @@
 		
 		$body .= $navigator;
 		$head="Board ".$board['name']." messaggio: ".$object;
+		$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
 
 		$body .="<table width=\"100%\" cellspacing=0>";
 
-		$avatar="<br>".date("j/n/Y G:i", $row['time']);
-		if($row['avatar']!=''){
-			$avatar.="<br><img src=\"$row[avatar]\" width=\"100\" height=\"100\">";
-		}
-		
-		$body.="<tr><td class=\"msg_avatar\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td>
-					<td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
-		$msgid=$row['id'];
-		$user=$row['user'];
-			
-		if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
-                        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
-                }
-                if(checkIfMaster()){
-                        $body .=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=".$msgid."')\">[Delete]</a>";
-		}
-
-		$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
-		$msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);
-		$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
-		
-		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$avatar="<br>".date("j/n/Y G:i", $row['time']);
 			if($row['avatar']!=''){
@@ -832,19 +818,34 @@
 			$nb = board_msg_split($row['body']);
 			$msg = $nb[0];
 			$object = $nb[1];
+
+			$user = "<a onClick=\"".
+				popup_open(500, 680, "index.php?act=sheet&pg={$row['user']}",
+						'sheet_other')."\" >".$row['user']."</a>".$avatar;
+
+			if ($row['anonymous']) {
+				if (checkIfMaster()) {
+					$user = "<a onClick=\"".
+						popup_open(500, 680, "index.php?act=sheet&pg={$row['user']}",
+								'sheet_other')."\" >".$row['user']."</a><br>(anonimo)".$avatar;
+				}
+				else {
+					$user = "Anonimo";
+				}
+			}
 			
+			$body.="<tr><td class=\"msg_row\"><b>Utente:</b> $user</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			$msgid=$row['id'];
 			$user=$row['user'];
 			
-			$body.="<tr><td class=\"msg_row\"><b>Utente:</b><a onClick=\"javascript: window.open('index.php?act=sheet&pg={$row['user']}','sheet_other','width=500,height=680, toolbar=no, status=yes, location=no, menubar=no, resizable=no, status=yes');\" >".$row['user']."</a>".$avatar."</td><td class=\"msg_row\"><b>Oggetto:</b> ".$object." ".$unread;
 			if(($user == $x7s->username && !$board['readonly']) || checkIfMaster()){
-			        $body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
-                        }
-                        if(checkIfMaster()){
+				$body .=" <a href=./index.php?act=boards&send=".$board['id']."&modify=".$msgid.">[Modify]</a>";
+			}
+			if(checkIfMaster()){
 				$body .=" <a href=\"\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=".$msgid."')\">[Delete]</a>";
 			}
 
-		        $msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);	
+			$msg = preg_replace($url_regexp, '<a href="\\0" target="_blank">\\0</a>', $msg);	
 			$body.= "<br><br>".$msg."<br><br><br><br></td></tr>\n";
 		}
 
