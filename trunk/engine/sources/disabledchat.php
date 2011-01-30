@@ -50,17 +50,13 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 	
-	function print_ban($body){
+	function print_disabled($body){
 		global $print,$x7c,$x7s;
 		
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
 		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']}</title>";
 		echo $print->style_sheet;
-		echo $print->ss_mini;
-		echo $print->ss_chatinput;
-		echo $print->ss_uc;
-		
-		
+
 		echo '
 		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
@@ -68,16 +64,15 @@
 			#container{
 				position: relative;
 			}
-
 			#innerdiv{
 				position: absolute;
 				top: 0;
 				left: 0;
 				width: 1024px;
 				height: 723px;
-				background-image:url(\'./graphic/ban_page.jpg\');
+				background-image:url(\'./graphic/sfondodisabled.gif\');
 			}
-			#bandiv {
+			#disableddiv {
 				position: absolute;
 				left: 0;
 				top: 450;
@@ -90,11 +85,11 @@
 		';
 		
 		
-
-		echo '</head><body>
+		
+    echo '</head><body>
 			<div id="container">
-			<div id="innerdiv">
-			<div id="bandiv">';
+				<div id="innerdiv">
+					<div id="disableddiv">';
 
 		echo $body;
 
@@ -107,8 +102,8 @@
 
 			</body>
 			</html>';
-                
-		
+
+
 	}
 
 ?>

@@ -79,7 +79,7 @@ $txt[36] = "Temi Installati";
 $txt[37] = "PdC Admin";
 
 $txt[38] = "Frame sconosciuto.";
-$txt[39] = "La land e' temporaneamente offline per lavori di aggiornamento.";
+$txt[39] = "La land e' temporaneamente offline per lavori di aggiornamento. <br><br>Noi vi osserviamo, continuate a farlo anche voi...";
 
 $txt[40] = "Status";
 $txt[41] = "PdC Stanza";
