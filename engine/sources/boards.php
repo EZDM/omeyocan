@@ -784,11 +784,6 @@
 						ORDER BY time DESC LIMIT $limit_min, $maxmsg");
 		
 		//Head message
-		
-		$nb = board_msg_split($row['body']);
-		$msg = $nb[0];
-		$object = $nb[1];
-
 		$unread='';
 		$unreads = get_unread();
 
