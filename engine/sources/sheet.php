@@ -998,7 +998,8 @@ function sheet_page_main(){
 				isset($_POST['nat']) &&
 				isset($_POST['marr']) &&
 				isset($_POST['gender']) &&
-				isset($_POST['avatar_in'])) {
+				isset($_POST['avatar_in']) &&
+				isset($_POST['lvl'])) {
 
 
 			if($_POST['name']==''){
@@ -1045,7 +1046,8 @@ function sheet_page_main(){
 					marr='$_POST[marr]',
 					hobbies='$_POST[hobbies]',
 					gender='$_POST[gender]',
-					avatar='$_POST[avatar_in]'
+					avatar='$_POST[avatar_in]',
+					lvl='$_POST[lvl]'
 					WHERE username='$pg'");
 
 
@@ -1067,44 +1069,38 @@ function sheet_page_main(){
 				}
 			}
 
-			if(checkIfMaster()){
-				if(isset($_POST['info'])){
-					if(is_numeric($_POST['info'])){
-						if($_POST['info']!=$row_user['info']){
-							$time=time();
-							$db->DoQuery("UPDATE {$prefix}users
-									SET info='$_POST[info]',
-									heal_time='$time'
-									WHERE username='$pg'");
-						}
-					}
-					else{
-						$errore .= "Il campo \"Status\" puo' contenere solo numeri";
+			if(isset($_POST['info'])){
+				if(is_numeric($_POST['info'])){
+					if($_POST['info']!=$row_user['info']){
+						$time=time();
+						$db->DoQuery("UPDATE {$prefix}users
+								SET info='$_POST[info]',
+								heal_time='$time'
+								WHERE username='$pg'");
 					}
 				}
-
-				if(isset($_POST['xp'])){
-					$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
+				else{
+					$errore .= "Il campo \"Status\" puo' contenere solo numeri";
 				}
-
-
-				foreach($char as $cur){
-					if(!isset($_POST[$cur['id']])){
-						$ok = false;
-						break;
-					}
-
-					$db->DoQuery("UPDATE {$prefix}usercharact
-							SET value='{$_POST[$cur['id']]}'
-							WHERE username='$pg'
-							AND charact_id='{$cur['id']}'");
-				}
-
 			}
 
+			if(isset($_POST['xp'])){
+				$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
+			}
+
+
+			foreach($char as $cur){
+				if(!isset($_POST[$cur['id']])){
+					$ok = false;
+					break;
+				}
+
+				$db->DoQuery("UPDATE {$prefix}usercharact
+						SET value='{$_POST[$cur['id']]}'
+						WHERE username='$pg'
+						AND charact_id='{$cur['id']}'");
+			}
 		}
-
-
 	}
 	else if(isset($_GET['settings_change']) && !checkIfMaster() && $x7s->username==$pg){
 
@@ -1219,13 +1215,16 @@ function sheet_page_main(){
 				document.forms[0].elements["xp"].style.color="blue";
 				document.forms[0].elements["xp"].style.background="white";
 				document.forms[0].elements["xp"].disabled=false;
+				
+				document.forms[0].elements["lvl"].style.color="blue";
+				document.forms[0].elements["lvl"].style.background="white";
+				document.forms[0].elements["lvl"].disabled=false;
 			}
 		}
 
 		</script>';
 	}
 
-	//Here everithing tha is untouchable by anyone
 	$body .= "
 		<div class=\"indiv\" id=\"login\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">$row_user[username]</a></div>
 		<div class=\"indiv\" id=\"group\">$group</div>
@@ -1401,6 +1400,7 @@ function sheet_page_main(){
 			<div class=\"indiv\" id=\"status\"><input class=\"sheet_input\" type=\"text\" name=\"info\" value=\"$row_user[info]\" size=\"5\" disabled /></div>
 			<div class=\"indiv\" id=\"real_status\"><input class=\"sheet_input\" type=\"text\" name=\"hobbies\" value=\"$row_user[hobbies]\" size=\"10\" disabled /></div>
 			<div class=\"indiv\" id=\"xp_point\"><input class=\"sheet_input\" type=\"text\" id=\"xp\" name=\"xp\" size=\"5\" value=\"$row_user[xp]\" disabled />$extra</div>
+			<div class=\"indiv\" id=\"lvl\"><input class=\"sheet_input\" type=\"text\" id=\"lvl\" name=\"lvl\" size=\"5\" value=\"$row_user[lvl]\" disabled/></div>
 			";
 
 
