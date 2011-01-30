@@ -528,11 +528,11 @@
       include_once("./sources/roomdescr.php");
       roomdescr_main();
       exit;
-        case "secret":
+    case "secret":
       include_once("./sources/secret.php");
       secret_main();
       exit;
-        case "resurgo":
+    case "resurgo":
       include_once("./sources/resurgo.php");
       resurgo_main();
       exit;
