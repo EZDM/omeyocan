@@ -440,16 +440,16 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 			width: 100%;
 			text-align: center;
 			font-weight: bold;
-			color: white;
+			color: black;
 		}
 
 		#navigator a{
-			color: white;
+			color: black;
 		}
 
 		.dark_row{
 			font-size: 10pt;
-			color: white;
+			color: black;
 			background: transparent;
 			border-bottom: solid 1px gray;
 		}
@@ -467,14 +467,14 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 
 		.dark_link{
 			font-style: italic;
-			color: white;
+			color: black;
 		}
 
 		.col_header{
 			background: transparent;
 			margin-top: 10px;
 			border: 0;
-			color: white;
+			color: black;
 		}
 
 		a:hover{
