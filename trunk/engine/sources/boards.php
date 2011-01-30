@@ -714,7 +714,7 @@
 				
 			if(checkIfMaster()){
 				$startfrom = "";
-				if ($_GET['startfrom'])
+				if (isset($_GET['startfrom']))
 					$startfrom = "&startfrom=".$_GET['startfrom'];
 
 				$body.=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=$msgid$startfrom')\">[Delete]</a>";
