@@ -237,10 +237,7 @@
 		$board['user_group']=$row['user_group'];
 		$board['readonly']=$row['readonly'];
 				
-		//Master can delete all messages... other can delete only their own messages
-		//if((checkAuth($board['id']) && !$board['readonly'] && $x7s->username == $user )|| checkIfMaster()){
-
-		//Only master cann delete
+		//Only master can delete
 		if(checkIfMaster()){
 			
 			//All the conversation.. we are deleting the head message
@@ -260,6 +257,9 @@
 		}
 			
 		$location='Location: ./index.php?act=boards&board='.$bid;
+		if (isset($_GET['startfrom']))
+				$location .= "&startfrom=".$_GET['startfrom'];
+
 		header($location);
 		return;
 		
@@ -359,11 +359,11 @@
 			if(isset($_POST['anonymous']) && $_POST['anonymous'])
 				$anonymous = 1;
 				
-			
+			$redirect = "";
 			//Do the real send (master can always send and modify even if readonly)
 			if((checkAuth($board['id']) && !$board['readonly']) || checkIfMaster()){
 				if(isset($_GET['modify'])){
-					$query = $db->DoQuery("SELECT user FROM {$prefix}boardmsg WHERE id='{$_GET['modify']}'");
+					$query = $db->DoQuery("SELECT user, father FROM {$prefix}boardmsg WHERE id='{$_GET['modify']}'");
 					$row = $db->Do_Fetch_Assoc($query);
 
 					if(!$row){
@@ -383,6 +383,11 @@
 						return;
 
 					}
+
+					if ($row['father'])
+						$redirect .= "&message=".$row['father'];
+					else	
+						$redirect .= "&message=".$_GET['modify'];
 
 					$db->DoQuery("UPDATE {$prefix}boardmsg 
 							SET body='$subject::$msg', anonymous='$anonymous'
@@ -407,7 +412,7 @@
 					<A HREF=\"javascript:javascript:history.go(-1)\"> Torna indietro</a>";
 
 				$head="Errore";
-				$print->board_window($head,$body,$indice);
+				$print->board_window($head, $body, $indice);
 				return;
 			}
 
@@ -415,6 +420,8 @@
 			$location='Location: ./index.php?act=boards&board='.$board['id'];
 			if(isset($_GET['reply']) && $_GET['reply']!=0)
 				$location .= '&message='.$_GET['reply'];
+			else if(isset($_GET['modify']))
+				$location .= $redirect;
 
 			header($location);
 			return;
@@ -706,7 +713,11 @@
 				 <b>".$object."</b> ".$unread."</a>";
 				
 			if(checkIfMaster()){
-				$body.=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=$msgid')\">[Delete]</a>";
+				$startfrom = "";
+				if ($_GET['startfrom'])
+					$startfrom = "&startfrom=".$_GET['startfrom'];
+
+				$body.=" <a href=\"#\" onClick=\"javascript: do_delete('./index.php?act=boards&delete=$msgid$startfrom')\">[Delete]</a>";
 				$body.=" <a href=./index.php?act=boards&move=$msgid>[Sposta]</a>";
       }
 			
