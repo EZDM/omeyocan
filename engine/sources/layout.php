@@ -80,6 +80,20 @@ function PlayTardis()
     }
 ?>
    
+<!-- PULSANTI -->
+
+<?PHP
+	if (!$x7c->settings['panic']) {
+		echo '
+			<div id="hintbtn" style="position: absolute; top: 670px; left: 300px; border: 1px solid white"">
+			<a onClick="'.popup_open(300, 300, "index.php?act=hint", "hint").'"> 
+				<img src="dd">
+			</a>
+			</div>';
+	}
+?>
+
+
 <div id="logoutbtn" style="position: absolute; top: 235px; left: 932px;">
   <a onClick="javascript: window.location.href='index.php?act=logout';">
     <img src="<?PHP echo $logout_src;?>"
@@ -88,9 +102,6 @@ function PlayTardis()
   </a> 
 </div>
 
-  
-
-<!-- PULSANTI -->
 <a href="index.php">
   <img style="position:absolute; top:320px; left:896px;" 
     src="<?PHP echo $mappa;?>"

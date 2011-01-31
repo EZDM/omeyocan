@@ -49,7 +49,7 @@
 //		your right to use this software.
 //	
 ////////////////////////////////////////////////////////////////EOH
-?> <?PHP
+
 // This is by far the largest file in the entire distrobution.  It clocks in at almost 3000 lines
 function admincp_master(){
 	global $X7CHATVERSION, $x7p, $x7s, $print, $db, $txt, $x7c, $prefix, $X7CHAT_CONFIG, $g_default_settings;
@@ -447,18 +447,18 @@ function admincp_master(){
 					</tr>
 					<tr>
 					<td width=\"100\">$txt[338]* ($txt[351]): </td>
-																											<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"min_refresh\" value=\"{$def['min_refresh']}\"></td>
-																												</tr>
-																												<tr>
-																												<td width=\"100\">$txt[339]* ($txt[351]): </td>
-																																																		<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"max_refresh\" value=\"{$def['max_refresh']}\"></td>
-																																																			</tr>
-																																																			<tr>
-																																																			<td width=\"100\">$txt[341]: </td>
-																																																			<td width=\"100\">
-																																																			<select name=\"default_lang\" class=\"text_input\">
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"min_refresh\" value=\"{$def['min_refresh']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"100\">$txt[339]* ($txt[351]): </td>
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"max_refresh\" value=\"{$def['max_refresh']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"100\">$txt[341]: </td>
+					<td width=\"100\">
+					<select name=\"default_lang\" class=\"text_input\">
 					{$def['default_lang']}
-				</select>
+					</select>
 					</td>
 					</tr>
 					<tr>
@@ -466,29 +466,29 @@ function admincp_master(){
 					<td width=\"100\">
 					<select name=\"default_skin\" class=\"text_input\">
 					{$def['default_skin']}
-				</select>
+					</select>
 					</td>
 					</tr>
 					<tr>
 					<td width=\"100\">$txt[357] ($txt[351]): </td>
-																										 <td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"cookie_time\" value=\"{$def_settings['cookie_time']}\"></td>
-																											 </tr>
-																											 <tr>
-																											 <td width=\"100\">$txt[590]<b>**</b>: </td>
-																											 <td width=\"100\"><select class=\"text_input\" name=\"single_room_mode\">{$def['single_room_mode']}</select></td>
-																											 </tr>
-																											 <tr>
-																											 <td width=\"100\">$txt[616]: </td>
-																											 <td width=\"100\"><input type=\"checkbox\" class=\"text_input\" value=\"1\" name=\"req_activation\"{$def['req_activation']}></td>
-																											 </tr>
-																											 <tr>
-																											 <td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
-																											 </tr>
-																											 <tr>
-																											 <td width=\"200\" colspan=\"2\"><b>* $txt[340]</b><Br><Br><b>** $txt[593]</b></td>
-																											 </tr>
-																											 </table>
-																											 </form>";
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"cookie_time\" value=\"{$def_settings['cookie_time']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"100\">$txt[590]<b>**</b>: </td>
+					<td width=\"100\"><select class=\"text_input\" name=\"single_room_mode\">{$def['single_room_mode']}</select></td>
+					</tr>
+					<tr>
+					<td width=\"100\">$txt[616]: </td>
+					<td width=\"100\"><input type=\"checkbox\" class=\"text_input\" value=\"1\" name=\"req_activation\"{$def['req_activation']}></td>
+					</tr>
+					<tr>
+					<td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
+					</tr>
+					<tr>
+					<td width=\"200\" colspan=\"2\"><b>* $txt[340]</b><Br><Br><b>** $txt[593]</b></td>
+					</tr>
+					</table>
+					</form>";
 
 			}elseif($_GET['settings_page'] == "user_agreement"){
 				// The user agreement page
@@ -592,20 +592,20 @@ function admincp_master(){
 					</tr>
 					<tr>
 					<td width=\"100\">$txt[354]* ($txt[356]): </td>
-																											<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"expire_rooms\" value=\"{$def['expire_rooms']}\"></td>
-																												</tr>
-																												<tr>
-																												<td width=\"100\">$txt[355]* ($txt[356]): </td>
-																																																		<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"expire_guests\" value=\"{$def['expire_guests']}\"></td>
-																																																			</tr>
-																																																			<tr>
-																																																			<td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
-																																																			</tr>
-																																																			<tr>
-																																																			<td width=\"200\" colspan=\"2\"><b>* $txt[340]</b></td>
-																																																			</tr>
-																																																			</table>
-																																																			</form>";
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"expire_rooms\" value=\"{$def['expire_rooms']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"100\">$txt[355]* ($txt[356]): </td>
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"expire_guests\" value=\"{$def['expire_guests']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
+					</tr>
+					<tr>
+					<td width=\"200\" colspan=\"2\"><b>* $txt[340]</b></td>
+					</tr>
+					</table>
+					</form>";
 
 			}elseif($_GET['settings_page'] == "styles"){
 
@@ -905,6 +905,7 @@ function admincp_master(){
 			($row[45] == 1) ? $def['gremios'] = " checked=\"true\"" : $def['gremios'] = "";
 			($row[46] == 1) ? $def['admin_abilities'] = " checked=\"true\"" : $def['admin_abilities'] = "";
 			($row[47] == 1) ? $def['admin_money'] = " checked=\"true\"" : $def['admin_money'] = "";
+			($row[48] == 1) ? $def['admin_hints'] = " checked=\"true\"" : $def['admin_hints'] = "";
 
 			$body = "$txt[424]<Br><Br><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" align=\"center\">
 				<form action=\"index.php?act=adminpanel&cp_page=groupmanager&update=$_GET[edit]\" method=\"post\">
@@ -1080,9 +1081,15 @@ function admincp_master(){
 				<td width=\"120\">Puo' scrivere in modo master</td>
 				<td width=\"50\"><input type=\"checkbox\" name=\"write_master\" value=\"1\"{$def['write_master']}></td>
 				</tr>
+				<tr>
 				<td width=\"120\">Amministra le abilit&agrave;</td>
 				<td width=\"50\"><input type=\"checkbox\" name=\"admin_abilities\" value=\"1\"{$def['admin_abilities']}></td>
 				</tr>
+				<tr>
+				<td width=\"120\">Amministra gli hint del master</td>
+				<td width=\"50\"><input type=\"checkbox\" name=\"admin_hints\" value=\"1\"{$def['admin_hints']}></td>
+				</tr>
+				<tr>
 				<td width=\"120\">E' una gremios?</td>
 				<td width=\"50\"><input type=\"checkbox\" name=\"gremios\" value=\"1\"{$def['gremios']}></td>
 				</tr>
@@ -1169,9 +1176,58 @@ function admincp_master(){
 				!isset($_POST['write_master']) ? $_POST['write_master'] = 0 : "";
 				!isset($_POST['gremios']) ? $_POST['gremios'] = 0 : "";
 				!isset($_POST['admin_abilities']) ? $_POST['admin_abilities'] = 0 : "";
+				!isset($_POST['admin_hints']) ? $_POST['admin_hints'] = 0 : "";
 
 				// Save the settings
-				$db->DoQuery("UPDATE {$prefix}permissions SET make_rooms='$_POST[make_rooms]',make_proom='$_POST[make_proom]',make_nexp='$_POST[make_nexp]',make_mod='$_POST[make_mod]',viewip='$_POST[viewip]',kick='$_POST[kick]',ban_kick_imm='$_POST[ban_kick_imm]',AOP_all='$_POST[AOP_all]',AV_all='$_POST[AV_all]',view_hidden_emails='$_POST[view_hidden_emails]',use_keywords='$_POST[use_keywords]',access_room_logs='$_POST[access_room_logs]',log_pms='$_POST[log_pms]',set_background='$_POST[set_background]',set_logo='$_POST[set_logo]',make_admins='$_POST[make_admins]',server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',can_mkick='$_POST[can_mkick]',admin_settings='$_POST[admin_settings]',admin_themes='$_POST[admin_themes]',admin_filter='$_POST[admin_filter]',admin_groups='$_POST[admin_groups]',admin_users='$_POST[admin_users]',admin_ban='$_POST[admin_ban]',admin_bandwidth='$_POST[admin_bandwidth]',admin_logs='$_POST[admin_logs]',admin_events='$_POST[admin_events]',admin_mail='$_POST[admin_mail]',admin_mods='$_POST[admin_mods]',admin_smilies='$_POST[admin_smilies]',admin_rooms='$_POST[admin_rooms]',access_disabled='$_POST[access_disabled]',b_invisible='$_POST[b_invisible]',c_invisible=$_POST[c_invisible],admin_keywords='$_POST[admin_keywords]',access_pw_rooms='$_POST[access_pw_rooms]', admin_panic='$_POST[admin_panic]', admin_alarms='$_POST[admin_alarms]', admin_objects='$_POST[admin_objects]', logo='$_POST[logo]', sheet_modify='$_POST[sheet_modify]', write_master='$_POST[write_master]', gremios='$_POST[gremios]', admin_abilities='$_POST[admin_abilities]', admin_money='$_POST[admin_money]' WHERE usergroup='$_GET[update]'");
+				$db->DoQuery("UPDATE {$prefix}permissions 
+						SET make_rooms='$_POST[make_rooms]',
+						make_proom='$_POST[make_proom]',
+						make_nexp='$_POST[make_nexp]',
+						make_mod='$_POST[make_mod]',
+						viewip='$_POST[viewip]',
+						kick='$_POST[kick]',
+						ban_kick_imm='$_POST[ban_kick_imm]',
+						AOP_all='$_POST[AOP_all]',
+						AV_all='$_POST[AV_all]',
+						view_hidden_emails='$_POST[view_hidden_emails]',
+						use_keywords='$_POST[use_keywords]',
+						access_room_logs='$_POST[access_room_logs]',
+						log_pms='$_POST[log_pms]',
+						set_background='$_POST[set_background]',
+						set_logo='$_POST[set_logo]',
+						make_admins='$_POST[make_admins]',
+						server_msg='$_POST[server_msg]',can_mdeop='$_POST[can_mdeop]',
+						can_mkick='$_POST[can_mkick]',
+						admin_settings='$_POST[admin_settings]',
+						admin_themes='$_POST[admin_themes]',
+						admin_filter='$_POST[admin_filter]',
+						admin_groups='$_POST[admin_groups]',
+						admin_users='$_POST[admin_users]',
+						admin_ban='$_POST[admin_ban]',
+						admin_bandwidth='$_POST[admin_bandwidth]',
+						admin_logs='$_POST[admin_logs]',
+						admin_events='$_POST[admin_events]',
+						admin_mail='$_POST[admin_mail]',
+						admin_mods='$_POST[admin_mods]',
+						admin_smilies='$_POST[admin_smilies]',
+						admin_rooms='$_POST[admin_rooms]',
+						access_disabled='$_POST[access_disabled]',
+						b_invisible='$_POST[b_invisible]',
+						c_invisible=$_POST[c_invisible],
+						admin_keywords='$_POST[admin_keywords]',
+						access_pw_rooms='$_POST[access_pw_rooms]', 
+						admin_panic='$_POST[admin_panic]', 
+						admin_alarms='$_POST[admin_alarms]', 
+						admin_objects='$_POST[admin_objects]', 
+						logo='$_POST[logo]', 
+						sheet_modify='$_POST[sheet_modify]', 
+						write_master='$_POST[write_master]', 
+						gremios='$_POST[gremios]', 
+						admin_abilities='$_POST[admin_abilities]', 
+						admin_hints='$_POST[admin_hints]', 
+						admin_money='$_POST[admin_money]' 
+							
+							WHERE usergroup='$_GET[update]'");
 				// Tell user they have been updated
 				$body .= "$txt[458]<Br><br>";
 
@@ -3407,6 +3463,122 @@ function admincp_master(){
 
 		$body .= "</form>";
 
+	}elseif($_GET['cp_page'] == "hints"){
+		$head = "Gestione hints del master";
+		$body = "";
+		$limit = 0;
+		if (isset($_GET['startfrom']))
+			$limit = $_GET['startfrom'];
+
+
+		if (isset($_GET['edit'])){
+			if (isset($_POST['text'])) {
+				$query = $db->DoQuery("SELECT * FROM {$prefix}hints WHERE id='{$_GET['edit']}'");
+				$row = $db->Do_Fetch_Assoc($query);
+
+				$_POST['text'] = preg_replace("/\n/", "<br>", $_POST['text']);
+
+				if ($row) {
+					$db->DoQuery("UPDATE {$prefix}hints SET text='{$_POST['text']}'
+							WHERE id='{$row['id']}'");
+				}
+				else {
+					$db->DoQuery("INSERT INTO {$prefix}hints 
+							(text) VALUES ('{$_POST['text']}')");
+				}
+
+			header("location: index.php?act=adminpanel&cp_page=hints&startfrom=$limit");
+			}
+
+			$hint = "";
+			$query = $db->DoQuery("SELECT * FROM {$prefix}hints 
+					WHERE id={$_GET['edit']}");
+
+			$row = $db->Do_Fetch_Assoc($query);
+			if ($row)
+				$hint = $row['text'];
+				
+			$hint = preg_replace("/<br>/", "\n", $hint);
+
+			$body .= '<form action="index.php?act=adminpanel&cp_page=hints&edit='.
+				$_GET['edit'].'&startfrom='.$limit.'"	method="post">';
+
+			$body .= "<textarea name=\"text\" class=\"text_input\" 
+				cols=\"80\" rows=\"20\">$hint</textarea><br>";
+
+			$body .= '<input type="submit" value="Invia" class="button">
+				</form>';
+		}
+		else if(isset($_GET['delete'])) {
+			$db->DoQuery("DELETE FROM {$prefix}hints WHERE id='{$_GET['delete']}'");	
+			header("location: index.php?act=adminpanel&cp_page=hints&startfrom=$limit");
+		}
+		else {
+			$maxmsg=10;
+			$navigator='';
+
+			$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}hints");
+			$row = $db->Do_Fetch_Assoc($query);
+			$total = $row['total'];
+
+			if($total > $maxmsg){
+				$i=0;
+				while($total > 0){
+					$navigator .= "<a href=\"index.php?act=adminpanel&cp_page=hints".
+						"&startfrom=$i\">";
+					if((isset($_GET['startfrom']) && $_GET['startfrom'] == $i) || 
+							(!isset($_GET['startfrom']) && $i == 0))
+						$navigator .= "<b>[".($i+1)."]</b>";
+					else
+						$navigator .= $i+1;
+
+					$navigator .= "</a>";
+					$i++;
+					$total -= $maxmsg;
+
+				}
+			}
+			$navigator.="<br>";
+
+			$limit_min = $limit * $maxmsg;
+			$limit_max = $maxmsg;
+			$query = $db->DoQuery("SELECT *	FROM {$prefix}hints
+					ORDER BY id LIMIT $limit_min, $maxmsg");
+
+			$body .= '<p style="text-align: center;"><a href="index.php?act=adminpanel&cp_page=hints&edit=-1">
+				Aggiungi nuovo</a><br>';
+			$body .= $navigator."</p>";
+			$body .= '<table width="95%" align="center" border="0" cellspacing="0"'.
+				' cellpadding="0" class="col_header">
+				<tr>
+				<td width="5%">Id</td><td>Hint</td><td width="20%">Azioni</td>
+				</tr>
+				</table>';
+
+			$body .= '<table width="95%" align="center" border="0" cellspacing="0"'.
+				' cellpadding="0" class="inside_table">';
+
+			while ($row = $db->Do_Fetch_Assoc($query)) {
+				$body .= "<tr>
+					<td width=\"5%\">$row[id]</td>
+					<td>$row[text]</td>
+					<td width=\"20%\">
+					<a href=\"index.php?act=adminpanel&cp_page=hints&edit=$row[id]&startfrom=$limit\">
+					[Edit]
+					</a>
+					<a href=\"index.php?act=adminpanel&cp_page=hints&delete=$row[id]&startfrom=$limit\">
+					[Delete]
+					</a>
+					</td>
+					<tr><td colspan=\"3\"><hr></td></tr>
+					</tr>";	
+			}
+
+			$body .= '</table>';
+			$body .= "<p style=\"text-align: center;\">".$navigator;
+			$body .= '<a href="index.php?act=adminpanel&cp_page=hints&edit=-1">
+				Aggiungi nuovo</a></p>';
+		}
 	}elseif($_GET['cp_page'] == "ad"){
 		// A permission denied error occured, Don't show admin menu, only the error
 		$head = $txt[14];
@@ -3464,6 +3636,7 @@ function admincp_master(){
 			".printlink("alarms","Allarmi")."
 			".printlink("objects","Oggetti")."
 			".printlink("money","Soldi")."
+			".printlink("hints","Hint del master")."
 			<tr valign=\"top\">
 			<td class=\"ucp_cell\" style=\"cursor: default;\" height=\"100%\"><Br><a href=\"#\" onClick=\"javascript: window.close();\">[$txt[133]]</a><Br><Br></td>
 			</tr>
@@ -3475,33 +3648,6 @@ function admincp_master(){
 			</table>
 			</div>";
 	}
-
-	/*
-
-		 OLD MENU
-
-		 ".printlink("main",$txt[137])."
-		 ".printlink("news",$txt[307])."
-		 ".printlink("settings",$txt[139])."
-		 ".printlink("themes",$txt[308])."
-		 ".printlink("filter",$txt[143])."
-		 ".printlink("keywords",$txt[144])."
-		 ".printlink("groupmanager",$txt[309])."
-		 ".printlink("users",$txt[310])."
-		 ".printlink("rooms",$txt[311])."
-		 ".printlink("ban",$txt[312])."
-		 ".printlink("bandwidth",$txt[313])."
-		 ".printlink("logs",$txt[314])."
-		 ".printlink("events",$txt[315])."
-		 ".printlink("mail",$txt[316])."
-		 ".printlink("smilies",$txt[317])."
-		 ".printlink("mods",$txt[318])."
-		 ".printlink("help",$txt[34])."
-		 ".printlink("panic","Oscurit&agrave;")."
-		 ".printlink("alarms","Allarmi")."
-		 ".printlink("objects","Oggetti")."
-
-	 */
 
 	$print->normal_window($head,$print->ss_ucp.$cbody);
 

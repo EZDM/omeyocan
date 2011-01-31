@@ -540,6 +540,10 @@
 			include_once("./sources/shop.php");
 			shop_main();
 			exit;
+		case "hint":
+			include_once("./sources/hint.php");
+			hint_display();
+			exit;
     default:
       // The default action is to show the room list
       // Clean up old rooms

@@ -114,7 +114,7 @@ _gaq.push(['_trackPageview']);
 
 <?PHP 
 //This file include common layout for frame and map
-	include_once('./sources/layout.html');
+	include_once('./sources/layout.php');
 
 	if($x7c->permissions['admin_panic']){
 		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 1px;">
