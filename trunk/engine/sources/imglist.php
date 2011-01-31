@@ -38,7 +38,6 @@ function imglist_main(){
 		//Eventualmente estendere per le sottodirectory
 		$file_path=$basedir.$image_dir;
 			
-		//TODO fileupdate
 		if(isset($_GET['file'])){
 			file_upload($file_path);
 		}
@@ -104,7 +103,19 @@ function file_list($path,$url){
 				
 				function do_multidelete(url){
           return confirm("Vuoi davvero cancellare i files?\n\nATTENTO: se i files sono parte di un oggetto o sono ancora visualizzati in qualche stanza, comparira il box di \"oggetto mancante\"");
-        }  
+        } 
+
+				function flash_preview(id, url) {
+					document.getElementById(id).innerHTML = \'<object>\
+							<param name="movie" value="\' + url + \'" width="100" height="100">\
+							<param name="quality" value="high">\
+							<param name="allowScriptAccess" value="sameDomain" />\
+							<param name="allowFullScreen" value="True" />\
+							<embed src="\' + url + \'" play="false" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowScriptAccess="sameDomain" allowFullScreen="True" width="100" height="100">\
+							</embed>\
+						</object>\';
+
+				}
 				</script>';
 
 
@@ -141,6 +152,8 @@ function file_list($path,$url){
 		$sep="";
 		if($subdir!="")
 			$sep="/";
+
+		$flash_id = 0;
 	
 		for($fp=0; $fp<count($file_array); $fp++){
 
@@ -151,17 +164,17 @@ function file_list($path,$url){
 				
 				if(preg_match("/swf$/i", $path.$file_array[$fp])){
 					$img.= "			
-						<td align=\"center\" width=\"110\"><a onClick=\"putimage('$url$file_array[$fp]');\">
+						<td align=\"center\" width=\"110\">
+						<a onClick=\"javascript: flash_preview('flash_id$flash_id', '".$url.$file_array[$fp]."');\">
+						<div id=\"flash_id$flash_id\" style=\"background: url('./graphic/flash_preview.gif'); width: 100px; height: 100px;\">
+						</div></a>
+
 						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file_array[$fp]\">
-								<object>
-									<param name=\"movie\" value=\"".$url.$file_array[$fp]."\" width=\"100\" height=\"100\">
-									<param name=\"quality\" value=\"high\">
-									<param name=\"allowScriptAccess\" value=\"sameDomain\" />
-									<param name=\"allowFullScreen\" value=\"True\" />
-									<embed src=\"".$url.$file_array[$fp]."\" play=\"false\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"True\" width=\"100\" height=\"100\">
-									</embed>
-								</object>					
-								<br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+						<br>
+						<a onClick=\"putimage('$url$file_array[$fp]');\">
+						$file_array[$fp]</a><br>
+						<a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+					$flash_id++;
 				}
 				else{
 					$img.= "
