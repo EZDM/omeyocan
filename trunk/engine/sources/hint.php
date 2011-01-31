@@ -78,16 +78,16 @@
 		$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}hints");
 		$row = $db->Do_Fetch_Assoc($query);
 
-		//srand(date("dmYGi", time()));
+		srand(date("dmYGi", time()));
 		$hint_num = rand(0, $row['total'] - 1);
 
 		$query = $db->DoQuery("SELECT text FROM {$prefix}hints ORDER BY id
 				LIMIT $hint_num, 1");
 		$row = $db->Do_Fetch_Assoc($query);
 
-		$hint = "^__^ $hint_num";
+		$hint = "^__^";
 		if ($row) {
-			$hint = $hint_num." ".$row['text'];
+			$hint = $row['text'];
 		}
 
 		
