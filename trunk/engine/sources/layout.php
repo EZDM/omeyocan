@@ -85,9 +85,9 @@ function PlayTardis()
 <?PHP
 	if (!$x7c->settings['panic']) {
 		echo '
-			<div id="hintbtn" style="position: absolute; top: 670px; left: 300px; border: 1px solid white"">
+			<div id="hintbtn" style="position: absolute; top: 672px; left: 283px;">
 			<a onClick="'.popup_open(300, 300, "index.php?act=hint", "hint").'"> 
-				<img src="dd">
+				<img src="./graphic/hint_button.gif">
 			</a>
 			</div>';
 	}
