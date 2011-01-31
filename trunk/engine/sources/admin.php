@@ -3477,6 +3477,9 @@ function admincp_master(){
 				$row = $db->Do_Fetch_Assoc($query);
 
 				$_POST['text'] = preg_replace("/\n/", "<br>", $_POST['text']);
+				$url_regexp = "/http(s)?:\/\/[^[:space:]]+/i";
+				$_POST['text'] = preg_replace($url_regexp, 
+						'<a href="\\0" target="_blank">\\0</a>', $_POST['text']);
 
 				if ($row) {
 					$db->DoQuery("UPDATE {$prefix}hints SET text='{$_POST['text']}'
@@ -3499,6 +3502,8 @@ function admincp_master(){
 				$hint = $row['text'];
 				
 			$hint = preg_replace("/<br>/", "\n", $hint);
+			$url_regexp = "/<a[^>]*>|<\/a>/i";
+			$hint = preg_replace($url_regexp, "", $hint);
 
 			$body .= '<form action="index.php?act=adminpanel&cp_page=hints&edit='.
 				$_GET['edit'].'&startfrom='.$limit.'"	method="post">';
