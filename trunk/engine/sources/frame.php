@@ -1259,7 +1259,7 @@ _gaq.push(['_trackPageview']);
 	<div id="position"></div>
 <?PHP 
     //This file include common layout for frame and map
-    include_once('./sources/layout.html');
+    include_once('./sources/layout.php');
 
     $polaroid=$x7c->room_data['logo'];
     /*if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){

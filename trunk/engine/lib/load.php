@@ -66,31 +66,6 @@
 			while($row = $db->Do_Fetch_Row($query))
 				$this->settings[$row[1]] = $row[2];
 
-			/* The Master Query */
-			// Test if the user is in a room or not
-			/*
-			if(isset($_GET['room'])){
-				$query = $db->DoQuery("SELECT userx.*,roomx.*,permissionx.*
-				FROM {$prefix}users userx, {$prefix}rooms roomx, {$prefix}permissions permissionx
-				WHERE userx.username='$_COOKIE[$auth_ucookie]' AND roomx.name='$_GET[room]' AND permissionx.usergroup=userx.user_group");
-				$row = $db->Do_Fetch_Row($query);
-				$this->user_query = array_splice($row,0,16);
-				$this->room_query = array_splice($row,0,14);
-				$this->permission_query = array_splice($row,0,39);
-				$this->online_query = array_splice($row,0,7);
-			}elseif(isset($_COOKIE[$auth_ucookie]){
-				$query = $db->DoQuery("SELECT userx.*,permissionx.*
-				FROM {$prefix}users userx, {$prefix}permissions permissionx
-				WHERE userx.username='$_COOKIE[$auth_ucookie]' AND permissionx.usergroup=userx.user_group");
-				$row = $db->Do_Fetch_Row($query);
-				$this->user_query = array_splice($row,0,16);
-				$this->room_query = array_fill(0,15,'');
-				$this->permission_query = array_splice($row,0,39);
-				$this->online_query = array_fill(0,8,'');
-			}
-			*/
-			/* End The Master Query */
-
 		}
 
 		function usersettings(){
@@ -330,6 +305,7 @@
 			$return['write_master'] = 0;
       $return['admin_abilities'] = 0;
       $return['admin_money'] = 0;
+      $return['admin_hints'] = 0;
 			$temp = 0;
 
 			// Load other permissions
@@ -401,10 +377,11 @@
 				$return['write_master']+=$row[44];
         $return['admin_abilities']+=$row[46];
         $return['admin_money']+=$row[47];
+        $return['admin_hints']+=$row[48];
 				
 				$temp += $row[21]+$row[22]+$row[23]+$row[24]+$row[25]+$row[26]+$row[27]+
 					$row[28]+$row[29]+$row[30]+$row[31]+$row[32]+$row[33]+$row[37]+
-					$row[38]+$row[39]+$row[40]+$row[41]+$row[46]+$row[47];
+					$row[38]+$row[39]+$row[40]+$row[41]+$row[46]+$row[47]+$row[48];
 				
 
 
