@@ -1221,37 +1221,6 @@ _gaq.push(['_trackPageview']);
     document.chatIn.counter.value=document.chatIn.msgi.value.length;
   }
 
-	function ShowTip(hoveritem, locat)
-	{
-		if (!e) var e = window.event;
-		if (e.pageX || e.pageY) 	{
-			posx = e.pageX;
-			posy = e.pageY;
-		}
-		else if (e.clientX || e.clientY) 	{
-			posx = e.clientX + document.body.scrollLeft
-				+ document.documentElement.scrollLeft;
-			posy = e.clientY + document.body.scrollTop
-				+ document.documentElement.scrollTop;
-		}
-		hp = document.getElementById("position");
-
-		// Set popup to visible
-		hp.style.top = posy + 15;
-		hp.style.left = posx + 15;
-		hp.style.zIndex = 1;
-		hp.innerHTML = locat;
-
-		hp.style.visibility = "visible";
-
-	}
-
-	function HideTip(hoveritem)
-	{
-		hp = document.getElementById("position");
-		hp.style.visibility = "hidden";	
-	}
-
 </script>
 
 <div id="container">
@@ -1455,7 +1424,7 @@ _gaq.push(['_trackPageview']);
       onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'"
       onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 		<input name="autosend" type="checkbox" checked 
-			onMouseover="ShowTip(this,'Invia con Enter');" onMouseout="HideTip(this);">
+			onMousemove="ShowPopup(this,'Invia con Enter');" onMouseout="HidePopup(this);">
 
 <?PHP
     if($x7c->permissions['write_master']){
