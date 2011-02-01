@@ -3537,7 +3537,7 @@ function admincp_master(){
 					else
 						$navigator .= $i+1;
 
-					$navigator .= "</a>";
+					$navigator .= " </a>";
 					$i++;
 					$total -= $maxmsg;
 
