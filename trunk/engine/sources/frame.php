@@ -1424,7 +1424,7 @@ _gaq.push(['_trackPageview']);
       onMouseOut="this.style.background='url(<?PHP echo $print->image_path; ?>send.gif)'"
       onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 		<input name="autosend" type="checkbox" checked 
-			onMousemove="ShowPopup(this,'Invia con Enter');" onMouseout="HidePopup(this);">
+			onMousemove="ShowPopup(event, this,'Invia con Enter');" onMouseout="HidePopup(this);">
 
 <?PHP
     if($x7c->permissions['write_master']){
