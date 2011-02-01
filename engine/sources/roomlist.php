@@ -333,11 +333,11 @@ _gaq.push(['_trackPageview']);
 						'sub_location').'"';
 			}
 			
-			$rollover="onMouseOut=\"HidePopup(this);\" onMousemove=\"ShowPopup(this,'$row[descr]');\"";
+			$rollover="onMouseOut=\"HidePopup(this);\" onMousemove=\"ShowPopup(event, this,'$row[descr]');\"";
 			if($row['rollover']){
 				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" ".
 					"onMouseout=\"HidePopup(this); location_out(this);\" ".
-					"onMousemove=\"ShowPopup(this,'$row[descr]');\"".
+					"onMousemove=\"ShowPopup(event, this,'$row[descr]');\"".
 					"onMouseover=\"location_over(this);\"";
 			}
 			
