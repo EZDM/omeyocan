@@ -1449,7 +1449,7 @@ function sheet_page_main(){
 
 		if($row_user['info']!="Morto" && $row_user['info'] >= -10){
 			$body .= "<option value=\"kill\">Uccidi</option>";
-			$body .= "<option value=\"real_kill\">Uccidi definitivamente</option>";
+			$body .= "<option value=\"real_kill\">EXTERMINATE!</option>";
 		}
 		else{
 			$body .= "<option value=\"respawn\">Resuscita</option>";
