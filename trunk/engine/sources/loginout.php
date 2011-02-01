@@ -239,9 +239,11 @@
       }
 
       #login_form{
-        width: 300px;
-        margin-left: 380px;
-        margin-top: 300px;
+				position: absolute;
+        width: 100%;
+				top: 65px;
+        margin-left: 15px;
+        margin-top: 320px;
       }
 
       td{
@@ -281,10 +283,10 @@
       }
 
       #disclaimer{
-        width: 300px;
-        height: 200px;
-				top: 500px;
-				left: 60px;
+        width: 200px;
+        height: 220px;
+				top: 490px;
+				left: 10px;
 				position: absolute;
         overflow: auto;
       }
