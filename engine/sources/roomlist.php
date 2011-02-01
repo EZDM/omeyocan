@@ -148,52 +148,6 @@ _gaq.push(['_trackPageview']);
 						listhash = '';
 						startfrom = 0;
 						newMail = 0;
-						saved_src='';
-						
-						function ShowPopup(hoveritem, locat)
-						{
-							hp = document.getElementById("position");
-		
-							// Set popup to visible
-							hp.style.top = hoveritem.offsetTop + 18;
-							hp.style.left = hoveritem.offsetLeft + 20;
-                                                        hp.style.zIndex = 1;
-							hp.innerHTML = locat;
-
-							hp.style.visibility = "Visible";
-							saved_src=hoveritem.src;
-							hoveritem.src='./graphic/pulsante_over.gif';
-							
-						}
-
-						function HidePopup(hoveritem)
-						{
-							hp = document.getElementById("position");
-							hp.style.visibility = "Hidden";	
-							hoveritem.src=saved_src;
-						}
-
-						function ShowPopup2(hoveritem, locat)
-						{
-							hp = document.getElementById("position");
-		
-							// Set popup to visible
-							hp.style.top = hoveritem.offsetTop + 18;
-							hp.style.left = hoveritem.offsetLeft + 20;
-                                                        hp.style.zIndex = 1;
-							hp.innerHTML = locat;
-
-							hp.style.visibility = "Visible";
-							
-							
-						}
-
-						function HidePopup2(hoveritem)
-						{
-							hp = document.getElementById("position");
-							hp.style.visibility = "Hidden";	
-						}
-
 						function do_initial_refresh(){
 							// Create object
 							if(window.self.name == ''){
@@ -207,7 +161,6 @@ _gaq.push(['_trackPageview']);
 							
 							mapRefresh = setInterval('do_refresh()','<?PHP echo $x7c->settings['refresh_rate']*5; ?>');
 							do_refresh();
-							
 							
 						}
 
@@ -380,9 +333,12 @@ _gaq.push(['_trackPageview']);
 						'sub_location').'"';
 			}
 			
-			$rollover="onMouseOut=\"HidePopup2(this);\" onMouseOver=\"ShowPopup2(this,'$row[descr]');\"";
+			$rollover="onMouseOut=\"HidePopup(this);\" onMousemove=\"ShowPopup(this,'$row[descr]');\"";
 			if($row['rollover']){
-				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" onMouseOut=\"HidePopup(this);\" onMouseOver=\"ShowPopup(this,'$row[descr]');\"";
+				$rollover="onMouseDown=\"this.src='./graphic/pulsante_down.gif'\" ".
+					"onMouseout=\"HidePopup(this); location_out(this);\" ".
+					"onMousemove=\"ShowPopup(this,'$row[descr]');\"".
+					"onMouseover=\"location_over(this);\"";
 			}
 			
 			$button_list .= "<a $link_action>

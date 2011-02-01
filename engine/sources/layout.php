@@ -30,6 +30,48 @@ function PlayTardis()
   flashMovie.Play();
 }
 
+saved_src='';
+
+function ShowPopup(hoveritem, locat)
+{
+	if (!e) var e = window.event;
+	if (e.pageX || e.pageY)   {
+		posx = e.pageX;
+		posy = e.pageY;
+	}
+	else if (e.clientX || e.clientY)  {
+		posx = e.clientX + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+		posy = e.clientY + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+	}
+	hp = document.getElementById("position");
+
+	// Set popup to visible
+	hp.style.top = posy - 30;
+	hp.style.left = posx + 15;
+	hp.style.zIndex = 1;
+	hp.innerHTML = locat;
+
+	hp.style.visibility = "Visible";
+}
+
+function location_over(hoveritem) {
+	saved_src=hoveritem.src;
+	hoveritem.src='./graphic/pulsante_over.gif';
+
+}
+
+function HidePopup(hoveritem)
+{
+	hp = document.getElementById("position");
+	hp.style.visibility = "Hidden";	
+}
+
+function location_out(hoveritem) {
+	hoveritem.src=saved_src;
+}
+
 //-->
 </script>
 
@@ -87,7 +129,9 @@ function PlayTardis()
 		echo '
 			<div id="hintbtn" style="position: absolute; top: 672px; left: 283px;">
 			<a onClick="'.popup_open(446, 558, "index.php?act=hint", "hint").'"> 
-				<img src="./graphic/hint_button.gif">
+				<img src="./graphic/hint_button.gif" 
+				onMousemove="javascript: ShowPopup(this, \'Chiedilo ad Aya\');"
+				onMouseout="javascript: HidePopup(this);">
 			</a>
 			</div>';
 	}
