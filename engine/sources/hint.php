@@ -62,14 +62,17 @@
 		<style type="text/css">
 		
 			#innerdiv{
-				width: 100%;
-				height: 100%;
+				width: 444px;
+				height: 556px;
+				background: url("./graphic/sfondohints.jpg");
+				overflow: auto;
 			}
 			#hintdiv {
 				padding: 20px;
 				text-align: center;
 				font-size: 12pt;
 				color: #8f8f8f;
+				width: 50%;
 			}
 		</style>
 		';
