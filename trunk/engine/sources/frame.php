@@ -1223,9 +1223,9 @@ _gaq.push(['_trackPageview']);
 
 </script>
 
+<div id="position"></div>
 <div id="container">
   <div id="divchat">
-	<div id="position"></div>
 <?PHP 
     //This file include common layout for frame and map
     include_once('./sources/layout.php');
