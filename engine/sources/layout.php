@@ -66,7 +66,9 @@ function location_over(hoveritem) {
 function HidePopup(hoveritem)
 {
 	hp = document.getElementById("position");
-	hp.style.visibility = "Hidden";	
+	hp.style.visibility = "Hidden";
+	hp.style.left = 0;
+	hp.style.top = 0;
 }
 
 function location_out(hoveritem) {

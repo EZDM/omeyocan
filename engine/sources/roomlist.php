@@ -109,6 +109,7 @@ _gaq.push(['_trackPageview']);
 
 
  </head><body onload="javascript: do_initial_refresh();"> <!--openActionBox();">-->
+ <div id="position"> </div>
  <div id="container">
  <div id="divmap">
 
@@ -303,8 +304,6 @@ _gaq.push(['_trackPageview']);
 						
 
 					</script>
-  
-  <div id="position"> </div>
   
   <!-- Pulsanti mappa -->
   
