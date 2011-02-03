@@ -89,7 +89,7 @@ $txt[39] = "\"Per me si va ne la citt&agrave; dolente, <br>
 	<br>
 	-Lady Rebecca Wexford- <br>
 	<br>
-	[0FF: LA LAND E' TEMPORANEAMENTE CHIUSA PER AGGIORNAMENTI]";
+	[0FF: LA LAND E' TEMPORANEAMENTE CHIUSA PER AGGIORNAMENTI. UTILIZZATE IL FORUM PER QUALUNQUE ESIGENZA]";
 
 $txt[40] = "Status";
 $txt[41] = "PdC Stanza";
