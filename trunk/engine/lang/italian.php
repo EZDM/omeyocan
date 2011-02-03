@@ -79,7 +79,17 @@ $txt[36] = "Temi Installati";
 $txt[37] = "PdC Admin";
 
 $txt[38] = "Frame sconosciuto.";
-$txt[39] = "La land e' temporaneamente offline per lavori di aggiornamento. <br><br>Noi vi osserviamo, continuate a farlo anche voi...";
+$txt[39] = "\"Per me si va ne la citt&agrave; dolente, <br>
+	per me si va ne l'eterno dolore, <br>
+	per me si va tra la perduta gente. <br>
+	Giustizia mosse il mio alto fattore; <br>
+	fecemi la divina podestate, la somma sapienza e 'l primo amore. <br>
+	Dinanzi a me non fuor cose create se non etterne, e io etterno duro.<br> 
+	Lasciate ogne speranza, voi ch'intrate\" <br>
+	<br>
+	-Lady Rebecca Wexford- <br>
+	<br>
+	[0FF: LA LAND E' TEMPORANEAMENTE CHIUSA PER AGGIORNAMENTI]";
 
 $txt[40] = "Status";
 $txt[41] = "PdC Stanza";
