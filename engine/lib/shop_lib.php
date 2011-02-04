@@ -217,15 +217,18 @@ $GLOBALS['start_cogs'] = 30;
 		if (!$row_obj)
 			return "Oggetto non posseduto/equipaggiato<br>";
 
+		include_once('./lib/sheet_lib.php');
 		// Shopper has infinite space
 		if ($to != $shopper) {
-			$query_user = $db->DoQuery("
-					SELECT spazio FROM {$prefix}users
-					WHERE username = '$to'");
-			$row_user = $db->Do_Fetch_Assoc($query_user);
-
-			if ($row_obj['size'] > $row_user['spazio']) {
+			if (get_user_space($to) - $row_obj['size'] < 0) {
 				return "Spazio non sufficiente per equipaggiare l'oggetto ".
+					"$row_obj[name]<br>";
+			}
+		}
+
+		if ($from != $shopper) {
+			if (get_user_space($from) + $row_obj['size'] < 0) {
+				return "Spazio non sufficiente per disequipaggiare l'oggetto ".
 					"$row_obj[name]<br>";
 			}
 		}
@@ -238,12 +241,6 @@ $GLOBALS['start_cogs'] = 30;
 				SET owner='$to'
 				WHERE id='$obj'");
 
-		include_once('./lib/sheet_lib.php');
-		// Shopper has infinite space
-		if ($from != $shopper)
-			recalculate_space($from);
-		if ($to != $shopper)
-			recalculate_space($to);
 	}
 
 	function pay($qty, $from, $to, $check_only=false, $only_equipped=true) {
@@ -257,14 +254,10 @@ $GLOBALS['start_cogs'] = 30;
 			return "Denaro non disponibile<br>";
 		}
 	
+		include_once('./lib/sheet_lib.php');
 		// Shopper has infinite space
 		if ($to != $shopper) {
-			$query_user = $db->DoQuery("
-					SELECT spazio FROM {$prefix}users
-					WHERE username = '$to'");
-			$row_user = $db->Do_Fetch_Assoc($query_user);
-		
-			if ($space_required > $row_user['spazio'])
+			if (get_user_space($to) - $space_required < 0)
 				return "Spazio non sufficiente per ricevere i soldi<br>";
 		}
 
@@ -273,10 +266,6 @@ $GLOBALS['start_cogs'] = 30;
 
 		remove_money($qty, $from);
 		assign_money($qty, $to);
-		
-		// We do not do this anymore for splitting purpose
-		//group_money($from);
-		//group_money($to);
 
 		include_once("./lib/alarms.php");
 		record_payment($from, $to, $qty);
@@ -346,12 +335,6 @@ $GLOBALS['start_cogs'] = 30;
 
 			$to_move -= $money_group;
 		}
-
-		// Shopper has infinite space
-		if ($pg != $shopper) {
-			include_once('./lib/sheet_lib.php');
-			recalculate_space($pg);
-		}
 	}
 	
   function split_money($qty, $pg, $group) {
@@ -388,12 +371,6 @@ $GLOBALS['start_cogs'] = 30;
 		}
 
 		assign_money($qty, $pg);
-
-		// Shopper has infinite space
-		if ($pg != $shopper) {
-			include_once('./lib/sheet_lib.php');
-			recalculate_space($pg);
-		}
 	}
 	
 	function remove_money($qty, $pg) {
@@ -437,11 +414,6 @@ $GLOBALS['start_cogs'] = 30;
 			$to_move -= $assign;
 		}
 
-		// Shopper has infinite space
-		if ($pg != $shopper) {
-			include_once('./lib/sheet_lib.php');
-			recalculate_space($pg);
-		}
 	}
 
 	function group_money($pg) {
@@ -459,12 +431,6 @@ $GLOBALS['start_cogs'] = 30;
 				AND equipped = '1'");
 
 		assign_money($qty, $pg);
-
-		// Shopper has infinite space
-		if ($pg != $shopper) {
-			include_once('./lib/sheet_lib.php');
-			recalculate_space($pg);
-		}
 
 	}
 

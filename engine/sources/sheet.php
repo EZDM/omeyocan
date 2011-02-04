@@ -93,7 +93,6 @@ function sheet_page_equip(){
 
 	if(isset($_GET['delete']) && ($x7s->username==$pg || checkIfMaster())){
 		$db->DoQuery("DELETE FROM {$prefix}objects WHERE id='$_GET[delete]'");
-		recalculate_space($pg);
 	}
 
 	if(isset($_GET['equiptgl']) && ($x7s->username==$pg || checkIfMaster())){
@@ -101,37 +100,41 @@ function sheet_page_equip(){
 				FROM {$prefix}objects WHERE id='$_GET[equiptgl]'");
 		$row = $db->Do_Fetch_Assoc($query);
 		if(!$row)
-		$errore = "Oggetto non esistente";
+			$errore = "Oggetto non esistente";
 		else{
-			$valore=0;
-			$azione="depositato";
+			$equip_value = 0;
+			$azione="";
 			$action_ok=true;
-			$query = $db->DoQuery("SELECT position,spazio 
+
+			$query = $db->DoQuery("SELECT position 
 					FROM {$prefix}users WHERE username='$pg'");
 			$row_msg=$db->Do_Fetch_Assoc($query);
-
-			if(!$row['equipped']){
-				$valore=1;
-				$azione="equipaggiato";
-
-				if(!$row_msg)
+			
+			if(!$row_msg)
 				die("Utente non esistente");
 
-				if($row_msg['spazio']<$row['size']){
+			if(!$row['equipped']){
+				$equip_value = 1;
+				$azione="equipaggiato";
+
+				if(get_user_space($pg) - $row['size'] < 0){
 					$errore="Spazio insufficiente per equipaggiare l'oggetto";
 					$action_ok=false;
 				}
-				else{
-					$residuo=$row_msg['spazio']-$row['size'];
+			} 
+			else {
+				$equip_value = 0;
+				$azione = "depositato";
+				if(get_user_space($pg) + $row['size'] < 0){
+					$errore="Impossibile depositare l'oggetto";
+					$action_ok = false;
 				}
 			}
 
 			if($action_ok){
 
 				$db->DoQuery("UPDATE {$prefix}objects 
-						SET equipped='$valore' WHERE id='{$_GET['equiptgl']}'");
-				recalculate_space($pg);
-
+						SET equipped='$equip_value' WHERE id='{$_GET['equiptgl']}'");
 
 				if($row_msg['position']!="Mappa" && $row_msg['position']!=""){
 					include_once("./lib/message.php");
@@ -196,7 +199,7 @@ function sheet_page_equip(){
 			$errore = "Non puoi consegnare un oggetto che non trasporti";
 		}
 
-		$query = $db->DoQuery("SELECT position,spazio
+		$query = $db->DoQuery("SELECT position
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
 		$row_msg=$db->Do_Fetch_Assoc($query);
 
@@ -204,11 +207,11 @@ function sheet_page_equip(){
 			$errore = "Utente non esistente";
 		}
 		else {
-			if($row_msg['spazio']<$row['size']){
-				$errore="Il destinatario non puo' equipaggiare l'oggetto";
+			if(get_user_space($_POST['owner']) - $row['size'] < 0){
+				$errore = "Il destinatario non puo' equipaggiare l'oggetto";
 			}
-			else{
-				$residuo=$row_msg['spazio']-$row['size'];
+			else if (get_user_space($pg) + $row['size'] < 0){
+				$errore = "Non puoi disequipaggiare l'oggetto";
 			}
 		}
 
@@ -243,8 +246,6 @@ function sheet_page_equip(){
 			$errore="Oggetto assegnato correttamente\n";
 			include_once('./lib/alarms.php');
 			object_moves($_POST['owner'],$pg,$obj);
-			recalculate_space($pg);
-			recalculate_space($_POST['owner']);
 		}
 
 	}
@@ -279,15 +280,31 @@ function sheet_page_equip(){
 			$dimensione="";
 			$disabled="";
 			if(!$row['equipped'])
-			$disabled="style=\"color: #aeaeae;\"";
-			if($row['size']==0)
-			$dimensione="Minuscolo";
-			if($row['size']==1)
-			$dimensione="Piccolo";
-			if($row['size']==2)
-			$dimensione="Medio";
-			if($row['size']==5)
-			$dimensione="Grande";
+				$disabled="style=\"color: #aeaeae;\"";
+
+			switch($row['size']) {
+				case 0:
+					$dimensione="Minuscolo";
+					break;
+				case 1:
+					$dimensione="Piccolo";
+					break;
+				case 2:
+					$dimensione="Medio";
+					break;
+				case 5:
+					$dimensione="Grande";
+					break;
+				case -1:
+					$dimensione="Capienza piccola";
+					break;
+				case -2:
+					$dimensione="Capienza media";
+					break;
+				case -5:
+					$dimensione="Capienza grande";
+					break;
+			}
 
 			if($row['uses']==0){
 				$obj_name .= " [inutilizzabile]";

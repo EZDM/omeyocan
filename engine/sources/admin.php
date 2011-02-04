@@ -1425,7 +1425,7 @@ function admincp_master(){
 			if(!isset($_POST['owner']) || !isset($_POST['id'])){
 				die("Bad form");
 			}
-			$query = $db->DoQuery("SELECT spazio 
+			$query = $db->DoQuery("SELECT username 
 					FROM {$prefix}users WHERE username='$_POST[owner]'");
 			$row_usr = $db->Do_Fetch_Assoc($query);
 
@@ -1445,10 +1445,11 @@ function admincp_master(){
 			if ($obj_name == $money_name)
 				$error = "Non puoi assegnare soldi da questo pannello";
 
-			$residuo=$row_usr['spazio'] - $row['size'];
-			if($residuo<0)
-				$error = "L'utente non pu&ograve; trasportare l'oggetto;".
-					"ha solo spazio: $row_usr[spazio] e l'oggetto occupa $row[size]";
+			include_once('./lib/sheet_lib.php');
+			$residuo = get_user_space($_POST['owner']);
+			if($residuo - $row['size'] < 0)
+				$error = "L'utente non pu&ograve; trasportare l'oggetto:<br>".
+					"spazio residuo: $residuo<br>spazio richiesto: $row[size]";
 
 			if($error==''){
 				$db->DoQuery("INSERT INTO {$prefix}objects
@@ -1458,8 +1459,6 @@ function admincp_master(){
 							'$row[image_url]','$_POST[owner]','1','$row[size]',
 							'$row[category]','$row[visible_uses]')");
 
-				include_once('./lib/sheet_lib.php');
-				recalculate_space($_POST['owner']);
 
 				$error="Oggetto assegnato correttamente\n";
 				include_once('./lib/alarms.php');
@@ -1493,6 +1492,11 @@ function admincp_master(){
 			if($_POST['id']!=-1){
 				$old_name = '';
 				get_obj_name_and_uses($_POST['id'], $old_name, $uses);
+
+				$query_old_size = $db->DoQuery("SELECT size FROM {$prefix}objects
+						WHERE id='$_POST[id]'");
+				$row_old_size = $db->Do_Fetch_Assoc($query_old_size);
+
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET name='$_POST[name]',
 							description='$_POST[description]',
@@ -1528,36 +1532,61 @@ function admincp_master(){
 								category='$category',
 								visible_uses='$visible_uses'
 							WHERE name='$old_name'");
-
+					
 					$query_count_obj = $db->DoQuery("SELECT count(*) AS cnt
 							FROM {$prefix}objects
 							WHERE name='$_POST[name]'");
 
-					$query_user_sync = $db->DoQuery("SELECT owner
-							FROM {$prefix}objects 
-							WHERE name='$_POST[name]'
-							AND equipped = 1
-							AND owner <> ''
-							AND owner <> '$shopper'");
-
-					$db->DoQuery("UPDATE {$prefix}objects 
-							SET equipped = 0
-							WHERE name='$_POST[name]'
-							AND equipped = 1
-							AND owner <> ''
-							AND owner <> '$shopper'");
-
-					include_once('./lib/sheet_lib.php');
-					$disequipped = 0;
-					while($row_user_sync = $db->Do_Fetch_Assoc($query_user_sync)) {
-						$disequipped++;
-						recalculate_space($row_user_sync['owner']);
-					}
-
 					$row_count_obj = $db->Do_Fetch_Assoc($query_count_obj);
 					$error = "Modifica eseguita e sincronizzati $row_count_obj[cnt]
-						oggetti esistenti.<br>A $disequipped utenti e' stato disequipaggiato
-						l'oggetto.";
+						oggetti esistenti.";
+					
+					if ($row_old_size && $row_old_size['size'] != $_POST['size']) {
+						if ($row_old_size['size'] >= 0) {
+							// Disequip the object if it had a positive value
+							
+							$query_user_sync = $db->DoQuery("SELECT count(*) AS total
+									FROM {$prefix}objects 
+									WHERE name='$_POST[name]'
+									AND equipped = 1
+									AND owner <> ''
+									AND owner <> '$shopper'");
+
+							$db->DoQuery("UPDATE {$prefix}objects 
+									SET equipped = 0
+									WHERE name='$_POST[name]'
+									AND equipped = 1
+									AND owner <> ''
+									AND owner <> '$shopper'");
+
+							$row_user_sync = $db->Do_Fetch_Assoc($query_user_sync);
+
+							$error .= "<br>A $row_user_sync[total] utenti e' stato 
+								disequipaggiato	l'oggetto.";	
+						} else {
+							// Disequip everything if the object had a negative value
+							
+							$query_user_sync = $db->DoQuery("SELECT owner
+									FROM {$prefix}objects 
+									WHERE equipped = 1
+									AND name='$_POST[name]'
+									AND owner <> ''
+									AND owner <> '$shopper'");
+
+							$disequipped = 0;
+							while ($row_user_sync = $db->Do_Fetch_Assoc($query_user_sync)) {
+								if ($row_user_sync['owner'] != "" && 
+										$row_user_sync['owner'] != $shopper) {
+									$db->DoQuery("UPDATE {$prefix}objects 
+											SET equipped = 0
+											WHERE owner = '$row_user_sync[owner]'");
+									$disequipped++;
+								}
+							}
+							$error .= "<br>A $row_user_sync[total] utenti e' stato 
+								disequipaggiato tutto"; 
+						}
+					}
 				}
 			}else{
 				$query_duplicate = $db->DoQuery("
@@ -1711,22 +1740,39 @@ function admincp_master(){
 			}
 			$minuscolo="";
 			$piccolo="";
+			$c_piccolo="";
 			$medio="";
+			$c_medio="";
 			$grande="";
+			$c_grande="";
 			$visible_uses_checked='';
 
 			if($row['visible_uses'])
 				$visible_uses_checked = "checked";
 
-			if($row['size']==0)
-				$minuscolo="selected";
-			if($row['size']==1)
-				$piccolo="selected";
-			if($row['size']==2)
-				$medio="selected";
-			if($row['size']==5)
-				$grande="selected";
-
+			switch ($row['size']) {
+				case 0:
+					$minuscolo="selected";
+					break;
+				case 1:
+					$piccolo="selected";
+					break;
+				case 2:
+					$medio="selected";
+					break;
+				case 5:
+					$grande="selected";
+					break;
+				case -1:
+					$c_piccolo="selected";
+					break;
+				case -2:
+					$c_medio="selected";
+					break;
+				case -5:
+					$c_grande="selected";
+					break;
+			}
 			$query_cat = $db->DoQuery("SELECT DISTINCT category 
 					FROM {$prefix}objects
 					ORDER BY category");
@@ -1828,6 +1874,9 @@ function admincp_master(){
 				<option value=\"1\" $piccolo>Piccolo</option>
 				<option value=\"2\" $medio>Medio</option>
 				<option value=\"5\" $grande>Grande</option>
+				<option value=\"-1\" $c_piccolo>Capienza Piccola</option>
+				<option value=\"-2\" $c_medio>Capienza Media</option>
+				<option value=\"-5\" $c_grande>Capienza Grande</option>
 				</select>
 				</td>
 				</tr>
@@ -2020,6 +2069,15 @@ function admincp_master(){
 						case 5: 
 							$size = "(grande)";
 							break;
+						case -1:
+							$size = "(capienza piccola)";
+							break;
+						case -2:
+							$size = "(capienza media)";
+							break;
+						case -5: 
+							$size = "(capienza grande)";
+							break;
 						default: 
 							$size = "(IMPOSSIBLE SIZE)";
 
@@ -2075,7 +2133,7 @@ function admincp_master(){
 				$error = "Valore negativo non permesso";
 
 			if (isset($_POST['username']) && $_POST['username']) {
-				$query = $db->DoQuery("SELECT spazio FROM {$prefix}users
+				$query = $db->DoQuery("SELECT username FROM {$prefix}users
 						WHERE username='$_POST[username]'");
 				$row_usr = $db->Do_Fetch_Assoc($query);
 
@@ -3153,11 +3211,6 @@ function admincp_master(){
 		if(isset($_GET['multidestroy'])){
 			include_once('./lib/sheet_lib.php');
 			$db->DoQuery("DELETE FROM {$prefix}objects WHERE owner<>''");
-
-			$query = $db->DoQuery("SELECT username FROM {$prefix}users");
-			while($row = $db->Do_Fetch_Assoc($query)) {
-				recalculate_space($row['username']);
-			}
 
 			$msg .= "<b>Hai distrutto tutti gli oggetti!</b>";				
 		}
