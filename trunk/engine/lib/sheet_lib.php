@@ -372,12 +372,18 @@
 
 	function get_user_space($username){
 		global $db, $prefix, $x7c;
-		$query = $db->DoQuery("SELECT SUM(size) as total_size FROM 
-				{$prefix}objects WHERE owner='$username' AND equipped='1'");
+		$residuo = 0;
 
-		$row = $db->Do_Fetch_Assoc($query);
-		
-		$residuo = $x7c->settings['default_spazio'] - $row['total_size'];
+		$query_obj = $db->DoQuery("SELECT SUM(size) as total_size FROM 
+				{$prefix}objects WHERE owner='$username' AND equipped='1'");
+		$query_usr = $db->DoQuery("SELECT spazio FROM {$prefix}users 
+				WHERE username = '$username'");
+
+		$row_obj = $db->Do_Fetch_Assoc($query_obj);
+		$row_usr = $db->Do_Fetch_Assoc($query_usr);
+	
+		if ($row_usr)
+			$residuo = $row_usr['spazio'] - $row_obj['total_size'];
 
 		return $residuo;
 	}
