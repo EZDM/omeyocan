@@ -1985,13 +1985,14 @@ function admincp_master(){
 			$query_category = $db->DoQuery("SELECT DISTINCT category
 					FROM {$prefix}objects ORDER BY category");
 
+
 			$body .= " <p style=\"text-align: center;\">";
 			while ($row_category = $db->Do_Fetch_Assoc($query_category)) {
 				$long_name = $row_category['category'];
 				if (!$row_category['category'])
 					$long_name = "Senza categoria";
 				$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&category=".
-					$row_category['category']."\">[$long_name] </a>";
+					$row_category['category']."\">[$long_name]</a>";
 			}
 
 			$body .= "</p>";
@@ -2005,12 +2006,31 @@ function admincp_master(){
 					isset($_POST['letter']) ||
 					isset($_GET['category'])){
 				while($row = $db->Do_Fetch_Assoc($query)){
+					$size = "";
+					switch ($row['size']) {
+						case 0:
+							$size = "(minuscolo)";
+							break;
+						case 1:
+							$size = "(piccolo)";
+							break;
+						case 2:
+							$size = "(medio)";
+							break;
+						case 5: 
+							$size = "(grande)";
+							break;
+						default: 
+							$size = "(IMPOSSIBLE SIZE)";
+
+					}
+
 					$category = '';
 					if ($row['category'])
 						$category = $row['category'].": ";
 					$body .= "<tr><td>
 						<a href=\"index.php?act=adminpanel&cp_page=objects&edit=$row[id]\">
-						$category$row[name]</a></td>";
+						$category$row[name]</a> $size</td>";
 
 					if ($row['name'] != $money_name) {
 						$body .= "<td style=\"width=10%\">
