@@ -1593,7 +1593,7 @@ function sheet_page_corp(){
 				}
 				else if($_GET['mgmt']=='charge'){
 					if(isset($_POST['charge'])){
-						$db->DoQuery("UPDATE {$prefix}users SET corp_charge='{$_POST[charge]}' WHERE username='$target'");
+						$db->DoQuery("UPDATE {$prefix}users SET corp_charge='{$_POST['charge']}' WHERE username='$target'");
 						header("location: index.php?act=sheet&page=corp&pg=$pg");
 					}
 				}
