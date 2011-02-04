@@ -2,10 +2,9 @@
 
     function toggle_heal($pg, $heal){
         global $db, $prefix;
-		$errore='';
-		$time=time();
-		$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', autoheal='$heal' WHERE username='$pg'");
-
+			$errore='';
+			$time=time();
+			$db->DoQuery("UPDATE {$prefix}users SET heal_time='$time', autoheal='$heal' WHERE username='$pg'");
     }
     
 		function get_base_group($user){
@@ -371,20 +370,16 @@
 		return $body;
 	}
 
-	function recalculate_space($username){
-                global $x7s, $db, $prefix, $x7c;
-                $query = $db->DoQuery("SELECT size FROM {$prefix}objects WHERE owner='$username' AND equipped='1'");
+	function get_user_space($username){
+		global $db, $prefix, $x7c;
+		$query = $db->DoQuery("SELECT size FROM {$prefix}objects WHERE owner='$username' AND equipped='1'");
 
-                $occupato=0;
-                while($row = $db->Do_Fetch_Assoc($query)){
-                    $occupato+=$row['size'];
-                }
-                $residuo = $x7c->settings['default_spazio'] - $occupato;
+		$occupato=0;
+		while($row = $db->Do_Fetch_Assoc($query)){
+			$occupato+=$row['size'];
+		}
+		$residuo = $x7c->settings['default_spazio'] - $occupato;
 
-                if($residuo<0)
-                        die('Left space not consistent');
-
-                $db->DoQuery("UPDATE {$prefix}users SET spazio='$residuo' WHERE username='$username'");
+		return $residuo;
 	}
-
 ?>
