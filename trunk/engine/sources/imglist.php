@@ -155,32 +155,34 @@ function file_list($path,$url){
 
 		$flash_id = 0;
 	
-		for($fp=0; $fp<count($file_array); $fp++){
+		foreach($file_array as $file){
 
-			if($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])!="dir"){
+			if($file[0]!="." && filetype($path.$file)!="dir"){
 				if($i % $maxcol == 0){
 					$img.="<tr>";
 				}
 				
-				if(preg_match("/swf$/i", $path.$file_array[$fp])){
+				if(preg_match("/swf$/i", $path.$file)){
 					$img.= "			
 						<td align=\"center\" width=\"110\">
-						<a onClick=\"javascript: flash_preview('flash_id$flash_id', '".$url.$file_array[$fp]."');\">
+						<a onClick=\"javascript: flash_preview('flash_id$flash_id', '".
+						$url.$file."');\">
 						<div id=\"flash_id$flash_id\" style=\"background: url('./graphic/flash_preview.gif'); width: 100px; height: 100px;\">
 						</div></a>
 
-						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file_array[$fp]\">
+						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file\">
 						<br>
-						<a onClick=\"putimage('$url$file_array[$fp]');\">
-						$file_array[$fp]</a><br>
-						<a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+						<a onClick=\"putimage('$url$file');\">
+						$file</a><br>
+						<a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 					$flash_id++;
 				}
 				else{
 					$img.= "
 						<td align=\"center\" width=\"110\">
-						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file_array[$fp]\">
-						<a onClick=\"putimage('$url$file_array[$fp]');\"><img src=\"$url$file_array[$fp]\" width=\"100\"> <br>$file_array[$fp]<br></a><a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file_array[$fp]\")'>[Delete]</a><td>\n";
+						<input type=\"checkbox\" name=\"multidel[]\" value=\"$file\">
+						<a onClick=\"putimage('$url$file');\"><img src=\"$url$file\" width=\"100\"> 
+						<br>$file<br></a><a onClick='javascript: do_delete(\"index.php?act=images&subdir={$subdir}&delete=$file\")'>[Delete]</a><td>\n";
 				}
 					
 				$i++;
@@ -190,8 +192,8 @@ function file_list($path,$url){
 				}
 					
 			}
-			elseif($file_array[$fp][0]!="." && filetype($path.$file_array[$fp])=="dir"){
-				$dir.="<li><a href=\"index.php?act=images&subdir=$subdir$sep$file_array[$fp]\">$file_array[$fp]</a></li>";
+			elseif($file[0]!="." && filetype($path.$file)=="dir"){
+				$dir.="<li><a href=\"index.php?act=images&subdir=$subdir$sep$file\">$file</a></li>";
 			}
 
 		}
