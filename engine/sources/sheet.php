@@ -106,13 +106,6 @@ function sheet_page_equip(){
 			$azione="";
 			$action_ok=true;
 
-			$query = $db->DoQuery("SELECT position 
-					FROM {$prefix}users WHERE username='$pg'");
-			$row_msg=$db->Do_Fetch_Assoc($query);
-			
-			if(!$row_msg)
-				die("Utente non esistente");
-
 			if(!$row['equipped']){
 				$equip_value = 1;
 				$azione="equipaggiato";
@@ -132,19 +125,15 @@ function sheet_page_equip(){
 			}
 
 			if($action_ok){
-
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET equipped='$equip_value' WHERE id='{$_GET['equiptgl']}'");
 
-				if($row_msg['position']!="Mappa" && $row_msg['position']!=""){
-					include_once("./lib/message.php");
-					$txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
-					alert_room($row_msg['position'], $txt);
-				}
+				include_once("./lib/message.php");
+				$txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
+				send_global_message($txt);	
 
 				header("location: index.php?act=sheet&page=equip&pg=$pg");
 			}
-
 		}
 	}
 
@@ -199,11 +188,11 @@ function sheet_page_equip(){
 			$errore = "Non puoi consegnare un oggetto che non trasporti";
 		}
 
-		$query = $db->DoQuery("SELECT position
+		$query = $db->DoQuery("SELECT username
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
-		$row_msg=$db->Do_Fetch_Assoc($query);
+		$row_user=$db->Do_Fetch_Assoc($query);
 
-		if(!$row_msg) {
+		if(!$row_user) {
 			$errore = "Utente non esistente";
 		}
 		else {
@@ -266,9 +255,6 @@ function sheet_page_equip(){
 			WHERE owner='$pg' ORDER BY equipped DESC, name");
 
 	$room='';
-	$piccoli=0;
-	$medi=0;
-	$grandi=0;
 
 	while($row=$db->Do_Fetch_Assoc($query)){
 
@@ -308,15 +294,6 @@ function sheet_page_equip(){
 
 			if($row['uses']==0){
 				$obj_name .= " [inutilizzabile]";
-			}
-
-			if($row['equipped']){
-				if($row['size']==1)
-				$piccoli++;
-				if($row['size']==2)
-				$medi++;
-				if($row['size']==5)
-				$grandi++;
 			}
 
 			if(preg_match("/^key_/", $row['name']) ||
@@ -464,9 +441,7 @@ function sheet_page_equip(){
 
 	$body.="</div>\n";
 
-	$body .= '<div class="counter" id="piccoli">'. $piccoli .'</div>';
-	$body .= '<div class="counter" id="medi">'.$medi. '</div>';
-	$body .= '<div class="counter" id="grandi">'.$grandi.' </div>';
+	$body .= '<div class="counter" id="spazio">'. get_user_space($pg) .'</div>';
 
 	if($errore!=''){
 		$body.='<script language="javascript" type="text/javascript">
@@ -2309,20 +2284,11 @@ function print_sheet($body,$bg){
 				position: absolute;
 			}
 			
-			#grandi{
+			#spazio{
 				top: 602px;
-				left: 155px;
+				left: 270px;			
 			}
 			
-			#medi{
-				top: 602px;
-				left: 283px;			
-			}
-			
-			#piccoli{
-				top: 602px;
-				left: 425px;
-			}
 			#corp_name{
 				position: absolute;
 				top: 41px;
