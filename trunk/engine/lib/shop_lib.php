@@ -356,7 +356,7 @@ $GLOBALS['start_cogs'] = 30;
 				AND owner = '$pg'");
 		$row_money = $db->Do_Fetch_Assoc($query_money);
 		if (!$row_money)
-			die("Incosistent money status");
+			return;
 
 		$to_move = $qty;
 		if ($to_move > 0) {
@@ -392,8 +392,7 @@ $GLOBALS['start_cogs'] = 30;
 				AND equipped = 1");
 		$row_money = $db->Do_Fetch_Assoc($query_money);
 		if (!$row_money)
-			die("Incosistent money status");
-
+			return;
 		$to_move = $qty;
 		while ($to_move > 0) {
 			$assign = $to_move;
