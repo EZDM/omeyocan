@@ -50,7 +50,8 @@
 
     <script language="javascript" type="text/javascript">
         function go_there(url){
-              opener.location.href=url;
+							main_win = window.open('', 'main', '');
+              main_win.location.href=url;
               window.close(self);
         }
     </script>
