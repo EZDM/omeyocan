@@ -897,7 +897,7 @@ _gaq.push(['_trackPageview']);
                 var topy = (screen.height/2)-(200/2);
 
                 <?PHP
-									echo popup_open(300, 200, './sources/oscurita_popup.html',
+									echo popup_open(302, 202, './sources/oscurita_popup.html',
 											'oscurita'); ?>
 								hndl.moveTo(leftx, topy); 
                 hndl.focus();
