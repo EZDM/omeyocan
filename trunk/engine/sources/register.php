@@ -117,7 +117,7 @@
         $row = $db->Do_Fetch_Assoc($gif_query);
 
 				if (!$row)
-					die("Invalid base group, sfhoudl not happen");
+					die("Invalid base group, should not happen");
 
         $gif=$row['logo'];
 				
@@ -202,7 +202,7 @@
 					onMouseOut="javascript: restore(this)"></a></td>
 					</a></td>
 				  <td>
-					<a href="index.php?act=register&base_group=Non Cittadino">
+					<a href="index.php?act=register&base_group=Sopravvissuto">
 					<img src="./graphic/uncitizen_choice.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
