@@ -120,10 +120,10 @@
 					<a href="manual/"><div id="rules"></div></a>
 					
 					<a onClick="<?PHP 
-						echo popup_open(500, 715, 'citizen.html','citizen');?>" href="#">
+						echo popup_open(484, 702, 'citizen.html','citizen');?>" href="#">
 						<div id="citizen"></div></a>
 					<a onClick="<?PHP
-						echo popup_open(500, 715, 'uncitizen.html','citizen'); ?>" href="#">
+						echo popup_open(484, 702, 'uncitizen.html','citizen'); ?>" href="#">
 						<div id="uncitizen"></div></a>
 					</div>
 					</td>
