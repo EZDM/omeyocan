@@ -19,101 +19,73 @@
       }
 
       #mausoleo{
-        left: 610px;
-        top: 58px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 54px;
       }
 
       #ishtar{
-        left: 610px;
-        top: 85px;
-        width: 123px;
-        height: 15px;
+        left: 613px;
+        top: 81px;
       }
 
       #lanterne{
-        left: 610px;
-        top: 113px;
-        width: 163px;
-        height: 15px;
+        left: 613px;
+        top: 108px;
       }
 
       #loto{
-        left: 610px;
-        top: 141px;
-        width: 138px;
-        height: 15px;
+        left: 613px;
+        top: 135px;
       }
 
       #inn{
-        left: 610px;
-        top: 166px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 162px;
       }
 
       #soccorso{
-        left: 610px;
-        top: 193px;
-        width: 133px;
-        height: 15px;
+        left: 613px;
+        top: 189px;
       }
 
       #pub{
-        left: 610px;
-        top: 221px;
-        width: 123px;
-        height: 15px;
+        left: 613px;
+        top: 216px;
       }
 
       #vicoli{
-        left: 610px;
-        top: 248px;
-        width: 140px;
-        height: 15px;
+        left: 613px;
+        top: 242px;
       }
 
       #workshop{
-        left: 610px;
-        top: 273px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 269px;
       }
 
       #bastioni{
-        left: 610px;
-        top: 301px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 296px;
       }
 
       #nordest{
-        left: 610px;
-        top: 328px;
-        width: 113px;
-        height: 15px;
+        left: 613px;
+        top: 321px;
       }
 
       #ovest{
-        left: 610px;
-        top: 355px;
-        width: 98px;
-        height: 15px;
+        left: 613px;
+        top: 349px;
       }
 
       #sud{
-        left: 610px;
-        top: 381px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 376px;
       }
 
       #prigione{
-        left: 610px;
-        top: 408px;
-        width: 83px;
-        height: 15px;
+        left: 613px;
+        top: 403px;
       }
 
     </style>
@@ -123,52 +95,88 @@
               opener.location.href=url;
               window.close(self);
         }
+
+				function rollover(element, img) {
+					element.src = img;
+				}
+
+				function rollout(element, img) {
+					element.src = img;
+				}
     </script>
 
   </head>
   <body>
       <div id="container">
         <a href="#" onClick="go_there('../index.php?act=frame&room=Mausoleo')">
-				<div id="mausoleo"></div></a>
+				<div id="mausoleo"><img src="../graphic/613-54Mausoleo.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-54Mausoleo_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-54Mausoleo.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Culto')">
-				<div id="ishtar"></div></a>
+				<div id="ishtar"><img src="../graphic/613-81Tempio.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-81Tempio_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-81Tempio.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Lanterne')">
-				<div id="lanterne"></div></a>
+				<div id="lanterne"><img src="../graphic/613-108Piazza.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-108Piazza_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-108Piazza.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Loto')">
-				<div id="loto"></div></a>
+				<div id="loto"><img src="../graphic/613-135Collegio.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-135Collegio_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-135Collegio.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Inn')">
-				<div id="inn"></div></a>
+				<div id="inn"><img src="../graphic/613-162Iron.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-162Iron_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-162Iron.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Montague')">
-				<div id="soccorso"></div></a>
+				<div id="soccorso"><img src="../graphic/613-189PS.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-189PS_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-189PS.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Licoreria')">
-				<div id="pub"></div></a>
+				<div id="pub"><img src="../graphic/613-216Barracho.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-216Barracho_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-216Barracho.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Mercato')">
-				<div id="vicoli"></div></a>
+				<div id="vicoli"><img src="../graphic/613-242Vicoli.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-242Vicoli_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-242Vicoli.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Bastioni')">
-				<div id="bastioni"></div></a>
+				<div id="bastioni"><img src="../graphic/613-296Bastioni.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-296Bastioni_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-296Bastioni.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=TorreNord')">
-				<div id="nordest"></div></a>
+				<div id="nordest"><img src="../graphic/613-321TorreNE.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-321TorreNE_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-321TorreNE.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Torre2')">
-				<div id="ovest"></div></a>
+				<div id="ovest"><img src="../graphic/613-349TorreO.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-349TorreO_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-349TorreO.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Guradian')">
-				<div id="sud"></div></a>
+				<div id="sud"><img src="../graphic/613-376TorreS.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-376TorreS_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-376TorreS.jpg');"></div></a>
 
         <a href="#" onClick="go_there('../index.php?act=frame&room=Prigione')">
-				<div id="prigione"></div></a>
+				<div id="prigione"><img src="../graphic/613-403Prigione.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-403Prigione_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-403Prigione.jpg');"></div></a>
 
 				<a href="#" onClick="javascript: hndl=window.open('../index.php?act=shop', 'shop','width=802,height=722, toolbar=no, status=yes, location=no, menubar=no, resizable=yes, status=yes, scrollbars=yes'); hndl.focus();";>
-				<div id="workshop"></div></a>
+				<div id="workshop"><img src="../graphic/613-269Workshop.jpg" 
+				onMouseOver="javascript: rollover(this, '../graphic/613-269Workshop_over.jpg');"
+				onMouseOut="javascript: rollout(this, '../graphic/613-269Workshop.jpg');"></div></a>
       </div>
   </body>
 </html>
