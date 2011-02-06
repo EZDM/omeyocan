@@ -9,5 +9,3 @@
 		<x7chat_index>
 	</div>
 </div>
-
-<Br>

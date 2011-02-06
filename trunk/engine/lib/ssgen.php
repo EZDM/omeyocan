@@ -145,13 +145,18 @@
 			#board_wrapper{
 				background-image:url(./graphic/sfondobacheca.jpg);
 				width: 800px; 
-				height: 571px;
+				height: 620px;
 				position:relative;
 				margin: 0 auto;
 				color: black;
 			}
+			#dump_copyright {
+				position: absolute;
+				bottom: 0px;
+				width: 100%
+			}
 			.board_cell{
-				border-bottom: 2px solid white;
+				border-bottom: 1px solid white;
 				text-align: center;
 				padding: 5px;
 			}
@@ -168,11 +173,11 @@
 			}
 			#board_index{
 				position: absolute;
-				width: 26%;
+				width: 28%;
 				float: right;
-				right: 65px;
+				right: 50px;
 				top: 60px;
-				height: 400px;
+				height: 455px;
 				text-align: center;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
@@ -184,7 +189,7 @@
 				top: 60px;
 				left: 40px;
 				width: 420px;
-				height: 390px;
+				height: 450px;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				text-align: center;
