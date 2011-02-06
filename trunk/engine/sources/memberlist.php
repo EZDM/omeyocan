@@ -330,18 +330,18 @@ function memberlist(){
 			$info = new profile_info($row['username']);
 
 			if(in_array("Master", $info->profile['usergroup']))
-				$master_gif='  <img src="./graphic/master_gif.gif" />';
+				$master_gif=' <img src="./graphic/master_gif.gif" />';
 			elseif(in_array("Administrator", $info->profile['usergroup']))
-				$master_gif='  <img src="./graphic/admincoin.gif" />';
+				$master_gif=' <img src="./graphic/admincoin.gif" />';
 			elseif(in_array("Controller", $info->profile['usergroup']))
-				$master_gif='  <img src="./graphic/controller_gif.gif" />';
+				$master_gif=' <img src="./graphic/controller_gif.gif" />';
 
 			$gremios_gif = "<img src=\"".$row['bio']."\" height=15 width=15>";
 			$list[$cur] .= "\n<tr>
 				<td class=\"dark_row\">$gremios_gif<a $barred href=\"#\" class=\"$dead_fmt\" 
 				onClick=\"".
 				popup_open(500, 680, "index.php?act=sheet&pg={$row['username']}",
-						'sheet_other')."\">{$row['username']}$master_gif</a></td>
+						'sheet_other')."\">{$row['username']}</a>$master_gif</td>
 				<td class=\"dark_row\">{$position}</td>";
 
 			if($room!='' && $room!="Mappa")
