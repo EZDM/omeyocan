@@ -219,11 +219,11 @@ function file_upload($path){
 
 	if($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/pjpeg" || $_FILES['file']['type'] == "application/x-shockwave-flash"){
 
-		$size = getimagesize($_FILES['file']['tmp_name']);
+		/*$size = getimagesize($_FILES['file']['tmp_name']);
 		if($size[0] > 650){
 			$print->normal_window("Errore","L'immagine &egrave; troppo larga");
 			return;
-		}
+		}*/
 			
 		move_uploaded_file($_FILES['file']['tmp_name'],$path.$_FILES['file']['name']);
 			
