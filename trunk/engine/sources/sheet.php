@@ -128,9 +128,18 @@ function sheet_page_equip(){
 				$db->DoQuery("UPDATE {$prefix}objects 
 						SET equipped='$equip_value' WHERE id='{$_GET['equiptgl']}'");
 
-				include_once("./lib/message.php");
-				$txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
-				send_global_message($txt);	
+				include('./lib/alarms.php');
+				toggle_equip_log($row['name'], $azione);
+
+				$query = $db->DoQuery("SELECT position		
+						FROM {$prefix}users WHERE username='$pg'");		
+				$row_msg=$db->Do_Fetch_Assoc($query);		
+
+				if($row_msg && $row_msg['position']!="Mappa" && $row_msg['position']!=""){
+					include_once("./lib/message.php");
+					$txt="L\'utente $pg ha $azione l\'oggetto $row[name]";
+					alert_room($row_msg['position'], $txt);
+				}
 
 				header("location: index.php?act=sheet&page=equip&pg=$pg");
 			}

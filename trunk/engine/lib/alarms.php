@@ -68,6 +68,20 @@
 		
 	}
 	
+	function toggle_equip_log($modified, $action){
+		global $x7s, $x7c, $prefix, $db;
+		
+		if($page=='')
+			$page="main";
+		
+		$msg = "<b>EQUIP OGGETTO</b>: l\'utente <b>{$x7s->username} </b> ha $action l\'oggetto $modified <br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
+		
+		
+	}
+	
 	function object_assignement($owner, $obj){
 		global $x7s, $x7c, $prefix, $db;
 		
