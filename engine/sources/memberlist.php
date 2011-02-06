@@ -330,11 +330,11 @@ function memberlist(){
 			$info = new profile_info($row['username']);
 
 			if(in_array("Master", $info->profile['usergroup']))
-				$master_gif=' <img src="./graphic/master_gif.gif" />';
+				$master_gif='&nbsp;&nbsp;&nbsp;<img src="./graphic/master_gif.gif" />';
 			elseif(in_array("Administrator", $info->profile['usergroup']))
-				$master_gif=' <img src="./graphic/admincoin.gif" />';
+				$master_gif='&nbsp;&nbsp;&nbsp;<img src="./graphic/admincoin.gif" />';
 			elseif(in_array("Controller", $info->profile['usergroup']))
-				$master_gif=' <img src="./graphic/controller_gif.gif" />';
+				$master_gif='&nbsp;&nbsp;&nbsp;<img src="./graphic/controller_gif.gif" />';
 
 			$gremios_gif = "<img src=\"".$row['bio']."\" height=15 width=15>";
 			$list[$cur] .= "\n<tr>
