@@ -1,3 +1,4 @@
+<div style="height: 95%; overflow: auto;">
 <table border="0" cellspacing="0" cellspacing="0" width="100%" align="center">
 	<tr>
 		<td height="25" class="box_header"><x7chat_header></td>
@@ -14,4 +15,4 @@
 		</td>
 	</tr>
 </table> 
-<Br><Br> 
+</div>
