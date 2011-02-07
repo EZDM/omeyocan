@@ -140,9 +140,9 @@
 				offline_markasread($_GET['read']);
 
 				$mid = $_GET['read'];
-				$author = $msgs[$mid][1];
+				$author = @$msgs[$mid][1];
 
-				$nb = offline_msg_split($msgs[$mid][2]);
+				$nb = offline_msg_split(@$msgs[$mid][2]);
 				$msgbody = $nb[0];
 				$subject = $nb[1];
 				$time = $nb[2];
@@ -301,7 +301,7 @@
 				$replybody='';
 				if(isset($_GET['back'])){
 					$back="&read=".$_GET['back'];
-					$nb = offline_msg_split($msgs[$_GET['back']][2]);
+					$nb = offline_msg_split(@$msgs[$_GET['back']][2]);
 					$msgbody = $nb[0];
 					$subject = $nb[1];
 					
