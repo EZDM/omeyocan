@@ -63,14 +63,18 @@
   $x7c->settings['show_enter_message'] = false;
 
   if(!isset($_GET['frame']))
-  $_GET['frame'] = 'main';
+	  $_GET['frame'] = 'main';
 
 
-  if(!isset($_GET['room']))
-  die("Fatal error, room name not set.");
+  if(!isset($_GET['room'])) {
+		header("Location: index.php?errore=noroom");
+		return;
+	}
 
-  if($_GET['room'] == "Mappa" && !isset($_GET['frame']))
-  header("Location: index.php?errore=noroom");
+  if($_GET['room'] == "Mappa" && !isset($_GET['frame'])) {
+		header("Location: index.php?errore=noroom");
+		return;
+	}
 
   if(isset($_GET['delete']))
   if($x7c->permissions['admin_panic']){
@@ -92,6 +96,11 @@
       WHERE name='$_GET[room]'");
   $row = $db->Do_Fetch_Assoc($query);
 
+	// The room does not exist
+	if (!$row) {
+		header("Location: index.php?errore=noroom");
+		return;
+	}
 
   //If it is private
   if($row['type'] == 2 &&
@@ -679,8 +688,10 @@
 
       $row = $db->Do_Fetch_Assoc($query);
 
-      if($row['num'] >= $x7c->room_data['maxusers'])
-        echo "9;;./index.php?act=overload|";
+      if($row['num'] >= $x7c->room_data['maxusers']) {
+        header("Location: ./index.php?act=overload");
+				return;
+			}
 
       // Create a new record for you
       $time = time();
