@@ -71,9 +71,6 @@
 	function toggle_equip_log($modified, $action){
 		global $x7s, $x7c, $prefix, $db;
 		
-		if($page=='')
-			$page="main";
-		
 		$msg = "<b>EQUIP OGGETTO</b>: l\'utente <b>{$x7s->username} </b> ha $action l\'oggetto $modified <br>";
 		
 		$time = time();
