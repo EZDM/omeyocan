@@ -480,7 +480,7 @@
 		if(preg_match("/^(.+?)::/i",$body,$match))
 			$return[1] = $match[1];
 		else
-			$return[1] = "":
+			$return[1] = "";
 
 		$tmp=preg_replace("/^(.+?)::/i","",$body);
 		if(preg_match("/^(.+?)::/i",$tmp,$match) && is_numeric($match[1]))
