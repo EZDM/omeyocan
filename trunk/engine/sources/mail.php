@@ -199,7 +199,7 @@
 					<Br><Br><div align=\"center\">
 					<div align=\"left\">
 					<a href=\"index.php?act=mail\">[Elenco]</a>
-					</div
+					</div>
 					
 					</div>";
 
@@ -506,8 +506,8 @@
 			}
 			
 			#message_tbl {
-				width: 400px; 
-				height: 100%;
+				width: 100%; 
+				height: 330px;
 				overflow: auto;
 			}
 			
