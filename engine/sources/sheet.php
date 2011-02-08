@@ -810,7 +810,8 @@ function sheet_page_ability(){
 								username='$pg' AND
 								corp=''
 							ORDER BY dep,name");
-		
+
+	$ability = array();
 	while($row = $db->Do_Fetch_Assoc($query)){
 		$ability[$row['ability_id']]=$row;
 	}
