@@ -1504,7 +1504,7 @@ function admincp_master(){
 			}
 
 			$shop_return = false;
-			if($_POST['shop_return']) {
+			if(isset($_POST['shop_return'])) {
 				$shop_return = true;
 			}
 
