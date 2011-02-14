@@ -37,28 +37,32 @@ function imglist_main(){
 			
 		//Eventualmente estendere per le sottodirectory
 		$file_path=$basedir.$image_dir;
-			
+		
+		$error = "<p style=\"color: red; font-weight: bold;\">";
 		if(isset($_GET['file'])){
-			file_upload($file_path);
+			$error .= file_upload($file_path);
 		}
 		elseif(isset($_GET['delete'])){
-			file_delete($file_path.$_GET['delete']);
+			$error .= file_delete($file_path.$_GET['delete']);
 		}
 		elseif(isset($_POST['multidel'])){
 			foreach ($_POST['multidel'] as $file){
-				file_delete($file_path.$file);
+				$error .= file_delete($file_path.$file);
 			}
 		}
+		$error .= "</p>";
 			
 		$site_path=dirname($_SERVER['PHP_SELF']).$image_dir;
-		file_list($file_path,$site_path);
+		$output = file_list($file_path, $site_path);
+
+		$body = $error.$output['body'];
+		$head = $output['head'];
+
+		$print->normal_window($head, $body);
 			
 	}
 	else{
-
-		$head="Errore";
-		$body="Non sei autorizzato a vedere questa pagina";
-		$print->normal_window($head,$body);
+		return "Non sei autorizzato a vedere questa pagina <br>";
 	}
 
 
@@ -206,31 +210,32 @@ function file_list($path,$url){
 
 	$body.=$dir.$img;
 	$body.="</table>";
-	$print->normal_window($head,$body);
+
+	$output['head'] = $head;
+	$output['body'] = $body;
+	return $output;
 }
 
 function file_upload($path){
 	global $print;
 
 	if(eregi("[^a-zA-Z0-9\-_\.]",$_FILES['file']['name'])){
-		$print->normal_window("Errore", "Il nome del file non puo' avere spazi o caratteri speciali");
-		return;
+		return "Errore: il nome del file non puo' avere spazi o caratteri speciali<br>";
 	}
 
 	if($_FILES['file']['type'] == "image/gif" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/pjpeg" || $_FILES['file']['type'] == "application/x-shockwave-flash"){
 
 		/*$size = getimagesize($_FILES['file']['tmp_name']);
 		if($size[0] > 650){
-			$print->normal_window("Errore","L'immagine &egrave; troppo larga");
-			return;
+			return "L'immagine &egrave; troppo larga<br>";
 		}*/
 			
 		move_uploaded_file($_FILES['file']['tmp_name'],$path.$_FILES['file']['name']);
 			
-		$print->normal_window("Upload ok",$_FILES['file']['name']);
+		return "Upload ok ".$_FILES['file']['name']."<br>";
 	}
 	else{
-		$print->normal_window("Errore", "Tipo di file errato");
+		return "Errore: tipo di file errato<br>";
 	}
 }
 
@@ -238,10 +243,10 @@ function file_delete($path){
 	global $print;
 
 	if(unlink($path)){
-		$print->normal_window("Delete ok", basename($path));
+		return "Delete ok ". basename($path). "<br>";
 	}
 	else{
-		$print->normal_window("Errore", "Impossibile cancellare il file specificato");
+		return "Errore: impossibile cancellare il file specificato<br>";
 	}
 }
 
