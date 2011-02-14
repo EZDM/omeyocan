@@ -103,9 +103,7 @@
 	}
 
   //If it is private
-  if($row['type'] == 2 &&
-      (!isset($_GET['frame']) ||
-       $_GET['frame']!="update" && $_GET['frame']!="send")){
+  if($row['type'] == 2) {
     if($x7s->username != $_GET['room'] && !$x7c->permissions['admin_panic']){
       //We are not the owner of the room or the master..
       //To enter we must own the keyCode
@@ -127,37 +125,41 @@
           $_GET['key_used'] = $row['id'];
 
         $remain = -1;      
-        if($row['uses'] > 0){
-          //If we have a limited access to the room whe must update the use 
-          // of the keyCode
-          $remain = $row['uses'] - 1;
-
-          if($remain <= 0){
-            $db->DoQuery("DELETE FROM {$prefix}objects
-                WHERE
-                owner = '{$x7s->username}' AND
-                name = 'key_$_GET[room]' AND
-                id = '$_GET[key_used]'
-                ");
-          }
-          else{
-            $db->DoQuery("UPDATE {$prefix}objects
-                SET uses=$remain
-                WHERE
-                owner = '{$x7s->username}' AND
-                name = 'key_$_GET[room]' AND
-                id = '$_GET[key_used]'
-                ");
-          }
-        }
-        include_once('./lib/alarms.php');
-        object_usage($x7s->username, $_GET['key_used'], $remain);
-
-      }
+      
+				if(!isset($_GET['frame']) || ($_GET['frame']!="update" && $_GET['frame']!="send")){
+					if($row['uses'] > 0) {
+						//If we have a limited access to the room whe must update the use 
+						// of the keyCode
+						$remain = $row['uses'] - 1;
+						$db->DoQuery("UPDATE {$prefix}objects
+								SET uses=$remain
+								WHERE
+								owner = '{$x7s->username}' AND
+								name = 'key_$_GET[room]' AND
+								id = '$_GET[key_used]'
+								");
+					} else if ($row['uses'] == 0) {
+						$db->DoQuery("DELETE FROM {$prefix}objects
+								WHERE
+								owner = '{$x7s->username}' AND
+								name = 'key_$_GET[room]' AND
+								id = '$_GET[key_used]'
+								");
+					}
+					include_once('./lib/alarms.php');
+					object_usage($x7s->username, $_GET['key_used'], $remain);
+				}
+			}
       if(!$ok){
+				if(!isset($_GET['frame']) || ($_GET['frame']!="update" && $_GET['frame']!="send")){
         //We do not own a valid key
         header("Location: index.php?errore=nokey");
         return;
+				}
+				else {
+					echo("9;Non hai la chiave per questa stanza;index.php");
+					return;
+				}
       }
 
     }

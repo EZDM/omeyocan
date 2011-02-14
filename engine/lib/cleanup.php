@@ -90,6 +90,26 @@
 			rmdir("{$x7c->settings['logs_path']}/$guest");
 		}
 	}
+
+	// remove temporary objects
+	function cleanup_temp_objects() {
+		include_once('./lib/shop_lib.php');
+		global $db, $prefix, $shopper;
+		$time = time();
+
+		$query = $db->DoQuery("SELECT * FROM {$prefix}temp_obj WHERE expire_time < $time");
+		while ($row = $db->Do_Fetch_Assoc($query)) {
+			if ($row['shop_return']) {
+				$db->DoQuery("UPDATE {$prefix}objects SET owner = '$shopper' 
+						WHERE id = '$row[id]'");
+			}
+			else {
+				$db->DoQuery("DELETE FROM {$prefix}objects WHERE id = '$row[id]'");
+			}
+		}
+
+		$db->DoQuery("DELETE FROM {$prefix}temp_obj WHERE expire_time < $time");
+	}
 	
 	// Updates the timestamps on your current room and username
 	function prevent_cleanup(){
@@ -102,15 +122,14 @@
 	}
 
 	function resurgo(){
-              global $db, $prefix;
-              $time = time();
-              $query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE resurgo<'$time' AND info='Morto'");
-              
-              while($row = $db->Do_Fetch_Assoc($query)){
-              	include_once("./lib/sheet_lib.php");
-              	toggle_death($row['username'], 0);
-              }
-              
+		global $db, $prefix;
+		$time = time();
+		$query = $db->DoQuery("SELECT username FROM {$prefix}users WHERE resurgo<'$time' AND info='Morto'");
+
+		while($row = $db->Do_Fetch_Assoc($query)){
+			include_once("./lib/sheet_lib.php");
+			toggle_death($row['username'], 0);
+		}
 	}
 	
 	function delete_user($user){

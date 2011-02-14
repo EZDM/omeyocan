@@ -319,6 +319,7 @@
 				if(isset($_GET['group'])){
 				
 					
+					$elenco = '';
 					if(checkIfMaster()){
 						$elenco = '<option value="all">Tutti</option>';
 						$query = "SELECT DISTINCT usergroup FROM {$prefix}groups";
