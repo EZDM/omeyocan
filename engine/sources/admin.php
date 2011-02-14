@@ -1383,8 +1383,8 @@ function admincp_master(){
 
 				$value = calculate_obj_value($_POST['id'], $shopper);
 
-				if ($value <= 0 && $obj_name == $money_name) {
-					$error = "L'oggetto non ha valore";
+				if ($value <= 0 || $obj_name == $money_name) {
+					$error = "Errore: l'oggetto non ha valore";
 				}
 				else {
 					if ($delta_avail < 0) {
