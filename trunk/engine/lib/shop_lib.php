@@ -207,7 +207,7 @@ $GLOBALS['start_cogs'] = 30;
 		global $db, $prefix, $shopper;
 
 		$query_obj = $db->DoQuery("
-				SELECT name, size FROM {$prefix}objects
+				SELECT id, name, size, expire_span, shop_return FROM {$prefix}objects
 				WHERE id='$obj'
 				AND owner='$from'
 				AND equipped='1'");
@@ -218,18 +218,29 @@ $GLOBALS['start_cogs'] = 30;
 			return "Oggetto non posseduto/equipaggiato<br>";
 
 		include_once('./lib/sheet_lib.php');
+		
+		if ($from != $shopper) {
+			if (get_user_space($from) + $row_obj['size'] < 0) {
+				return "Spazio non sufficiente per disequipaggiare l'oggetto ".
+					"$row_obj[name]<br>";
+			}
+		}
+
 		// Shopper has infinite space
 		if ($to != $shopper) {
 			if (get_user_space($to) - $row_obj['size'] < 0) {
 				return "Spazio non sufficiente per equipaggiare l'oggetto ".
 					"$row_obj[name]<br>";
 			}
-		}
 
-		if ($from != $shopper) {
-			if (get_user_space($from) + $row_obj['size'] < 0) {
-				return "Spazio non sufficiente per disequipaggiare l'oggetto ".
-					"$row_obj[name]<br>";
+			if ($row_obj['expire_span'] > 0) {
+				$expire_time = time() + $row_obj['expire_span'] * 60;
+				if(!$check_only) {
+					$db->DoQuery("INSERT INTO {$prefix}temp_obj 
+							(id, expire_time, shop_return)
+							VALUES
+							('$row_obj[id]', '$expire_time', '$row_obj[shop_return]')");
+				}
 			}
 		}
 

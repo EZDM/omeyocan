@@ -80,7 +80,7 @@ function sheet_page_equip(){
 
 	if(isset($_GET['moduse']) && checkIfMaster()){
 		if(!isset($_POST['use']) || !isset($_POST['id'])){
-			die("Bad form");
+			die("Bad form 3");
 		}
 			
 		$db->DoQuery("UPDATE {$prefix}objects SET uses='$_POST[use]'
@@ -149,7 +149,7 @@ function sheet_page_equip(){
 	if(isset($_GET['pay']) && ($x7s->username==$pg || checkIfMaster())){
 		global $shopper;
 		if(!isset($_POST['owner']) || !isset($_POST['amount'])){
-			die("Bad form");
+			die("Bad form 4");
 		}
 		$query = $db->DoQuery("SELECT count(*) AS cnt
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
@@ -165,7 +165,7 @@ function sheet_page_equip(){
 
 	if(isset($_GET['split']) && ($x7s->username==$pg || checkIfMaster())){
 		if(!isset($_POST['amount']) || !isset($_POST['group']))
-			die("Bad form");
+			die("Bad form 2");
 
 		$errore = split_money($_POST['amount'], $pg, $_POST['group']);
 	}
@@ -176,7 +176,7 @@ function sheet_page_equip(){
 
 	if(isset($_GET['assign']) && ($x7s->username==$pg || checkIfMaster())){
 		if(!isset($_POST['owner']) || !isset($_POST['id'])){
-			die("Bad form");
+			die("Bad form owner: $_POST[owner] id: $_POST[id]");
 		}
 		$query = $db->DoQuery("SELECT count(*) AS cnt
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
@@ -219,19 +219,38 @@ function sheet_page_equip(){
 			if(preg_match("/^masterkey/", $row['name'])){
 				list($pre, $name)=split("masterkey_", $row['name']);
 				$obj="key_$name";
+
 				if(!isset($_POST['grants']) ||
-						$_POST['grants'] <= 0 || $_POST['grants']== '')
-				$_POST['grants'] = -1;
+						$_POST['grants'] <= 0 || $_POST['grants']== '') {
+					$_POST['grants'] = -1;
+				}
+				
 					
 				$db->DoQuery("INSERT INTO {$prefix}objects
-							(name, description, owner, uses, image_url, equipped)
+							(name, description, owner, uses, image_url, equipped,
+							 expire_span, visible_uses)
 							VALUES (
 								'$obj',
 								'$row[description]',
 								'$_POST[owner]',
 								'$_POST[grants]',
-								'$row[image_url]','1')
+								'$row[image_url]','1',
+								'$row[expire_span]', '$row[visible_uses]')
 						");
+
+				$new_id = mysql_insert_id();
+
+				// If master key expires, also the client key must expire at the same moment
+				if ($row['expire_span'] > 0) {
+					$expire_query = $db->DoQuery("SELECT expire_time FROM {$prefix}temp_obj 
+							WHERE id = '$row[id]'");
+					$row_expire = $db->Do_Fetch_Assoc($expire_query);
+					if ($row_expire) {
+						$db->DoQuery("INSERT INTO {$prefix}temp_obj
+								(id, expire_time) VALUES
+								('$new_id', '$row_expire[expire_time]')");
+					}
+				}
 			}
 			else{
 				$db->DoQuery("UPDATE {$prefix}objects
@@ -327,11 +346,6 @@ function sheet_page_equip(){
 							</td>
               </tr>';
 					}
-					else{
-						$remaining_uses = 
-							($row['uses'] == -1) ? "illimitati" : $row['uses'];
-						$description .= "<br>(Usi rimasti: $remaining_uses)";
-					}
 
 					$obj_name = '<a onClick="javascript: hdl=window.open(\'\',\'main\'); hdl.location.href=\'index.php?act=frame&room='.$name.'&key_used='.$row['id'].'\'; window.location.reload(); hdl.focus(); "> Stanza di '.$name.$master_string.'</a>';
 
@@ -346,8 +360,25 @@ function sheet_page_equip(){
 			}
 
 			$visible_uses = '';
-			if($row['visible_uses'] && $row['uses'] >= 0)
-				$visible_uses = "<br>Usi rimasti: $row[uses]";
+			if($row['visible_uses']) {
+				if($row['uses'] >= 0)
+					$visible_uses = "<br>Usi rimasti: $row[uses]";
+				else
+					$visible_uses = "<br>Usi rimasti: illimitati";
+			}
+
+			$expire_string = '';
+			if ($row['expire_span'] > 0) {
+				$query_expire = $db->DoQuery("SELECT expire_time 
+						FROM {$prefix}temp_obj
+						WHERE id = '$row[id]'");
+				$row_expire = $db->Do_Fetch_Assoc($query_expire);
+				if ($row_expire) {
+					$expire_string = "<br>(Scadenza: ".
+						date("d/m/Y H:i",$row_expire['expire_time']).")";
+				}
+			}
+
 
 			$body.= "<table width=100%> <tr> <td class=\"obj\">
 				<img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
@@ -355,6 +386,7 @@ function sheet_page_equip(){
         <b>$obj_name</b>
         <br>Dimensione: $dimensione
 				$visible_uses
+				$expire_string
         <p>$description</p>
         </div> </td> </tr> </table>";
 
@@ -416,8 +448,8 @@ function sheet_page_equip(){
           <td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
           <td><input type=\"submit\" class=\"button\" value=\"Dai\"></td>
           </tr>
-          </form>
           $more_form
+          </form>
           <tr>
           <td><input type=\"button\" class=\"button\" value=\"Butta\"
 					onClick=\"javascript: confirmDrop($row[id])\">

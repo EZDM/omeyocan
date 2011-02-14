@@ -1408,10 +1408,11 @@ function admincp_master(){
 								$db->DoQuery("INSERT INTO {$prefix}objects
 										(name,description,uses,
 										 image_url,owner,equipped,size,category,base_value,
-										 visible_uses)
+										 visible_uses, expire_span, shop_return)
 										VALUES('$row[name]','$row[description]','$row[uses]',
 											'$row[image_url]','$shopper','1','$row[size]',
-											'$row[category]',$row[base_value],'$row[visible_uses]')");
+											'$row[category]',$row[base_value],'$row[visible_uses]',
+											'$row[expire_span]','$row[shop_return]')");
 							}
 						}
 					}
@@ -1454,13 +1455,28 @@ function admincp_master(){
 			if($error==''){
 				$db->DoQuery("INSERT INTO {$prefix}objects
 						(name,description,uses,image_url,owner,equipped,size,category,
-						 visible_uses)
+						 visible_uses, expire_span, shop_return)
 						VALUES('$row[name]','$row[description]','$row[uses]',
 							'$row[image_url]','$_POST[owner]','1','$row[size]',
-							'$row[category]','$row[visible_uses]')");
+							'$row[category]','$row[visible_uses]','$row[expire_span]',
+							'$row[shop_return]')");
+
+				$new_id = mysql_insert_id();
 
 
 				$error="Oggetto assegnato correttamente\n";
+
+				if ($row['expire_span'] > 0) {
+					$expire_time = time() + $row['expire_span'] * 60;
+
+					$db->DoQuery("INSERT INTO {$prefix}temp_obj 
+							(id, expire_time, shop_return)
+							VALUES
+							('$new_id', '$expire_time', '$row[shop_return]')");
+				
+					$error .= "<br>L'oggetto scadra' il:".date("d/m/Y H:i", $expire_time);
+				}
+
 				include_once('./lib/alarms.php');
 				object_assignement($_POST['owner'],$row['name']);
 			}
@@ -1475,15 +1491,22 @@ function admincp_master(){
 					!isset($_POST['image_url'])||
 					!isset($_POST['size'])||
 					!isset($_POST['base_value'])||
-					!isset($_POST['category'])){
+					!isset($_POST['category'])||
+					!isset($_POST['expire_span']) ){
 
 				die("Bad form");
 			}
 
 			$_POST['name'] = trim($_POST['name']);
 			$visible_uses = false;
-			if(isset($_POST['visible_uses']))
+			if(isset($_POST['visible_uses'])) {
 				$visible_uses = true;
+			}
+
+			$shop_return = false;
+			if($_POST['shop_return']) {
+				$shop_return = true;
+			}
 
 			$category = $_POST['category'];
 			if ($_POST['category'] == "_new_" && isset($_POST['new_category']))
@@ -1505,7 +1528,9 @@ function admincp_master(){
 							size='$_POST[size]',
 							base_value='$_POST[base_value]',
 							category='$category',
-							visible_uses='$visible_uses'
+							visible_uses='$visible_uses',
+							expire_span='$_POST[expire_span]',
+							shop_return = '$shop_return'
 						WHERE id='$_POST[id]'");
 				
 				// Update not sold copies
@@ -1517,7 +1542,9 @@ function admincp_master(){
 							size='$_POST[size]',
 							base_value='$_POST[base_value]',
 							category='$category',
-							visible_uses='$visible_uses'
+							visible_uses='$visible_uses',
+							expire_span='$_POST[expire_span]',
+							shop_return = '$shop_return'
 						WHERE name='$old_name' AND owner='$shopper'");
 
 				// Sync existing objects 
@@ -1530,7 +1557,9 @@ function admincp_master(){
 								size='$_POST[size]',
 								base_value='$_POST[base_value]',
 								category='$category',
-								visible_uses='$visible_uses'
+								visible_uses='$visible_uses',
+								expire_span='$_POST[expire_span]',
+								shop_return = '$shop_return'
 							WHERE name='$old_name'");
 					
 					$query_count_obj = $db->DoQuery("SELECT count(*) AS cnt
@@ -1598,12 +1627,13 @@ function admincp_master(){
 				else {
 					$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
-						 equipped, size, base_value, category, visible_uses)
+						 equipped, size, base_value, category, visible_uses, expire_span, 
+						 shop_return)
 						VALUES(
 							'$_POST[name]',	'$_POST[description]',
 							'$_POST[uses]',	'$_POST[image_url]',
-							'1','$_POST[size]',
-							'$_POST[base_value]', '$category', '$visible_uses'
+							'1','$_POST[size]', '$_POST[base_value]', '$category', 
+							'$visible_uses', '$_POST[expire_span]', '$shop_return'
 							)");
 				}
 			}
@@ -1659,10 +1689,11 @@ function admincp_master(){
 					if($row_obj_master['cnt'] == 0){
 						//Copy of the key for the master
 						$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url,equipped,size)
+								(name, description, uses, image_url, equipped, size, 
+								 visible_uses)
 								VALUES ('masterkey_$_POST[owner]',
 									'Chiave della stanza di $_POST[owner]', '-1',
-									'./graphic/private_key.jpg','1','0')");
+									'./graphic/private_key.jpg','1','0','1')");
 						$body .= "Copia master della chiave creata con successo<br>";
 					}
 					else
@@ -1671,10 +1702,11 @@ function admincp_master(){
 					if($row_obj_user['cnt'] == 0){
 						//Cooy of the key for the owner
 						$db->DoQuery("INSERT INTO {$prefix}objects
-								(name, description, uses, image_url, owner,equipped,size)
+								(name, description, uses, image_url, owner, equipped, size,
+								 visible_uses)
 								VALUES ('masterkey_$_POST[owner]',
 									'Chiave della stanza di $_POST[owner]', '-1',
-									'./graphic/private_key.jpg','$_POST[owner]','1','0')");
+									'./graphic/private_key.jpg','$_POST[owner]','1','0', '1')");
 						$body .= "Copia utente della chiave creata con successo<br>";
 						include_once('./lib/alarms.php');
 						object_assignement($_POST['owner'],
@@ -1736,6 +1768,7 @@ function admincp_master(){
 				$row['base_value']=-1;
 				$row['category']='';
 				$row['visible_uses']='';
+				$row['expire_span']='-1';
 
 			}
 			$minuscolo="";
@@ -1746,9 +1779,15 @@ function admincp_master(){
 			$grande="";
 			$c_grande="";
 			$visible_uses_checked='';
+			$shop_return_checked = '';
 
-			if($row['visible_uses'])
+			if($row['visible_uses']) {
 				$visible_uses_checked = "checked";
+			}
+
+			if($row['shop_return']) {
+				$shop_return_checked = "checked";
+			}
 
 			switch ($row['size']) {
 				case 0:
@@ -1851,6 +1890,19 @@ function admincp_master(){
 				<td>Gli usi rimasti sono visibili?
 				</td>
 				<td><input type=\"checkbox\" class=\"text_input\" name=\"visible_uses\" $visible_uses_checked>
+				</td>
+				</tr>
+				<tr>
+				<td>Scadenza in minuti (-1: no scadenza)
+				</td>
+				<td><input type=\"text\" class=\"text_input\" name=\"expire_span\" 
+				value=\"$row[expire_span]\">
+				</td>
+				</tr>
+				<tr>
+				<td>Torna in vendita dopo la scadenza?
+				</td>
+				<td><input type=\"checkbox\" class=\"text_input\" name=\"shop_return\" $shop_return_checked>
 				</td>
 				</tr>
 				<tr>

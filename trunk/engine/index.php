@@ -145,6 +145,7 @@
 		cleanup_banned();
 	  resurgo();
     cleanup_messages();
+		cleanup_temp_objects();
   }
 
   // Now before all else we have to get them logged in if they are not already
