@@ -174,9 +174,11 @@
 		$del_day='';
 		$time = time();
 
-		//We do this check once per day
+		// We do this check once per day
 		$now = date("d/m/Y");
-		$before = date("d/m/Y", $x7c->settings['last_cleanup']); 
+
+		// We reset at 5 in the morning
+		$before = date("d/m/Y", $x7c->settings['last_cleanup'] + 5*3600); 
 		if($now == $before){
 			return;
 		}
