@@ -3006,20 +3006,24 @@ function admincp_master(){
 				include_once("./lib/message.php");
 				$time = time();
 				$row_punish = $db->Do_Fetch_Assoc($db->DoQuery("
-							SELECT last_punish FROM {$prefix}users
+							SELECT last_punish FROM {$prefix}punish
 							WHERE username = '$_GET[punish]'"));
 
 				if($row_punish && 
 						date("d/m/Y") != date("d/m/Y", $row_punish['last_punish'])) {
-					$db->DoQuery("UPDATE {$prefix}users SET last_punish = $time, 
-							xp = xp - 5
+					$db->DoQuery("UPDATE {$prefix}punish SET last_punish = $time 
 							WHERE username = '$_GET[punish]'");
+					$db->DoQuery("UPDATE {$prefix}users SET xp = xp - 5
+							WHERE username = '$_GET[punish]'");
+
 					send_offline_msg($_GET['punish'], "Non hai usato il loto nero",
 							$punishment_warn, $x7s->username);
 				}
 
 			}
 			// Logging is enabled, tell them so
+			$date_string = date("d/m/Y", time() - 24*3600);
+
 			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&".
 					"cp_page=logs&able=1\">",$txt[485]);
 			$body = $txt[485]."<Br><br>";
@@ -3029,23 +3033,20 @@ function admincp_master(){
 				"cp_page=settings&settings_page=logs\">$txt[486]</a><Br><Br></div>";
 
 			// Daily stats for users
-			$body .= "<b>User's daily posts (".date("d/m/Y").")</b>
+			$body .= "<b>User's daily posts (".$date_string.")</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
 				<td height=\"25\">Username</td>
-				<td width=\"33%\" height=\"25\">Posts odierni</td>
+				<td width=\"33%\" height=\"25\"># Posts</td>
 				<td width=\"33%\" height=\"25\">Loto nero</td>
 				</tr>
 				</table>
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 
-			$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish, 
-					daily_lotus
-					FROM {$prefix}users 
-					WHERE daily_post > 0
-					AND base_group = '{$x7c->settings['usergroup_default']}'
+			$query_daily = $db->DoQuery("SELECT username, last_punish, daily_post
+					FROM {$prefix}punish
 					ORDER BY username");
 
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
@@ -3071,20 +3072,19 @@ function admincp_master(){
 			$body .= "</table>";
 			
 			// Daily stats for rooms
-			$body .= "<b>Room's daily posts (".date("d/m/Y").")</b>
+			$body .= "<b>Room's daily posts (".$date_string.")</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
 				<td height=\"25\">Room</td>
-				<td width=\"33%\" height=\"25\">Posts odierni</td>
+				<td width=\"33%\" height=\"25\"># Posts</td>
 				</tr>
 				</table>
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 			
 			$query_daily = $db->DoQuery("SELECT name, daily_post
-					FROM {$prefix}rooms 
-					WHERE daily_post > 0
+					FROM {$prefix}roomposts 
 					ORDER BY name");
 
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
@@ -3102,7 +3102,8 @@ function admincp_master(){
 			include_once("./lib/rooms.php");
 			$rooms = list_rooms();
 			$body .= "<Br>
-				<table align=\"center\"  width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				<table align=\"center\"  width=\"95%\" border=\"0\" 
+					cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
 				<td height=\"25\">&nbsp;$txt[31]</td>
 				<td width=\"33%\" height=\"25\">$txt[482]</td>
