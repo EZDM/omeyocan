@@ -3023,7 +3023,7 @@ function admincp_master(){
 
 			}
 			// Logging is enabled, tell them so
-			$date_string = date("d/m/Y", time() - 24*3600);
+			$date_string = date("d/m/Y", $x7c->settings['last_cleanup'] - 24*3600);
 
 			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&".
 					"cp_page=logs&able=1\">",$txt[485]);
