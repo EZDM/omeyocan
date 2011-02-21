@@ -38,7 +38,7 @@ function shop_main(){
 
 function get_object_list($user, $start_from) {
 	global $db, $prefix, $max_items, $shopper, $money_name, $x7c;
-	$body = '<table width=100% border=1 rules=rows>';
+	$body = '<table width=100% border=1 rules="rows">';
 	$trade_action = "sell[]";
 	$start_limit = ($start_from - 1) * $max_items;
 
@@ -79,6 +79,31 @@ function get_object_list($user, $start_from) {
 		else
 			$valore = calculate_obj_value($row['id'], $user);
 
+		$size = "__Dimensione Errata__";
+		switch ($row['size']) {
+			case 0:
+				$size = "Minuscola";
+				break;
+			case 1:
+				$size = "Piccola";
+				break;
+			case 2:
+				$size = "Media";
+				break;
+			case 5:
+				$size = "Grande";
+				break;
+			case -1:
+				$size = "Capienza piccola";
+				break;
+			case -2:
+				$size = "Capienza media";
+				break;
+			case -5:
+				$size = "Capienza grande";
+				break;
+		}
+
 		if ($valore <= 0)
 			$valore = "Senza valore";
 		$body .= '
@@ -91,7 +116,8 @@ function get_object_list($user, $start_from) {
 			<img width=100 height=100 src="'.$row['image_url'].'" '. 
 			'align="left">
 			<b>'.$row['name'].'</b><br>
-			Valore: '.$valore.'
+			Valore: '.$valore.'<br>
+			Dimensione: '.$size.'
 			<p>'.$row['description'].'</p>
 			</td>
 			</tr>';
