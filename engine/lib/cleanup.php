@@ -183,6 +183,30 @@
 			return;
 		}
 
+		$db->DoQuery("DELETE FROM {$prefix}punish");
+		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish, 
+				daily_lotus
+				FROM {$prefix}users 
+				WHERE daily_post > 0
+				AND base_group = '{$x7c->settings['usergroup_default']}'
+				ORDER BY username");
+
+		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
+			$db->DoQuery("INSERT INTO {$prefix}punish (username, daily_post) VALUES 
+					('{$row['username']}', '{$row['daily_post']}')");
+		}
+
+		$db->DoQuery("DELETE FROM {$prefix}roomposts");
+		$query_daily = $db->DoQuery("SELECT name, daily_post
+				FROM {$prefix}rooms 
+				WHERE daily_post > 0
+				ORDER BY name");
+		
+		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
+			$db->DoQuery("INSERT INTO {$prefix}roomposts (name, daily_post) VALUES 
+					('{$row['name']}', '{$row['daily_post']}')");
+		}
+
 		$db->DoQuery("UPDATE {$prefix}settings SET setting = '$time' WHERE variable = 'last_cleanup'");
 
 		// Reset daily counters
