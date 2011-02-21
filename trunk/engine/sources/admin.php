@@ -1769,6 +1769,7 @@ function admincp_master(){
 				$row['category']='';
 				$row['visible_uses']='';
 				$row['expire_span']='-1';
+				$row['shop_return']='0';
 
 			}
 			$minuscolo="";
