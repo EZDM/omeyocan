@@ -184,16 +184,18 @@
 		}
 
 		$db->DoQuery("DELETE FROM {$prefix}punish");
-		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish, 
+		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish,
+				daily_lotus
 				FROM {$prefix}users 
 				WHERE daily_post > 0
 				AND base_group = '{$x7c->settings['usergroup_default']}'
-				AND daily_lotus = 0
 				ORDER BY username");
 
 		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
-			$db->DoQuery("INSERT INTO {$prefix}punish (username, daily_post) VALUES 
-					('{$row['username']}', '{$row['daily_post']}')");
+			$db->DoQuery("INSERT INTO {$prefix}punish (username, daily_post, 
+				daily_lotus) VALUES 
+					('{$row['username']}', '{$row['daily_post']}', 
+					 '{$row['daily_lotus']}')");
 		}
 
 		$db->DoQuery("DELETE FROM {$prefix}roomposts");
