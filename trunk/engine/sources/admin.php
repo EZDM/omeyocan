@@ -3046,7 +3046,8 @@ function admincp_master(){
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 
-			$query_daily = $db->DoQuery("SELECT username, last_punish, daily_post
+			$query_daily = $db->DoQuery("SELECT username, last_punish, daily_post,
+					daily_lotus
 					FROM {$prefix}punish
 					ORDER BY username");
 
