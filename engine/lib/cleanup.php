@@ -183,7 +183,6 @@
 			return;
 		}
 
-		$db->DoQuery("DELETE FROM {$prefix}punish");
 		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish,
 				daily_lotus
 				FROM {$prefix}users 
@@ -192,21 +191,22 @@
 				ORDER BY username");
 
 		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
-			$db->DoQuery("INSERT INTO {$prefix}punish (username, daily_post, 
+			$db->DoQuery("INSERT INTO {$prefix}punish (username, time, daily_post, 
 				daily_lotus) VALUES 
-					('{$row['username']}', '{$row['daily_post']}', 
-					 '{$row['daily_lotus']}')");
+					('{$row['username']}', '{$x7c->settings['last_cleanup']}',
+					 '{$row['daily_post']}', '{$row['daily_lotus']}')");
 		}
 
-		$db->DoQuery("DELETE FROM {$prefix}roomposts");
 		$query_daily = $db->DoQuery("SELECT name, daily_post
 				FROM {$prefix}rooms 
 				WHERE daily_post > 0
 				ORDER BY name");
 		
 		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
-			$db->DoQuery("INSERT INTO {$prefix}roomposts (name, daily_post) VALUES 
-					('{$row['name']}', '{$row['daily_post']}')");
+			$db->DoQuery("INSERT INTO {$prefix}roomposts (name, time, daily_post) 
+					VALUES 
+					('{$row['name']}', '{$x7c->settings['last_cleanup']}', 
+					 '{$row['daily_post']}')");
 		}
 
 		$db->DoQuery("UPDATE {$prefix}settings SET setting = '$time' WHERE variable = 'last_cleanup'");
