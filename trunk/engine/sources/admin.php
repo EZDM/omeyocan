@@ -3022,9 +3022,12 @@ function admincp_master(){
 				}
 
 			}
-			// Logging is enabled, tell them so
-			$date_string = date("d/m/Y", $x7c->settings['last_cleanup'] - 24*3600);
 
+			if (isset($_GET['clear_daily'])) {
+				$db->DoQuery("DELETE FROM {$prefix}punish");
+				$db->DoQuery("DELETE FROM {$prefix}roomposts");
+			}
+			// Logging is enabled, tell them so
 			$txt[485] = eregi_replace("<a>","<a href=\"index.php?act=adminpanel&".
 					"cp_page=logs&able=1\">",$txt[485]);
 			$body = $txt[485]."<Br><br>";
@@ -3034,7 +3037,7 @@ function admincp_master(){
 				"cp_page=settings&settings_page=logs\">$txt[486]</a><Br><Br></div>";
 
 			// Daily stats for users
-			$body .= "<b>User's daily posts (".$date_string.")</b>
+			$body .= "<b>User's daily posts</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
@@ -3046,12 +3049,19 @@ function admincp_master(){
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 
-			$query_daily = $db->DoQuery("SELECT username, last_punish, daily_post,
-					daily_lotus
-					FROM {$prefix}punish
-					ORDER BY username");
+			$query_daily = $db->DoQuery("SELECT *	FROM {$prefix}punish
+					ORDER BY time, username");
 
+			$prev_time = -1;
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
+
+				if ($prev_time != $row_daily['time']) {
+					$body .= "<tr><td colspan=\"3\" style=\"text-align: center;".
+					"font-weight: bold;\"><hr>".date("d/m/Y", $row_daily['time']).
+						"</td></tr>";
+					$prev_time = $row_daily['time'];
+				}
+
 				$lotus = "no";
 				if ($row_daily['daily_lotus'] > 0)
 					$lotus = "yes";
@@ -3074,7 +3084,7 @@ function admincp_master(){
 			$body .= "</table>";
 			
 			// Daily stats for rooms
-			$body .= "<b>Room's daily posts (".$date_string.")</b>
+			$body .= "<b>Room's daily posts</b>
 				<table align=\"center\"  width=\"95%\" border=\"0\" ".
 				"cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
@@ -3085,11 +3095,18 @@ function admincp_master(){
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
 				"cellpadding=\"0\" class=\"inside_table\">";
 			
-			$query_daily = $db->DoQuery("SELECT name, daily_post
-					FROM {$prefix}roomposts 
-					ORDER BY name");
+			$query_daily = $db->DoQuery("SELECT * FROM {$prefix}roomposts 
+					ORDER BY time, name");
 
+			$prev_time = -1;
 			while ($row_daily = $db->Do_Fetch_Assoc($query_daily)) {
+				if ($prev_time != $row_daily['time']) {
+					$body .= "<tr><td colspan=\"3\" style=\"text-align: center;".
+					"font-weight: bold;\"><hr>".date("d/m/Y", $row_daily['time']).
+						"</td></tr>";
+					$prev_time = $row_daily['time'];
+				}
+
 				$body .= "<tr>
 					<td height=\"25\">
 					<a href=\"index.php?act=roomcp&cp_page=logs&room=$row_daily[name]\">
@@ -3098,6 +3115,11 @@ function admincp_master(){
 					</tr>";
 			}
 
+			$body .= '<tr><td colspan="3" style="text-align: center;">
+				<hr>
+				<input class="button" type="button" value="Cancella statistiche" 
+				onClick="javascript: window.location=\'index.php?act=adminpanel&cp_page=logs&clear_daily\';"/>
+				</td></tr>';
 			$body .= "</table>";
 
 			// Display a table of all rooms showing if logging is enabled giving a Manage/View link
