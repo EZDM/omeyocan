@@ -3001,6 +3001,8 @@ function admincp_master(){
 
 		// See if logging is enabled or disabled
 		if($x7c->settings['enable_logging'] == 1){
+			include_once('./lib/cleanup.php');
+			update_daily_statistics();
 
 			if (isset($_GET['punish'])) {
 				include_once("./sources/warnings.php");

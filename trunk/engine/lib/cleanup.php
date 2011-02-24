@@ -164,7 +164,42 @@
 		// Clean up logs
 		cleanup_guest_logs($user);	
 	}
-	
+
+	function update_daily_statistics() {
+		global $db, $prefix, $x7c;
+
+		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish,
+				daily_lotus
+				FROM {$prefix}users 
+				WHERE daily_post > 0
+				AND base_group = '{$x7c->settings['usergroup_default']}'
+				ORDER BY username");
+
+		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
+			$db->DoQuery("INSERT INTO {$prefix}punish (username, time, daily_post, 
+				daily_lotus) VALUES 
+					('{$row['username']}', '{$x7c->settings['last_cleanup']}',
+					 '{$row['daily_post']}', '{$row['daily_lotus']}')
+					ON DUPLICATE KEY UPDATE
+					daily_post = '{$row['daily_post']}',
+					daily_lotus = '{$row['daily_lotus']}'");
+		}
+
+		$query_daily = $db->DoQuery("SELECT name, daily_post
+				FROM {$prefix}rooms 
+				WHERE daily_post > 0
+				ORDER BY name");
+		
+		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
+			$db->DoQuery("INSERT INTO {$prefix}roomposts (name, time, daily_post) 
+					VALUES 
+					('{$row['name']}', '{$x7c->settings['last_cleanup']}', 
+					 '{$row['daily_post']}')
+					ON DUPLICATE KEY UPDATE
+					daily_post = '{$row['daily_post']}'");
+		}
+
+	}
 	
 	function cleanup_inactive_users(){
 		global $db, $prefix, $x7c;
@@ -183,31 +218,7 @@
 			return;
 		}
 
-		$query_daily = $db->DoQuery("SELECT username, daily_post, last_punish,
-				daily_lotus
-				FROM {$prefix}users 
-				WHERE daily_post > 0
-				AND base_group = '{$x7c->settings['usergroup_default']}'
-				ORDER BY username");
-
-		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
-			$db->DoQuery("INSERT INTO {$prefix}punish (username, time, daily_post, 
-				daily_lotus) VALUES 
-					('{$row['username']}', '{$x7c->settings['last_cleanup']}',
-					 '{$row['daily_post']}', '{$row['daily_lotus']}')");
-		}
-
-		$query_daily = $db->DoQuery("SELECT name, daily_post
-				FROM {$prefix}rooms 
-				WHERE daily_post > 0
-				ORDER BY name");
-		
-		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
-			$db->DoQuery("INSERT INTO {$prefix}roomposts (name, time, daily_post) 
-					VALUES 
-					('{$row['name']}', '{$x7c->settings['last_cleanup']}', 
-					 '{$row['daily_post']}')");
-		}
+		update_daily_statistics();
 
 		$db->DoQuery("UPDATE {$prefix}settings SET setting = '$time' WHERE variable = 'last_cleanup'");
 
