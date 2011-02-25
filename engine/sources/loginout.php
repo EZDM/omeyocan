@@ -71,7 +71,7 @@
     // Print the login form that the user must enter username and password
     $body = "	
 			<script>
-				jseyes(407, 114);
+				jseyes(407, 113);
 			</script>
 			<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
       <div id=\"login_form\">
