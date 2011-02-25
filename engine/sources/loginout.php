@@ -69,7 +69,11 @@
     }
 
     // Print the login form that the user must enter username and password
-    $body = "	<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
+    $body = "	
+			<script>
+				jseyes(407, 114);
+			</script>
+			<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
       <div id=\"login_form\">
       <form action=\"index.php\" method=\"post\" name=\"loginform\">
       <input type=\"hidden\" name=\"dologin\" value=\"dologin\">
@@ -346,6 +350,7 @@
 
 
     echo $login_style;
+		echo '<script src="graphic/jseyes.js"></script>';
 
     if(!$nosfondo){
       echo '</head><body>
