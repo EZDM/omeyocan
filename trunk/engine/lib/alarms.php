@@ -156,26 +156,30 @@
 	function object_usage($owner, $obj, $use){
 		global $x7s, $x7c, $prefix, $db;
 		$msg = "";
-		$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
-		if($row = $db->Do_Fetch_assoc($query))
-			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> 
-				utilizza l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> 
-				assegnando <b>$use</b> usi<br>";
-		else	
-			$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> 
-				utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> 
-				assegnando <b>$use</b> usi<br>";
 
-		$time = time();
-		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) 
-				VALUES ('{$x7s->username}','$msg','$time')");
-		$db->DoQuery("UPDATE {$prefix}objects SET daily_use = daily_use + 1
-				WHERE id = '$obj'");
+		if ($use == -1 || $use > 0) {
+			$use--;
+			$query = $db->DoQuery("SELECT name FROM {$prefix}objects WHERE id='$obj'");
+			if($row = $db->Do_Fetch_assoc($query))
+				$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> 
+					utilizza l\'oggetto <b>$row[name]</b> dell\'utente <b>$owner</b> 
+					assegnando <b>$use</b> usi<br>";
+			else	
+				$msg = "<b>UTILIZZO OGGETTO</b>: l\'utente <b>{$x7s->username} </b> 
+					utilizza l\'oggetto <b>$obj</b> dell\'utente <b>$owner</b> 
+					assegnando <b>$use</b> usi<br>";
 
-		//Very ugly temp code for lotus
-		if($row['name'] == "Loto nero") {
-			$db->DoQuery("UPDATE {$prefix}users SET daily_lotus = 1
-					WHERE username = '$owner'");
+			$time = time();
+			$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) 
+					VALUES ('{$x7s->username}','$msg','$time')");
+			$db->DoQuery("UPDATE {$prefix}objects SET daily_use = daily_use + 1
+					WHERE id = '$obj'");
+
+			//Very ugly temp code for lotus
+			if($row['name'] == "Loto nero") {
+				$db->DoQuery("UPDATE {$prefix}users SET daily_lotus = 1
+						WHERE username = '$owner'");
+			}
 		}
 		
 		
