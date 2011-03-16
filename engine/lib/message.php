@@ -347,7 +347,7 @@
 									}
 
 									include_once('./lib/alarms.php');
-									object_usage($x7s->username, $obj[1], $newusage);
+									object_usage($x7s->username, $obj[1], $row['uses']);
 								}	
 				}
 
