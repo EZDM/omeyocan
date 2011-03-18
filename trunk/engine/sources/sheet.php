@@ -149,7 +149,7 @@ function sheet_page_equip(){
 	if(isset($_GET['pay']) && ($x7s->username==$pg || checkIfMaster())){
 		global $shopper;
 		if(!isset($_POST['owner']) || !isset($_POST['amount'])){
-			die("Bad form 4");
+			$errore = "Non hai specificato il destinatario o l'ammontare";
 		}
 		$query = $db->DoQuery("SELECT count(*) AS cnt
 				FROM {$prefix}users WHERE username='$_POST[owner]'");
