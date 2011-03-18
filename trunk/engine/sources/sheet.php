@@ -148,18 +148,21 @@ function sheet_page_equip(){
 
 	if(isset($_GET['pay']) && ($x7s->username==$pg || checkIfMaster())){
 		global $shopper;
-		if(!isset($_POST['owner']) || !isset($_POST['amount'])){
+		if(!isset($_POST['owner']) || !isset($_POST['amount'])
+				|| !$_POST['owner'] || !$_POST['amount']) {
 			$errore = "Non hai specificato il destinatario o l'ammontare";
-		}
-		$query = $db->DoQuery("SELECT count(*) AS cnt
-				FROM {$prefix}users WHERE username='$_POST[owner]'");
-		$row = $db->Do_Fetch_Assoc($query);
-
-		if((!$row || $row['cnt']==0) && $_POST['owner'] != $shopper){
-			$errore = "Utente non esistente";
-		}
+		} 
 		else {
-			$errore = pay($_POST['amount'], $pg, $_POST['owner']);
+			$query = $db->DoQuery("SELECT count(*) AS cnt
+					FROM {$prefix}users WHERE username='$_POST[owner]'");
+			$row = $db->Do_Fetch_Assoc($query);
+
+			if((!$row || $row['cnt']==0) && $_POST['owner'] != $shopper){
+				$errore = "Utente non esistente";
+			}
+			else {
+				$errore = pay($_POST['amount'], $pg, $_POST['owner']);
+			}
 		}
 	}
 
