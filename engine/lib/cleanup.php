@@ -48,8 +48,8 @@
 				HAVING count(*) > $exptime");
 			
 			while($room = $db->Do_Fetch_Assoc($room_query)){
-	                        	$toDelete = $room['num'] - $exptime;
-                        		$db->DoQuery("DELETE FROM {$prefix}messages 
+				$toDelete = $room['num'] - $exptime;
+				$db->DoQuery("DELETE FROM {$prefix}messages 
 						WHERE (type='1' OR type='14') 
 						AND room='$room[room]' ORDER BY time LIMIT $toDelete");
 			}
@@ -99,6 +99,17 @@
 
 		$query = $db->DoQuery("SELECT * FROM {$prefix}temp_obj WHERE expire_time < $time");
 		while ($row = $db->Do_Fetch_Assoc($query)) {
+			if (preg_match("/^(master)?key_/", $row['name'])) {
+				if (pregmatch("/^masterkey_/"))
+					list($pre, $room) = split("masterkey_", $row['name']);
+				else
+					list($pre, $room) = split("key_", $row['name']);
+
+				$db->DoQuery("DELETE FROM {$prefix}messages 
+						WHERE (type='1' OR type='14') 
+						AND room='$room'");
+
+			}
 			if ($row['shop_return']) {
 				$db->DoQuery("UPDATE {$prefix}objects SET owner = '$shopper' 
 						WHERE id = '$row[id]'");
