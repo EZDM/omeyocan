@@ -97,10 +97,21 @@
 		global $db, $prefix, $shopper;
 		$time = time();
 
-		$query = $db->DoQuery("SELECT * FROM {$prefix}temp_obj WHERE expire_time < $time");
+		$query = $db->DoQuery("SELECT
+				temp.id AS id,
+				obj.name AS name,
+				temp.expire_time AS expire_time,
+				temp.shop_return AS shop_return
+				FROM 
+					{$prefix}temp_obj temp,
+					{$prefix}objects obj
+				WHERE 
+					obj.id = temp.id 
+					AND	temp.expire_time < $time");
 		while ($row = $db->Do_Fetch_Assoc($query)) {
-			if (preg_match("/^(master)?key_/", $row['name'])) {
-				if (pregmatch("/^masterkey_/"))
+			if (preg_match("/^masterkey_/", $row['name']) ||
+					preg_match("/^key_/", $row['name'])) {
+				if (preg_match("/^masterkey_/", $row['name']))
 					list($pre, $room) = split("masterkey_", $row['name']);
 				else
 					list($pre, $room) = split("key_", $row['name']);
