@@ -186,7 +186,7 @@ function location_out(hoveritem) {
 <div align="center" id="copyrigth" style="visibility: visible;">
   <marquee onMouseOver="this.stop();" onMouseOut="this.start();">
     Game engine by:
-    <a href="http://netgroup.polito.it/Members/niccolo_cascarano"
+    <a href="http://sites.google.com/site/niccolocascarano"
       target="_blank">
       Niccol&ograve; Cascarano
     </a> 
