@@ -106,6 +106,8 @@ function get_object_list($user, $start_from) {
 
 		if ($valore <= 0)
 			$valore = "Senza valore";
+		if ($row['visible_uses'])
+			$uses = "Usi: {$row['uses']}"
 		$body .= '
 			<tr>
 			<td>
@@ -118,6 +120,7 @@ function get_object_list($user, $start_from) {
 			<b>'.$row['name'].'</b><br>
 			Valore: '.$valore.'<br>
 			Dimensione: '.$size.'
+			'.$uses.'
 			<p>'.$row['description'].'</p>
 			</td>
 			</tr>';
