@@ -318,7 +318,10 @@ function sheet_page_equip(){
 
 
 	$body.="<div id=\"search_box\">
-	<input type=\"text\" size=20 onkeyup=\"javascript:do_refresh(this)\">
+	<input type=\"text\" size=20 onkeyup=\"javascript:do_refresh(this)\"
+	onclick=\"this.value=''\" 
+	onblur=\"this.value=!this.value?'cerca oggetto':this.value;\"
+	value=\"cerca oggetto\">
 	</div>\n";
 	$body.="<div id=\"objects\">\n";
   $obj_div = "";
