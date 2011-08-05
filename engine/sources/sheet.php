@@ -62,9 +62,8 @@ function sheet_main(){
 		$body = sheet_page_corp();
 	}
 
-		
-		
-	print_sheet($body,$page);
+	if ($body != "")
+	  print_sheet($body,$page);
 }
 
 
@@ -277,13 +276,59 @@ function sheet_page_equip(){
 					}
 					
 				}
+
+			function requestReady_channel1(){
+				if(httpReq2){
+					if(httpReq2.readyState == 4){
+						if(httpReq2.status == 200){
+							var dataArray = httpReq2.responseText;
+							document.getElementById('objects').innerHTML = dataArray;
+						}
+					}
+				}
+			}
+
+			function do_refresh(search){
+				jd=new Date();
+				nocache = jd.getTime();
+				text = search.value;
+				url = './index.php?act=sheet&page=equip&search=' + text + '&nc=' + nocache;
+				if(window.XMLHttpRequest){
+					try {
+						httpReq2 = new XMLHttpRequest();
+					} catch(e) {
+						httpReq2 = false;
+					}
+				}else if(window.ActiveXObject){
+					try{
+						httpReq2 = new ActiveXObject('Msxml2.XMLHTTP');
+					}catch(e){
+						try{
+							httpReq2 = new ActiveXObject('Microsoft.XMLHTTP');
+						}catch(e){
+							httpReq2 = false;
+						}
+					}
+				}
+				httpReq2.onreadystatechange = requestReady_channel1;
+				httpReq2.open('GET', url, true);
+				httpReq2.send('');
+			}
 			</script>";
 
+
+	$body.="<div id=\"search_box\">
+	<input type=\"text\" size=20 onkeyup=\"javascript:do_refresh(this)\">
+	</div>\n";
 	$body.="<div id=\"objects\">\n";
+  $obj_div = "";
 
-
+	$refine_query = "";
+	if (isset($_GET['search']) && $_GET['search']) {
+		$refine_query = " AND name like '%{$_GET['search']}%'";
+	}
 	$query = $db->DoQuery("SELECT * FROM {$prefix}objects
-			WHERE owner='$pg' ORDER BY equipped DESC, name");
+			WHERE owner='$pg' $refine_query ORDER BY equipped DESC, name");
 
 	$room='';
 
@@ -383,7 +428,7 @@ function sheet_page_equip(){
 			}
 
 
-			$body.= "<table width=100%> <tr> <td class=\"obj\">
+			$obj_div.= "<table width=100%> <tr> <td class=\"obj\">
 				<img width=100 height=100 src=\"$row[image_url]\" align=\"left\">
         <div $disabled>
         <b>$obj_name</b>
@@ -441,7 +486,7 @@ function sheet_page_equip(){
 				if(!$row['equipped']){
 					$equip_text="Equipaggia";
 				}
-				$body.="
+				$obj_div.="
           <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 					<form action=\"index.php?act=sheet&page=equip&pg=$pg&assign=1\"
 					method=\"post\" name=\"object_assign\">
@@ -464,7 +509,7 @@ function sheet_page_equip(){
 			}
 
 			if(checkIfMaster() && $row['name'] != $money_name){
-				$body.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\"".
+				$obj_div.="<form action=\"index.php?act=sheet&page=equip&pg=$pg&moduse=1\"".
 					" method=\"post\" name=\"object_moduse\">
           <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
           <input type=\"hidden\" name=\"id\" value=\"$row[id]\">
@@ -476,13 +521,18 @@ function sheet_page_equip(){
           </table>
           ";
 
-				$body.="</form>\n";
+				$obj_div.="</form>\n";
 			}
 
-			$body.="<br><br>\n";
+			$obj_div.="<br><br>\n";
 		}
 	}
 
+	if (isset($_GET['search'])) {
+		echo $obj_div;
+		return "";
+	}
+	$body.=$obj_div;
 	$body.="</div>\n";
 
 	$body .= '<div class="counter" id="spazio">'. get_user_space($pg) .'</div>';
@@ -2348,6 +2398,11 @@ function print_sheet($body,$bg){
 				position: absolute;
 				top: 80px;
 				left: 120px;
+			}
+      #search_box{
+        position: absolute;
+				top: 38px;
+				left: 300px;
 			}
 		</style>
 		';
