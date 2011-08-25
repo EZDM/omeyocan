@@ -484,7 +484,10 @@
 
 		function profile_info($user){
 			global $db, $prefix;
-			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,status,id,hideemail,gender,settings,password,corp_master,frozen FROM {$prefix}users WHERE username='$user'");
+			$query = $db->DoQuery("SELECT email,avatar,name,location,hobbies,bio,
+					status,id,hideemail,gender,settings,password,corp_master,frozen,
+					base_group
+					FROM {$prefix}users WHERE username='$user'");
 			$row = $db->Do_Fetch_Row($query);
 			$this->profile['email'] = $row[0];
 			$this->profile['avatar'] = $row[1];
@@ -504,6 +507,7 @@
 			$this->profile['frozen'] = $row[13];
 			
 			$this->profile['usergroup'] = array();
+			$this->profile['base_group'] = $row[14];
 			$query = $db->DoQuery("SELECT usergroup FROM {$prefix}groups WHERE username='$user'");
 			while($row = $db->Do_Fetch_Row($query)){
 				$this->profile['usergroup'][] = $row[0];
