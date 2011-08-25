@@ -168,11 +168,9 @@
 			
 			while($row = $db->Do_Fetch_Assoc($query)){
 				$display = $row['usergroup'];
-				if ($row['usergroup'] == $x7c->settings['usergroup_default'])
-					$display = "Tutti";
-
 				$options.="<option value=\"{$row['usergroup']}\">{$display}</option>";
 			}
+			$options.="<option value=\"_all_\">Tutti</option>";
 			
 			$head="Crea board";
 			
@@ -520,7 +518,8 @@
 		while($row = $db->Do_Fetch_Assoc($query)){
 			if(	checkIfMaster() || 
 				in_array($row['user_group'], $x7p->profile['usergroup']) ||
-				$row['user_group'] == $x7c->settings['usergroup_default']){
+				$row['user_group'] == $x7p->profile['base_group'] ||
+				$row['user_group'] == '_all_') {
 				$q_new = $db->DoQuery("SELECT count(*) AS cnt FROM {$prefix}boardmsg msg, {$prefix}boardunread un
 									WHERE msg.id=un.id
 	 								AND board='$row[id]'
@@ -895,7 +894,9 @@
 		if(checkIfMaster()){
 			return true;	
 		}	
-		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || $row['user_group'] == $x7c->settings['usergroup_default']){
+		else if(in_array($row['user_group'], $x7p->profile['usergroup']) || 
+				$row['user_group'] == $x7p->profile['base_group'] ||
+				$row['user_group'] == '_all_') {
 			$bans = $x7p->bans_on_you;
 			if(count($bans) && !$row['offgame'])
 				return false;
@@ -936,7 +937,8 @@
 			//We consider only groups which we belong to and the default user group
 			//Master must be updated on alle messages
 			if(in_array($new_msg['user_group'], $x7p->profile['usergroup']) || 
-					$new_msg['user_group'] == $x7c->settings['usergroup_default'] ||
+					$new_msg['user_group'] == $x7p->profile['base_group'] ||
+				  $new_msg['user_group'] == '_all_' ||
 					checkIfMaster()){
 				if($lastid<$new_msg['id'])
 					$lastid=$new_msg['id'];
