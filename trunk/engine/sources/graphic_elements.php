@@ -24,22 +24,7 @@
  */
 
 
-  if($x7c->settings['panic']) {
-		$mappa = "./graphic/01mappa_dark.jpg";
-		$mappa_over = "./graphic/01mappa_dark_over.jpg";
-		$bacheca = "./graphic/02bacheca_dark.jpg";
-		$bacheca_over = "./graphic/02bacheca_dark_over.jpg";
-		$presenti = "./graphic/03presenti_dark.jpg";
-		$presenti_over = "./graphic/03presenti_dark_over.jpg";
-		$scheda = "./graphic/04scheda_dark.jpg";
-		$scheda_over = "./graphic/04scheda_dark_over.jpg";
-    $logout_src="./graphic/06logout_dark.jpg";
-    $logout_over_src="./graphic/06logout_dark_over.jpg";
-		
-		$posta_no = "./graphic/05postano_dark.gif";
-		$posta_si = "./graphic/05postasi_dark.gif";
-	}
-  else {
+  if(!$x7c->settings['panic'] || $x7c->room_data['panic_free']) {
 		$mappa = "./graphic/01mappa.jpg";
 		$mappa_over = "./graphic/01mappa_over.jpg";
 		$bacheca = "./graphic/02bacheca.jpg";
@@ -53,6 +38,21 @@
 		
 		$posta_no = "./graphic/05postano.gif";
 		$posta_si = "./graphic/05postasi.gif";
+	}
+  else {
+		$mappa = "./graphic/01mappa_dark.jpg";
+		$mappa_over = "./graphic/01mappa_dark_over.jpg";
+		$bacheca = "./graphic/02bacheca_dark.jpg";
+		$bacheca_over = "./graphic/02bacheca_dark_over.jpg";
+		$presenti = "./graphic/03presenti_dark.jpg";
+		$presenti_over = "./graphic/03presenti_dark_over.jpg";
+		$scheda = "./graphic/04scheda_dark.jpg";
+		$scheda_over = "./graphic/04scheda_dark_over.jpg";
+    $logout_src="./graphic/06logout_dark.jpg";
+    $logout_over_src="./graphic/06logout_dark_over.jpg";
+		
+		$posta_no = "./graphic/05postano_dark.gif";
+		$posta_si = "./graphic/05postasi_dark.gif";
 	}
 
 ?>
