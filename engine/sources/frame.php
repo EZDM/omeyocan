@@ -1244,11 +1244,6 @@ _gaq.push(['_trackPageview']);
     include_once('./sources/layout.php');
 
     $polaroid=$x7c->room_data['logo'];
-    /*if($x7c->settings['panic'] && !$x7c->room_data['panic_free']){
-      $pos=stripos($polaroid,".jpg");
-      $polaroid = substr($polaroid, 0, $pos);
-      $polaroid.="ob.jpg";
-    }*/
 
     if($x7c->permissions['admin_panic']){
       if($x7s->invisible)
@@ -1285,7 +1280,7 @@ _gaq.push(['_trackPageview']);
     echo '
       <a onClick="'.popup_open(550, 500, 
 			'index.php?act=roomdesc&room='.$_GET['room'],'roomdesc').'">';
-		if (!$x7c->settings['panic'])
+		if (!$x7c->settings['panic'] || $x7c->room_data['panic_free'])
       echo '<img class="polaroid" src="'.$polaroid.'" >';
 		else
 			echo '
