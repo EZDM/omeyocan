@@ -140,7 +140,7 @@ function sheet_page_equip(){
 					alert_room($row_msg['position'], $txt);
 				}
 
-				header("location: index.php?act=sheet&page=equip&pg=$pg");
+				header("location: index.php?act=sheet&page=equip&pg=$pg&refreshparent");
 			}
 		}
 	}
@@ -2410,6 +2410,11 @@ function print_sheet($body,$bg){
 		</style>
 		';
 
+		if (isset($_GET['refreshparent'])) {
+			echo '<script type="text/javascript">
+				window.opener.location.href = window.opener.location.href;
+			</script>'; 
+		}
 
 
 	echo '</head><body>
