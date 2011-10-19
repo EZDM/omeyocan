@@ -1178,6 +1178,20 @@ function sheet_page_main(){
 				$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
 			}
 
+			$strength_query = $db->DoQuery("SELECT value FROM {$prefix}usercharact
+					WHERE username='$pg' AND charact_id='for'");
+			if ($row = $db->Do_Fetch_Assoc($strength_query)) {
+        if ($row['value'] != $_POST['for']) {
+					$spazio = ($_POST['for'] - 3) * 2;
+					$db->DoQuery("UPDATE {$prefix}users
+									SET sheet_ok='1', spazio = $spazio
+									WHERE username='$pg'");
+					$db->DoQuery("UPDATE {$prefix}objects 
+							SET equipped='0'
+							WHERE owner='$pg'");
+
+				}
+			}
 
 			foreach($char as $cur){
 				if(!isset($_POST[$cur['id']])){
