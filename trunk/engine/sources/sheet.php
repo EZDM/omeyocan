@@ -292,7 +292,7 @@ function sheet_page_equip(){
 				jd=new Date();
 				nocache = jd.getTime();
 				text = search.value;
-				url = './index.php?act=sheet&page=equip&search=' + text + '&nc=' + nocache;
+				url = './index.php?act=sheet&page=equip&pg=$pg&search=' + text + '&nc=' + nocache;
 				if(window.XMLHttpRequest){
 					try {
 						httpReq2 = new XMLHttpRequest();
