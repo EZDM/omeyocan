@@ -110,6 +110,7 @@
 				$default_max_panic = $x7c->settings['default_max_panic'];
 				$default_start_xp=$x7c->settings['starting_xp']*$x7c->settings['xp_ratio'];
 				$default_spazio=$x7c->settings['default_spazio'];
+				$default_avatar=$x7c->settings['default_avatar'];
 
         $gif_query = $db->DoQuery("SELECT logo from {$prefix}permissions 
 						WHERE usergroup='{$_POST['base_group']}'");
@@ -123,11 +124,12 @@
 				
 				$db->DoQuery("INSERT INTO {$prefix}users (id,username,password,email,
 					status,user_group,time,settings,hideemail,ip,activated,sheet_ok,xp,
-					iscr,max_panic,bio,spazio,base_group) 
+					iscr,max_panic,bio,spazio,base_group,avatar) 
 						VALUES('0','$_POST[username]','$_POST[pass1]','$_POST[email]',
 							'$txt[150]','{$_POST['base_group']}','$time','$settings','0',
 							'$ip','$act_code','0','$default_start_xp','$time',
-							'$default_max_panic','$gif','$default_spazio','{$_POST['base_group']}')");
+							'$default_max_panic','$gif','$default_spazio',
+							'{$_POST['base_group']}','$default_avatar')");
 				$db->DoQuery("INSERT INTO {$prefix}groups (username,usergroup,corp_master) 
 						VALUES('$_POST[username]','{$_POST['base_group']}','0') 
 						ON DUPLICATE KEY UPDATE username=username");
