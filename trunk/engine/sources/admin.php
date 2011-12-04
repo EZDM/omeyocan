@@ -3854,7 +3854,7 @@ function admincp_master(){
 			<table width=\"100%\" class=\"ucp_table2\" height=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 			".printlink("main",$txt[137])."
 			".printlink("settings","Settaggi server")."
-			".printlink("abilities", "Abilit&agrave;")."
+			".printlink("abilities", "Abilit&agrave;/Talenti")."
 			".printlink("groupmanager","Gruppi/Gremios")."
 			".printlink("users","Utenti")."
 			".printlink("ban","Ban")."
