@@ -3452,6 +3452,17 @@ function admincp_master(){
 			$db->DoQuery($query);
 		}
 
+		if(isset($_GET['del_feat'])) {
+			$db->DoQuery("DELETE FROM {$prefix}features WHERE feat_id = '{$_GET['del_feat']}'");
+			$db->DoQuery("DELETE FROM {$prefix}user_feat WHERE feat_id = '{$_GET['del_feat']}'");
+		}
+
+		if(isset($_POST['new_feature_id'])) {
+			$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr)
+					VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}')
+					ON DUPLICATE KEY UPDATE descr = '{$_POST['feature_desc']}'");
+		}
+
 		if(!isset($_GET['group']))
 			$_GET['group'] = $x7c->settings['usergroup_default'];
 
@@ -3490,6 +3501,15 @@ function admincp_master(){
 			}
 			else{
 				document.getElementById("personal").style.visibility = "hidden";
+			}
+		}
+
+		function show_new_feat(value){
+			if(value!="_new"){
+				window.location.href=\'index.php?act=adminpanel&cp_page=abilities&mod_feat=\' + value;
+			}
+			else{
+				window.location.href=\'index.php?act=adminpanel&cp_page=abilities\';
 			}
 		}
 		</script>';
@@ -3614,7 +3634,58 @@ function admincp_master(){
 			</tr>
 			<tr><td><input type=\"submit\" value=\"Inserisci\"></td></tr>";
 
-		$body .= "</form>";
+		$body .= "</table></form>";
+
+
+		$body .= "<h3>Inserisci modifica un talento</h3>
+			<form action=\"index.php?act=adminpanel&cp_page=abilities\" method=\"post\">";
+
+		$body .= "<table>
+			<tr>
+			<td><select name=\"feature_id\" onChange=\"show_new_feat(this.value)\">
+		  <option value=\"_new\">Nuovo talento...</option>";
+
+		$query = $db->DoQuery("SELECT feat_id FROM {$prefix}features ORDER BY feat_id");
+		while ($row = $db->Do_Fetch_Assoc($query)) {
+			$selected = "";
+			if (isset($_GET['mod_feat']) && $_GET['mod_feat'] == $row['feat_id'])
+				$selected = "selected=\"selected\"";
+			$body .= "<option value=\"{$row['feat_id']}\" $selected>$row[feat_id]</option>";
+		}
+
+		$new_feat_show = 'visible';
+		$desc="";
+		$delete_act = "";
+		if (isset($_GET['mod_feat'])) {
+			$new_feat_show = 'hidden';
+			$query_select = $db->DoQuery("SELECT descr FROM {$prefix}features
+					WHERE feat_id = '{$_GET['mod_feat']}'");
+			$row_select = $db->Do_Fetch_Assoc($query_select);
+			$desc = $row_select['descr'];
+			$delete_act = "window.location.href='index.php?act=adminpanel&cp_page=abilities&del_feat=".$_GET['mod_feat']."'";
+		} else {
+			$_GET['mod_feat'] = "";
+		}
+
+		$body .= "</select>
+      </td>
+			</tr>
+
+			<tr><td>
+			<input type=\"text\" name=\"new_feature_id\"
+			style=\"visibility: $new_feat_show\" value=\"".$_GET['mod_feat']."\"></td>
+			</tr>
+			<tr>
+			<td>Descrizione:</td>
+			<td><textarea name=\"feature_desc\" style=\"height: 200\">$desc</textarea></td>
+			</tr>
+			<tr><td><input type=\"submit\" value=\"Inserisci/Modifica\"></td></tr>";
+
+		if ($delete_act)
+			$body .="<tr><td><input type=\"button\" value=\"Cancella\"
+				onClick=\"$delete_act\"></td></tr>";
+
+		$body .= "</table></form>";
 
 	}elseif($_GET['cp_page'] == "hints"){
 		$head = "Gestione hints del master";
