@@ -273,6 +273,7 @@ function show_shop() {
 	$categories = '';
 	$query = $db->DoQuery("SELECT DISTINCT category 
 			FROM {$prefix}objects
+			WHERE owner = '$shopper'
 			ORDER BY category");
 	while ($row = $db->Do_Fetch_Assoc($query)) {
 		if ($row['category']) {
