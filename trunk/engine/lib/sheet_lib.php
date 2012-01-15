@@ -1,5 +1,33 @@
 <?PHP
 
+		function can_take_feat($pg, $feat_id) {
+			global $db, $prefix;
+			$query_feat = $db->DoQuery("SELECT COUNT(*) AS cnt FROM {$prefix}user_feat 
+					WHERE username = '$pg'");
+			$query_lvl = $db->DoQuery("SELECT lvl FROM {$prefix}users
+					WHERE username = '$pg'");
+
+			if ($feat_id) {
+				$query = $db->DoQuery("SELECT COUNT(*) as cnt FROM {$prefix}user_feat u,
+						{$prefix}features f
+						WHERE u.feat_id = f.id
+						AND f.id = '$feat_id'
+						AND f.cumulative = '0'
+						AND f.first_lvl = '1'");
+				$row = $db->Do_Fetch_Assoc($query);
+			}
+
+			$row_feat = $db->Do_Fetch_Assoc($query_feat);
+			$row_lvl = $db->Do_Fetch_Assoc($query_lvl);
+
+			if ($row_lvl['lvl'] / 20 > $row_feat['cnt']) {
+				if (!$feat_id || $row['cnt'] == 0)
+					return true;
+			}
+
+			return false;
+		}
+
     function toggle_heal($pg, $heal){
         global $db, $prefix;
 			$errore='';
