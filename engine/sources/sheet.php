@@ -558,6 +558,7 @@ function sheet_page_master(){
 	global $db,$x7c,$prefix,$x7s,$print;
 	$pg=$_GET['pg'];
 	$body='';
+	include_once('./lib/sheet_lib.php');
 
 	if(isset($_GET['settings_change']) && checkIfMaster()){
 		if(isset($_POST['master']) && isset($_POST['master_private'])){
@@ -575,6 +576,19 @@ function sheet_page_master(){
 					"<img src=\"$1\">",$master_private);
 
 			$db->DoQuery("UPDATE {$prefix}users SET master='$master', master_private='$master_private' WHERE username='$pg'");
+		}
+	}
+
+	if (isset($_GET['delete_feat']) && checkIfMaster()) {
+		$db->DoQuery("DELETE FROM ${prefix}user_feat WHERE username = '$pg' AND
+				feat_id='{$_GET['delete_feat']}' AND num='{$_GET['feat_num']}'");
+	}
+
+	if (isset($_POST['add_feat'])) {
+		if (can_take_feat($pg, $_POST['add_feat'])) {
+			$db->DoQuery("INSERT INTO {$prefix}user_feat
+					(username, feat_id)
+					VALUES ('$pg', '{$_POST['add_feat']}')");
 		}
 	}
 
@@ -625,9 +639,42 @@ function sheet_page_master(){
 
 
 		}
-		
-		$body .= '<div class="indiv" id="masterdiv">'.
-			'<div id="inner_master">'.$row['master'].'</div>'.$modify_master.'</div>';
+
+		$query_feat = $db->DoQuery("SELECT f.id AS id, f.feat_id AS feat_id, u.num
+				FROM {$prefix}user_feat u,
+				${prefix}features f WHERE u.username = '$pg'
+				AND f.id = u.feat_id
+				ORDER BY f.feat_id");
+		$feat_list = "";
+		$features_form = "";
+		while ($row_feat = $db->Do_Fetch_Assoc($query_feat)) {
+			$feat_list .= "$row_feat[feat_id]";
+			if (checkIfMaster()) {
+				$feat_list.='<input type="button" value="Delete"
+					onClick="javascript: window.location.href=\'index.php?act=sheet&page=master&delete_feat='.
+					$row_feat['id'].'&pg='.$pg.'&feat_num='.$row_feat['num'].'\'">';
+			}
+			$feat_list .= "<br>";
+			$features_form = $feat_list;
+		}
+
+		if (can_take_feat($pg, '')) {
+		$features_form .= "<select name=\"add_feat\">";
+
+		$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
+				WHERE first_lvl = 0 AND (cumulative = 1 OR
+					id NOT IN (
+						SELECT feat_id FROM ${prefix}user_feat
+						WHERE username = '$pg'))
+				ORDER BY feat_id");
+		while ($row_feat_list = $db->Do_Fetch_Assoc($query_feat_list)) {
+			$features_form .= "<option value={$row_feat_list['id']}>
+			{$row_feat_list['feat_id']}</option>";
+		}
+		$features_form .= "</select>
+			<input type=\"submit\" value=\"Aggiungi\">";
+		}
+
 
 		if(checkIfMaster() || $x7s->username == $pg)
 			$body .= '<div class="indiv" id="masterdiv_private">
@@ -642,6 +689,19 @@ function sheet_page_master(){
 
 			$body .="</form>\n";
 		}
+
+		$body .= '
+			<form action="index.php?act=sheet&page=master&pg='.$pg.'" method="post" name="sheet_form">
+			<div class="indiv" id="masterdiv">'.
+			'<div id="inner_master">'.$row['master'].'</div>'.$modify_master.'</div>';
+
+		$body .= '<div class="indiv" id="masterdiv_features">
+			Talenti:
+			<div class="inner_features" id="inner_features">'.
+			$features_form.
+			'</div></div>
+			</form>';
+		
 
 	}
 
@@ -770,7 +830,8 @@ function sheet_page_ability(){
 		if(!$row_user)
 		die("Users not in database");
 
-		$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id, u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
+		$query = $db->DoQuery("SELECT a.corp AS corp, u.ability_id AS ab_id,
+				u.value AS value, a.dep AS dep, a.dep_val AS dep_val, a.name AS name
 							FROM 	{$prefix}userability u, 
 							{$prefix}ability a
 							WHERE 
@@ -2096,14 +2157,27 @@ function print_sheet($body,$bg){
 			
       #master_private, #masterdiv_private{
 				top: 300px;
-				left: 50px;
-				width: 400px;
-				height: 220px;
+				left: 250px;
+				width: 230px;
+				height: 270px;
 				overflow: hidden;
 			}
       #master_private_text, #inner_private, .inner_private{
-				height: 200px;
-				width: 400px;
+				height: 270px;
+				width: 230px;
+				overflow: auto;
+				position: absolute;
+			}
+      #master_features, #masterdiv_features{
+				top: 300px;
+				left: 50px;
+				width: 200px;
+				height: 270px;
+				overflow: hidden;
+			}
+      #master_features_text, #inner_features, .inner_features{
+				height: 270px;
+				width: 200px;
 				overflow: auto;
 				position: absolute;
 			}

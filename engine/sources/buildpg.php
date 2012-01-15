@@ -257,7 +257,7 @@
 							$marr="Sposata";
 						
 
-                                        $pf = $_POST['rob'] * 2;
+					$pf = $_POST['rob'] * 2;
 					$db->DoQuery("UPDATE {$prefix}users SET
 								name='$_POST[name]',
 								age='$_POST[age]',
@@ -304,6 +304,10 @@
 						global $shopper, $start_cogs;
 						pay($start_cogs, $shopper, $pg);
 					}
+
+					$db->DoQuery("INSERT INTO {$prefix}user_feat
+							(username, feat_id)
+							VALUES ('$pg', '{$_POST['add_feat']}')");
 						
 					header('Location: ./index.php');
 					return;
@@ -423,6 +427,16 @@
 				$full_name_form='<input type="hidden" name="name" value="'.$row_user['username'].'">';	
 			}
 
+			$features_form .= "<select name=\"add_feat\">";
+
+			$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
+					ORDER BY feat_id");
+			while ($row_feat_list = $db->Do_Fetch_Assoc($query_feat_list)) {
+				$features_form .= "<option value={$row_feat_list['id']}>
+				{$row_feat_list['feat_id']}</option>";
+			}
+			$features_form .= "</select>";
+
 			$body ='
 			<script language="javascript" type="text/javascript">
 						var descr=Array();
@@ -431,7 +445,7 @@
 						.'
 
 						descr[\'naz\']="La Nazionalit&agrave; indica lo stato dal quale provenite. Italiana, statunitense, russa... Facile dai!";
-						descr[\'nome\']="Il nome completo del pg &egrave; inteso come il vero nome anagrafico del personaggio, quello \"legale\" ... Quindi il <b>NICK</b> � quello che appare in chat (scorpion, butterfly, volpe quel che vi pare...) ma questo &egrave; la Vera Identit&agrave; del player. Non sono quindi ammessi nomi impossibili (Leo-99 o Topolina 74) o cretini (the undead lord o Diabolik), come nemmeno nomi fantasy (Gandalf il bianco, Elandriel Blacwisdom o cose simili)... Insomma siate veritieri...";
+						descr[\'nome\']="Il nome completo del pg &egrave; inteso come il vero nome anagrafico del personaggio, quello \"legale\" ... Quindi il <b>NICK</b> e\' quello che appare in chat (scorpion, butterfly, volpe quel che vi pare...) ma questo &egrave; la Vera Identit&agrave; del player. Non sono quindi ammessi nomi impossibili (Leo-99 o Topolina 74) o cretini (the undead lord o Diabolik), come nemmeno nomi fantasy (Gandalf il bianco, Elandriel Blacwisdom o cose simili)... Insomma siate veritieri...";
 						descr[\'sesso\']="Sesso? Spesso e volentieri grazie... Non vi spiego cosa sia, tanto il men&ugrave; a tendina non vi permetter&agrave; grossi errori!";
 						descr[\'civile\']="Indica se siete sposati o single.";
 
@@ -540,7 +554,11 @@
 						<td>Punti caratteristica:</td> <td><input type="text" size="2" name="ch_display" value="'.$ch.'" style="text-align: right; color: blue;" disabled> <input type="hidden" name="ch" value="'.$ch.'"> </td>
 					</tr>
 					'.$ch_fields.'
-
+					<tr><td>Talento:</td><td>'.
+					$features_form.
+					'</tr></td>
+					
+					
 					<tr>
 						<td><INPUT id="send" name="aggiorna" class="button" type="SUBMIT" value="Crea personaggio" disabled></td>
 					</tr>
