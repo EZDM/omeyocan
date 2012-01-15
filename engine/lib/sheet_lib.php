@@ -2,6 +2,9 @@
 
 		function can_take_feat($pg, $feat_id) {
 			global $db, $prefix;
+			if (checkIfMaster())
+				return true;
+
 			$query_feat = $db->DoQuery("SELECT COUNT(*) AS cnt FROM {$prefix}user_feat 
 					WHERE username = '$pg'");
 			$query_lvl = $db->DoQuery("SELECT lvl FROM {$prefix}users
