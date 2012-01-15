@@ -3458,16 +3458,19 @@ function admincp_master(){
 		}
 
 		if(isset($_POST['new_feature_id'])) {
+			$first_lvl = isset($_POST['first_lvl']);
 			$query = $db->DoQuery("SELECT COUNT(*) AS cnt FROM ${prefix}features 
 					WHERE id = '{$_POST['new_feature_id']}'");
 			$row = $db->Do_Fetch_Assoc($query);
 			if ($row['cnt'] > 0) {
 				$db->DoQuery("UPDATE ${prefix}features SET 
-						descr = '{$_POST['feature_desc']}'
+						descr = '{$_POST['feature_desc']}',
+						first_lvl = '$first_lvl'
 						WHERE id = '{$_POST['new_feature_id']}'");
 			} else {
-				$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr)
-						VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}')");
+				$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr, first_lvl)
+						VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}',
+							'$first_lvl')");
 			}
 		}
 
@@ -3664,12 +3667,16 @@ function admincp_master(){
 		$new_feat_show = 'visible';
 		$desc="";
 		$delete_act = "";
+		$first_lvl = "";
 		if (isset($_GET['mod_feat'])) {
 			$new_feat_show = 'hidden';
-			$query_select = $db->DoQuery("SELECT descr FROM {$prefix}features
+			$query_select = $db->DoQuery("SELECT descr,first_lvl
+					FROM {$prefix}features
 					WHERE id = '{$_GET['mod_feat']}'");
 			$row_select = $db->Do_Fetch_Assoc($query_select);
 			$desc = $row_select['descr'];
+			if ($row_select['first_lvl'])
+				$first_lvl = "checked";
 			$delete_act = "window.location.href='index.php?act=adminpanel&cp_page=abilities&del_feat=".$_GET['mod_feat']."'";
 		} else {
 			$_GET['mod_feat'] = "";
@@ -3687,6 +3694,8 @@ function admincp_master(){
 			<td>Descrizione:</td>
 			<td><textarea name=\"feature_desc\" style=\"height: 200\">$desc</textarea></td>
 			</tr>
+			<tr><td>Primo livello:</td>
+			<td><input type=\"checkbox\" name=\"first_lvl\" $first_lvl></td></tr>
 			<tr><td><input type=\"submit\" value=\"Inserisci/Modifica\"></td></tr>";
 
 		if ($delete_act)
