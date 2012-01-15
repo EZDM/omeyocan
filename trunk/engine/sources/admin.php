@@ -3453,14 +3453,22 @@ function admincp_master(){
 		}
 
 		if(isset($_GET['del_feat'])) {
-			$db->DoQuery("DELETE FROM {$prefix}features WHERE feat_id = '{$_GET['del_feat']}'");
+			$db->DoQuery("DELETE FROM {$prefix}features WHERE id = '{$_GET['del_feat']}'");
 			$db->DoQuery("DELETE FROM {$prefix}user_feat WHERE feat_id = '{$_GET['del_feat']}'");
 		}
 
 		if(isset($_POST['new_feature_id'])) {
-			$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr)
-					VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}')
-					ON DUPLICATE KEY UPDATE descr = '{$_POST['feature_desc']}'");
+			$query = $db->DoQuery("SELECT COUNT(*) AS cnt FROM ${prefix}features 
+					WHERE id = '{$_POST['new_feature_id']}'");
+			$row = $db->Do_Fetch_Assoc($query);
+			if ($row['cnt'] > 0) {
+				$db->DoQuery("UPDATE ${prefix}features SET 
+						descr = '{$_POST['feature_desc']}'
+						WHERE id = '{$_POST['new_feature_id']}'");
+			} else {
+				$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr)
+						VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}')");
+			}
 		}
 
 		if(!isset($_GET['group']))
@@ -3645,12 +3653,12 @@ function admincp_master(){
 			<td><select name=\"feature_id\" onChange=\"show_new_feat(this.value)\">
 		  <option value=\"_new\">Nuovo talento...</option>";
 
-		$query = $db->DoQuery("SELECT feat_id FROM {$prefix}features ORDER BY feat_id");
+		$query = $db->DoQuery("SELECT id,feat_id FROM {$prefix}features ORDER BY feat_id");
 		while ($row = $db->Do_Fetch_Assoc($query)) {
 			$selected = "";
-			if (isset($_GET['mod_feat']) && $_GET['mod_feat'] == $row['feat_id'])
+			if (isset($_GET['mod_feat']) && $_GET['mod_feat'] == $row['id'])
 				$selected = "selected=\"selected\"";
-			$body .= "<option value=\"{$row['feat_id']}\" $selected>$row[feat_id]</option>";
+			$body .= "<option value=\"{$row['id']}\" $selected>$row[feat_id]</option>";
 		}
 
 		$new_feat_show = 'visible';
@@ -3659,7 +3667,7 @@ function admincp_master(){
 		if (isset($_GET['mod_feat'])) {
 			$new_feat_show = 'hidden';
 			$query_select = $db->DoQuery("SELECT descr FROM {$prefix}features
-					WHERE feat_id = '{$_GET['mod_feat']}'");
+					WHERE id = '{$_GET['mod_feat']}'");
 			$row_select = $db->Do_Fetch_Assoc($query_select);
 			$desc = $row_select['descr'];
 			$delete_act = "window.location.href='index.php?act=adminpanel&cp_page=abilities&del_feat=".$_GET['mod_feat']."'";
