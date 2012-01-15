@@ -3459,18 +3459,21 @@ function admincp_master(){
 
 		if(isset($_POST['new_feature_id'])) {
 			$first_lvl = isset($_POST['first_lvl']);
+			$cumulative = isset($_POST['cumulative']);
 			$query = $db->DoQuery("SELECT COUNT(*) AS cnt FROM ${prefix}features 
 					WHERE id = '{$_POST['new_feature_id']}'");
 			$row = $db->Do_Fetch_Assoc($query);
 			if ($row['cnt'] > 0) {
 				$db->DoQuery("UPDATE ${prefix}features SET 
 						descr = '{$_POST['feature_desc']}',
-						first_lvl = '$first_lvl'
+						first_lvl = '$first_lvl',
+						cumulative = '$cumulative'
 						WHERE id = '{$_POST['new_feature_id']}'");
 			} else {
-				$db->DoQuery("INSERT INTO ${prefix}features (feat_id, descr, first_lvl)
+				$db->DoQuery("INSERT INTO ${prefix}features 
+						(feat_id, descr, first_lvl, cumulative)
 						VALUES ('{$_POST['new_feature_id']}', '{$_POST['feature_desc']}',
-							'$first_lvl')");
+							'$first_lvl', '$cumulative')");
 			}
 		}
 
@@ -3668,15 +3671,18 @@ function admincp_master(){
 		$desc="";
 		$delete_act = "";
 		$first_lvl = "";
+		$cumulative = "";
 		if (isset($_GET['mod_feat'])) {
 			$new_feat_show = 'hidden';
-			$query_select = $db->DoQuery("SELECT descr,first_lvl
+			$query_select = $db->DoQuery("SELECT descr, first_lvl, cumulative
 					FROM {$prefix}features
 					WHERE id = '{$_GET['mod_feat']}'");
 			$row_select = $db->Do_Fetch_Assoc($query_select);
 			$desc = $row_select['descr'];
 			if ($row_select['first_lvl'])
 				$first_lvl = "checked";
+			if ($row_select['cumulative'])
+				$cumulative = "checked";
 			$delete_act = "window.location.href='index.php?act=adminpanel&cp_page=abilities&del_feat=".$_GET['mod_feat']."'";
 		} else {
 			$_GET['mod_feat'] = "";
@@ -3696,6 +3702,8 @@ function admincp_master(){
 			</tr>
 			<tr><td>Primo livello:</td>
 			<td><input type=\"checkbox\" name=\"first_lvl\" $first_lvl></td></tr>
+			<tr><td>Cumulativo:</td>
+			<td><input type=\"checkbox\" name=\"cumulative\" $cumulative></td></tr>
 			<tr><td><input type=\"submit\" value=\"Inserisci/Modifica\"></td></tr>";
 
 		if ($delete_act)
