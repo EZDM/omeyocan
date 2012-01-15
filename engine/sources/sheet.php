@@ -659,20 +659,26 @@ function sheet_page_master(){
 		}
 
 		if (can_take_feat($pg, '')) {
-		$features_form .= "<select name=\"add_feat\">";
+			$features_form .= "<select name=\"add_feat\">";
 
-		$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
-				WHERE first_lvl = 0 AND (cumulative = 1 OR
-					id NOT IN (
-						SELECT feat_id FROM ${prefix}user_feat
-						WHERE username = '$pg'))
-				ORDER BY feat_id");
-		while ($row_feat_list = $db->Do_Fetch_Assoc($query_feat_list)) {
-			$features_form .= "<option value={$row_feat_list['id']}>
-			{$row_feat_list['feat_id']}</option>";
-		}
-		$features_form .= "</select>
-			<input type=\"submit\" value=\"Aggiungi\">";
+			if (checkIfMaster()) {
+				$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
+						ORDER BY feat_id");
+			} else {
+				$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
+						WHERE first_lvl = 0 AND (cumulative = 1 OR
+							id NOT IN (
+								SELECT feat_id FROM ${prefix}user_feat
+								WHERE username = '$pg'))
+						ORDER BY feat_id");
+
+			}
+			while ($row_feat_list = $db->Do_Fetch_Assoc($query_feat_list)) {
+				$features_form .= "<option value={$row_feat_list['id']}>
+				{$row_feat_list['feat_id']}</option>";
+			}
+			$features_form .= "</select>
+				<input type=\"submit\" value=\"Aggiungi\">";
 		}
 
 
