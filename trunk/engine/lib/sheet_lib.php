@@ -23,7 +23,7 @@
 			$row_feat = $db->Do_Fetch_Assoc($query_feat);
 			$row_lvl = $db->Do_Fetch_Assoc($query_lvl);
 
-			if ($row_lvl['lvl'] / 20 > $row_feat['cnt']) {
+			if ($row_lvl['lvl'] / 25 >= $row_feat['cnt'] && $row_feat['cnt'] < 5) {
 				if (!$feat_id || $row['cnt'] == 0)
 					return true;
 			}
