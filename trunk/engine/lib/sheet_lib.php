@@ -1,9 +1,12 @@
 <?PHP
 
 		function can_take_feat($pg, $feat_id) {
-			global $db, $prefix;
+			global $x7s, $db, $prefix;
 			if (checkIfMaster())
 				return true;
+
+			if ($x7s->username != $pg)
+				return false;
 
 			$query_feat = $db->DoQuery("SELECT COUNT(*) AS cnt FROM {$prefix}user_feat 
 					WHERE username = '$pg'");
