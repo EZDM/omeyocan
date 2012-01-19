@@ -2169,7 +2169,7 @@ function print_sheet($body,$bg){
 				top: 300px;
 				left: 250px;
 				width: 230px;
-				height: 270px;
+				height: 310px;
 				overflow: hidden;
 			}
       #master_private_text, #inner_private, .inner_private{
