@@ -659,7 +659,9 @@ function sheet_page_master(){
 		}
 
 		if (can_take_feat($pg, '')) {
-			$features_form .= "<select name=\"add_feat\">";
+			$features_form = '<form action="index.php?act=sheet&page=master&pg='.
+				$pg.'" method="post" name="feat_form">'.$feat_list.
+				'<select name="add_feat">';
 
 			if (checkIfMaster()) {
 				$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
@@ -678,7 +680,7 @@ function sheet_page_master(){
 				{$row_feat_list['feat_id']}</option>";
 			}
 			$features_form .= "</select>
-				<input type=\"submit\" value=\"Aggiungi\">";
+				<input type=\"submit\" value=\"Aggiungi\"></form>";
 		}
 
 
@@ -705,11 +707,9 @@ function sheet_page_master(){
 
 		$body .= '<div class="indiv" id="masterdiv_features">
 			Talenti:
-			<div class="inner_features" id="inner_features">
-			<form action="index.php?act=sheet&page=master&pg='.$pg.'" method="post" name="feat_form">'.
-			$features_form.
-			'</form></div>
-			
+			<div class="inner_features" id="inner_features">'
+			.$features_form.
+			'</div>
 			</div>';
 		
 
