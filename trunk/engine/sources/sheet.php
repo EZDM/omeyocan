@@ -693,20 +693,24 @@ function sheet_page_master(){
 								<INPUT name=\"aggiorna\" class=\"button\" type=\"SUBMIT\" value=\"Invia modifiche\" style=\"visibility: hidden;\">		
 						</div>";
 
-			$body .="</form>\n";
 		}
 
 		$body .= '
-			<form action="index.php?act=sheet&page=master&pg='.$pg.'" method="post" name="sheet_form">
 			<div class="indiv" id="masterdiv">'.
 			'<div id="inner_master">'.$row['master'].'</div>'.$modify_master.'</div>';
 
+		if(checkIfMaster()) {
+			$body .="</form>\n";
+		}
+
 		$body .= '<div class="indiv" id="masterdiv_features">
 			Talenti:
-			<div class="inner_features" id="inner_features">'.
+			<div class="inner_features" id="inner_features">
+			<form action="index.php?act=sheet&page=master&pg='.$pg.'" method="post" name="feat_form">'.
 			$features_form.
-			'</div></div>
-			</form>';
+			'</form></div>
+			
+			</div>';
 		
 
 	}
