@@ -167,7 +167,7 @@
 
   switch($_GET['frame']){
     case "invisibility":
-      header("Content-type: text/plain; charset=UTF-8");
+      header("Content-type: text/plain; charset=iso-8859-1");
       header("Cache-Control: no-cache");
       header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
 
@@ -188,7 +188,7 @@
 
 
     case "shadow":
-      header("Content-type: text/plain; charset=UTF-8");
+      header("Content-type: text/plain; charset=iso-8859-1");
       header("Cache-Control: no-cache");
       header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
 
@@ -212,7 +212,7 @@
 
     case "update":
       // Make sure they are not trying to cache this page
-      header("Content-type: text/plain; charset=UTF-8");
+      header("Content-type: text/plain; charset=iso-8859-1");
       header("Cache-Control: no-cache");
       header("Expires: Thu, 1 Jan 1970 0:00:00 GMT");
 
@@ -712,6 +712,7 @@
       echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
       echo "<html dir=\"$print->direction\"><head>
         <title>{$x7c->settings['site_name']} Chat</title>";
+			echo '<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />';
       echo $print->style_sheet;
       echo $print->ss_mini;
       echo $print->ss_chatinput;
