@@ -217,6 +217,7 @@
 		function dump_buffer($pretend=false){
 			global $_GET, $X7CHATVERSION;
 			
+			header("Content-type: text/html; charset=iso-8859-1");
 			// Theme copyright if written by someone other then ourselfs
 			$theme_info = $this->theme_info($this->this_skin);
 			if($theme_info['author'] == "X7 Group")
