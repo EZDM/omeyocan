@@ -132,10 +132,11 @@
 			</table>
 		</div>
 		<object>
+		  <param name="bgcolor" value="#000000">
 			<param name="movie" width="0" height="0" value="./engine/graphic/letmecryhigh.swf">
 			<param name="quality" value="high">
 			<param name="allowScriptAccess" value="sameDomain">
-			<embed src="./engine/graphic/letmecryhigh.swf" width="0" height="0" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowScriptAccess="sameDomain">
+			<embed src="./engine/graphic/letmecryhigh.swf" width="0" height="0" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowScriptAccess="sameDomain" bgcolor="#000000">
 			</embed>
 		</object>
 	</body>
