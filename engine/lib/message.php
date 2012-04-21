@@ -308,51 +308,56 @@
 			$obj_regexp = "/&deg;([0-9]+);/i";
 			
 			while(preg_match($obj_regexp,$message, $obj)){
-									
+
 				$obj_msg="";
-				$query = $db->DoQuery("SELECT name, uses, equipped, visible_uses
-							FROM {$prefix}objects
-							WHERE id='$obj[1]'
-							 AND owner='$x7s->username'");
-			 
+				$query = $db->DoQuery("SELECT name, uses, equipped, visible_uses,
+						random_img
+						FROM {$prefix}objects
+						WHERE id='$obj[1]'
+						AND owner='$x7s->username'");
+
 				if($row = $db->Do_Fetch_Assoc($query)){
-				        if(!$row['equipped']){
-				                $obj_msg="<span class=\"break\">{L\'oggetto ".
-													$row['name']." non &egrave; equipaggiato}</span>";
-				        }
-				        else{
-									$newusage = -1;        
-									if($row['uses'] > 0){
-										$newusage = $row['uses'] - 1;
-										$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' 
-												WHERE id='{$obj[1]}'");
-									}
+					if(!$row['equipped']){
+						$obj_msg="<span class=\"break\">{L\'oggetto ".
+							$row['name']." non &egrave; equipaggiato}</span>";
+					}
+					else{
+						$newusage = -1;        
+						if($row['uses'] > 0){
+							$newusage = $row['uses'] - 1;
+							$db->DoQuery("UPDATE {$prefix}objects SET uses='$newusage' 
+									WHERE id='{$obj[1]}'");
+						}
 
-									$left_usage = '';
-									if($row['visible_uses'] && $newusage >= 0)
-										$left_usage = " (usi rimasti: $newusage)";
+						$left_usage = '';
+						if($row['visible_uses'] && $newusage >= 0)
+							$left_usage = " (usi rimasti: $newusage)";
 
-									if($row['uses'] > 1 || $row['uses'] == -1){
-										$obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".
-											$row['name'].$left_usage."}</span>";
-									}
-									else if($row['uses'] == 1){
-										$obj_msg="<span class=\"break\">{Usa l\'oggetto ".
-											$row['name']." che diventa inutilizzabile subito dopo ".
-											"l\'azione}</span>";
-									}
-									else{
-										$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un".
-											" oggetto inutilizzabile: ".$row['name']."}</span>";
-									}
+						if($row['uses'] > 1 || $row['uses'] == -1){
+							$obj_msg="<span class=\"roll_pos\">{Usa l\'oggetto ".
+								$row['name'].$left_usage."}</span>";
+						}
+						else if($row['uses'] == 1){
+							$obj_msg="<span class=\"break\">{Usa l\'oggetto ".
+								$row['name']." che diventa inutilizzabile subito dopo ".
+								"l\'azione}</span>";
+						}
+						else{
+							$obj_msg="<span class=\"roll_neg\">{Tenta di utilizzare un".
+								" oggetto inutilizzabile: ".$row['name']."}</span>";
+						}
 
-									include_once('./lib/alarms.php');
-									object_usage($x7s->username, $obj[1], $row['uses']);
-								}	
+						include_once('./lib/alarms.php');
+						object_usage($x7s->username, $obj[1], $row['uses']);
+					}	
+				}
+
+				if ($row['random_img']) {
+					$obj_msg .= pick_random_img($row['random_img']);
 				}
 
 				$message = preg_replace($obj_regexp, $obj_msg, $message, 1);
-				
+
 			}			
 			
 			//Perform image
@@ -520,6 +525,44 @@
 		global $x7c;
 		$time = $time+(($x7c->settings['time_offset_hours']*3600)+($x7c->settings['time_offset_mins']*60));
 		return date("[".$x7c->settings['date_format']."]",$time);
+	}
+
+  function pick_random_img($folder){
+		$img = '';
+	  if (!$folder)
+			return '';
+
+		if(preg_match("/\.\./", $folder)) {
+      return '';
+		}
+
+		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
+		$file_path=$basedir.'/'.$folder.'/';
+
+		if (!file_exists($file_path)) {
+			return '';
+		}
+
+		if ($dh = opendir($file_path)) {
+			$file_array = array();
+			while (($file = readdir($dh)) != false) {
+				if(filetype($file_path.$file) == 'file') {
+					$file_array[]=$file;
+				}
+			}
+
+			if (count($file_array) > 0) {
+				srand(time()+microtime());
+				$img_file = $file_array[rand(0,count($file_array) - 1)];
+
+				$img .= '<br>
+					<div style="text-align: center;">
+					<img src="'.$folder.'/'.$img_file.'" />
+					</div><br>';
+			}
+		}
+
+		return $img;
 	}
 
 ?>

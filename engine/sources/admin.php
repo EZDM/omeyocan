@@ -1408,11 +1408,12 @@ function admincp_master(){
 								$db->DoQuery("INSERT INTO {$prefix}objects
 										(name,description,uses,
 										 image_url,owner,equipped,size,category,base_value,
-										 visible_uses, expire_span, shop_return)
+										 visible_uses, expire_span, shop_return,random_img)
 										VALUES('$row[name]','$row[description]','$row[uses]',
 											'$row[image_url]','$shopper','1','$row[size]',
 											'$row[category]',$row[base_value],'$row[visible_uses]',
-											'$row[expire_span]','$row[shop_return]')");
+											'$row[expire_span]','$row[shop_return]',
+											'$row[random_img]')");
 							}
 						}
 					}
@@ -1455,11 +1456,11 @@ function admincp_master(){
 			if($error==''){
 				$db->DoQuery("INSERT INTO {$prefix}objects
 						(name,description,uses,image_url,owner,equipped,size,category,
-						 visible_uses, expire_span, shop_return)
+						 visible_uses, expire_span, shop_return,random_img)
 						VALUES('$row[name]','$row[description]','$row[uses]',
 							'$row[image_url]','$_POST[owner]','1','$row[size]',
 							'$row[category]','$row[visible_uses]','$row[expire_span]',
-							'$row[shop_return]')");
+							'$row[shop_return]','$row[random_img]')");
 
 				$new_id = mysql_insert_id();
 
@@ -1530,7 +1531,8 @@ function admincp_master(){
 							category='$category',
 							visible_uses='$visible_uses',
 							expire_span='$_POST[expire_span]',
-							shop_return = '$shop_return'
+							shop_return = '$shop_return',
+							random_img = '$_POST[random_img]'
 						WHERE id='$_POST[id]'");
 				
 				// Update not sold copies
@@ -1544,7 +1546,8 @@ function admincp_master(){
 							category='$category',
 							visible_uses='$visible_uses',
 							expire_span='$_POST[expire_span]',
-							shop_return = '$shop_return'
+							shop_return = '$shop_return',
+							random_img = '$_POST[random_img]'
 						WHERE name='$old_name' AND owner='$shopper'");
 
 				// Sync existing objects 
@@ -1559,7 +1562,8 @@ function admincp_master(){
 								category='$category',
 								visible_uses='$visible_uses',
 								expire_span='$_POST[expire_span]',
-								shop_return = '$shop_return'
+								shop_return = '$shop_return',
+								random_img = '$_POST[random_img]'
 							WHERE name='$old_name'");
 					
 					$query_count_obj = $db->DoQuery("SELECT count(*) AS cnt
@@ -1628,12 +1632,13 @@ function admincp_master(){
 					$db->DoQuery("INSERT INTO {$prefix}objects 
 						(name, description, uses, image_url,
 						 equipped, size, base_value, category, visible_uses, expire_span, 
-						 shop_return)
+						 shop_return,random_img)
 						VALUES(
 							'$_POST[name]',	'$_POST[description]',
 							'$_POST[uses]',	'$_POST[image_url]',
 							'1','$_POST[size]', '$_POST[base_value]', '$category', 
-							'$visible_uses', '$_POST[expire_span]', '$shop_return'
+							'$visible_uses', '$_POST[expire_span]', '$shop_return',
+							'$_POST[random_img]'
 							)");
 				}
 			}
@@ -1770,6 +1775,7 @@ function admincp_master(){
 				$row['visible_uses']='';
 				$row['expire_span']='-1';
 				$row['shop_return']='0';
+				$row['random_img']='';
 
 			}
 			$minuscolo="";
@@ -1881,6 +1887,15 @@ function admincp_master(){
 				<td>Descrizione:</td>
 				<td><textarea cols=\"30\" rows=\"10\" type=\"text\" name=\"description\"
 				class=\"text_input\">$row[description]</textarea></td>
+				</tr>
+				<tr>
+				<td>
+			  Cartella per immagine random:
+				</td>
+				<td>
+				<input type=\"text\" name=\"random_img\" class=\"text_input\"
+				value=\"$row[random_img]\">
+				</td>
 				</tr>
 				<tr>
 				<td>Usi (-1 per usi infiniti):</td>

@@ -427,7 +427,7 @@
 				$full_name_form='<input type="hidden" name="name" value="'.$row_user['username'].'">';	
 			}
 
-			$features_form .= "<select name=\"add_feat\">";
+			$features_form = "<select name=\"add_feat\">";
 
 			$query_feat_list = $db->DoQuery("SELECT id, feat_id FROM ${prefix}features
 					ORDER BY feat_id");
