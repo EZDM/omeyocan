@@ -1464,7 +1464,6 @@ function admincp_master(){
 
 				$new_id = mysql_insert_id();
 
-
 				$error="Oggetto assegnato correttamente\n";
 
 				if ($row['expire_span'] > 0) {
