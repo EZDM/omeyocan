@@ -1160,6 +1160,7 @@ function sheet_page_main(){
 				isset($_POST['marr']) &&
 				isset($_POST['gender']) &&
 				isset($_POST['avatar_in']) &&
+				isset($_POST['spazio']) &&
 				isset($_POST['lvl'])) {
 
 
@@ -1249,13 +1250,12 @@ function sheet_page_main(){
 				$db->DoQuery("UPDATE {$prefix}users SET	xp='$_POST[xp]'	WHERE username='$pg'");
 			}
 
-			$strength_query = $db->DoQuery("SELECT value FROM {$prefix}usercharact
-					WHERE username='$pg' AND charact_id='for'");
-			if ($row = $db->Do_Fetch_Assoc($strength_query)) {
-        if ($row['value'] != $_POST['for']) {
-					$spazio = ($_POST['for'] - 3) * 2;
+			$spazio_query = $db->DoQuery("SELECT spazio FROM {$prefix}users
+					WHERE username='$pg'");
+			if ($row = $db->Do_Fetch_Assoc($spazio_query)) {
+        if ($row['spazio'] != $_POST['spazio']) {
 					$db->DoQuery("UPDATE {$prefix}users
-									SET sheet_ok='1', spazio = $spazio
+									SET sheet_ok='1', spazio = '$_POST[spazio]'
 									WHERE username='$pg'");
 					$db->DoQuery("UPDATE {$prefix}objects 
 							SET equipped='0'
@@ -1263,7 +1263,6 @@ function sheet_page_main(){
 
 				}
 			}
-
 			foreach($char as $cur){
 				if(!isset($_POST[$cur['id']])){
 					$ok = false;
@@ -1331,6 +1330,7 @@ function sheet_page_main(){
 				document.forms[0].elements["marr"].style.color="blue";
 				document.forms[0].elements["gender"].style.color="blue";
 				document.forms[0].elements["avatar_in"].style.color="blue";
+				document.forms[0].elements["spazio"].style.color="blue";
 
 				document.forms[0].elements["name"].style.border="1px solid";
 				document.forms[0].elements["age"].style.border="1px solid";
@@ -1338,6 +1338,7 @@ function sheet_page_main(){
 				document.forms[0].elements["marr"].style.border="1px solid";
 				document.forms[0].elements["gender"].style.border="1px solid";
 				document.forms[0].elements["avatar_in"].style.border="1px solid";
+				document.forms[0].elements["spazio"].style.border="1px solid";
 
 				document.forms[0].elements["name"].style.background="white";
 				document.forms[0].elements["age"].style.background="white";
@@ -1345,6 +1346,7 @@ function sheet_page_main(){
 				document.forms[0].elements["marr"].style.background="white";
 				document.forms[0].elements["gender"].style.background="white";
 				document.forms[0].elements["avatar_in"].style.background="white";
+				document.forms[0].elements["spazio"].style.background="white";
 
 				document.forms[0].elements["name"].disabled=false;
 				document.forms[0].elements["age"].disabled=false;
@@ -1355,6 +1357,7 @@ function sheet_page_main(){
 				document.forms[0].elements["marr"].disabled=false;
 
 				document.forms[0].elements["avatar_in"].style.visibility="visible";
+				document.forms[0].elements["spazio"].style.visibility="visible";
 				document.forms[0].elements["aggiorna"].style.visibility="visible";
 				document.forms[0].elements["mod_button"].style.visibility="hidden";
 
@@ -1476,17 +1479,25 @@ function sheet_page_main(){
 		$body .= '
 			<script language="javascript" type="text/javascript">
 			function add_ch(ch_name){
-				var value = parseInt(document.sheet_form[ch_name].value);
-				document.sheet_form[ch_name].value = value + 1;
+				var value = parseInt(document.sheet_form[ch_name].value) + 1;
+				document.sheet_form[ch_name].value = value;
 
 				do_ch_form_refresh(ch_name);
+
+				if(ch_name == "for") {
+					document.sheet_form["spazio"].value = (value - 3) * 2;
+				}
 			}
 
 		function sub_ch(ch_name){
-			var value = parseInt(document.sheet_form[ch_name].value);
-			document.sheet_form[ch_name].value = value -1;
+			var value = parseInt(document.sheet_form[ch_name].value) - 1;
+			document.sheet_form[ch_name].value = value;
 
 			do_ch_form_refresh(ch_name);
+
+			if(ch_name == "for") {
+				document.sheet_form["spazio"].value = (value - 3) * 2;
+			}
 		}
 
 		function do_ch_form_refresh(ch_name){
@@ -1561,6 +1572,7 @@ function sheet_page_main(){
 			</select>
 			</div>
 			<div class=\"indiv\" id=\"avatar\"><input class=\"sheet_input\" type=\"text\" name=\"avatar_in\" value=\"$row_user[avatar]\" size=\"10\" style=\"visibility: hidden; font-size:10pt;\" disabled /></div>
+			<div class=\"indiv\" id=\"spazio_main\">Spazio:<input class=\"sheet_input\" type=\"text\" name=\"spazio\" value=\"$row_user[spazio]\" size=\"2\" style=\"visibility: hidden; font-size:10pt;\" /></div>
 			";
 
 		$time = time();
@@ -2375,6 +2387,14 @@ function print_sheet($body,$bg){
 				left: 65px;
 				top: 61px;
 				width: 200px;
+				color: white;
+				font-size: 10pt;
+				text-align: center;
+			}
+			#spazio_main{
+				left: 320px;
+				top: 11px;
+				width: 100px;
 				color: white;
 				font-size: 10pt;
 				text-align: center;
