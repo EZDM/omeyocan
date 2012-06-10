@@ -66,18 +66,14 @@
 	}
 	
 	// This function creates a new room
-	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$exp,$panic_free, $long_name){
+	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$panic_free, $long_name){
 		global $prefix, $db;
-		if($exp != 1)
-			$time = time();
-		else
-			$time = 0;
 		$ops = "$uid";
 		$voice = "$uid";
 		
 		$db->DoQuery("INSERT INTO {$prefix}rooms 
 		(id, name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, logo, panic_free, long_name, shadow)
-		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','$time','$ops','$voice','1','','','$panic_free','$long_name', '0')");
+		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','0','$ops','$voice','1','','','$panic_free','$long_name', '0')");
 		
 		//We also create the master key for the access
 		if($type==2){
