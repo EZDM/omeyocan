@@ -75,6 +75,11 @@
 		}elseif($_GET['cp_page'] == "settings"){
 		
 			$head = $txt[218];
+			if($x7c->permissions['make_rooms'] == 0){
+				$body = "--".$txt[216];
+				return;
+			}
+				
 		
 			if(!isset($_POST['topic'])){
 
@@ -592,36 +597,14 @@
 						<table class=\"ucp_table2\" height=\"100%\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
 							<tr>
 								<td width=\"100%\"".whatsmyclass("main").">$txt[137]</td>
-							</tr>
+							</tr>";
+
+		if($x7c->permissions['make_rooms'] == 1)
+			$cbody .= "
 							<tr>
 								<td width=\"100%\"".whatsmyclass("settings").">$txt[218]</td>
 							</tr>";
 
-							/*
-
-							<tr>
-								<td width=\"100%\"".whatsmyclass("blocklist").">$txt[141]</td>
-							</tr>
-							<tr>
-								<td width=\"100%\"".whatsmyclass("filter").">$txt[143]</td>
-							</tr>
-
-							*/
-							
-			/*if($x7c->permissions['use_keywords'] == 1)
-				$cbody .= "<tr>
-								<td width=\"100%\"".whatsmyclass("kwds").">$txt[144]</td>
-							</tr>";
-			$cbody .= 		"<tr>
-								<td width=\"100%\"".whatsmyclass("ops").">$txt[219]</td>
-							</tr>
-							<tr>
-								<td width=\"100%\"".whatsmyclass("voices").">$txt[220]</td>
-							</tr>
-							<tr>
-								<td width=\"100%\"".whatsmyclass("mutes").">$txt[221]</td>
-							</tr>";
-			*/				
 		if($x7c->permissions['access_room_logs'] == 1)
 			$cbody .= "			<tr>
 									<td width=\"100%\"".whatsmyclass("logs").">$txt[240]</td>

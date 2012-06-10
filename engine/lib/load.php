@@ -261,7 +261,7 @@
 
 			// By default user is not an administrator :)
 			$return['admin_access'] = 0;
-			$return['make_room']  = 0;
+			$return['make_rooms']  = 0;
 			$return['make_proom']  = 0;
 			$return['make_nexp']  = 0;
 			$return['make_mod']  = 0;
@@ -324,7 +324,7 @@
 			foreach (@$user_data->profile['usergroup'] as $user_group){
 				$row = $querydb['permissions_1'][$user_group];
 	
-				$return['make_room'] += $row[2];
+				$return['make_rooms'] += $row[2];
 				$return['make_proom'] += $row[3];
 				$return['make_nexp'] += $row[4];
 				$return['make_mod'] += $row[5];
