@@ -54,6 +54,16 @@
 		
 	}
 	
+	function room_modification($room){
+		global $x7s, $x7c, $prefix, $db;
+		
+		$msg = "<b>MODIFICA STANZA</b>: l\'utente <b>{$x7s->username} </b> modifica la stanza <b>$room</b><br>";
+		
+		$time = time();
+		$db->DoQuery("INSERT INTO {$prefix}logs (user, msg, time) VALUES ('{$x7s->username}','$msg','$time')");
+		
+		
+	}
 	function sheet_modification($modified, $page){
 		global $x7s, $x7c, $prefix, $db;
 		

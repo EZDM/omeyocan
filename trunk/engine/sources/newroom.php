@@ -57,7 +57,7 @@
 		global $txt, $print, $x7c;
 		
 		// Make sure they have permission to make a new room
-		if($x7c->permissions['make_room'] != 1){
+		if($x7c->permissions['make_rooms'] != 1){
 			$print->normal_window($txt[14],$txt[60]);
 			return 0;
 		}
