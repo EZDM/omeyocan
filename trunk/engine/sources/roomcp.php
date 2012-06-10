@@ -150,11 +150,6 @@
 							<td><select class=\"text_input\" style=\"width: 100px;\" name=\"room_type\">$type_options</select></td>
 						</tr>";
 
-				if($x7c->permissions['make_nexp'] == 1)
-					$body .= "<tr>
-								<td>$txt[71]:</td>
-								<td><input type=\"checkbox\" name=\"neverexpire\" value=\"1\"{$def['neverexpire']}></td>
-							</tr>";
 				$body .= "<tr>
 								<td>Non &egrave; affetta dal panico:</td>
 								<td><input type=\"checkbox\" name=\"panic_free\" value=\"1\"{$def['panic_free']}></td>
@@ -174,11 +169,6 @@
 					
 				if(@$_POST['moderated'] == "" || $x7c->permissions['make_mod'] == 0)
 					$_POST['moderated'] = 0;
-					
-				if(@$_POST['neverexpire'] == 1 && $x7c->permissions['make_nexp'] == 1)
-					change_roomsetting($_GET['room'],"time","0");
-				else
-					change_roomsetting($_GET['room'],"time",time());
 					
 				if($x7c->permissions['make_proom'] == 0 || ($_POST['room_type'] != 1 && $_POST['room_type'] != 2))
 					$_POST['room_type'] = 1;

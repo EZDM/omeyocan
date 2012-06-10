@@ -129,23 +129,14 @@
 						
 
 							
-				// Permission check and if enabled print never expire toggle
-				if($x7c->permissions['make_nexp'] == 1)
-					$body .= "		<tr valign=\"top\">
-										<td width=\"70\">&nbsp;</td>
-										<td width=\"80\" style=\"vertical-align: middle;\">$txt[71]: </td>
-										<td width=\"175\" ><input type=\"checkbox\" checked name=\"roomnexp\" value=\"1\"></td>
-										<td width=\"70\">&nbsp;</td>
-									</tr>
-							";
 							
-					$body .= "		<tr valign=\"top\">
-										<td width=\"70\">&nbsp;</td>
-										<td width=\"80\" style=\"vertical-align: middle;\">Non &egrave; affetta dal panico: </td>
-										<td width=\"175\" ><input type=\"checkbox\" name=\"panic_free\" value=\"1\"></td>
-										<td width=\"70\">&nbsp;</td>
-									</tr>
-							";
+				$body .= "		<tr valign=\"top\">
+					<td width=\"70\">&nbsp;</td>
+					<td width=\"80\" style=\"vertical-align: middle;\">Non &egrave; affetta dal panico: </td>
+					<td width=\"175\" ><input type=\"checkbox\" name=\"panic_free\" value=\"1\"></td>
+					<td width=\"70\">&nbsp;</td>
+					</tr>
+					";
 						
 				// The submit button and form close
 				$body .= "		<tr valign=\"top\">
@@ -194,15 +185,13 @@
 		if($x7c->permissions['make_mod'] != 1 || !isset($_POST['roommod']))
 			$_POST['roommod'] = 0;
 			
-		if($x7c->permissions['make_nexp'] != 1 || !isset($_POST['roomnexp']))
-			$_POST['roomnexp'] = 0;
 		if(!isset($_POST['panic_free']))
 			$_POST['panic_free']=0;
 			
 		if($error == ""){
 			$body = $txt[75]."<Br><Br><a href=\"./index.php\">[$txt[29]]</a>";
 			// Crate the room
-			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'],$_POST['roomnexp'], $_POST['panic_free'], $_POST['roomlong']);
+			create_room($x7p->profile['id'],$_POST['roomname'],$_POST['roomtype'],$_POST['roommod'],$_POST['roomtopic'],$_POST['roomgreeting'],$_POST['roompass'],$_POST['roommax'], $_POST['panic_free'], $_POST['roomlong']);
 			header("location: index.php?act=roomcp&room=$_POST[roomname]&cp_page=settings");
 		}else{
 			$body = $error."<Br><Br><a href=\"index.php?act=newroom1\">[$txt[77]]</a>";
