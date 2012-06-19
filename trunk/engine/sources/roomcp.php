@@ -530,6 +530,7 @@
 					</form>
 					';
 					
+					$body .= "<Br>{$pages}<hr>";
 					
 					include_once("./lib/message.php");
 					$body .= '<div style="background: black; color: white;">';
