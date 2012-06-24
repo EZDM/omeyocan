@@ -26,17 +26,18 @@ If not, see <http://www.gnu.org/licenses/>
 function imglist_main(){
 	global $print, $x7s, $x7c, $x7p;
 
+	$base_image_dir="/images/";
 	$image_dir="/images/";
 
 	if(isset($_GET['subdir']) && $_GET['subdir']!="")
-	$image_dir.=$_GET['subdir']."/";
+		$image_dir.=$_GET['subdir']."/";
 
 	if($x7c->permissions['admin_panic'] || authorized($image_dir, $x7p->profile['usergroup'])){
 			
 		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 			
-		//Eventualmente estendere per le sottodirectory
 		$file_path=$basedir.$image_dir;
+		$image_root_dir = $basedir.$base_image_dir;
 		
 		$error = "<p style=\"color: red; font-weight: bold;\">";
 		if(isset($_GET['file'])){
@@ -46,8 +47,17 @@ function imglist_main(){
 			$error .= file_delete($file_path.$_GET['delete']);
 		}
 		elseif(isset($_POST['multidel'])){
-			foreach ($_POST['multidel'] as $file){
-				$error .= file_delete($file_path.$file);
+			if($_POST['action'] == 'delete') {
+				foreach ($_POST['multidel'] as $file){
+					$error .= file_delete($file_path.$file);
+				}
+			}
+			elseif($_POST['action'] == 'move') {
+				foreach ($_POST['multidel'] as $file){
+					$error .= file_move($file_path.$file,
+							$image_root_dir.$_POST['dest'].$file);
+					
+				}
 			}
 		}
 		$error .= "</p>";
@@ -109,6 +119,11 @@ function file_list($path,$url){
           return confirm("Vuoi davvero cancellare i files?\n\nATTENTO: se i files sono parte di un oggetto o sono ancora visualizzati in qualche stanza, comparira il box di \"oggetto mancante\"");
         } 
 
+				function do_move(url){
+					document.forms["multidelete"]["action"].value = "move";
+					document.forms["multidelete"].submit();
+        } 
+
 				function flash_preview(id, url) {
 					document.getElementById(id).innerHTML = \'<object>\
 							<param name="movie" value="\' + url + \'" width="100" height="100">\
@@ -142,9 +157,27 @@ function file_list($path,$url){
 			
 		$dir.="<li><a href=\"index.php?act=images&subdir=$previous\">../</a></li>";
 	}
+
+	$dir_tree = array();
+	$dir_tree[] = "/";
+	$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
+	get_dir_tree($dir_tree, $basedir."/images/");
+
 	$img="<form action=\"./index.php?act=images&subdir=".$subdir.
 		"\" method=\"post\" name=\"multidelete\" onSubmit=\"return do_multidelete();\">
-		<tr><td><input type=\"submit\" value=\"Multi delete\"></td></tr>";
+		<tr><td colspan=\"$maxcol\"><input type=\"submit\" value=\"Multi delete\">
+		<input type=\"button\" value=\"Sposta in\" onClick=\"do_move();\">";
+
+	$img .= "<select name=\"dest\">";
+
+  foreach($dir_tree as $d) {
+		$img .= "<option value=\"$d\">$d</option>";
+	}
+
+	$img .= "</select>";
+
+	$img.="<input type=\"hidden\" name=\"action\" value=\"delete\">
+		</td></tr>";
 
 	if($dh = opendir($path)){
 		while (($file = readdir($dh)) !== false) {
@@ -216,6 +249,29 @@ function file_list($path,$url){
 	return $output;
 }
 
+function get_dir_tree(&$tree, $path) {
+	$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
+	$basedir=preg_replace("/\//","\/", $basedir."/images");
+	if($dh = opendir($path)){
+		while (($file = readdir($dh)) !== false) {
+			$file_array[]=$file;
+		}
+	}
+	else {
+		return;
+	}
+		
+	natcasesort($file_array);
+	foreach ($file_array as $file) {
+		if($file[0]!="." && filetype($path.$file)=="dir"){
+			$file_str = preg_replace("/^$basedir/i", "", $path.$file);
+			array_push($tree, $file_str."/");
+			get_dir_tree($tree, $path.$file."/");
+		}
+	}
+
+}
+
 function file_upload($path){
 	global $print;
 
@@ -247,6 +303,19 @@ function file_delete($path){
 	}
 	else{
 		return "Errore: impossibile cancellare il file specificato<br>";
+	}
+}
+
+
+function file_move($s, $d){
+	global $print;
+
+	if(rename($s, $d)){
+    //return "Move ok ". basename($s). "<br>";
+		return "Move ok ". $s ."  ". $d. "<br>";
+	}
+	else{
+		return "Errore: impossibile spostare il file specificato<br>";
 	}
 }
 
