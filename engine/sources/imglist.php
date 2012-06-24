@@ -311,8 +311,7 @@ function file_move($s, $d){
 	global $print;
 
 	if(rename($s, $d)){
-    //return "Move ok ". basename($s). "<br>";
-		return "Move ok ". $s ."  ". $d. "<br>";
+    return "Move ok ". basename($s). "<br>";
 	}
 	else{
 		return "Errore: impossibile spostare il file specificato<br>";
