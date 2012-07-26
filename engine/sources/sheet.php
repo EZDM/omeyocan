@@ -425,7 +425,7 @@ function sheet_page_equip(){
 						WHERE id = '$row[id]'");
 				$row_expire = $db->Do_Fetch_Assoc($query_expire);
 				if ($row_expire) {
-					$expire_string = "<br>(Scadenza: ".
+					$expire_string = "<br>(Nullificazione in: ".
 						date("d/m/Y H:i",$row_expire['expire_time']).")";
 				}
 			}
