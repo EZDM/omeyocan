@@ -88,7 +88,7 @@
 
 		$count = 0;
 		foreach($prob as $i) {
-			if ($item < $i)
+			if ($item <= $i)
 				break;
 			$count++;
 		}
