@@ -96,7 +96,7 @@
 		return $count;
 	}
 	
-	function render_weather($description) {
+  function render_weather($description) {
 		$humidity = array();
 		$humidity['N/A'] = 'N/A';
 		$humidity[] = "Sereno (nessuna nube)"; 
@@ -112,12 +112,12 @@
 		$wind['N/A'] = 'N/A';
 		$wind[] = "Nessun vento (0-5 Km/h)";
 		$wind[] = "Brezza leggera (6-11 Km/h)";
-		$wind[]	=	"Vento (39-49Km/h)"; 
+		$wind[]	= "Vento (39-49Km/h)"; 
 		$wind[] = "Vento forte (50-61 Km/h)"; 
-	  $wind[]	=	"Burrasca (62-74 Km/h)";
+		$wind[]	= "Burrasca (62-74 Km/h)";
 		$wind[] = "Tempesta (89-102 Km/h)";
 		$wind[] = "Fortunale (103-117 Km/h)";
-		$wind[] =	"Haboob (oltre 118Km/h)";
+		$wind[] = "Haboob (oltre 118Km/h)";
 
 		$radiation = array(); 
 		$radiation['N/A'] = 'N/A';
@@ -152,8 +152,8 @@
 		$radiation_choice = $radiation[take_random_item($matches[1], 3)];
 
 		$weather = '
-		<p align="center">
-		<table border="1">
+			<p align="center">
+			<table border="1">
 			<tr>
 			<th>UMIDITA\'</th>
 			<th>VENTO</th>
@@ -168,8 +168,8 @@
 
 			</table>
 			</p>';
-			
-			return $weather.$description;
+
+		return $weather.$description;
 
 	}
 
