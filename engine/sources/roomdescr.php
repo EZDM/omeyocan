@@ -100,11 +100,11 @@
 		$humidity = array();
 		$humidity['N/A'] = 'N/A';
 		$humidity[] = "Sereno (nessuna nube)"; 
-		$humidity[]	= "Coperto (temperatura -15°C";
+		$humidity[] = "Coperto (temperatura -15°C";
 		$humidity[] = "Pioviggine (< 1 mm ogni ora)";
-		$humidity[]	= "Pioggia debole (1/2 mm/h)"; 
+		$humidity[] = "Pioggia debole (1/2 mm/h)"; 
 		$humidity[] = "Pioggia moderata (2/6 mm/h)";
-		$humidity[]	= "Pioggia forte (> 6 mm/h)";
+		$humidity[] = "Pioggia forte (> 6 mm/h)";
 		$humidity[] = "Rovescio (> 10 mm/h ma limitato nella durata)";
 		$humidity[] = "Nubifragio (> 30 mm/h)"; 
 
