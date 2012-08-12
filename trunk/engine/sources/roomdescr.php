@@ -90,7 +90,6 @@
 
 		$count = 0;
 		foreach($prob as $i) {
-			print "$item <= $i ";
 			if ($item <= $i)
 				break;
 			$count++;
