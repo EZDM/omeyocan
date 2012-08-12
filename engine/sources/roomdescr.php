@@ -59,15 +59,119 @@
 				if($row['background']!=''){
 					$body .= '<img src="'.$row['background'].'" />'."\n";
 				}
-
-				$body .= '<p id="descr">'.$row['topic'].'</p>';
+				$description = $row['topic'];
+				$description = render_weather($description);
+				$body .= '<p id="descr">'.$description.'</p>';
 			}
 
 			return $body;
 			
 	}
+
+  function take_random_item($probabilities, $type) {
+    $prob = explode(",", $probabilities);
+		$prev = 0;
+		$count = 0;
+		foreach($prob as $i) {
+			if(!is_numeric($i))
+				return "N/A";
+      $prob[$count] = $prev + $i;
+			if (($prev + $i) > 100)
+				return "N/A";
+			$prev = $prob[$count];
+			$count++;
+		}
+
+		$seed = date("W") . date("Y") . $type;
+		srand($seed);
+		$item = rand(0, 100);
+
+		$count = 0;
+		foreach($prob as $i) {
+			if ($item < $i)
+				break;
+			$count++;
+		}
+
+		return $count;
+	}
 	
-	
+	function render_weather($description) {
+		$humidity = array();
+		$humidity['N/A'] = 'N/A';
+		$humidity[] = "Sereno (nessuna nube)"; 
+		$humidity[]	= "Coperto (temperatura -15°C";
+		$humidity[] = "Pioviggine (< 1 mm ogni ora)";
+		$humidity[]	= "Pioggia debole (1/2 mm/h)"; 
+		$humidity[] = "Pioggia moderata (2/6 mm/h)";
+		$humidity[]	= "Pioggia forte (> 6 mm/h)";
+		$humidity[] = "Rovescio (> 10 mm/h ma limitato nella durata)";
+		$humidity[] = "Nubifragio (> 30 mm/h)"; 
+
+		$wind = array();
+		$wind['N/A'] = 'N/A';
+		$wind[] = "Nessun vento (0-5 Km/h)";
+		$wind[] = "Brezza leggera (6-11 Km/h)";
+		$wind[]	=	"Vento (39-49Km/h)"; 
+		$wind[] = "Vento forte (50-61 Km/h)"; 
+	  $wind[]	=	"Burrasca (62-74 Km/h)";
+		$wind[] = "Tempesta (89-102 Km/h)";
+		$wind[] = "Fortunale (103-117 Km/h)";
+		$wind[] =	"Haboob (oltre 118Km/h)";
+
+		$radiation = array(); 
+		$radiation['N/A'] = 'N/A';
+		$radiation[] = "Radiazione assente (0 mSv)";
+		$radiation[] = "Radiazione lieve (radiografia <1 mSv)";
+		$radiation[] = "Radiazione moderata (TAC 2/15 mSv)";
+		$radiation[] = "Radiazione media (tomografia 10/20 mSv)";
+		$radiation[] = "Radiazione alta (radioterapia 21/40 mSv)";
+		$radiation[] = "Radiazione forte (alterazioni temporanee emoglobina (1 Sv)";
+		$radiation[] = "Radiazione intensa nausea, perdita dei capelli, emorragie 2/5 Sv)";
+		$radiation[] = "Radiazione nociva (morte nel 50% dei casi 4 Sv)";
+		$radiation[] = "Radiazione letale (sopravvivenza improbabile 6 Sv)"; 
+
+		$matches  = array();
+
+		if(!preg_match("/%humidity:(.*)%/", $description, $matches))
+			return $description;
+		$description = preg_replace("/%humidity:(.*)%/", "",
+				$description);
+		$humidity_choice = $humidity[take_random_item($matches[1], 1)];
+
+		if(!preg_match("/%wind:(.*)%/", $description, $matches))
+			return $description;
+		$description = preg_replace("/%wind:(.*)%/", "",
+				$description);
+		$wind_choice = $wind[take_random_item($matches[1], 2)];
+
+		if(!preg_match("/%radiation:(.*)%/", $description, $matches))
+			return $description;
+		$description = preg_replace("/%radiation:(.*)%/", "",
+				$description);
+		$radiation_choice = $radiation[take_random_item($matches[1], 3)];
+
+		$weather = '
+		<p align="center">
+		<table border="1">
+			<tr>
+			<th>UMIDITA\'</th>
+			<th>VENTO</th>
+			<th>RADIZIONE</th>
+			</tr>
+
+			<tr>
+			<td>'.$humidity_choice.'</td>
+			<td>'.$wind_choice.'</td>
+			<td>'.$radiation_choice.'</td>
+			</tr>
+
+			</table>
+			</p>';
+			
+			return $weather.$description;
+
+	}
 
 	function print_page($body){
 		global $print,$x7c,$x7s;
