@@ -81,6 +81,8 @@
 			$prev = $prob[$count];
 			$count++;
 		}
+		if ($prev != 100)
+			return "N/A";
 
 		$seed = date("W") . date("Y") . $type;
 		srand($seed);
@@ -88,6 +90,7 @@
 
 		$count = 0;
 		foreach($prob as $i) {
+			print "$item <= $i ";
 			if ($item <= $i)
 				break;
 			$count++;
