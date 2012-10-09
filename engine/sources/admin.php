@@ -1424,7 +1424,8 @@ function admincp_master(){
 		}
 
 		if(isset($_GET['assign'])){
-			if(!isset($_POST['owner']) || !isset($_POST['id'])){
+			if(!isset($_POST['owner']) || !isset($_POST['id']) ||
+					!isset($_POST['qty'])){
 				die("Bad form");
 			}
 			$query = $db->DoQuery("SELECT username 
@@ -1433,6 +1434,9 @@ function admincp_master(){
 
 			if(!$row_usr){
 				$error = "Utente non esistente";
+			}
+			if(!is_numeric($_POST['qty'])) {
+				$error = "Quantita' da assegnare non valida";
 			}
 
 			$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
@@ -1447,38 +1451,44 @@ function admincp_master(){
 			if ($obj_name == $money_name)
 				$error = "Non puoi assegnare soldi da questo pannello";
 
-			include_once('./lib/sheet_lib.php');
-			$residuo = get_user_space($_POST['owner']);
-			if($residuo - $row['size'] < 0)
-				$error = "L'utente non pu&ograve; trasportare l'oggetto:<br>".
-					"spazio residuo: $residuo<br>spazio richiesto: $row[size]";
+			if($error==''){
+				include_once('./lib/sheet_lib.php');
+				$residuo = get_user_space($_POST['owner']);
+				$total_space = $row['size'] * $_POST['qty'];
+				if($residuo - $total_space < 0)
+					$error = "L'utente non pu&ograve; trasportare l'oggetto:<br>".
+						"spazio residuo: $residuo<br>spazio richiesto: $total_space";
+			}
 
 			if($error==''){
-				$db->DoQuery("INSERT INTO {$prefix}objects
-						(name,description,uses,image_url,owner,equipped,size,category,
-						 visible_uses, expire_span, shop_return,random_img)
-						VALUES('$row[name]','$row[description]','$row[uses]',
-							'$row[image_url]','$_POST[owner]','1','$row[size]',
-							'$row[category]','$row[visible_uses]','$row[expire_span]',
-							'$row[shop_return]','$row[random_img]')");
+				for($i=0; $i < $_POST['qty']; $i++) {
+					$db->DoQuery("INSERT INTO {$prefix}objects
+							(name,description,uses,image_url,owner,equipped,size,category,
+							 visible_uses, expire_span, shop_return,random_img)
+							VALUES('$row[name]','$row[description]','$row[uses]',
+								'$row[image_url]','$_POST[owner]','1','$row[size]',
+								'$row[category]','$row[visible_uses]','$row[expire_span]',
+								'$row[shop_return]','$row[random_img]')");
 
-				$new_id = mysql_insert_id();
+					$new_id = mysql_insert_id();
 
-				$error="Oggetto assegnato correttamente\n";
+					$error.="Oggetto assegnato correttamente<br>";
 
-				if ($row['expire_span'] > 0) {
-					$expire_time = time() + $row['expire_span'] * 60;
+					if ($row['expire_span'] > 0) {
+						$expire_time = time() + $row['expire_span'] * 60;
 
-					$db->DoQuery("INSERT INTO {$prefix}temp_obj 
-							(id, expire_time, shop_return)
-							VALUES
-							('$new_id', '$expire_time', '$row[shop_return]')");
-				
-					$error .= "<br>L'oggetto scadra' il:".date("d/m/Y H:i", $expire_time);
+						$db->DoQuery("INSERT INTO {$prefix}temp_obj 
+								(id, expire_time, shop_return)
+								VALUES
+								('$new_id', '$expire_time', '$row[shop_return]')");
+					
+						$error .= "<br>L'oggetto scadra' il:".date("d/m/Y H:i",
+								$expire_time);
+					}
+
+					include_once('./lib/alarms.php');
+					object_assignement($_POST['owner'],$row['name']);
 				}
-
-				include_once('./lib/alarms.php');
-				object_assignement($_POST['owner'],$row['name']);
 			}
 
 		}
@@ -1987,6 +1997,9 @@ function admincp_master(){
 						<hr>
 						<td>Assegna a:</td>
 						<td><input type=\"text\" name=\"owner\" class=\"text_input\"></td>
+						<td>Quantita'</td>
+						<td><input type=\"text\" size=\"5\" name=\"qty\"
+						       class=\"text_input\" value=\"1\"></td>
 						<td><input type=\"submit\" class=\"button\" value=\"Assegna\"></div>
 						</td>
 						</tr>
