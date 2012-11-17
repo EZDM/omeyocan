@@ -37,7 +37,7 @@
 				height: 100px;
 			}
 			
-			#forum{
+			#hole{
 				position: absolute;
 				top: 400px;
 				left: 0px;
@@ -116,7 +116,7 @@
 										
 					<a onClick="<?PHP echo popup_open(1028, 728, 'engine','main');?>" href="#"><div id="enter"></div></a>
 					
-					<a href="forum/"><div id="forum"></div></a>
+					<a href="hole/"><div id="hole"></div></a>
 					<a href="manual/"><div id="rules"></div></a>
 					
 					<a onClick="<?PHP 
