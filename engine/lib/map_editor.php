@@ -27,20 +27,33 @@ If not, see <http://www.gnu.org/licenses/>
 <?php 
 	$link_selection='<option value=""></option>\n';
 	$link_selection_static='<option value=""></option>\n';
+	$link_up='<option value=""></option>\n';
+	$link_down='<option value=""></option>\n';
+	$link_left='<option value=""></option>\n';
+	$link_right='<option value=""></option>\n';
 	$button_list='';
 	$button_img='';
 	$errore='';
 	
 	function map_editor_main(){		
-		global $x7c, $db, $prefix, $button_list, $link_selection, $button_img, $link_selection_static, $errore;
+		global $x7c, $db, $prefix, $button_list, $link_selection, $button_img, $link_selection_static, $errore, $link_up, $link_down, $link_left, $link_right;
 		if(!$x7c->permissions['admin_panic']){
 			die("Non autorizzato");
 		}
+
+		$selected_up = '';
+		$selected_down = '';
+		$selected_left = '';
+		$selected_right = '';
 		
 		if(isset($_GET['edited']))
 			map_edit();
+
+		if(!isset($_GET['view']))
+			$_GET['view'] = 'map_main';
 		
-		$query = $db->DoQuery("SELECT * FROM {$prefix}map");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}map WHERE view='".
+				$_GET['view']."'");
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$button=dirname($_SERVER['PHP_SELF'])."/graphic/pulsante.gif";
@@ -48,16 +61,26 @@ If not, see <http://www.gnu.org/licenses/>
 			if($row['button']!='')
 				$button=$row['button'];
 			
-			$button_list .= "<img rollover=\"$row[rollover]\"
-				night=\"$row[night_red]\" 
-				id=\"$row[id]\" 
-				title=\"$row[descr]\" 
-				alt=\"$row[link]\" 
-				src=\"$button\" 
-				pop_w=\"$row[width]\"
-				pop_h=\"$row[height]\"
-				onClick=\"javascript: edit_button(event);\" 
-				style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
+			if($row['link_type'] == 10){
+				$selected_up = $row['link'];
+			} else if($row['link_type'] == 11) {
+				$selected_down = $row['link'];
+			} else if($row['link_type'] == 12) {
+				$selected_left = $row['link'];
+			} else if($row['link_type'] == 13) {
+				$selected_right = $row['link'];
+			}	else {
+				$button_list .= "<img rollover=\"$row[rollover]\"
+					night=\"$row[night_red]\" 
+					id=\"$row[id]\" 
+					title=\"$row[descr]\" 
+					alt=\"$row[link]\" 
+					src=\"$button\" 
+					pop_w=\"$row[width]\"
+					pop_h=\"$row[height]\"
+					onClick=\"javascript: edit_button(event);\" 
+					style=\"position: absolute; top: $row[posy]; left: $row[posx]\">\n";
+			}
 		}
 		
 		$query = $db->DoQuery("SELECT id, name, long_name FROM {$prefix}rooms ORDER BY long_name");
@@ -96,6 +119,40 @@ If not, see <http://www.gnu.org/licenses/>
 			while (($file = readdir($dh)) !== false) {				
 				if($file[0]!="." && filetype($path.$file)!="dir" && eregi("sub.*\.html", $file)){
 					$link_selection_static .= "<option value=\"$site_path$file\">$file</option>";
+				}
+				
+			}
+			
+			closedir($dh);
+		}
+		
+		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
+		$path=$basedir."/graphic/map/";
+		
+		if($dh = opendir($path)){
+			while (($file = readdir($dh)) !== false) {				
+				if($file[0]!="." && filetype($path.$file)!="dir" && eregi(".*\.jpg", $file)){
+					$file = preg_replace("/\.jpg/i", "", $file);
+
+					$selected = '';
+					if ($file == $selected_up)
+						$selected = 'selected';
+					$link_up .= "<option value=\"$file\" $selected>$file</option>";
+					$selected = '';
+
+					if ($file == $selected_down)
+						$selected = 'selected';
+					$link_down .= "<option value=\"$file\" $selected>$file</option>";
+					$selected = '';
+					
+					if ($file == $selected_left)
+						$selected = 'selected';
+					$link_left .= "<option value=\"$file\" $selected>$file</option>";
+					$selected = '';
+
+					if ($file == $selected_right)
+						$selected = 'selected';
+					$link_right .= "<option value=\"$file\" $selected>$file</option>";
 				}
 				
 			}
@@ -225,11 +282,12 @@ If not, see <http://www.gnu.org/licenses/>
 				if($link_type!=-1){
 					$db->DoQuery("INSERT INTO {$prefix}map 
 							(link, posx, posy, button, link_type, descr, night_red, rollover,
-							 width, height) 
+							 width, height, view) 
 									VALUES('$link', '$_POST[selected_x]', '$_POST[selected_y]',
 										'$_POST[selected_img]',	'$link_type', '$_POST[descr]',
-										'$night_red', '$rollover', '$pop_w', '$pop_h')");
-					header("location: index.php?act=mapeditor");
+										'$night_red', '$rollover', '$pop_w', '$pop_h', 
+										'$_GET[view]')");
+					header("location: index.php?act=mapeditor&view=$_GET[view]");
 					return;
 				}
 				else{

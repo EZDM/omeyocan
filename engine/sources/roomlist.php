@@ -107,6 +107,34 @@ _gaq.push(['_trackPageview']);
 
 </script>
 
+<?PHP
+
+	if(!isset($_GET['view'])) {
+		$_GET['view'] = 'map_main';
+	}
+
+	$bg_img = '';
+	if($x7c->settings['panic'])
+		$bg_img .= "./graphic/map/".$_GET['view']."_obscure.jpg";
+	else
+		$bg_img .= "./graphic/map/".$_GET['view'].".jpg";
+
+	$map_style = '
+		<style type="text/css">
+			#divmap {
+				background-image:url("'.
+				$bg_img.'");
+				width: 1026px; 
+				height: 723px;
+				position: absolute;
+				left: 0px;
+				right: 0px;
+			}
+		</style>
+	';
+
+	echo $map_style;
+?>
 
  </head><body onload="javascript: do_initial_refresh();"> <!--openActionBox();">-->
  <div id="position"> </div>
@@ -309,7 +337,8 @@ _gaq.push(['_trackPageview']);
   
   <?php 
   
-		$query = $db->DoQuery("SELECT * FROM {$prefix}map");
+		$query = $db->DoQuery("SELECT * FROM {$prefix}map
+				                   WHERE view='".$_GET['view']."'");
 		$button_list='';
 		
 		$hour = date("G");
@@ -345,6 +374,16 @@ _gaq.push(['_trackPageview']);
 		}
 		
 		echo $button_list;
+
+		$nav_up = '<a href="http://www.google.com"><div id="map_up"></div></a>';
+		$nav_down = '<div id="map_down"></div>';
+		$nav_left = '<div id="map_left"></div>';
+		$nav_right = '<div id="map_right"></div>';
+
+		echo $nav_up;
+		echo $nav_down;
+		echo $nav_left;
+		echo $nav_right;
   
 ?>
 

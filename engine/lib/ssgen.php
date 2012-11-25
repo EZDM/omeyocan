@@ -458,20 +458,6 @@
 				left: 0px;
 				right: 0px;
 			}
-			#divmap {
-				background-image:url(";
-			if($x7c->settings['panic'])
-				$css .= "./graphic/sfondomap1026x723obscure.jpg";
-			else
-				$css .=	"./graphic/sfondomap1026x723.jpg";
-				
-			$css.=");
-				width: 1026px; 
-				height: 723px;
-				position: absolute;
-				left: 0px;
-				right: 0px;
-			}
 			#inputchatdiv {
 				position: absolute;
 				top: 505px;
@@ -554,6 +540,38 @@
 				left: 920px;
 				text-align: center;
 				width: 90px;
+			}
+			#map_up {
+				position: absolute;
+				top: 60px;
+				left: 100px;
+				width: 700px;
+				height: 20px;
+				background: green;
+			}
+			#map_down {
+				position: absolute;
+				top: 550px;
+				left: 100px;
+				width: 700px;
+				height: 20px;
+				background: green;
+			}
+			#map_left {
+				position: absolute;
+				top: 100px;
+				left: 90px;
+				width: 20px;
+				height: 430px;
+				background: green;
+			}
+			#map_right {
+				position: absolute;
+				top: 100px;
+				left: 780px;
+				width: 20px;
+				height: 430px;
+				background: green;
 			}
 
 			.polaroid {

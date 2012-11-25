@@ -45,7 +45,9 @@ If not, see <http://www.gnu.org/licenses/>
       #map{
         width: 1026px;
         height: 723px;
-        background-image:url('./graphic/sfondomap1026x723.jpg');
+        background-image:url('<?php
+							echo './graphic/map/'.$_GET['view'].'.jpg';
+						?>');
       }
       #editor{ 
         top: 0px;
@@ -416,6 +418,19 @@ If not, see <http://www.gnu.org/licenses/>
       	<div id="form">
 	      	<form name="editor" method="post" action="index.php?act=mapeditor&edited=1">
 		      	<table>
+		      		<tr><td>Link up:</td><td id="visual_selected_link_static">
+								<select id="link_up" name="link_up">
+								<?php echo $link_up;?> </select></td></tr>
+		      		<tr><td>Link down:</td><td id="visual_selected_link_static">
+								<select id="link_down" name="link_down">
+								<?php echo $link_down;?> </select></td></tr>
+		      		<tr><td>Link left:</td><td id="visual_selected_link_static">
+								<select id="link_left" name="link_left">
+								<?php echo $link_left;?> </select></td></tr>
+		      		<tr><td>Link right:</td><td id="visual_selected_link_static">
+								<select id="link_right" name="link_right">
+								<?php echo $link_right;?> </select></td></tr>
+		      		<tr><td colspan=2><hr/></td></tr>
 		      		<tr><td>Descrizione:</td><td>
 							<input type="text" id="visual_selected_id"
 								name="descr" onClick="javascript: this.select();"></td></tr>
