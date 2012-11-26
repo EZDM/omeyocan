@@ -342,6 +342,11 @@ _gaq.push(['_trackPageview']);
 		$button_list='';
 		
 		$hour = date("G");
+
+		$link_up = '';
+		$link_down = '';
+		$link_left = '';
+		$link_right = '';
 		
 		while($row = $db->Do_Fetch_Assoc($query)){
 			$button="./graphic/pulsante.gif";
@@ -353,8 +358,21 @@ _gaq.push(['_trackPageview']);
 			if($row['night_red'] && ($hour >= 22 || $hour < 5))
 				$button="./graphic/pulsante.gif";
 				
+			$link_action = '';
 			if($row['link_type']==0){
 				$link_action='href="'.$row['link'].'"';
+			}
+			else if($row['link_type'] == 10){
+				$link_up = "index.php?view=".$row['link'];
+			}
+			else if($row['link_type'] == 11){
+				$link_down = "index.php?view=".$row['link'];
+			}
+			else if($row['link_type'] == 12){
+				$link_left = "index.php?view=".$row['link'];
+			}
+			else if($row['link_type'] == 13){
+				$link_right = "index.php?view=".$row['link'];
 			}
 			else{
 				$link_action='onClick="'.popup_open($row['width'], $row['height'], $row['link'],
@@ -369,22 +387,22 @@ _gaq.push(['_trackPageview']);
 					"onMouseover=\"location_over(this);\"";
 			}
 			
-			$button_list .= "<a $link_action>
-			<img src=\"$button\" $rollover style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
+			if($link_action) {
+				$button_list .= "<a $link_action>
+				<img src=\"$button\" $rollover style=\"position: absolute; top: $row[posy]; left: $row[posx]\"></a>\n";
+			}
 		}
 		
 		echo $button_list;
 
-		$nav_up = '<a href="http://www.google.com"><div id="map_up"></div></a>';
-		$nav_down = '<div id="map_down"></div>';
-		$nav_left = '<div id="map_left"></div>';
-		$nav_right = '<div id="map_right"></div>';
-
-		echo $nav_up;
-		echo $nav_down;
-		echo $nav_left;
-		echo $nav_right;
-  
+		if($link_up)
+			echo '<a href="'.$link_up.'"><div id="map_up"></div></a>';
+		if($link_down)
+			echo '<a href="'.$link_down.'"><div id="map_down"></div></a>';
+		if($link_left)
+			echo '<a href="'.$link_left.'"><div id="map_left"></div></a>';
+		if($link_right)
+			echo '<a href="'.$link_right.'"><div id="map_right"></div></a>';
 ?>
 
 	

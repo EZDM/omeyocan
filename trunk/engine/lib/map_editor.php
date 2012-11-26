@@ -46,12 +46,12 @@ If not, see <http://www.gnu.org/licenses/>
 		$selected_left = '';
 		$selected_right = '';
 		
-		if(isset($_GET['edited']))
-			map_edit();
-
 		if(!isset($_GET['view']))
 			$_GET['view'] = 'map_main';
 		
+		if(isset($_GET['edited']))
+			map_edit();
+
 		$query = $db->DoQuery("SELECT * FROM {$prefix}map WHERE view='".
 				$_GET['view']."'");
 		
@@ -61,14 +61,23 @@ If not, see <http://www.gnu.org/licenses/>
 			if($row['button']!='')
 				$button=$row['button'];
 			
+			$href = "index.php?act=mapeditor&view=$row[link]";
 			if($row['link_type'] == 10){
 				$selected_up = $row['link'];
+				$button_list .= '<a href="'.$href.'"><div id="map_up">'.$row['link'].
+					'</div></a>';
 			} else if($row['link_type'] == 11) {
 				$selected_down = $row['link'];
+				$button_list .= '<a href="'.$href.'"><div id="map_down">'.$row['link'].
+					'</div></a>';
 			} else if($row['link_type'] == 12) {
 				$selected_left = $row['link'];
+				$button_list .= '<a href="'.$href.'"><div id="map_left">'.
+					join('<br>', str_split($row['link'])).'</div></a>';
 			} else if($row['link_type'] == 13) {
 				$selected_right = $row['link'];
+				$button_list .= '<a href="'.$href.'"><div id="map_right">'.
+					join('<br>', str_split($row['link'])).'</div></a>';
 			}	else {
 				$button_list .= "<img rollover=\"$row[rollover]\"
 					night=\"$row[night_red]\" 
@@ -170,12 +179,28 @@ If not, see <http://www.gnu.org/licenses/>
 	function map_edit(){
 		global $prefix, $db, $errore;
 		
+		$db->DoQuery("DELETE FROM {$prefix}map WHERE
+				link_type >= 10 AND link_type <= 13 AND view = '$_GET[view]'");
+
+		$links[10] = 'link_up';
+		$links[11] = 'link_down';
+		$links[12] = 'link_left';
+		$links[13] = 'link_right';
+
+		for($i=10; $i<14 ; $i++) {
+			$link = $links[$i];
+			$link_type = $i;
+			if(@$_POST[$link]) {
+				$db->DoQuery("INSERT INTO {$prefix}map (link_type, link, view)
+						VALUES ($link_type, '$_POST[$link]', '$_GET[view]')");		
+			}
+		}
+
 		if(isset($_POST['delete']) && $_POST['delete']>0){
 			$db->DoQuery("DELETE FROM {$prefix}map WHERE id='{$_POST['delete']}'");
 			header("location: index.php?act=mapeditor");
 			return;
-		}
-		
+		}	
 		if(isset($_POST['edit']) && $_POST['edit']>0){
 				$link_type=-1;
 				$link = '';
