@@ -547,7 +547,6 @@
 				left: 100px;
 				width: 700px;
 				height: 20px;
-				background: green;
 			}
 			#map_down {
 				position: absolute;
@@ -555,7 +554,6 @@
 				left: 100px;
 				width: 700px;
 				height: 20px;
-				background: green;
 			}
 			#map_left {
 				position: absolute;
@@ -563,7 +561,6 @@
 				left: 90px;
 				width: 20px;
 				height: 430px;
-				background: green;
 			}
 			#map_right {
 				position: absolute;
@@ -571,7 +568,6 @@
 				left: 780px;
 				width: 20px;
 				height: 430px;
-				background: green;
 			}
 
 			.polaroid {

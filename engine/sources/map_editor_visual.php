@@ -42,6 +42,9 @@ If not, see <http://www.gnu.org/licenses/>
         background: black;
       }
 
+			a {
+				color: white;
+			}
       #map{
         width: 1026px;
         height: 723px;
@@ -53,7 +56,6 @@ If not, see <http://www.gnu.org/licenses/>
         top: 0px;
         left: 1030px;
       }
-      
       #errore{ 
       	position: relative; 
         color: red;
@@ -61,11 +63,46 @@ If not, see <http://www.gnu.org/licenses/>
         font-weight: bold;
         border: 0;
       }
-      
       #form{
       	position: relative;
       	border: 0;
       }
+			#map_up {
+				position: absolute;
+				top: 60px;
+				left: 100px;
+				width: 700px;
+				height: 20px;
+				text-align: center;
+				font-weight: bold;
+			}
+			#map_down {
+				position: absolute;
+				top: 550px;
+				left: 100px;
+				width: 700px;
+				height: 20px;
+				text-align: center;
+				font-weight: bold;
+			}
+			#map_left {
+				position: absolute;
+				top: 100px;
+				left: 90px;
+				width: 20px;
+				height: 430px;
+				text-align: center;
+				font-weight: bold;
+			}
+			#map_right {
+				position: absolute;
+				top: 100px;
+				left: 780px;
+				width: 20px;
+				height: 430px;
+				text-align: center;
+				font-weight: bold;
+			}
       
       
 
@@ -416,7 +453,8 @@ If not, see <http://www.gnu.org/licenses/>
       
       <div id="editor">
       	<div id="form">
-	      	<form name="editor" method="post" action="index.php?act=mapeditor&edited=1">
+	      	<form name="editor" method="post"
+					action="index.php?act=mapeditor&edited=1&view=<?php echo $_GET['view']; ?>">
 		      	<table>
 		      		<tr><td>Link up:</td><td id="visual_selected_link_static">
 								<select id="link_up" name="link_up">
