@@ -184,6 +184,7 @@
 		$db->DoQuery("DELETE FROM {$prefix}messages WHERE user='$user'
 			OR room='$user'");
 		// Clean up logs
+		$db->DoQuery("DELETE FROM {$prefix}user_feat WHERE username='$user'");
 		cleanup_guest_logs($user);	
 	}
 
