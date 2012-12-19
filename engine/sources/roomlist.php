@@ -113,11 +113,20 @@ _gaq.push(['_trackPageview']);
 		$_GET['view'] = 'map_main';
 	}
 
+	$hour = date("G");
+
 	$bg_img = '';
-	if($x7c->settings['panic'])
+	if($x7c->settings['panic']) {
 		$bg_img .= "./graphic/map/".$_GET['view']."_obscure.jpg";
-	else
-		$bg_img .= "./graphic/map/".$_GET['view'].".jpg";
+	}
+	else {
+		if ($hour >= 22 || $hour < 5) {
+			$bg_img .= "./graphic/map/".$_GET['view']."_night.jpg";
+		}
+		else {
+			$bg_img .= "./graphic/map/".$_GET['view'].".jpg";	
+		}
+	}
 
 	$map_style = '
 		<style type="text/css">
@@ -341,8 +350,6 @@ _gaq.push(['_trackPageview']);
 				                   WHERE view='".$_GET['view']."'");
 		$button_list='';
 		
-		$hour = date("G");
-
 		$link_up = '';
 		$link_down = '';
 		$link_left = '';
