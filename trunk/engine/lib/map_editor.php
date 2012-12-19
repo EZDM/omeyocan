@@ -140,7 +140,9 @@ If not, see <http://www.gnu.org/licenses/>
 		
 		if($dh = opendir($path)){
 			while (($file = readdir($dh)) !== false) {				
-				if($file[0]!="." && filetype($path.$file)!="dir" && eregi(".*\.jpg", $file)){
+				if($file[0]!="." && filetype($path.$file)!="dir" &&
+						preg_match("/.*\.jpg/i", $file) &&
+						!preg_match("/obscure|night/", $file)){
 					$file = preg_replace("/\.jpg/i", "", $file);
 
 					$selected = '';
