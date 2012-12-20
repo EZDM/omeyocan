@@ -69,7 +69,7 @@ If not, see <http://www.gnu.org/licenses/>
       }
 			#map_up {
 				position: absolute;
-				top: 60px;
+				top: 30px;
 				left: 100px;
 				width: 700px;
 				height: 20px;
@@ -78,7 +78,7 @@ If not, see <http://www.gnu.org/licenses/>
 			}
 			#map_down {
 				position: absolute;
-				top: 550px;
+				top: 540px;
 				left: 100px;
 				width: 700px;
 				height: 20px;
@@ -88,7 +88,7 @@ If not, see <http://www.gnu.org/licenses/>
 			#map_left {
 				position: absolute;
 				top: 100px;
-				left: 90px;
+				left: 30px;
 				width: 20px;
 				height: 430px;
 				text-align: center;
@@ -97,7 +97,7 @@ If not, see <http://www.gnu.org/licenses/>
 			#map_right {
 				position: absolute;
 				top: 100px;
-				left: 780px;
+				left: 830px;
 				width: 20px;
 				height: 430px;
 				text-align: center;

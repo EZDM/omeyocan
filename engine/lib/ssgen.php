@@ -543,14 +543,14 @@
 			}
 			#map_up {
 				position: absolute;
-				top: 60px;
+				top: 30px;
 				left: 100px;
 				width: 700px;
 				height: 20px;
 			}
 			#map_down {
 				position: absolute;
-				top: 550px;
+				top: 540px;
 				left: 100px;
 				width: 700px;
 				height: 20px;
@@ -558,14 +558,14 @@
 			#map_left {
 				position: absolute;
 				top: 100px;
-				left: 90px;
+				left: 30px;
 				width: 20px;
 				height: 430px;
 			}
 			#map_right {
 				position: absolute;
 				top: 100px;
-				left: 780px;
+				left: 830px;
 				width: 20px;
 				height: 430px;
 			}
