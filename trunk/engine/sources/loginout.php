@@ -70,9 +70,6 @@
 
     // Print the login form that the user must enter username and password
     $body = "	
-			<script>
-				jseyes(407, 113);
-			</script>
 			<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
       <div id=\"login_form\">
       <form action=\"index.php\" method=\"post\" name=\"loginform\">
@@ -350,7 +347,6 @@
 
 
     echo $login_style;
-		echo '<script src="graphic/jseyes.js"></script>';
 
     if(!$nosfondo){
       echo '</head><body>

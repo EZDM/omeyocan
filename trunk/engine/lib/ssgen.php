@@ -153,7 +153,8 @@
 			#dump_copyright {
 				position: absolute;
 				bottom: 0px;
-				width: 100%
+				width: 100%;
+				visibility: hidden;
 			}
 			.board_cell{
 				border-bottom: 1px solid white;
@@ -175,20 +176,26 @@
 				position: absolute;
 				width: 28%;
 				float: right;
-				right: 50px;
-				top: 60px;
+				right: 85px;
+				top: 100px;
 				height: 455px;
 				text-align: center;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				overflow: auto;
 			}
+      #board_index a {
+        color: black;
+      }
+      #board_body a {
+        color: black;
+      }
 			#board_body {
 				position: absolute;
 				float: left;
-				top: 60px;
-				left: 40px;
-				width: 420px;
+				top: 100px;
+				left: 80px;
+				width: 370px;
 				height: 450px;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
