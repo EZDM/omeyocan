@@ -440,18 +440,13 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 			width: 100%;
 			text-align: center;
 			font-weight: bold;
-			color: black;
-		}
-
-		#navigator a{
-			color: black;
 		}
 
 		.dark_row{
 			font-size: 10pt;
-			color: black;
 			background: transparent;
 			border-bottom: solid 1px gray;
+      color: white;
 		}
 
 		.dark_link_red{
@@ -462,23 +457,18 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 		table{
 			width: 90%;
 			margin-top: 20px;
-			border: solid 2px gray;
+			border: 0;
 		}
 
 		.dark_link{
 			font-style: italic;
-			color: black;
 		}
 
 		.col_header{
 			background: transparent;
 			margin-top: 10px;
 			border: 0;
-			color: black;
-		}
-
-		a:hover{
-			color: red;
+			color: white;
 		}
 
 		.bold_red{
@@ -487,9 +477,15 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 		}
 
 		#inner_member{
-			width: 440px;
+      position: absolute;
+      left: 40px;
+			width: 380px;
 			height: 480px;
 			overflow: auto;
+			color: white;
+		}
+    #inner_member a{
+		  color: white;
 		}
 
 </style>
