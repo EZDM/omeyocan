@@ -224,7 +224,7 @@
           overflow: hidden;
 				}
         #login{
-          height: 700px;
+          height: 725px;
           '.$sfondo.'
 					background-repeat: no-repeat;
           position: relative; 
