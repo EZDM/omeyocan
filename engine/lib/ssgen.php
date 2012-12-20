@@ -178,7 +178,7 @@
 				float: right;
 				right: 85px;
 				top: 100px;
-				height: 455px;
+				height: 470px;
 				text-align: center;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
@@ -196,7 +196,7 @@
 				top: 100px;
 				left: 80px;
 				width: 370px;
-				height: 450px;
+				height: 470px;
 				font-family: $data[FontFamily];
 				font-size: $data[FontSize1];
 				text-align: center;
