@@ -2211,7 +2211,7 @@ function print_sheet($body,$bg){
 				overflow: auto;
 				font-size: 10pt;
 				font-weight: bold;
-				color: black;
+				color: white;
 				border: 0;
 				width: 98%;
 				height: 90%;
@@ -2219,7 +2219,7 @@ function print_sheet($body,$bg){
 			.ab_text{
 				font-size: 8pt;
 				font-weight: bold;
-				color: black;
+				color: white;
 			}
 			.sheet {
 				width: 500px; 
@@ -2227,7 +2227,7 @@ function print_sheet($body,$bg){
 				position: absolute;
 				left: 0px;
 				top: 0px;
-				color: black;
+				color: white;
 				background: white;
 				font-weight: bold;
 				font-size: 11pt;
@@ -2237,7 +2237,7 @@ function print_sheet($body,$bg){
 				border: 0;
 				font-weight: bold;
 				font-size: 11pt;
-				color: black;
+				color: white;
 			}
 			.indiv{
 				position: absolute;
@@ -2482,7 +2482,7 @@ function print_sheet($body,$bg){
 			}
 
 			.dark_link{
-				color: black;
+				color: white;
 			}
 
 			a:hover{

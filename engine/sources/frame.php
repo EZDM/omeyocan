@@ -1281,22 +1281,25 @@ _gaq.push(['_trackPageview']);
     echo '
       <a onClick="'.popup_open(550, 500, 
 			'index.php?act=roomdesc&room='.$_GET['room'],'roomdesc').'">';
-		if (!$x7c->settings['panic'] || $x7c->room_data['panic_free'])
-      echo '<img class="polaroid" src="'.$polaroid.'" >';
-		else
-			echo '
-				<div class="polaroid">
-				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="180" height="190">
-				<param name="movie" value="./graphic/polaroid_dark.swf">
-				<param name="quality" value="high">
-				<param name="allowScriptAccess" value="sameDomain" />
-				<param name="allowFullScreen" value="True" />
-				<embed src="./graphic/polaroid_dark.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="190" height="236" allowScriptAccess="sameDomain" allowFullScreen="True">
-				</embed>
-				</object>
-				</div>
-				';
-
+		if ($x7c->settings['panic'] && !$x7c->room_data['panic_free']) {
+			$basedir=$_SERVER['DOCUMENT_ROOT'];
+			$hunt_path=dirname($_SERVER['PHP_SELF'])."/images/random_hunt/";
+			$path=$basedir.$hunt_path;
+			
+			if($dh = opendir($path)){
+				$hunters = array();
+				while (($file = readdir($dh)) !== false) {				
+					if($file[0]!="." && filetype($path.$file)!="dir" &&
+							preg_match("/.*\.jpg/i", $file)){
+						$hunters[] = $hunt_path.$file;
+					}
+				}
+				srand(intval(date('dmY')));
+				$i = rand(0, count($hunters) - 1);
+				$polaroid = $hunters[$i];
+			}
+		}
+    echo '<img class="polaroid" src="'.$polaroid.'" >';
 		echo '</a>'; 
 
 ?>

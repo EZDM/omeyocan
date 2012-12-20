@@ -354,7 +354,7 @@
     // Chat is disabled and user is not an admin
     case "disabledchat":
 			include_once('./sources/disabledchat.php');
-      print_disabled($txt[39]);
+      print_disabled();
       exit;
     break;
 

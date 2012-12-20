@@ -71,6 +71,7 @@
 				width: 1024px;
 				height: 723px;
 				background-image:url(\'./graphic/sfondodisabled.gif\');
+				background-repeat: no-repeat;
 			}
 			#disableddiv {
 				position: absolute;
