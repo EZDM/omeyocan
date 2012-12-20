@@ -233,7 +233,7 @@
 			//	from it.  So if you don't want to pay for it the least you 	//
 			//	can do is give me one line of credit.						//
 			//**************************************************************//
-			$this->add("<!----><div id=\"dump_copyright\" align=\"center\" style=\"visibility: visible; background: transparent;\">
+			$this->add("<!----><div id=\"dump_copyright\" align=\"center\" style=\"background: transparent;\">
 			Game engine by: Niccol&ograve; Cascarano - Graphic by: Federico Gori<br>
 			Powered By <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Chat</a> $X7CHATVERSION &copy; 2004 By The <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Group</a>$theme_c<br></div>");
 			//**************************************************************//
