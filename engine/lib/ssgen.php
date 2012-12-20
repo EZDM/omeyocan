@@ -148,7 +148,6 @@
 				height: 620px;
 				position:relative;
 				margin: 0 auto;
-				color: black;
 			}
 			#dump_copyright {
 				position: absolute;
@@ -184,12 +183,6 @@
 				font-size: $data[FontSize1];
 				overflow: auto;
 			}
-      #board_index a {
-        color: black;
-      }
-      #board_body a {
-        color: black;
-      }
 			#board_body {
 				position: absolute;
 				float: left;
@@ -301,7 +294,7 @@
 				border-bottom: 1px solid white;
 				vertical-align: top;
 				padding: 5px;
-				color: black;
+				color: white;
 			}
 			.msg_avatar{
 				border-bottom: 1px solid white;
