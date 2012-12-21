@@ -465,8 +465,8 @@
 			}
 			#clean_chat{
 				position: absolute;
-				top: 70px;
-				left: 1px;
+				top: 0px;
+				left: 500px;
 			}
 
 			#invisible_master{
@@ -540,6 +540,10 @@
 				left: 920px;
 				text-align: center;
 				width: 90px;
+			}
+			.map_link:hover {
+        opacity:  0.4;
+        background: #1cc4b6;	
 			}
 			#map_up {
 				position: absolute;
@@ -663,7 +667,7 @@
 				position: absolute;
 				padding-right: 5px;
 				overflow-y: scroll;
-				top: 90px;
+				top: 20px;
 				left: 112px;
 				width: 675px;
 				height: 408px;

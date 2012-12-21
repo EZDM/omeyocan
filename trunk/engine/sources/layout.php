@@ -96,21 +96,20 @@ function location_out(hoveritem) {
 <?PHP 
   if($x7c->permissions['admin_panic'] ||$x7c->permissions['admin_objects']){
     echo '
-      <div id="adminbtn" style="position: absolute; top: 10px; left: 1px;">
-        <a onClick="'.popup_open(800, 620, "index.php?act=admincp", "admincp", "yes").'";>Administration
-        </a>
-      </div>';
+      <div id="adminbtn" style="position: absolute; top: 0px; left: 80px;">
+        <a onClick="'.popup_open(800, 620, "index.php?act=admincp", "admincp", "yes").'";>
+				[Administration]
+        </a>';
 
     echo '
-      <div id="anagrafe" style="position: absolute; top: 30px; left: 1px;">
-        <a onClick="'.popup_open(450, 500, "index.php?act=memberlist", "memberlist").'";>Anagrafe
-        </a>
-      </div>';
+        <a onClick="'.popup_open(450, 500, "index.php?act=memberlist", "memberlist").'";>
+				[Anagrafe]
+        </a>';
     
 
 		echo '
-      <div id="shop_debug" style="position: absolute; top: 50px; left: 1px;">
-        <a onClick="'.popup_open(800, 720, "index.php?act=shop", "shop").'";>Shop
+        <a onClick="'.popup_open(800, 720, "index.php?act=shop", "shop").'";>
+				[Shop]
         </a>
       </div>';
   }

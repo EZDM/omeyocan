@@ -155,8 +155,8 @@ _gaq.push(['_trackPageview']);
 	include_once('./sources/layout.php');
 
 	if($x7c->permissions['admin_panic']){
-		echo '<div id="mapedit" style="position: absolute; top: 70px; left: 1px;">
-			<a onClick="'.popup_open(1424, 763, "index.php?act=mapeditor", "mapeditor").'">Map editor </a></div>';
+		echo '<div id="mapedit" style="position: absolute; top: 0px; left: 720px;">
+			<a onClick="'.popup_open(1424, 763, "index.php?act=mapeditor", "mapeditor").'">[Map editor]</a></div>';
 	}
 		
 	if(isset($_GET['errore'])){
@@ -403,16 +403,16 @@ _gaq.push(['_trackPageview']);
 		echo $button_list;
 
 		if($link_up)
-			echo '<a href="'.$link_up.'"><div id="map_up"></div></a>';
+			echo '<a href="'.$link_up.'"><div class="map_link" id="map_up"></div></a>';
 		if($link_down)
-			echo '<a href="'.$link_down.'"><div id="map_down"></div></a>';
+			echo '<a href="'.$link_down.'"><div class="map_link" id="map_down"></div></a>';
 		if($link_left)
-			echo '<a href="'.$link_left.'"><div id="map_left"></div></a>';
+			echo '<a href="'.$link_left.'"><div class="map_link" id="map_left"></div></a>';
 		if($link_right)
-			echo '<a href="'.$link_right.'"><div id="map_right"></div></a>';
-?>
+			echo '<a href="'.$link_right.'"><div class="map_link" id="map_right"></div></a>';
+	}
 
-	
+/*
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=1011','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 175; left: 205;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=10737','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 234; left: 209;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=1085','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 221; left: 239;"></div></a>
@@ -515,20 +515,9 @@ _gaq.push(['_trackPageview']);
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=8741','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 241; left: 228;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=9878','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 177; left: 254;"></div></a>
 <a href="javascript: hndl = window.open('index.php?act=secret&secret=Giardino%20dei%20suicidi&code=9995','secret','width=600,height=440, toolbar=no, status=no, location=no, menubar=no, resizable=yes, status=no'); hndl.focus();"><div id="secret" style="width: 3px; height: 3px; top: 170; left: 250;"></div></a>
+*/
 
-
-
-
-
-
-					
-
+?>
 
 </body>
 </html>
-		
-<?PHP	}
-
-
-
-?>

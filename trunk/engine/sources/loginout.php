@@ -83,9 +83,6 @@
 				j= 0;
 				current_text = '';
 				text = new Array();
-				text[0] = '> Access restricted.';
-				text[1] = '> Security clearence level 5 required.';
-				text[2] = '> Enter user credentials.';
 
 		    function do_animation() {
 					if (j == text.length) {
@@ -143,8 +140,8 @@
 			<br>";
 
     if($x7c->settings['enable_passreminder'] == 1)
-      $body .= 	"<a href=\"./index.php?act=forgotmoipass\">[Recupera password]
-        </a></td>";
+      $body .= 	"<a href=\"./index.php?act=forgotmoipass\">[Recupera password]</a>";
+		$body .= "</td>";
 
     $body .= 	"</tr>
       <tr>

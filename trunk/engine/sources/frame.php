@@ -1262,13 +1262,9 @@ _gaq.push(['_trackPageview']);
               <a onClick="javascript: do_delete(\'all\')">
                 [Pulisci chats]
               </a>
-            </div>
-            <div id="invisible_master">
               <a id="invisible_link"
                 onClick="javascript: switch_invisibility()">'.$inv_txt.'
               </a>
-            </div>
-            <div id="shadow_room">
               <a id="shadow_link"
                 onClick="javascript: switch_shadow()">'.$shd_txt.'
               </a>

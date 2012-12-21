@@ -345,7 +345,9 @@ If not, see <http://www.gnu.org/licenses/>
   <body onLoad="javascript: document.editor.reset();">
       <div id="map" onClick="javascript: place_button(event);">
 		<?php echo $button_list; ?>
-		
+	
+		<?
+		/*
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 175; left: 205;"></div>
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 234; left: 209;"></div>
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 221; left: 239;"></div>
@@ -448,6 +450,8 @@ If not, see <http://www.gnu.org/licenses/>
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 241; left: 228;"></div>
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 177; left: 254;"></div>
 		<div id="secret" style="border: 0; background-color: green; width: 3px; height: 3px; top: 170; left: 250;"></div>
+		*/
+		?>
 				
       </div>
       
