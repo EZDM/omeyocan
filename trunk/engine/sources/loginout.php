@@ -242,7 +242,7 @@
       #login_form{
 				position: absolute;
         width: 100%;
-				top: 65px;
+				top: 0px;
         margin-left: 15px;
         margin-top: 320px;
       }
