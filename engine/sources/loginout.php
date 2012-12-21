@@ -101,9 +101,11 @@
 						if (i >= text[j].length) {
 							i = 0;
 							j++;
-							current_text += '<br>';
+							current_text = current_text.substring(
+									0, current_text.length - 1) + '<br> ';
 						} else {
-							current_text += text[j][i];
+							current_text = current_text.substring(
+									0, current_text.length - 1) + text[j][i] + '_';
 							i++;
 						}
 					}
