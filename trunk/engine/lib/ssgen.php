@@ -667,10 +667,10 @@
 				position: absolute;
 				padding-right: 5px;
 				overflow-y: scroll;
-				top: 20px;
-				left: 112px;
-				width: 675px;
-				height: 408px;
+				top: 30px;
+				left: 30px;
+				width: 800px;
+				height: 470px;
 			}
 			span {
 			 position: relative;
