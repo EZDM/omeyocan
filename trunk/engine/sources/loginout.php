@@ -69,8 +69,54 @@
     }
 
     // Print the login form that the user must enter username and password
+		if (@$_GET['act'] == 'disclaimer') {
+			include('sources/disclaimer.txt');
+			$body = '<div id="animation">'.$disc."<br><br>";
+
+			$body .= '<a href="./index.php">Login</a></div>';
+		} else {
     $body = "	
-			<div class=\"center\"><img src=\"./graphic/benvenuti.gif\"></div>
+			<script type=\"text/javascript\">
+			  animation_call = setInterval('do_animation()', 50);
+		    
+		    i = 0;
+				j= 0;
+				current_text = '';
+				text = new Array();
+				text[0] = '> Access restricted.';
+				text[1] = '> Security clearence level 5 required.';
+				text[2] = '> Enter user credentials.';
+
+		    function do_animation() {
+					if (j == text.length) {
+						clearInterval(animation_call);
+						setInterval('do_animation()', 500);
+						j++;
+					}
+					else if (j > text.length) {
+						if (i % 2) {
+							current_text = current_text.substring(0, current_text.length - 1);
+						} else {
+							current_text += '_';
+						}
+						i++;
+					} else {
+						if (i >= text[j].length) {
+							i = 0;
+							j++;
+							current_text += '<br>';
+						} else {
+							current_text += text[j][i];
+							i++;
+						}
+					}
+
+          div = document.getElementById('animation');
+					div.innerHTML = current_text;
+				}
+			</script>
+
+			<div id=\"animation\"></div>
       <div id=\"login_form\">
       <form action=\"index.php\" method=\"post\" name=\"loginform\">
       <input type=\"hidden\" name=\"dologin\" value=\"dologin\">
@@ -78,31 +124,28 @@
       cellpadding=\"4\">
       <tr>
       <td>Username: </td>
-			</tr>
-			<tr>
       <td>
 			<input type=\"text\" class=\"text_input\"
       name=\"username\"></td>
       </tr>
       <tr>
       <td>$txt[3]: </td>
-			</tr>
-			<tr>
       <td><input type=\"password\" class=\"text_input\"
       name=\"password\"></td>
       </tr>
       <tr>
       <td>
       <input type=\"submit\" value=\"Entra\" class=\"button\">
-      <Br>
-      <Br>
-      <a href=\"./index.php?act=register\">[$txt[6]]</a> &nbsp;";
+			</td>
+			<td>
+			<a href=\"./index.php?act=disclaimer\">[Disclaimer]</a>
+      <a href=\"./index.php?act=register\">[$txt[6]]</a>
+			<br>";
 
     if($x7c->settings['enable_passreminder'] == 1)
       $body .= 	"<a href=\"./index.php?act=forgotmoipass\">[Recupera password]
         </a></td>";
 
-    include('sources/disclaimer.txt');
     $body .= 	"</tr>
       <tr>
       <td class=\"error\"><br>$failmsg</td>
@@ -114,68 +157,8 @@
       ."</div>
       ";
 
-    include('sources/wellcome.html');
-//    $body .= "<div id=\"wellcome_text\">$wellcome</div>";
-
-    // See if there is any news to show
-    if($x7c->settings['news'] != "")
-      $body.=$x7c->settings['news'];
-
-    // See if the stats window should be displayed
-    if($x7c->settings['show_stats'] == 1){
-      // Get the information for the online table
-      include_once("./lib/online.php");
-      clean_old_data();
-      $people_online = get_online();
-      $number_online = count($people_online);
-      $people_online = implode(", ",$people_online);
-
-      // Calculate total rooms
-      $rooms = 0;
-      $query = $db->DoQuery("SELECT id FROM {$prefix}rooms WHERE type='1'");
-      while($row = $db->Do_Fetch_Row($query))
-        $rooms++;
-
-      // Calculate total registered users
-      $accounts = 0;
-      $query = $db->DoQuery("SELECT id FROM {$prefix}users WHERE 
-          user_group<>'{$x7c->settings['usergroup_guest']}'");
-      while($row = $db->Do_Fetch_Row($query))
-        $accounts++;
-
-
-      // Now body will hold the stats table
-      $body .= "	<div id=\"stats\">
-        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-        <tr valign=\"top\">
-        <td width=\"175\">
-        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-        <tr valign=\"top\">
-        <td width=\"125\"><b>$txt[8]:</b> </td>
-        <td width=\"50\">$number_online</td>
-        </tr>
-        <tr valign=\"top\">
-        <td width=\"125\"><b>$txt[9]:</b> </td>
-        <td width=\"50\">$rooms</td>
-        </tr>
-        <tr valign=\"top\">
-        <td width=\"125\"><b>$txt[10]:</b> </td>
-        <td width=\"50\">$accounts</td>
-        </tr>
-        </table>
-        </td>
-        <td width=\"225\"><b>$txt[11]</b><Br>
-        <i>$people_online</i>
-        </td>
-        </tr>
-        </table>
-        </div>
-        ";
-
-    }
-
+		}
     print_loginout($body);
-
   }
 
   function logout_page(){
@@ -242,10 +225,21 @@
       #login_form{
 				position: absolute;
         width: 100%;
-				top: 0px;
+				top: 70px;
         margin-left: 15px;
         margin-top: 320px;
       }
+
+      #animation{
+        top: 300px;
+				left: 400px;
+			  position: absolute;
+				color: #00c95a;
+   			font-weight: bold;
+        width: 250px;
+				height: 180px;
+        overflow: auto;
+			}
 
       td{
         color: white;
