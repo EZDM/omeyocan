@@ -693,8 +693,7 @@
 			.chatmsg{
 			 color: #b0b0b0;
 			 font-size: 8pt;
-			 font-weight: bold;
-			 font-family: courier;
+			 font-family: \"Lucida Console\", Monaco, monospace;
 			}
 			.mastering{
 			 color: teal;
@@ -703,7 +702,7 @@
 			 text-align: center;
 			 font-style: italic;
 			 font-size: 8pt;
-			 font-weight: bold;
+			 font-family: \"Lucida Console\", Monaco, monospace;
 			}
 			.ambient{
 			 color: teal;
@@ -712,7 +711,7 @@
 			 text-align: center;
 			 font-style: italic;
 			 font-size: 8pt;
-			 font-weight: bold;
+			 font-family: \"Lucida Console\", Monaco, monospace;
 			}
 			.roll_neg{
 			 font-weight: bold;
