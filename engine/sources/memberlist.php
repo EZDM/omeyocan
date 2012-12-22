@@ -206,7 +206,7 @@ function memberlist(){
 	}
 
 	$body = "<div id=\"navigator\">
-		<a href=\"index.php?act=memberlist\">[Anagrafe]</a>
+		<a href=\"index.php?act=memberlist\">[Anagrafe]</a></br>
 		<a href=\"index.php?act=memberlist&letter=a$get_room\">[a]</a>
 		<a href=\"index.php?act=memberlist&letter=b$get_room\">[b]</a>
 		<a href=\"index.php?act=memberlist&letter=c$get_room\">[c]</a>
