@@ -136,6 +136,14 @@ function location_out(hoveritem) {
 				onMouseout="javascript: HidePopup(this);">
 			</a>
 			</div>';
+		echo '
+			<div id="hintbtn" style="position: absolute; top: 672px; left: 619px;">
+			<a onClick="'.popup_open(446, 558, "index.php?act=hint_player", "hint").'"> 
+				<img src="./graphic/hint_button.gif" 
+				onMousemove="javascript: ShowPopup(event, this, \'Racconti nelle nebbie\');"
+				onMouseout="javascript: HidePopup(this);">
+			</a>
+			</div>';
 	}
 ?>
 

@@ -50,7 +50,7 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 	
-	function hint_display(){
+	function hint_display($type){
 		global $print, $x7c, $x7s, $db, $prefix;
 		
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
@@ -78,13 +78,16 @@
 		';
 		
 	
-		$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}hints");
+		$query = $db->DoQuery("SELECT count(*) AS total FROM {$prefix}hints
+				WHERE type = '$type'");
 		$row = $db->Do_Fetch_Assoc($query);
 
 		srand(date("dmYGi", time()));
 		$hint_num = rand(0, $row['total'] - 1);
 
-		$query = $db->DoQuery("SELECT text FROM {$prefix}hints ORDER BY id
+		$query = $db->DoQuery("SELECT text FROM {$prefix}hints 
+				WHERE type = '$type'
+				ORDER BY id
 				LIMIT $hint_num, 1");
 		$row = $db->Do_Fetch_Assoc($query);
 
