@@ -655,17 +655,12 @@
 		$css = "<style type=\"text/css\">
 			.male {
 				color: #0ca4e3;
-				font-weight: bold;
-				font-size: 8pt;
 			}
 			.female {
 				color: #ff6dbc;
-				font-weight: bold;
-				font-size: 8pt;
 			}
 			.you {
 				color: $data[You];
-				font-weight: bold;
 			} 
 			#message_window {
 				position: absolute;
@@ -675,6 +670,8 @@
 				left: 30px;
 				width: 800px;
 				height: 470px;
+			 font-size: 8pt;
+			 font-family: \"Lucida Console\", Monaco, monospace;
 			}
 			span {
 			 position: relative;
@@ -685,52 +682,40 @@
 			}
 			.locazione_display{
 			 color: #b0b0b0;
-			 font-weight: bold;
 			}
 			.sussurro{
 			 color: white;
 			}
 			.chatmsg{
 			 color: #b0b0b0;
-			 font-size: 8pt;
-			 font-family: \"Lucida Console\", Monaco, monospace;
 			}
 			.mastering{
 			 color: teal;
 			 border: 5px ridge #f3b700;
 			 padding: 5px;
 			 text-align: center;
-			 font-style: italic;
-			 font-size: 8pt;
-			 font-family: \"Lucida Console\", Monaco, monospace;
+			 font-style: bold;
 			}
 			.ambient{
 			 color: teal;
 			 border: 5px ridge purple;
 			 padding: 5px;
 			 text-align: center;
-			 font-style: italic;
-			 font-size: 8pt;
-			 font-family: \"Lucida Console\", Monaco, monospace;
+			 font-style: bold;
 			}
 			.roll_neg{
-			 font-weight: bold;
 			 color: red;
 			}
 			.roll_avg{
-			 font-weight: bold;
 			 color: orange;
 			}
 			.roll_pos{
-			 font-weight: bold;
 			 color: #05bf01;
 			}
 			.break{
-			 font-weight: bold;
 			 color: #edd50a;
 			}
 			.masterRoll{
-			 font-weight: bold;
 			 color: white;
 			}
 		</style>";
