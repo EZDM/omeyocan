@@ -202,37 +202,37 @@ function memberlist(){
 
 	$additional_controls='';                                            
 	if($x7c->permissions['admin_panic'] && $room==''){
-		$additional_controls .= "<br><a href=\"index.php?act=memberlist&cos\">[Mostra robustezza &lt;= 6]</a><a href=\"index.php?act=memberlist&sheet\">[Mostra pg senza scheda]</a>";
+		$additional_controls .= "<a href=\"index.php?act=memberlist&cos\">[Mostra robustezza &lt;= 6]</a><a href=\"index.php?act=memberlist&sheet\">[Mostra pg senza scheda]</a>";
 	}
 
 	$body = "<div id=\"navigator\">
-		<a href=\"index.php?act=memberlist\">[Anagrafe]</a></br>
-		<a href=\"index.php?act=memberlist&letter=a$get_room\">[a]</a>
-		<a href=\"index.php?act=memberlist&letter=b$get_room\">[b]</a>
-		<a href=\"index.php?act=memberlist&letter=c$get_room\">[c]</a>
-		<a href=\"index.php?act=memberlist&letter=d$get_room\">[d]</a>
-		<a href=\"index.php?act=memberlist&letter=e$get_room\">[e]</a>
-		<a href=\"index.php?act=memberlist&letter=f$get_room\">[f]</a>
-		<a href=\"index.php?act=memberlist&letter=g$get_room\">[g]</a>
-		<a href=\"index.php?act=memberlist&letter=h$get_room\">[h]</a>
-		<a href=\"index.php?act=memberlist&letter=i$get_room\">[i]</a>
-		<a href=\"index.php?act=memberlist&letter=j$get_room\">[j]</a>
-		<a href=\"index.php?act=memberlist&letter=k$get_room\">[k]</a>
-		<a href=\"index.php?act=memberlist&letter=l$get_room\">[l]</a>
+		<a href=\"index.php?act=memberlist&letter=a$get_room\">[a]</a> 
+		<a href=\"index.php?act=memberlist&letter=b$get_room\">[b]</a> 
+		<a href=\"index.php?act=memberlist&letter=c$get_room\">[c]</a> 
+		<a href=\"index.php?act=memberlist&letter=d$get_room\">[d]</a> 
+		<a href=\"index.php?act=memberlist&letter=e$get_room\">[e]</a> 
+		<a href=\"index.php?act=memberlist&letter=f$get_room\">[f]</a> 
+		<a href=\"index.php?act=memberlist&letter=g$get_room\">[g]</a> 
+		<a href=\"index.php?act=memberlist&letter=h$get_room\">[h]</a> 
+		<a href=\"index.php?act=memberlist&letter=i$get_room\">[i]</a> 
+		<a href=\"index.php?act=memberlist&letter=j$get_room\">[j]</a> 
+		<a href=\"index.php?act=memberlist&letter=k$get_room\">[k]</a> 
+		<a href=\"index.php?act=memberlist&letter=l$get_room\">[l]</a> 
 		<a href=\"index.php?act=memberlist&letter=m$get_room\">[m]</a><br>
-		<a href=\"index.php?act=memberlist&letter=n$get_room\">[n]</a>
-		<a href=\"index.php?act=memberlist&letter=o$get_room\">[o]</a>
-		<a href=\"index.php?act=memberlist&letter=p$get_room\">[p]</a>
-		<a href=\"index.php?act=memberlist&letter=q$get_room\">[q]</a>
-		<a href=\"index.php?act=memberlist&letter=r$get_room\">[r]</a>
-		<a href=\"index.php?act=memberlist&letter=s$get_room\">[s]</a>
-		<a href=\"index.php?act=memberlist&letter=t$get_room\">[t]</a>
-		<a href=\"index.php?act=memberlist&letter=u$get_room\">[u]</a>
-		<a href=\"index.php?act=memberlist&letter=v$get_room\">[v]</a>
-		<a href=\"index.php?act=memberlist&letter=w$get_room\">[w]</a>
-		<a href=\"index.php?act=memberlist&letter=x$get_room\">[x]</a>
-		<a href=\"index.php?act=memberlist&letter=y$get_room\">[y]</a>
-		<a href=\"index.php?act=memberlist&letter=z$get_room\">[z]</a>
+		<a href=\"index.php?act=memberlist&letter=n$get_room\">[n]</a> 
+		<a href=\"index.php?act=memberlist&letter=o$get_room\">[o]</a> 
+		<a href=\"index.php?act=memberlist&letter=p$get_room\">[p]</a> 
+		<a href=\"index.php?act=memberlist&letter=q$get_room\">[q]</a> 
+		<a href=\"index.php?act=memberlist&letter=r$get_room\">[r]</a> 
+		<a href=\"index.php?act=memberlist&letter=s$get_room\">[s]</a> 
+		<a href=\"index.php?act=memberlist&letter=t$get_room\">[t]</a> 
+		<a href=\"index.php?act=memberlist&letter=u$get_room\">[u]</a> 
+		<a href=\"index.php?act=memberlist&letter=v$get_room\">[v]</a> 
+		<a href=\"index.php?act=memberlist&letter=w$get_room\">[w]</a> 
+		<a href=\"index.php?act=memberlist&letter=x$get_room\">[x]</a> 
+		<a href=\"index.php?act=memberlist&letter=y$get_room\">[y]</a> 
+		<a href=\"index.php?act=memberlist&letter=z$get_room\">[z]</a><br>
+		<a href=\"index.php?act=memberlist\">[Anagrafe]</a></br>
 		$additional_controls
 		</div>";
 
