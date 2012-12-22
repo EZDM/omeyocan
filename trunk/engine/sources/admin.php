@@ -3758,12 +3758,14 @@ function admincp_master(){
 						'<a href="\\0" target="_blank">\\0</a>', $_POST['text']);
 
 				if ($row) {
-					$db->DoQuery("UPDATE {$prefix}hints SET text='{$_POST['text']}'
+					$db->DoQuery("UPDATE {$prefix}hints SET text='{$_POST['text']}',
+							type = '{$_POST['type']}'
 							WHERE id='{$row['id']}'");
 				}
 				else {
 					$db->DoQuery("INSERT INTO {$prefix}hints 
-							(text) VALUES ('{$_POST['text']}')");
+							(text, type) VALUES ('{$_POST['text']}',
+								'{$_POST['type']}')");
 				}
 
 			header("location: index.php?act=adminpanel&cp_page=hints&startfrom=$limit");
@@ -3787,7 +3789,18 @@ function admincp_master(){
 			$body .= "<textarea name=\"text\" class=\"text_input\" 
 				cols=\"80\" rows=\"20\">$hint</textarea><br>";
 
+			$selected_aya = '';
+			$selected_player = '';
+			if ($row['type'] == 'aya')
+				$selected_aya = 'selected';
+			if ($row['type'] == 'player')
+				$selected_player = 'selected';
+
 			$body .= '<input type="submit" value="Invia" class="button">
+				<select name="type">
+				  <option value="aya" '.$selected_aya.'>Aya</option>
+				  <option value="player" '.$selected_player.'>Player</option>
+				</input>
 				</form>';
 		}
 		else if(isset($_GET['delete'])) {
@@ -3832,7 +3845,7 @@ function admincp_master(){
 			$body .= '<table width="95%" align="center" border="0" cellspacing="0"'.
 				' cellpadding="0" class="col_header">
 				<tr>
-				<td width="5%">Id</td><td>Hint</td><td width="20%">Azioni</td>
+				<td width="5%">Id</td><td>Hint</td><td width="20%">Tipo</td><td width="20%">Azioni</td>
 				</tr>
 				</table>';
 
@@ -3843,6 +3856,9 @@ function admincp_master(){
 				$body .= "<tr>
 					<td width=\"5%\">$row[id]</td>
 					<td>$row[text]</td>
+					<td width=\"20%\">
+					$row[type]
+					</td>
 					<td width=\"20%\">
 					<a href=\"index.php?act=adminpanel&cp_page=hints&edit=$row[id]&startfrom=$limit\">
 					[Edit]

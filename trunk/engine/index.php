@@ -543,7 +543,11 @@
 			exit;
 		case "hint":
 			include_once("./sources/hint.php");
-			hint_display();
+			hint_display('aya');
+			exit;
+		case "hint_player":
+			include_once("./sources/hint.php");
+			hint_display('player');
 			exit;
     default:
       // The default action is to show the room list
