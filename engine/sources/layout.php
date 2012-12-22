@@ -101,12 +101,6 @@ function location_out(hoveritem) {
 				[Administration]
         </a>';
 
-    echo '
-        <a onClick="'.popup_open(450, 500, "index.php?act=memberlist", "memberlist").'";>
-				[Anagrafe]
-        </a>';
-    
-
 		echo '
         <a onClick="'.popup_open(800, 720, "index.php?act=shop", "shop").'";>
 				[Shop]
