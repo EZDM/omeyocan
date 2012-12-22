@@ -84,6 +84,9 @@
 				current_text = '';
 				text = new Array();
 
+				text[0] = 'Stop doing F5';
+				text[1] = 'Stop doing F5';
+
 		    function do_animation() {
 					if (j == text.length) {
 						clearInterval(animation_call);
