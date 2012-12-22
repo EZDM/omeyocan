@@ -1349,7 +1349,7 @@ _gaq.push(['_trackPageview']);
 <div id="cmddiv">
   <table cellspacing=3 cellpadding=0 style="width: 100%">
     <tr>
-      <td style="width: 100%; text-align: center;"><select class="button"
+      <td class="cmdrow"><select class="button"
       name="action" onChange="javascript: return action_select(this);">
       <option value="">Scelta Abilit&agrave;...</option>
       <option value="">------------------</option>
@@ -1392,6 +1392,10 @@ _gaq.push(['_trackPageview']);
     }
 ?>
     </select> 
+		</td>
+		</tr>
+		<tr>
+		<td class="cmdrow">
 		<select class="button" name="objects" style="width: 150px;"
     onChange="javascript: return action_select(this);">
     <option value="">Oggetti...</option>

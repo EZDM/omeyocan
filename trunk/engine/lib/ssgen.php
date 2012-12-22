@@ -487,6 +487,10 @@
 				left: 30px;
 				width: 870px;
 			}
+      .cmdrow {
+				width: 100%;
+				text-align: center;
+			}
 			#action_countdown{
 				position: absolute;
 				top: 647px;
@@ -690,6 +694,7 @@
 			 color: #b0b0b0;
 			 font-size: 8pt;
 			 font-weight: bold;
+			 font-family: courier;
 			}
 			.mastering{
 			 color: teal;
