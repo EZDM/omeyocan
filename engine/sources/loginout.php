@@ -84,8 +84,7 @@
 				current_text = '';
 				text = new Array();
 
-				text[0] = 'Stop doing F5';
-				text[1] = 'Stop doing F5';
+				text[0] = '".$x7c->settings['news']."';
 
 		    function do_animation() {
 					if (j == text.length) {
@@ -107,6 +106,10 @@
 							current_text = current_text.substring(
 									0, current_text.length - 1) + '<br> ';
 						} else {
+							if (i > 0 && (i % 45) == 0) {
+							current_text = current_text.substring(
+									0, current_text.length - 1) + '<br> ';
+						  }
 							current_text = current_text.substring(
 									0, current_text.length - 1) + text[j][i] + '_';
 							i++;

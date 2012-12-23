@@ -256,37 +256,13 @@ function admincp_master(){
 			}elseif($_GET['settings_page'] == "loginpage"){
 
 				// Check Check boxes
-				if(!isset($_POST['show_events']))
-					$_POST['show_events'] = 0;
-				if(!isset($_POST['show_stats']))
-					$_POST['show_stats'] = 0;
 				if(!isset($_POST['enable_passreminder']))
 					$_POST['enable_passreminder'] = 0;
 
 				// Adjust this wierd little setting again
-				$_POST['events_3day_number']--;
-				if($_POST['events_3day_number'] > 2 || $_POST['events_3day_number'] < 0)
-					$_POST['events_3day_number'] = 0;
-
-				// Figure out whether they want to show the daily or monthly calendar.
-				// Actually, chat will show both correctly if both values are set to 1
-				// in the database, but the admin doesn't need to know that :)
-				if($_POST['event_show'] == "events_showmonth"){
-					$_POST['events_showmonth'] = 1;
-					$_POST['events_show3day'] = 0;
-				}else{
-					$_POST['events_showmonth'] = 0;
-					$_POST['events_show3day'] = 1;
-				}
 
 				// Update settings
 				update_setting("news",$_POST['news']);
-				update_setting("show_events",$_POST['show_events']);
-				update_setting("events_showmonth",$_POST['events_showmonth']);
-				update_setting("events_show3day",$_POST['events_show3day']);
-				update_setting("show_stats",$_POST['show_stats']);
-				update_setting("enable_passreminder",$_POST['enable_passreminder']);
-				update_setting("events_3day_number",$_POST['events_3day_number']);
 
 				$body = $txt[343];
 
@@ -741,28 +717,6 @@ function admincp_master(){
 			}elseif($_GET['settings_page'] == "loginpage"){
 
 				// Calculate default check box values
-				$checkboxs[] = "show_stats";
-				$checkboxs[] = "enable_passreminder";
-				$checkboxs[] = "show_events";
-				foreach($checkboxs as $key=>$val){
-					if($def_settings[$val] == 1)
-						$def[$val] = " checked=\"true\"";
-					else
-						$def[$val] = "";
-				}
-
-				// Default radio button properties
-				if($def_settings['events_show3day'] == 1){
-					$def['events_show3day'] = " checked=\"true\"";
-					$def['events_showmonth'] = "";
-				}else{
-					$def['events_show3day'] = "";
-					$def['events_showmonth'] = " checked=\"true\"";
-				}
-
-				// Adjust this wierd little property
-				$def['events_3day_number'] = $def_settings['events_3day_number']+1;
-
 				$body = "<Br>
 					<form action=\"./index.php?act=adminpanel&cp_page=settings&settings_page=loginpage&update_settings=1\" method=\"POST\">
 					<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">
@@ -771,27 +725,8 @@ function admincp_master(){
 					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"news\" value=\"{$def_settings['news']}\"></td>
 					</tr>
 					<tr>
-					<td width=\"100\">$txt[379]: </td>
-					<td width=\"100\"><input type=\"checkbox\" name=\"show_stats\"{$def['show_stats']} value=\"1\"></td>
-					</tr>
-					<tr>
 					<td width=\"100\">$txt[380]: </td>
 					<td width=\"100\"><input type=\"checkbox\" name=\"enable_passreminder\"{$def['enable_passreminder']} value=\"1\"></td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[378]: </td>
-					<td width=\"100\"><input type=\"checkbox\" name=\"show_events\"{$def['show_events']} value=\"1\"></td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[378]: </td>
-					<td width=\"100\">
-					<input type=\"radio\" name=\"event_show\" value=\"events_showmonth\"{$def['events_showmonth']}> $txt[382]<Br>
-					<input type=\"radio\" name=\"event_show\" value=\"events_show3day\"{$def['events_show3day']}> $txt[383]
-					</td>
-					</tr>
-					<tr>
-					<td width=\"100\">$txt[381]: </td>
-					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"events_3day_number\" value=\"{$def['events_3day_number']}\"></td>
 					</tr>
 					<tr>
 					<td width=\"200\" colspan=\"2\"><div align=\"center\"><input type=\"submit\" class=\"button\" value=\"$txt[187]\"></div></td>
