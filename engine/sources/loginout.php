@@ -314,12 +314,16 @@
         overflow: auto;
 				text-align: left;
         height: 100%;
+				font-size: 10pt;
+				font-family: courier;
+				font-weight: bold;
 			}
 			#class_choice {
         foat: left;
 				background: black;
 				text-align: center;
 				width: 70%;
+				height: 100%;
         overflow: auto;
 			}
 
