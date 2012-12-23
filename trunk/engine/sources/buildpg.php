@@ -299,11 +299,11 @@
 									SET sheet_ok='1', spazio = $spazio
 									WHERE username='$pg'");
 
-					if ($row_user['base_group'] == $x7c->settings['usergroup_default']) {
+					/*if ($row_user['base_group'] == $x7c->settings['usergroup_default']) {
 						include_once('lib/shop_lib.php');
 						global $shopper, $start_cogs;
 						pay($start_cogs, $shopper, $pg);
-					}
+					}*/
 
 					$db->DoQuery("INSERT INTO {$prefix}user_feat
 							(username, feat_id)
@@ -423,9 +423,6 @@
 					</tr>
 
 			';
-			if ($row_user['base_group'] != $x7c->settings['usergroup_default']) {
-				$full_name_form='<input type="hidden" name="name" value="'.$row_user['username'].'">';	
-			}
 
 			$features_form = "<select name=\"add_feat\">";
 

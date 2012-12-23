@@ -155,14 +155,6 @@
 
 				include_once("./lib/message.php");
 
-				$wellcome_mail = $x7c->settings['citizen_wellcome_mail'];
-				if($_POST['base_group'] != $x7c->settings['usergroup_default']) {
-					$wellcome_mail = $x7c->settings['uncitizen_wellcome_mail'];
-				}
-
-				send_offline_msg($_POST['username'], "Benvenuto per sempre", 
-						$wellcome_mail, "Staff");
-
 				$body = $txt[28];
 				
 				if($act_code != 1)
@@ -188,6 +180,7 @@
 				</div>
 				';
 		}else if(!isset($_GET['base_group'])) {
+			include_once('./sources/register_intro.php');
 			$body = '
 				<script type="text/javascript">
 			
@@ -201,21 +194,41 @@
 				</script>
 
 				<div id="register_banner">
+				<div id="class_descr">
+				  '.$register_class.'
+				</div>
+				<div id="class_choice">
 				<table width=100%>
 				<tr>
 				  <td>
-					<a href="index.php?act=register&base_group=Cittadino">
-					<img src="./graphic/citizen_choice.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=Tecnico">
+					<img src="./graphic/class_tech.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 					</a></td>
 				  <td>
-					<a href="index.php?act=register&base_group=Sopravvissuto">
-					<img src="./graphic/uncitizen_choice.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=Diplomatico">
+					<img src="./graphic/class_dipl.jpg" class="citizen_banner"
+					onMouseOver="javascript: over(this);"
+					onMouseOut="javascript: restore(this)"></a></td>
+				  <td>
+					<a href="index.php?act=register&base_group=Spia">
+					<img src="./graphic/class_spy.jpg" class="citizen_banner"
+					onMouseOver="javascript: over(this);"
+					onMouseOut="javascript: restore(this)"></a></td>
+				  <td>
+					<a href="index.php?act=register&base_group=Assaltatore">
+					<img src="./graphic/class_assault.jpg" class="citizen_banner"
+					onMouseOver="javascript: over(this);"
+					onMouseOut="javascript: restore(this)"></a></td>
+				  <td>
+					<a href="index.php?act=register&base_group=Neutro">
+					<img src="./graphic/class_neutro.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 				</tr>
 				</table>
+				</div>
 				</div>
 				';
 		}else{
