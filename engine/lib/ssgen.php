@@ -718,6 +718,24 @@
 			.masterRoll{
 			 color: white;
 			}
+      #register_image {
+        position:absolute;
+				left: 0;
+				top: 0;
+			}
+      #register_intro{
+        position: absolute;
+				z-index: 10;
+        color: white;
+				right: 0px;
+				text-align: left;
+        width: 500px;
+        height: 720px;
+				overflow: auto;
+			}
+      #register_intro a {
+			  color: white;
+			}
 		</style>";
 		
 		$css = eregi_replace("\r","",$css);

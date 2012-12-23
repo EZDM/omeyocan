@@ -174,10 +174,16 @@
 			$body = activate_account();
 				
 		}else if(!isset($_GET['disclaimer_done']) && !isset($_GET['base_group'])){
+			include_once('./sources/register_intro.php');
 			$body = '
 				<div id="register_banner">
 					<a href="index.php?act=register&disclaimer_done">
-						<img src="./graphic/choose_page.jpg">
+					  <div id="register_image">
+  						<img src="./graphic/choose_page.jpg">
+						</div>
+						<div id="register_intro">
+						'.$register_intro.'
+						</dvi>
 					</a>
 				</div>
 				';
