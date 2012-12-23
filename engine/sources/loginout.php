@@ -306,6 +306,22 @@
 				width: 100%;
 				height: 100%;
 			}
+			#class_descr {
+        float: right;
+				background: black;
+				text-align: center;
+				width: 28%;
+        overflow: auto;
+				text-align: left;
+        height: 100%;
+			}
+			#class_choice {
+        foat: left;
+				background: black;
+				text-align: center;
+				width: 70%;
+        overflow: auto;
+			}
 
 			#citizen_popup, #uncitizen_popup {
 				position: absolute;

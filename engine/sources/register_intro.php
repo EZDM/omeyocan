@@ -119,4 +119,47 @@
 	Benvenuto per sempre.
 	';
 
+
+	$register_class ='
+	Ognuno personaggio alla creazione puo\' avere della "Attitudini".<br>
+	Cosa sono le Attitudini?<br>
+	Non sono nient\'altro che la manifestazione di essere bravo a fare qualcosa e
+	a esserlo meno in altro.<br>
+	Le indoli aggressive e fisiche avranno facilitazioni verso chi invece sa
+	essere accorto e silente, ma altresi\' saranno deboli verso chi sa
+	"abbindolarle" per bene.<br>
+	Esistono 5 diversi tipi di Attitudine e ognuna di loro e\' correlata alle
+	altre, ognuna e\' forte verso una determinata attitudine e debole verso un
+	altra.<br>
+	Ecco le diverse Attitudini:<br>
+	<ul>
+		<li>Tecnico. il personaggio che ha questa attitudine sviluppa un bonus di +3
+		ai danni derivanti da Armi da fuoco contro i Diplomatici.</li>
+		<li>Diplomatico: il personaggio che ha questa attitudine ha bonus di
+		intimidire e diplomazia intrinsechi di +1 verso gli Assaltatori.</li>
+		<li>Spia: il personaggio che ha questa attitudine ha un generico +1 a Cercare
+		e a Muoversi Silenziosamente nei confronti dei Tecnici.</li>
+	  <li>Assaltatore: il personaggio che ha questa attitudine ha un bonus di +1
+		ai danni di qualsiasi genere contro le Spie e ha una riduzione di 1 ai danni
+		ricevuti dalle stesse.</li>
+		<li>Neutro: il personaggio che ha questa attitudine non ha ne bonus ne malus
+		nei confronti di alcuna altra classe.</li>
+	</ul>
+
+	Ovviamente tutti sono intrisi dalle attitudini, anche i mostri e gli
+	umbramorfi, quindi per cui questi bonus varranno anche verso i pNg o mostri
+	guidati dai master.<br>
+	Queste Attitudini NON sono strettamente correlate ad alcuna gremios (gilda)
+	o particolare carriera, ma sono peculiarita\' che caratterizzano il tipo di
+	interrelazione verso determinati "comportamenti". Ci saranno a volte armi o
+	equipaggiamenti esclusivi per le succitate Attitudini, quindi scegliete con
+	cura questo punto focale del vostro pg.
+  <br>
+	<br>
+	Una volta completata l\'iscrizione avrete 15 gg. di tempo per cambiare un
+	qualsiasi aspetto del vostro pg (Abilita\', Caratteristiche, Attitudini
+	etc...). Per effettuare tale cambio dovrete comunicare a un master le vostre
+	decisioni in merito ma badate bene perche\' tale cambio sara\' possibile UNA
+	volta sola.
+	';
 ?>
