@@ -470,14 +470,13 @@
 
 
 			a{
-				color: #660000;
 				font-weight: bold;
+				color: white;
 			}
 			a:hover{
 				color: white;
 			}
 			th{
-				color: #660000;
 				font-size: 8pt;
 				text-align: left;
 				border-bottom: solid 2px gray;
@@ -491,19 +490,18 @@
 				position: absolute;
 				left: 0px;
 				top: 0px;
-				color: black;
 				font-weight: bold;
 				font-size: 8pt;
 				background-image:url('.$sfondo.');
+				color: white;
 			}
 			
 			#inner_mail {
-				width: 408px; 
+				width: 370px; 
 				height: 330px;
 				position: absolute;
-				left: 45px;
-				top: 140px;
-				color: #660000;
+				left: 60px;
+				top: 150px;
 			}
 			
 			#message_tbl {
@@ -518,22 +516,21 @@
 				overflow: auto;
 			}
      .msg_txt{
-        color: #660000;
         font-size: 8pt;
         font-weight: bold;
      }
 			.dark_row{
 				background: transparent;
 				font-size: 8pt;
+        color: white;
 			}
 		
 			.chatmsg{
-				color: #660000;
+        color: white;
 				font-size: 8pt;
 			}
 			
 			.text_input, .wickEnabled{
-				color: #660000;
 				font-weight: bold;
 				background: transparent;
 				border: 1px solid black;
