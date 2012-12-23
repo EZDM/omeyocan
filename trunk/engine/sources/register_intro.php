@@ -27,6 +27,7 @@
 	Dimensione e i suoi effetti, tutti questi incidenti sono stati coperti con
 	situazioni create ad hoc, ad arte.
 	<br>
+	<br>
 	Senti qui:
 	<br>
 	"21 novembre 2012. esplosione sull\'autobus e\' avvenuta nel centro di Tel
@@ -110,7 +111,7 @@
 	vero?). Dubito che potrai tornare indietro considerando anche la brutta
 	tempesta in avvicinamento.
 	<br>
-	Capisco che decidere così su due piedi possa essere difficile, ma devi capire
+	Capisco che decidere cosi\' su due piedi possa essere difficile, ma devi capire
 	che non hai altre scelte: oramai sei qui e non tornerai indietro vivo.
 	Beh sai come si dice dalle nostre parti?
 	<br>
