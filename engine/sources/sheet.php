@@ -1413,7 +1413,9 @@ function sheet_page_main(){
 
 	if($row_user['avatar']!='')
 		$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
-
+	else
+		$body .= "<img src=\"{$x7c->settings['default_avatar']}\" width=200 height=200 />";
+		
 	$body.='</a></div>';
 
 	$body.= "
