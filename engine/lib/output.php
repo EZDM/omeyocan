@@ -234,7 +234,7 @@
 			//	can do is give me one line of credit.						//
 			//**************************************************************//
 			$this->add("<!----><div id=\"dump_copyright\" align=\"center\" style=\"background: transparent;\">
-			Game engine by: Niccol&ograve; Cascarano - Graphic by: Federico Gori<br>
+			Game engine by: Niccol&ograve; Cascarano - Graphic by: Aya<br>
 			Powered By <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Chat</a> $X7CHATVERSION &copy; 2004 By The <a href=\"http://www.x7chat.com/\" target=\"_blank\">X7 Group</a>$theme_c<br></div>");
 			//**************************************************************//
 			//	Should you decide that you want to steal my work anyway, I 	//
