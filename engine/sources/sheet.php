@@ -978,7 +978,6 @@ function sheet_page_ability(){
 	$body .= "<div id=\"visual\"><table>";
 	foreach($ability as $cur){
 		if($cur['dep'] == ""){
-			//  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\"
 			$body .= "<tr class=\"ab_text\"><td class=\"ab_text\">".$cur['name']."</td><td>";
 			for($i=0; $i<6; $i++){
 				if($i<$cur['value']){
@@ -992,7 +991,6 @@ function sheet_page_ability(){
 			$body .= "</td></tr>\n";
 			foreach($ability as $cur2){
 				if($cur2['dep'] == $cur['ability_id']){
-					// onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\"
 					$body .= "<tr><td class=\"ab_text\" class=\"ab_text\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td><td>";
 						
 					for($i=0; $i<6; $i++){
@@ -1025,7 +1023,7 @@ function sheet_page_ability(){
 		foreach($ability as $cur){
 			if($cur['dep'] == ""){
 				$body .= "<tr>";
-				$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
+				$body .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
 						<td><input class=\"button\" type=\"button\" value=\"-\" onClick=\"return sub('{$cur['ability_id']}');\">
 						<input type=\"text\" name=\"{$cur['ability_id']}_display\" value=\"{$cur['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 						<input type=\"hidden\" name=\"{$cur['ability_id']}\" value=\"{$cur['value']}\"/>
@@ -1046,7 +1044,7 @@ function sheet_page_ability(){
 				foreach($ability as $cur2){
 					if($cur2['dep'] == $cur['ability_id']){
 						$body .= "<tr>\n";
-						$body .= "<td onMouseOver=\"javascript: show_desc('{$cur2['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
+						$body .= "<td style=\"font-weight: bold;\">&nbsp;&nbsp;&nbsp;".$cur2['name']."</td>
 									<td><input class=\"button\" type=\"button\" value=\"-\" onMouseDown=\"return sub('{$cur2['ability_id']}');\">
 									<input type=\"text\" name=\"{$cur2['ability_id']}_display\" value=\"{$cur2['value']}\" size=\"2\" style=\"text-align: right; color: blue;\" disabled/>
 									<input type=\"hidden\" name=\"{$cur2['ability_id']}\" value=\"{$cur2['value']}\"/>
@@ -1938,7 +1936,6 @@ function sheet_page_corp(){
 
 	foreach($ability as $cur){
 		if($cur['dep'] == ""){
-			//onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\" onMouseOut=\"javascript: hide_desc()\"
 			$body .= "<tr class=\"ab_text\"><td class=\"ab_text\">".$cur['name']."</td><td>";
 			for($i=0; $i<6; $i++){
 				if($i<$cur['value']){
@@ -1968,8 +1965,7 @@ function sheet_page_corp(){
 	$body.='<table align="left" border="0" cellspacing="0" cellpadding="0">';
 	foreach($ability as $cur){
 		$body .= "<tr>";
-		$body .= "<td  onMouseOver=\"javascript: show_desc('{$cur['ability_id']}')\"
-			onMouseOut=\"javascript: hide_desc()\" style=\"font-weight: bold;\">".$cur['name']."</td>
+		$body .= "<td style=\"font-weight: bold;\">".$cur['name']."</td>
 				<td>";
 		
 		if(in_array($cur['corp'],$x7p->profile['usergroup']) || $cur['corp'] == "_personal" || checkIfModifySheet())
@@ -2131,49 +2127,38 @@ function print_sheet($body,$bg){
 			#sheetcorp{
 				background-image:url(./graphic/schedapgCORP.jpg);
 			}
-			#psico_hid{
+      #psico, #psico_hid{
 				top: 370px;
-				left: 250px;
-				width: 200px;
+				left: 270px;
+				width: 190px;
 				height: 250px;
+			}
+			#psico_hid{
 				visibility: hidden;
+			}
+			#storia, #storia_hid{
+				top: 100px;
+				left: 50px;
+				width: 400px;
+				height: 220px;
 			}
 			#storia_hid{
-				top: 80px;
-				left: 30px;
-				width: 430px;
-				height: 250px;
 				visibility: hidden;
 			}
-			#fisici_hid{
+			#fisici, #fisici_hid{
 				top: 370px;
-				left: 30px;
+				left: 50px;
 				width: 200px;
 				height: 250px;
+			}
+      #fisici_hid{
 				visibility: hidden;
 			}
-			#psico{
-				top: 370px;
-				left: 250px;
-				width: 200px;
-				height: 250px;
-			}
-			#storia{
-				top: 80px;
-				left: 30px;
-				width: 430px;
-				height: 250px;
-			}
-			#fisici{
-				top: 370px;
-				left: 30px;
-				width: 200px;
-				height: 250px;
-			}';
+			';
 		
 
 		echo '#master, #masterdiv{
-				top: 60px;
+				top: 80px;
 				left: 50px;
 				width: 400px;
 				height: 220px;
@@ -2182,13 +2167,13 @@ function print_sheet($body,$bg){
       #master_private, #masterdiv_private{
 				top: 300px;
 				left: 250px;
-				width: 230px;
+				width: 210px;
 				height: 310px;
 				overflow: hidden;
 			}
       #master_private_text, #inner_private, .inner_private{
 				height: 270px;
-				width: 230px;
+				width: 100%;
 				overflow: auto;
 				position: absolute;
 			}
@@ -2253,10 +2238,10 @@ function print_sheet($body,$bg){
 			#objects{
 				position: absolute;
 				overflow: auto;
-				top: 65px;
+				top: 70px;
 				left: 55px;
 				width: 400px;
-				height: 530px;
+				height: 510px;
 			}
 			#pwd1{
 				top: 280px;
@@ -2279,7 +2264,7 @@ function print_sheet($body,$bg){
 			#modify{
 				position: absolute;
 				left: 50px;
-				top: 630px;
+				top: 620px;
 			}
 	               #modify2{
 				position: absolute;
@@ -2296,12 +2281,12 @@ function print_sheet($body,$bg){
 			#ability{
 				position: absolute;
 				left: 50px;
-				top: 70px;
+				top: 80px;
 			}
 			#corp{
 				position: absolute;
 				left: 50px;
-				top: 150px;
+				top: 160px;
 			}	
 			#Forza{
 				position: absolute;
@@ -2503,24 +2488,27 @@ function print_sheet($body,$bg){
 			}
 			
 			#spazio{
-				top: 602px;
+				top: 595px;
 				left: 270px;			
+				color: white;
 			}
 			
 			#corp_name{
 				position: absolute;
-				top: 41px;
-				left: 130px;
+				top: 48px;
+        left: 0;
+				width: 100%;
+				text-align: center;
 			}
 			#corp_symbol{
 				position: absolute;
-				top: 73px;
-				left: 400px;
+				top: 70px;
+				left: 410px;
 			}
 			#corp_charge{
 				position: absolute;
 				top: 80px;
-				left: 120px;
+				left: 170px;
 			}
       #search_box{
         position: absolute;
