@@ -191,7 +191,7 @@ function location_out(hoveritem) {
       target="_blank">
       Niccol&ograve; Cascarano
     </a> 
-    Graphic by: Federico Gori
+    Graphic by: Aya
     Powered By
     <a href="http://www.x7chat.com/" target="_blank">
       X7 Chat
