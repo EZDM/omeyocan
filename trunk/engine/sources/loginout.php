@@ -310,23 +310,26 @@
 				height: 100%;
 			}
 			#class_descr {
-        float: right;
+        position:absolute;
 				background: black;
 				text-align: center;
-				width: 28%;
+				width: 100%;
         overflow: auto;
 				text-align: left;
-        height: 100%;
+        height: 200px;
 				font-size: 10pt;
 				font-family: courier;
 				font-weight: bold;
+        top: 640px;
 			}
 			#class_choice {
-        foat: left;
+        position: absolute;
+				top: 0;
+				left: 0;
 				background: black;
 				text-align: center;
-				width: 70%;
-				height: 100%;
+				width: 100%;
+				height: 625px;
         overflow: auto;
 			}
 
