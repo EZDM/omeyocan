@@ -138,7 +138,7 @@
 		<li>Diplomatico: il personaggio che ha questa attitudine ha bonus di
 		intimidire e diplomazia intrinsechi di +1 verso gli Assaltatori.</li>
 		<li>Spia: il personaggio che ha questa attitudine ha un generico +1 a Cercare
-		e a Muoversi Silenziosamente nei confronti dei Tecnici.</li>
+		e a Nascondersi nei confronti dei Tecnici.</li>
 	  <li>Assaltatore: il personaggio che ha questa attitudine ha un bonus di +1
 		ai danni di qualsiasi genere contro le Spie e ha una riduzione di 1 ai danni
 		ricevuti dalle stesse.</li>

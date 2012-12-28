@@ -180,93 +180,25 @@ function sheet_page_equip(){
 		if(!isset($_POST['owner']) || !isset($_POST['id'])){
 			die("Bad form owner: $_POST[owner] id: $_POST[id]");
 		}
-		$query = $db->DoQuery("SELECT count(*) AS cnt
-				FROM {$prefix}users WHERE username='$_POST[owner]'");
-		$row = $db->Do_Fetch_Assoc($query);
 
-		if(!$row || $row['cnt']==0){
-			$errore = "Utente non esistente";
-		}
+		$dummy = '';
+		get_obj_name_and_uses($_POST['id'], $obj, $dummy);
+		//keys duplicates, and does not disappera from my sheet
+		if(preg_match("/^masterkey/", $row['name'])){
+			list($pre, $name)=split("masterkey_", $row['name']);
+			$obj="key_$name";
 
-		$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-				WHERE id='$_POST[id]' AND owner='$pg'");
-		$row = $db->Do_Fetch_Assoc($query);
-
-		if(!$row || $row['id']==''){
-			$errore = "Oggetto non esistente";
-		}
-		if(!$row['equipped']){
-			$errore = "Non puoi consegnare un oggetto che non trasporti";
-		}
-
-		$query = $db->DoQuery("SELECT username
-				FROM {$prefix}users WHERE username='$_POST[owner]'");
-		$row_user=$db->Do_Fetch_Assoc($query);
-
-		if(!$row_user) {
-			$errore = "Utente non esistente";
-		}
-		else {
-			if(get_user_space($_POST['owner']) - $row['size'] < 0){
-				$errore = "Il destinatario non puo' equipaggiare l'oggetto";
+			if(!isset($_POST['grants']) ||
+					$_POST['grants'] <= 0 || $_POST['grants']== '') {
+				$_POST['grants'] = -1;
 			}
-			else if (get_user_space($pg) + $row['size'] < 0){
-				$errore = "Non puoi disequipaggiare l'oggetto";
-			}
+			$errore .= assign_object($_POST['id'], $_POST['owner'], true, $pg,
+					$_POST['grants']);
 		}
-
-		$obj=$row['name'];
-		if($errore==''){
-			//keys duplicates, and does not disappera from my sheet
-			if(preg_match("/^masterkey/", $row['name'])){
-				list($pre, $name)=split("masterkey_", $row['name']);
-				$obj="key_$name";
-
-				if(!isset($_POST['grants']) ||
-						$_POST['grants'] <= 0 || $_POST['grants']== '') {
-					$_POST['grants'] = -1;
-				}
-				
-					
-				$db->DoQuery("INSERT INTO {$prefix}objects
-							(name, description, owner, uses, image_url, equipped,
-							 expire_span, visible_uses)
-							VALUES (
-								'$obj',
-								'$row[description]',
-								'$_POST[owner]',
-								'$_POST[grants]',
-								'$row[image_url]','1',
-								'$row[expire_span]', '$row[visible_uses]')
-						");
-
-				$new_id = mysql_insert_id();
-
-				// If master key expires, also the client key must expire at the same moment
-				if ($row['expire_span'] > 0) {
-					$expire_query = $db->DoQuery("SELECT expire_time FROM {$prefix}temp_obj 
-							WHERE id = '$row[id]'");
-					$row_expire = $db->Do_Fetch_Assoc($expire_query);
-					if ($row_expire) {
-						$db->DoQuery("INSERT INTO {$prefix}temp_obj
-								(id, expire_time) VALUES
-								('$new_id', '$row_expire[expire_time]')");
-					}
-				}
-			}
-			else{
-				$db->DoQuery("UPDATE {$prefix}objects
-							SET owner='$_POST[owner]'
-							WHERE id='$_POST[id]' AND owner<>''");
-				//The last is only for protection to pattern objects
-					
-			}
-
-			$errore="Oggetto assegnato correttamente\n";
-			include_once('./lib/alarms.php');
-			object_moves($_POST['owner'],$pg,$obj);
+		else{
+			$errore .= assign_object($_POST['id'], $_POST['owner'], false, $pg,
+					$_POST['grants']);
 		}
-
 	}
 
 	$body .= "<script language=\"javascript\" type=\"text/javascript\">

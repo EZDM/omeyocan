@@ -57,6 +57,11 @@
 		echo "<html dir=\"$print->direction\"><head><title>{$x7c->settings['site_name']}</title>";
 		echo $print->style_sheet;
 
+		$background = './graphic/sfondohints.jpg';
+		if (@$_GET['act'] == 'hint_player') {
+			$background = './graphic/player_hints.jpg';
+		}
+
 		echo '
 		<LINK REL="SHORTCUT ICON" HREF="./favicon.ico">
 		<style type="text/css">
@@ -64,7 +69,7 @@
 			#innerdiv{
 				width: 444px;
 				height: 556px;
-				background: url("./graphic/sfondohints.jpg");
+				background: url("'.$background.'");
 				overflow: auto;
 			}
 			#hintdiv {
