@@ -299,16 +299,28 @@
 									SET sheet_ok='1', spazio = $spazio
 									WHERE username='$pg'");
 
+					$db->DoQuery("INSERT INTO {$prefix}user_feat
+							(username, feat_id)
+							VALUES ('$pg', '{$_POST['add_feat']}')");
+						
+					// Default equipment
+
 					/*if ($row_user['base_group'] == $x7c->settings['usergroup_default']) {
 						include_once('lib/shop_lib.php');
 						global $shopper, $start_cogs;
 						pay($start_cogs, $shopper, $pg);
 					}*/
 
-					$db->DoQuery("INSERT INTO {$prefix}user_feat
-							(username, feat_id)
-							VALUES ('$pg', '{$_POST['add_feat']}')");
-						
+					$id = get_object_id("ID Pod");
+					assign_object($id, $pg, true);
+
+					if ($_POST['gender'] == 0)
+						$id2 = get_object_id("Abiti comuni maschili");
+					else
+						$id2 = get_object_id("Abiti comuni femminili");
+
+					assign_object($id2, $pg, true);
+
 					header('Location: ./index.php');
 					return;
 

@@ -422,6 +422,19 @@
 		return $residuo;
 	}
 
+  function get_object_id($name) {
+		global $db, $prefix;
+	
+		$query = $db->DoQuery("SELECT id FROM {$prefix}objects 
+				WHERE name='$name'");
+		$row = $db->Do_Fetch_Assoc($query);
+
+		if(!$row || $row['id']==''){
+			return -1;
+		}
+		return $row['id'];
+	}
+
   function assign_object($obj_id, $new_owner,
 			$copy=false, $by_user=false, $uses=-1) {
 		global $db, $prefix;
