@@ -184,8 +184,8 @@ function sheet_page_equip(){
 		$dummy = '';
 		get_obj_name_and_uses($_POST['id'], $obj, $dummy);
 		//keys duplicates, and does not disappera from my sheet
-		if(preg_match("/^masterkey/", $row['name'])){
-			list($pre, $name)=split("masterkey_", $row['name']);
+		if(preg_match("/^masterkey/", $obj)){
+			list($pre, $name)=split("masterkey_", $obj);
 			$obj="key_$name";
 
 			if(!isset($_POST['grants']) ||
@@ -193,7 +193,7 @@ function sheet_page_equip(){
 				$_POST['grants'] = -1;
 			}
 			$errore .= assign_object($_POST['id'], $_POST['owner'], true, $pg,
-					$_POST['grants']);
+					$_POST['grants'], $obj);
 		}
 		else{
 			$errore .= assign_object($_POST['id'], $_POST['owner'], false, $pg,
