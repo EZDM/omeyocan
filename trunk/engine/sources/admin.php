@@ -1363,66 +1363,18 @@ function admincp_master(){
 					!isset($_POST['qty'])){
 				die("Bad form");
 			}
-			$query = $db->DoQuery("SELECT username 
-					FROM {$prefix}users WHERE username='$_POST[owner]'");
-			$row_usr = $db->Do_Fetch_Assoc($query);
-
-			if(!$row_usr){
-				$error = "Utente non esistente";
-			}
 			if(!is_numeric($_POST['qty'])) {
 				$error = "Quantita' da assegnare non valida";
 			}
 
-			$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
-					WHERE id='$_POST[id]'");
-			$row = $db->Do_Fetch_Assoc($query);
-
-			if(!$row || $row['id']==''){
-				$error = "Oggetto non esistente";
-			}
-			
 			get_obj_name_and_uses($_POST['id'], $obj_name, $dummy);
 			if ($obj_name == $money_name)
 				$error = "Non puoi assegnare soldi da questo pannello";
 
-			if($error==''){
-				include_once('./lib/sheet_lib.php');
-				$residuo = get_user_space($_POST['owner']);
-				$total_space = $row['size'] * $_POST['qty'];
-				if($residuo - $total_space < 0)
-					$error = "L'utente non pu&ograve; trasportare l'oggetto:<br>".
-						"spazio residuo: $residuo<br>spazio richiesto: $total_space";
-			}
-
+			include_once('./lib/sheet_lib.php');
 			if($error==''){
 				for($i=0; $i < $_POST['qty']; $i++) {
-					$db->DoQuery("INSERT INTO {$prefix}objects
-							(name,description,uses,image_url,owner,equipped,size,category,
-							 visible_uses, expire_span, shop_return,random_img)
-							VALUES('$row[name]','$row[description]','$row[uses]',
-								'$row[image_url]','$_POST[owner]','1','$row[size]',
-								'$row[category]','$row[visible_uses]','$row[expire_span]',
-								'$row[shop_return]','$row[random_img]')");
-
-					$new_id = mysql_insert_id();
-
-					$error.="Oggetto assegnato correttamente<br>";
-
-					if ($row['expire_span'] > 0) {
-						$expire_time = time() + $row['expire_span'] * 60;
-
-						$db->DoQuery("INSERT INTO {$prefix}temp_obj 
-								(id, expire_time, shop_return)
-								VALUES
-								('$new_id', '$expire_time', '$row[shop_return]')");
-					
-						$error .= "<br>L'oggetto scadra' il:".date("d/m/Y H:i",
-								$expire_time);
-					}
-
-					include_once('./lib/alarms.php');
-					object_assignement($_POST['owner'],$row['name']);
+					$error .= assign_object($_POST['id'], $_POST['owner'], true);
 				}
 			}
 

@@ -421,4 +421,86 @@
 
 		return $residuo;
 	}
+
+  function assign_object($obj_id, $new_owner,
+			$copy=false, $by_user=false, $uses=-1) {
+		global $db, $prefix;
+
+		$error = '';
+		$query = $db->DoQuery("SELECT username 
+				FROM {$prefix}users WHERE username='$new_owner'");
+		$row_usr = $db->Do_Fetch_Assoc($query);
+
+		if(!$row_usr){
+			$error = "Utente non esistente";
+		}
+
+    $more_query ='';
+		if ($by_user) {
+			$more_query = "AND owner = '$by_user'";
+		}
+
+		$query = $db->DoQuery("SELECT * FROM {$prefix}objects 
+				WHERE id='$obj_id'  $more_query");
+		$row = $db->Do_Fetch_Assoc($query);
+
+		if(!$row || $row['id']==''){
+			$error = "Oggetto non esistente";
+		}
+
+		if (!$row['equipped'] && $by_user) {
+			$error .= "Non puoi consegnare un oggetto che non trasporti";
+		}
+
+		get_obj_name_and_uses($obj_id, $obj_name, $dummy);
+
+		if($error==''){
+			$residuo = get_user_space($new_owner);
+			$total_space = $row['size'];
+			if($residuo - $total_space < 0)
+				$error = "L'utente non pu&ograve; trasportare l'oggetto:<br>".
+					"spazio residuo: $residuo<br>spazio richiesto: $total_space<br>";
+		}
+
+		if($error==''){
+			if ($uses > 0)
+				$row['uses'] = $uses;
+
+			if ($copy) {
+				$db->DoQuery("INSERT INTO {$prefix}objects
+						(name,description,uses,image_url,owner,equipped,size,category,
+						 visible_uses, expire_span, shop_return,random_img)
+						VALUES('$row[name]','$row[description]','$row[uses]',
+							'$row[image_url]','$new_owner','1','$row[size]',
+							'$row[category]','$row[visible_uses]','$row[expire_span]',
+							'$row[shop_return]','$row[random_img]')");
+
+				$new_id = mysql_insert_id();
+
+				$error.="Oggetto assegnato correttamente<br>";
+
+				if ($row['expire_span'] > 0) {
+					$expire_time = time() + $row['expire_span'] * 60;
+
+					$db->DoQuery("INSERT INTO {$prefix}temp_obj 
+							(id, expire_time, shop_return)
+							VALUES
+							('$new_id', '$expire_time', '$row[shop_return]')");
+
+					$error .= "<br>L'oggetto scadra' il:".date("d/m/Y H:i",
+							$expire_time);
+				}
+				include_once('./lib/alarms.php');
+				object_assignement($new_owner, $row['name']);
+			}
+			else {
+				$db->DoQuery("UPDATE ${prefix}objects SET owner='$new_owner'
+						WHERE id='$obj_id' AND owner='$by_user'");
+				include_once('./lib/alarms.php');
+				object_moves($new_owner, $by_user, $obj_name);
+				$error.="Oggetto assegnato correttamente<br>";
+			}
+		}
+  return $error;
+	}
 ?>

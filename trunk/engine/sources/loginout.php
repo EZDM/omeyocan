@@ -157,9 +157,6 @@
       </tr>
       </table>
       </form></div>
-      <div id=\"disclaimer\">".
-      $disc	
-      ."</div>
       ";
 
 		}
