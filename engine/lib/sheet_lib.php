@@ -436,7 +436,7 @@
 	}
 
   function assign_object($obj_id, $new_owner,
-			$copy=false, $by_user=false, $uses=-1) {
+			$copy=false, $by_user=false, $uses=-1, $new_name=false) {
 		global $db, $prefix;
 
 		$error = '';
@@ -478,6 +478,8 @@
 		if($error==''){
 			if ($uses > 0)
 				$row['uses'] = $uses;
+			if ($new_name)
+				$row['name'] = $new_name;
 
 			if ($copy) {
 				$db->DoQuery("INSERT INTO {$prefix}objects
