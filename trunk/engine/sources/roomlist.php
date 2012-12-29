@@ -138,6 +138,7 @@ _gaq.push(['_trackPageview']);
 				position: absolute;
 				left: 0px;
 				right: 0px;
+				background-repeat: no-repeat;
 			}
 		</style>
 	';
