@@ -121,7 +121,6 @@ function location_out(hoveritem) {
 <!-- PULSANTI -->
 
 <?PHP
-	if (!$x7c->settings['panic']) {
 		echo '
 			<div id="hintbtn" style="position: absolute; top: 672px; left: 283px;">
 			<a onClick="'.popup_open(446, 558, "index.php?act=hint", "hint").'"> 
@@ -138,7 +137,6 @@ function location_out(hoveritem) {
 				onMouseout="javascript: HidePopup(this);">
 			</a>
 			</div>';
-	}
 ?>
 
 
