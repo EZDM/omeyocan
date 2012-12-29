@@ -452,6 +452,7 @@
 				$css .=	"./graphic/sfondo1026x723.jpg";
 				
 			$css.=");
+			  background-repeat: no-repeat;
 				width: 1026px; 
 				height: 723px;
 				position: absolute;
