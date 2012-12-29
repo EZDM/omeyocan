@@ -2303,8 +2303,8 @@ function print_sheet($body,$bg){
 				width: 200px;
 			}
 			#avatar{
-				left: 65px;
-				top: 61px;
+				left: 63px;
+				top: 81px;
 				width: 200px;
 				color: white;
 				font-size: 10pt;
