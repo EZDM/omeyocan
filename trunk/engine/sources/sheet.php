@@ -2252,7 +2252,7 @@ function print_sheet($body,$bg){
 			}
 			#login{
 				left: 68px;
- 				top: 276px;
+ 				top: 306px;
  				width: 190px;
  				text-align: center;
  				font-size: 12pt;
