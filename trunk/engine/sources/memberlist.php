@@ -444,7 +444,7 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 
 		#low_navigator{
 			position: relative;
-		  top: 430px;
+		  top: 460px;
 			width: 100%;
 			text-align: center;
 			font-weight: bold;
@@ -488,11 +488,11 @@ function print_memberlist($body,$sfondo='',$myhead=''){
       position: absolute;
       left: 40px;
 			width: 380px;
-			height: 480px;
+			height: 420px;
 			overflow: auto;
 			color: white;
 		}
-    #inner_member a{
+    a{
 		  color: white;
 		}
 
