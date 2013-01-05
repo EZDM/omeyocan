@@ -141,7 +141,7 @@ function memberlist(){
 
 	// Get the userlist and online data
 	// we force a fake join with Mappa
-	$more_query="";
+	$more_query=" AND frozen = 0";
 	if(isset($_GET['dead'])){
 		$more_query = " AND sheet_ok='1' AND (u.info='Morto' OR u.info<'{$x7c->settings['dead_threshold']}')";
 	}
@@ -232,9 +232,14 @@ function memberlist(){
 		<a href=\"index.php?act=memberlist&letter=x$get_room\">[x]</a> 
 		<a href=\"index.php?act=memberlist&letter=y$get_room\">[y]</a> 
 		<a href=\"index.php?act=memberlist&letter=z$get_room\">[z]</a><br>
-		<a href=\"index.php?act=memberlist\">[Anagrafe]</a></br>
 		$additional_controls
 		</div>";
+
+	$body .= "
+		<div id=\"low_navigator\"
+		  <a href=\"index.php?act=memberlist\">[Anagrafe]</a>
+		</div>
+		";
 
 	$get_letter ='';
 	if($letter != 0)
@@ -437,6 +442,14 @@ function print_memberlist($body,$sfondo='',$myhead=''){
 		#navigator{
 			position: relative;
 			top: 10px;
+			width: 100%;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		#low_navigator{
+			position: relative;
+		  top: 430px;
 			width: 100%;
 			text-align: center;
 			font-weight: bold;
