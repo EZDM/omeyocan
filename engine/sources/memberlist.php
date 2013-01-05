@@ -236,7 +236,7 @@ function memberlist(){
 		</div>";
 
 	$body .= "
-		<div id=\"low_navigator\"
+		<div id=\"low_navigator\">
 		  <a href=\"index.php?act=memberlist\">[Anagrafe]</a>
 		</div>
 		";
