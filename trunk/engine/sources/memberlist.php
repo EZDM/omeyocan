@@ -505,8 +505,8 @@ echo $memberlist_style;
 
 echo '</head><body>
 <div id="member">
-  <div id=\"low_navigator\">
-	  <a href=\"index.php?act=memberlist\">[Anagrafe]</a>
+  <div id="low_navigator">
+	  <a href="index.php?act=memberlist">[Anagrafe]</a>
 	</div>
 <div id="inner_member">
 ';
