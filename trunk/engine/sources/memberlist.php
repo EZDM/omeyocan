@@ -235,11 +235,6 @@ function memberlist(){
 		$additional_controls
 		</div>";
 
-	$body .= "
-		<div id=\"low_navigator\">
-		  <a href=\"index.php?act=memberlist\">[Anagrafe]</a>
-		</div>
-		";
 
 	$get_letter ='';
 	if($letter != 0)
@@ -510,6 +505,9 @@ echo $memberlist_style;
 
 echo '</head><body>
 <div id="member">
+  <div id=\"low_navigator\">
+	  <a href=\"index.php?act=memberlist\">[Anagrafe]</a>
+	</div>
 <div id="inner_member">
 ';
 
