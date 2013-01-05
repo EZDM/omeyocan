@@ -210,6 +210,7 @@
 				}
         #login{
           height: 725px;
+					width: 1025px;
           '.$sfondo.'
 					background-repeat: no-repeat;
           position: relative; 
