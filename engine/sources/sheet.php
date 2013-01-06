@@ -2196,7 +2196,7 @@ function print_sheet($body,$bg){
 			#modify{
 				position: absolute;
 				left: 50px;
-				top: 620px;
+				top: 635px;
 			}
 	               #modify2{
 				position: absolute;
