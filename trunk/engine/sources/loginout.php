@@ -58,9 +58,9 @@
       $failmsg = $txt[613];
     }elseif($failed == "frozen"){
       $title = "Personaggio congelato";
-      $failmsg = "Il tuo personaggio e' congelato; chiedi a un admin ".
-        "di scongelartelo. <a href=\"mailto:webmaster@omeyocan.it\">".
-        "webmaster@omeyocan.it</a> ";
+      $failmsg = "Tutti i personaggi della precedente era sono congelati per ".
+				"questioni di trama. E\' necessario creare un nuovo personaggio per ".
+				"giocare nella nuova era. ";
     }else{
       $failmsg = $txt[13];
       $title = $txt[14];
@@ -75,6 +75,14 @@
 
 			$body .= '<a href="./index.php">Login</a></div>';
 		} else {
+
+		$typed = $x7c->settings['news'];
+	  $animation_style = '';
+		if(isset($failmsg) && $failmsg) {
+			$typed = $failmsg;
+			$animation_style = ' style="color: red;"';
+		}
+
     $body = "	
 			<script type=\"text/javascript\">
 			  animation_call = setInterval('do_animation()', 50);
@@ -84,7 +92,7 @@
 				current_text = '';
 				text = new Array();
 
-				text[0] = '".$x7c->settings['news']."';
+				text[0] = '".$typed."';
 
 		    function do_animation() {
 					if (j == text.length) {
@@ -106,7 +114,7 @@
 							current_text = current_text.substring(
 									0, current_text.length - 1) + '<br> ';
 						} else {
-							if (i > 0 && (i % 45) == 0) {
+							if (i > 0 && (i % 40) == 0 && (text[j][i]) == ' ') {
 							current_text = current_text.substring(
 									0, current_text.length - 1) + '<br> ';
 						  }
@@ -121,7 +129,7 @@
 				}
 			</script>
 
-			<div id=\"animation\"></div>
+			<div id=\"animation\"".$animation_style."></div>
       <div id=\"login_form\">
       <form action=\"index.php\" method=\"post\" name=\"loginform\">
       <input type=\"hidden\" name=\"dologin\" value=\"dologin\">
@@ -153,7 +161,6 @@
 
     $body .= 	"</tr>
       <tr>
-      <td class=\"error\"><br>$failmsg</td>
       </tr>
       </table>
       </form></div>
