@@ -26,6 +26,19 @@ function apriPopupCentrata(nome, titolo, lar, alt, feat){
   })();
 //-->
 </script>
+
+<style type="text/css">
+  body {
+		color: white;
+	}
+  .help {
+    text-align: center;
+	}
+  a  {
+		color: #444444;
+	}
+</style>
+
 </HEAD>
 <BODY bgcolor="#000000">
 <div style="width:1024px; height:608px; margin: 0 auto;">
@@ -49,5 +62,11 @@ function apriPopupCentrata(nome, titolo, lar, alt, feat){
 </OBJECT>
 </div>
 </div>
+<div class="help">
+<a onClick="apriPopupCentrata('engine', 'main', 1028, 728);" href="#">Entra</a>
+<a href="hole/">Forum</a>
+<a href="manual/">Manuale</a>
+</div>
 </BODY>
 </HTML>
+
