@@ -64,7 +64,6 @@ function apriPopupCentrata(nome, titolo, lar, alt, feat){
 </div>
 <div class="help">
 <a onClick="apriPopupCentrata('engine', 'main', 1028, 728);" href="#">Entra</a>
-<a href="hole/">Forum</a>
 <a href="manual/">Manuale</a>
 </div>
 </BODY>
