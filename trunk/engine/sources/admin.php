@@ -2005,7 +2005,6 @@ function admincp_master(){
 			$body .= " <p style=\"text-align: center;\">";
 			$count = 0;
 			while ($row_category = $db->Do_Fetch_Assoc($query_category)) {
-				$body .= "<br>";
 				$count++;
 				$long_name = $row_category['category'];
 				if (!$row_category['category'])
@@ -2013,6 +2012,7 @@ function admincp_master(){
 				$body .= "<a href=\"index.php?act=adminpanel&cp_page=objects&category=".
 					$row_category['category']."\">[$long_name]</a>";
 				if($count % 5 == 0)
+					$body .= "<br>";
 			}
 
 			$body .= "</p>";
