@@ -3173,6 +3173,12 @@ function admincp_master(){
 		$head = "Oscurit&agrave;";
 		$body = "Questo pannello permette di gestire l'oscurit&agrave; e altre cose terribili";
 
+		if(isset($_GET['autopay'])){
+			$newstate = !($x7c->settings['autopay']);
+			$db->DoQuery("UPDATE {$prefix}settings SET setting='{$newstate}' WHERE variable='autopay'");
+			$x7c->settings['autopay']=$newstate;
+		}
+
 		if(isset($_GET['switch'])){
 			$newstate = !($x7c->settings['panic']);
 			$db->DoQuery("UPDATE {$prefix}settings SET setting='{$newstate}' WHERE variable='panic'");
@@ -3256,6 +3262,12 @@ function admincp_master(){
 				return;
 			window.location='./index.php?act=adminpanel&cp_page=panic&switch=1';
 		}
+
+		function do_autopay(txt){
+			if(!security_question('Vuoi davvero ' + txt + ' il salario automatico?'))
+				return;
+			window.location='./index.php?act=adminpanel&cp_page=panic&autopay=1';
+		}
 		</script>";
 		
 		if($x7c->settings['panic']){
@@ -3267,6 +3279,14 @@ function admincp_master(){
 				<input class=\"button\" type=\"button\" value=\"Attiva oscurit&agrave;\" onClick=\"javascript: do_panic('attivare');\"></p>";
 		}
 		
+		if($x7c->settings['autopay']){
+			$body .= "<p align=\"center\">Ora l'auto salario &egrave;: <span style=\"color: red; font-weight: bold\">Attivato</span><br>
+				<input class=\"button\" type=\"button\" value=\"Disattiva autosalario\" onClick=\"javascript: do_autopay('disattivare');\"></p>";
+		}
+		else{
+			$body .= "<p align=\"center\">Ora l'auto salario &egrave;: <span style=\"color: green; font-weight: bold\">Disattivato</span><br>
+				<input class=\"button\" type=\"button\" value=\"Attiva autosalario\" onClick=\"javascript: do_autopay('attivare');\"></p>";
+		}
 
 		$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Uccidi TUTTI!\" onClick=\"javascript: do_kill()\"></p>";
 		$body .= "<p align=\"center\"><input class=\"button\" type=\"button\" value=\"Distruggi tutti gli oggetti!\" onClick=\"javascript: do_destroy()\"></p>";
