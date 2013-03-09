@@ -35,7 +35,26 @@
 		$db->DoQuery("DELETE FROM {$prefix}banned WHERE $time>starttime+endtime AND endtime<>0");
 	}
 	
-	function cleanup_messages(){
+  function pay_salary() {
+		global $db, $prefix, $x7s;
+
+		$query = $db->DoQuery("SELECT last_salary, lvl FROM {$prefix}users
+				WHERE username = '{$x7s->username}'");
+
+		if ($row = $db->Do_Fetch_Assoc($query)) {
+			include_once('./lib/shop_lib.php');
+			global $shopper;
+
+			$time = time();
+			if ($time - $row['last_salary'] > 7 * 24 * 3600) {
+				$db->DoQuery("UPDATE {$prefix}users SET last_salary='$time'
+						WHERE username = '{$x7s->username}'");
+				pay($row['lvl'] * 10, $shopper, $x7s->username);
+			}
+		}
+	}
+	
+function cleanup_messages(){
 		global $db,$prefix,$x7c;
 		if($x7c->settings['expire_messages'] != 0){
 			//Here I keep max_room_messages for type 1 (normal) and 14 (mastering) messages
