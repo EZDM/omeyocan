@@ -49,7 +49,7 @@
 			if ($time - $row['last_salary'] > 7 * 24 * 3600) {
 				$db->DoQuery("UPDATE {$prefix}users SET last_salary='$time'
 						WHERE username = '{$x7s->username}'");
-				pay($row['lvl'] * 10, $shopper, $x7s->username);
+				pay($row['lvl'] * 10, $shopper, $x7s->username, false, true, 0);
 			}
 		}
 	}
