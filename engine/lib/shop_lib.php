@@ -254,7 +254,8 @@ $GLOBALS['start_cogs'] = 30;
 
 	}
 
-	function pay($qty, $from, $to, $check_only=false, $only_equipped=true) {
+	function pay($qty, $from, $to, $check_only=false, $only_equipped=true,
+			$equip=1) {
 		global $db, $prefix, $money_group, $money_group_size, $money_name, $shopper;
 
 		$space_required = (($qty / $money_group) + 1) * $money_group_size;
@@ -267,7 +268,7 @@ $GLOBALS['start_cogs'] = 30;
 	
 		include_once('./lib/sheet_lib.php');
 		// Shopper has infinite space
-		if ($to != $shopper) {
+		if ($to != $shopper && $equip) {
 			if (get_user_space($to) - $space_required < 0)
 				return "Spazio non sufficiente per ricevere i soldi<br>";
 		}
@@ -276,14 +277,14 @@ $GLOBALS['start_cogs'] = 30;
 			return;
 
 		remove_money($qty, $from);
-		assign_money($qty, $to);
+		assign_money($qty, $to, $equip);
 
 		include_once("./lib/alarms.php");
 		record_payment($from, $to, $qty);
 		return "Pagamento effettuato<br>";
 	}
 
-	function assign_money($qty, $pg) {
+	function assign_money($qty, $pg, $equipped=1) {
 		global $db, $prefix, $money_name, $money_group, $money_group_size, $shopper;
 		
 		// Shopper does not split money
@@ -314,7 +315,7 @@ $GLOBALS['start_cogs'] = 30;
 						'$pg',
 						'$qty',
 						'{$row_money['image_url']}',
-						'1',
+						'$equipped',
 						'$money_group_size')");	
 
 			}
@@ -341,7 +342,7 @@ $GLOBALS['start_cogs'] = 30;
 						'$pg',
 						'$assign',
 						'{$row_money['image_url']}',
-						'1',
+						'$equipped',
 						'$money_group_size')");	
 
 			$to_move -= $money_group;
