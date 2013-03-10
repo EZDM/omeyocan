@@ -28,7 +28,7 @@
 $GLOBALS['max_items'] = 50;
 $GLOBALS['shopper'] = "_shopper_";
 $GLOBALS['money_name'] = "Kreds";
-$GLOBALS['money_group'] = 1000;
+$GLOBALS['money_group'] = 100000;
 $GLOBALS['money_group_size'] = 1;
 $GLOBALS['base_money'] = 100000;
 $GLOBALS['evaluate_cost'] = 10;
