@@ -38,6 +38,9 @@
   function pay_salary() {
 		global $db, $prefix, $x7s;
 
+		if (!$x7s->username || $x7s->username == '')
+			return;
+
 		$query = $db->DoQuery("SELECT last_salary, lvl FROM {$prefix}users
 				WHERE username = '{$x7s->username}'");
 
