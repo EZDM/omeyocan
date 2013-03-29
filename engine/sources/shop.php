@@ -49,6 +49,11 @@ function get_object_list($user, $start_from) {
 	if ($user == $shopper)
 		$trade_action = "buy[]";
 
+	if ($user == $shopper && !isset($_GET['category'])) {
+		$body .= "<tr><td>Seleztiona una categoria</td></tr>";
+		return $body;
+	}
+
 	if ($user == $shopper) {
 		$query = $db->DoQuery("
 				SELECT *, count(*) as qty FROM {$prefix}objects
