@@ -1286,7 +1286,7 @@ _gaq.push(['_trackPageview']);
 				$hunters = array();
 				while (($file = readdir($dh)) !== false) {				
 					if($file[0]!="." && filetype($path.$file)!="dir" &&
-							preg_match("/.*\.jpg/i", $file)){
+							preg_match("/.*\.(jpg|gif|png|jpeg)/i", $file)){
 						$hunters[] = $hunt_path.$file;
 					}
 				}
