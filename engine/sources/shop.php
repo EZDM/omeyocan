@@ -51,6 +51,7 @@ function get_object_list($user, $start_from) {
 
 	if ($user == $shopper && !isset($_GET['category'])) {
 		$body .= "<tr><td>Seleziona una categoria</td></tr>";
+		$body .= "</table>";
 		return $body;
 	}
 
