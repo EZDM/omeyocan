@@ -50,7 +50,7 @@ function get_object_list($user, $start_from) {
 		$trade_action = "buy[]";
 
 	if ($user == $shopper && !isset($_GET['category'])) {
-		$body .= "<tr><td>Seleztiona una categoria</td></tr>";
+		$body .= "<tr><td>Seleziona una categoria</td></tr>";
 		return $body;
 	}
 
