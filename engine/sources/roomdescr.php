@@ -30,7 +30,16 @@
 		
 		$page='';
 		
-		$body = roomdescr();
+    $body = '<script type="text/javascript" language="javascript">
+			function apri_negozio() {
+			   hndl = window.open("index.php?act=shop","shop",
+						 "width=800,height=720, toolbar=no, status=no, location=no, menubar=no, resizable=no, scrollbars=no");
+				 hndl.focus();
+			}
+			</script>
+			';
+
+		$body .= roomdescr();
 			
 			
 		print_page($body);
