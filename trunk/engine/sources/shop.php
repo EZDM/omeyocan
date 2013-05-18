@@ -43,8 +43,10 @@ function get_object_list($user, $start_from) {
 	$start_limit = ($start_from - 1) * $max_items;
 
 	$category_query="";
-	if (isset($_GET['category']) && $_GET['category'])
+	if (isset($_GET['category']) && $_GET['category']) {
+		if ($_GET['category'] != '_tutto_')
 		$category_query = "AND category='{$_GET['category']}'";
+	}
 
 	if ($user == $shopper)
 		$trade_action = "buy[]";
@@ -165,8 +167,12 @@ function get_navigator($user) {
 
 	$category_query="";
 	if (isset($_GET['category']) && $_GET['category']) {
-		$category_query = "AND category='{$_GET['category']}'";
+		if ($_GET['category'] != '_tutto_') {
+			$category_query = "AND category='{$_GET['category']}'";
+		}
 		$url_add .= "&category=$_GET[category]";
+	} else {
+		return;
 	}
 
 	if ($user == $shopper) {
@@ -316,7 +322,7 @@ function show_shop() {
 		<input class="button" type="submit" value="Compra">
 		Categoria:
 		<select class="button" onChange="javascript: category_change(this);">
-		<option value="">Tutto</option>
+		<option value="_tutto_">Tutto</option>
 		'.$categories.'
 		</select>
 		</div>
