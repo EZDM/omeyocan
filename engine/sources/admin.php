@@ -2109,12 +2109,23 @@ function admincp_master(){
 				$error = "Valore negativo non permesso";
 
 			if (isset($_POST['username']) && $_POST['username']) {
-				$query = $db->DoQuery("SELECT username FROM {$prefix}users
-						WHERE username='$_POST[username]'");
-				$row_usr = $db->Do_Fetch_Assoc($query);
+				if ($_POST['username'] == '__all__') {
+					$recent = time() - 3600 * 24 * 60;  # Two months
+					$query = $db->DoQuery("SELECT username FROM {$prefix}users
+							WHERE time > $recent ORDER BY username");
+					$error = '';
+					while($row = $db->Do_Fetch_Assoc($query)) {
+						$error .= $row['username'] . '<br>';
+						pay($amount, $shopper, $row['username']);
+					}
+				} else {
+					$query = $db->DoQuery("SELECT username FROM {$prefix}users
+							WHERE username='$_POST[username]'");
+					$row_usr = $db->Do_Fetch_Assoc($query);
 
-				if(!$row_usr){
-					$error = "Utente non esistente";
+					if(!$row_usr){
+						$error = "Utente non esistente";
+					}
 				}
 			}
 
@@ -2172,6 +2183,23 @@ function admincp_master(){
 				<tr>
 				<td>Ammontare:</td>
 				<td><input type="text" name="amount" class="text_input"></td>
+				<td><div align="center"><input type="submit" value="Paga"
+				class="button"></div></td>
+				</tr>
+				<tr><td colspan=3>
+				<b>I soldi verranno prelevati dalle riserve.</b>
+				</td></tr>
+				</form>';
+
+		$body .= '<form action="./index.php?act=adminpanel&cp_page=money&pay"
+				method="post">
+				<tr><td>&nbsp;</td></tr>
+				<tr><td>&nbsp;</td></tr>
+				<tr>
+				<td>Paga tutti (verrano pagati solo i giocatori che si sono collegati 
+						nei due mesi precedenti):</td>
+				<td><input type="hidden" name="username" value="__all__">
+				<input type="text" name="amount" class="text_input"></td>
 				<td><div align="center"><input type="submit" value="Paga"
 				class="button"></div></td>
 				</tr>

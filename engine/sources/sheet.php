@@ -196,8 +196,7 @@ function sheet_page_equip(){
 					$_POST['grants'], $obj);
 		}
 		else{
-			$errore .= assign_object($_POST['id'], $_POST['owner'], false, $pg,
-					$_POST['grants']);
+			$errore .= assign_object($_POST['id'], $_POST['owner'], false, $pg);
 		}
 	}
 
