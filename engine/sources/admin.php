@@ -1171,9 +1171,14 @@ function admincp_master(){
 				// Make sure the group is empty
 				$query = $db->DoQuery("SELECT * FROM {$prefix}groups WHERE usergroup='$_GET[delete]'");
 				$row = $db->Do_Fetch_Row($query);
+				$query = $db->DoQuery("SELECT * FROM {$prefix}ability WHERE corp='$_GET[delete]'");
+				$row2 = $db->Do_Fetch_Row($query);
 				if($row[0] != ""){
 					$body .= "$txt[420]<Br><Br>";
-				}else{
+				}elseif($row2[0] != ""){
+					$body .= "Rimuovere tutte le abilita' di gremios prima di cancellare<Br><Br>";
+				}
+				else{
 					$db->DoQuery("DELETE FROM {$prefix}permissions WHERE usergroup='$_GET[delete]'");
 					$body .= "$txt[421]<Br><Br>";
 				}
@@ -3422,7 +3427,8 @@ function admincp_master(){
 			<form>Seleziona la gremios:
 			<select onChange=\"location='index.php?act=adminpanel&cp_page=abilities&group='+this.options[this.selectedIndex].value\">\n";
 
-		$query = "SELECT usergroup FROM {$prefix}permissions WHERE gremios='1'";
+		$query = "SELECT usergroup FROM {$prefix}permissions WHERE gremios='1'
+			ORDER BY usergroup";
 		$result = $db->DoQuery($query);
 		$usergroup_list = array();
 
