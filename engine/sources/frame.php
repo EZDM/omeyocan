@@ -751,6 +751,7 @@ _gaq.push(['_trackPageview']);
 <script language="javascript" type="text/javascript">
   listhash = '';
   startfrom = 0;
+	first_sound = 0;
   newMail = 0;
   max_panic= <?PHP echo $x7s->max_panic;?>;
   cur_msg='';
@@ -817,7 +818,6 @@ _gaq.push(['_trackPageview']);
                   dataSubArray2[x2] = restoreText(dataSubArray2[x2]);
                 }
               }
-              playSound = 2;
 
             }else if(dataSubArray[0] == '3'){
               // Users for userlist
@@ -828,8 +828,6 @@ _gaq.push(['_trackPageview']);
                   dataSubArray2[x2] = restoreText(dataSubArray2[x2]);
                 }
               }
-
-              playSound = 2;
 
             }else if(dataSubArray[0] == '4'){
               // Listhash update
@@ -939,11 +937,12 @@ _gaq.push(['_trackPageview']);
 
           if(<?PHP echo $x7c->settings['disable_sounds']; ?> != 1 && playSound != 0){
 
-            if(playSound == 1){
-              try { document.snd_msg.Play(); } catch(e) {}
-            }else{
-              try { document.snd_enter.Play(); } catch(e) {}
+            if(first_sound != 0 && document.chatIn.sound.checked){
+              try { PlayChat(); } catch(e) {}
             }
+						if (first_sound == 0) {
+							first_sound = 1;
+						}
 
           }
         }
@@ -1437,6 +1436,8 @@ _gaq.push(['_trackPageview']);
       onMouseOver="this.style.background='url(<?PHP echo $print->image_path; ?>send_over.gif)'" value="<?PHP echo $txt[181]; ?>">
 		<input name="autosend" type="checkbox" checked 
 			onMousemove="ShowPopup(event, this,'Invia con Enter');" onMouseout="HidePopup(this);">
+		<input name="sound" type="checkbox" checked 
+			onMousemove="ShowPopup(event, this,'Suono chat');" onMouseout="HidePopup(this);">
 
 <?PHP
     if($x7c->permissions['write_master']){
