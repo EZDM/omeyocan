@@ -79,7 +79,7 @@
 		$typed = $x7c->settings['news'];
 	  $animation_style = '';
 		if(isset($failmsg) && $failmsg) {
-			$typed = $failmsg;
+			$typed = htmlentities($failmsg, ENT_QUOTES);;
 			$animation_style = ' style="color: red;"';
 		}
 
