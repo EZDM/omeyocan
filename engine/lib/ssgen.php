@@ -732,7 +732,7 @@
 				left: 528px;
 				text-align: left;
         width: 500px;
-        height: 720px;
+        height: 700px;
 				overflow: auto;
 			}
 		</style>";
