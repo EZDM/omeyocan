@@ -178,6 +178,15 @@
 						<a href="index.php?act=register&disclaimer_done">
 							Prosegui
 						</a>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
 						</div>
 				</div>
 				';
@@ -200,7 +209,7 @@
 				  '.$register_class.'
 				</div>
 				<div id="class_choice">
-				<table width=100%>
+				<table>
 				<tr>
 				  <td>
 					<a href="index.php?act=register&base_group=Tecnico">
