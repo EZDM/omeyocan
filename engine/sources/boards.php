@@ -28,8 +28,12 @@
 	
 	//This is the main function called by the index.php
 	function board_main(){
-		global $x7c, $x7s, $db, $prefix, $x7p;
+		global $x7c, $x7s, $db, $prefix, $x7p, $print;
 
+
+		if($x7c->settings['panic']) {
+			$print->board_window("","","");
+		}
 
 		udpate_unread();
 		

@@ -67,6 +67,7 @@
 	
 	function gen_css($data,$skin){	
 		// Generate the Style information
+		global $x7c;
 		$css = "<style type=\"text/css\">
 			BODY {
 				color: white;
@@ -144,7 +145,13 @@
 				text-align: left;
 			}
 			#board_wrapper{
-				background-image:url(./graphic/sfondobacheca.jpg);
+				background-image:url(";
+				if($x7c->settings['panic'])
+					$css .= "./graphic/sfondobachecaobscure.jpg";
+				else
+					$css .=	"./graphic/sfondobacheca.jpg";
+					
+				$css.=");
 				width: 800px; 
 				height: 620px;
 				position:relative;
