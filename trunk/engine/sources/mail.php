@@ -67,7 +67,7 @@
 				else{
 					$person_error = false;
 				}
-				
+
 				//Group send
 				if(isset($_POST['group'])){
 					if(!checkIfMaster() && !in_array($_POST['to'], $x7p->profile['usergroup'])){
@@ -125,6 +125,11 @@
 				if(isset($_POST['msg']))
 					$_POST['msg'] = eregi_replace("<Br>","\n",$_POST['msg']);
 
+			}elseif(isset($_POST['delete_group'])){
+				$body = "<div id=\"sysmsg\">Messaggio cancellato</div>";
+				foreach($_POST['delete_group'] as $delete){
+					offline_delete($delete);
+				}
 			}elseif(isset($_GET['delete'])){
 				$body = "<div id=\"sysmsg\">Messaggio cancellato</div>";
 				offline_delete($_GET['delete']);
@@ -206,27 +211,36 @@
 			}else if(!isset($_GET['write'])){
 				// Display a table of all messages
 
+				//jingjing add here
 				$body .= "
-                                        <script>
-                                        function do_delete(){
-							url = './index.php?act=mail&delete=_all_';
-							if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
-									return;
-                                                        window.location.href=url;
-                                        }
-                                        </script>
-                                        
+					<script>
+					function do_delete_all(){
+						url = './index.php?act=mail&delete=_all_';
+						if(!confirm('vuoi davvero cancellare tutti i messaggi?'))
+							return;
+						window.location.href=url;
+					}
+					function do_delete(){
+						document.forms['message_form'].submit();
+					}
+				</script>";
+
+			
+
+				$body .= "<form action='index.php?act=mail' method='POST' name='message_form'>
                                         <div id=\"message_tbl\">
 						<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">
 						<tr>
-							<th>&nbsp;</td>
-							<th>$txt[178]</td>
-							<th>$txt[179]</td>
-							<th>Data</td>
-							<th>&nbsp;</td>
+							<th>&nbsp;</th>
+							<th>&nbsp;</th>
+							<th>$txt[178]</th>
+							<th>$txt[179]</th>
+							<th>Data</th>
 						</tr>
 
 						";
+      
+
 
 				foreach($msgs as $id=>$val){
 					$mid = $id;
@@ -243,17 +257,20 @@
 						$img = "<img src=\"{$print->image_path}old_mail.gif\">";
 
 					$body .= "<tr>
+						    <td class=\"dark_row\"><input type=\"checkbox\" 
+								name=\"delete_group[]\" value=\"$mid\"></td>
 								<td class=\"dark_row\">$img</td>
 								<td class=\"dark_row\"><a href=\"./index.php?act=mail&read=$mid\">$subject</a></td>
 								<td class=\"dark_row\">$author</td>
 								<td class=\"dark_row\">$time</td>
-								<td class=\"dark_row\"><a href=\"./index.php?act=mail&delete=$mid\">[$txt[175]]</a></td>
-							</tr>";
+								</tr>";
 				}
 
+				
 				$body .= "</table>
 					</div>";
 
+				
 				// Display Inbox totals
 				if($x7c->settings['max_offline_msgs'] != 0){
 					$number = count_offline($x7s->username);
@@ -268,17 +285,22 @@
 					$body .= "<Br><br>$txt[185]";
 
 				}
+				
 				$body .= '<div id="menu"><a href="./index.php?act=mail&write">[Scrivi]</a>';
-				 
 				if(checkIfMaster() || $x7s->user_group != $x7c->settings['usergroup_default']){
 					$body .= '<a href="./index.php?act=mail&write&group">[Mail di gruppo]</a>';
 				} 
 				else{
 					$body .= '[Mail di gruppo]';
 				}
-				$body .= '<a href="#" onClick="do_delete()">[Cancella tutti]</a>';
+
+				$body .= "<a href='#' onClick=\"do_delete()\">[Cancella]</a>";
+			
+				$body .= '<a href="#" onClick="do_delete_all()">[Cancella tutti]</a>';
 				 
 				 $body .= "\n</div>";
+
+				 $body .="</form>";
 
 			}
 
