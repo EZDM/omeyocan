@@ -60,7 +60,9 @@
 		global $x7s, $db, $prefix, $x7c, $txt;
 		$time = time();
 		
-		$body_parsed = parse_message($body);
+		// This is used for hunt mode
+		$allow_user_img = ($sussurro == 3);
+		$body_parsed = parse_message($body, 0, $allow_user_img);
 		if($sussurro == 0){
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username',
 				'1','$body','$body_parsed','$room','$time')");
@@ -100,7 +102,7 @@
 						$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','10','$body','$user[1]:$body_parsed','$room','$time')");
 				}
 			}
-		}else if($sussurro == 2){
+		}else if($sussurro == 2 || $sussurro == 3){
 			//Mastering message
 			$db->DoQuery("INSERT INTO {$prefix}messages VALUES('0','$x7s->username','14','$body','$body_parsed','$room','$time')");
 		}
@@ -194,7 +196,7 @@
 	}
 
 	// Parses styles
-	function parse_message($message,$sysmsg=0){
+	function parse_message($message,$sysmsg=0,$allow_user_img=0){
 		global $x7s, $x7c, $db, $prefix;
 		// We look for the following tags:
 		
@@ -365,7 +367,7 @@
 			
 			while(preg_match($img_regexp,$message, $img_url)){
 
-				if($x7c->permissions['write_master']){
+				if($x7c->permissions['write_master'] || $allow_user_img){
 					if(preg_match("/swf$/i",$img_url[1])){
 						//This is specific for the server! (works only if the URL root and the DOCUMENT_ROOT point to the same place)
 						$file = $_SERVER['DOCUMENT_ROOT'].$img_url[1];
@@ -406,9 +408,9 @@
 		
 			}
 			
-			if(eregi("^\*",@$_POST['msg'])){
+			if(eregi("^\*", $message)){
 				$message = preg_replace("/^\*/", "", $message);
-				if($x7c->permissions['admin_panic'])
+				if($x7c->permissions['admin_panic'] || $allow_user_img)
 					$message = "<div class=\"mastering\">".$message."</div>";
 				else if($x7c->permissions['write_master'])
 					$message = "<div class=\"ambient\">".$message."</div>";
