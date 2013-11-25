@@ -99,6 +99,11 @@
 				else
 					$def['panic_free'] = "";
 
+				if($x7c->room_data['hunt'] == 1)
+					$def['hunt'] = " CHECKED";
+				else
+					$def['hunt'] = "";
+
 				$body = "<Br><Br><form action=\"index.php?act=roomcp&cp_page=settings&room=$_GET[room]\" method=\"post\">
 				<table width=\"100%\" align=\"center\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">
 					<tr>
@@ -161,6 +166,11 @@
 						</tr>";
 						
 				$body .= "<tr>
+								<td>Stanza hunt (random avatar):</td>
+								<td><input type=\"checkbox\" name=\"hunt\" value=\"1\"{$def['hunt']}></td>
+						</tr>";
+						
+				$body .= "<tr>
 							<td colspan=\"2\"><Br><div align=\"center\"><input type=\"submit\" class=\"text_input\" value=\"$txt[187]\"></div></td>
 						</tr></form></table>";
 
@@ -187,11 +197,14 @@
 				if(!isset($_POST['panic_free']))
 					$_POST['panic_free']=0;
 
-                                //We enable html formatting for the topic field
-                                $_POST['topic'] = preg_replace("/&lt;/i","<",$_POST['topic']);
-                                $_POST['topic'] = preg_replace("/&gt;/i",">",$_POST['topic']);
-                                $_POST['topic'] = preg_replace("/&quot;/i","\"",$_POST['topic']);
-				
+				if(!isset($_POST['hunt']))
+					$_POST['hunt']=0;
+
+				//We enable html formatting for the topic field
+				$_POST['topic'] = preg_replace("/&lt;/i","<",$_POST['topic']);
+				$_POST['topic'] = preg_replace("/&gt;/i",">",$_POST['topic']);
+				$_POST['topic'] = preg_replace("/&quot;/i","\"",$_POST['topic']);
+
 				// Order `em up
 				$new_settings[] = $_POST['room_type'];
 				$new_settings[] = $_POST['moderated'];
@@ -203,6 +216,7 @@
 				$new_settings[] = $_POST['image_url'];
 				$new_settings[] = $_POST['panic_free'];
 				$new_settings[] = $_POST['long_name'];
+				$new_settings[] = $_POST['hunt'];
 
 				
 				
