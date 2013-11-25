@@ -405,7 +405,10 @@
 			global $db, $prefix, $x7s;
 			// It is this functions job to get room information
 			if($room != ""){
-				$query = $db->DoQuery("SELECT name,type,moderated,topic,greeting,password,maxusers,ops,voiced,id,time,logged,background,logo,panic_free,long_name,shadow FROM {$prefix}rooms WHERE name='$room'");
+				$query = $db->DoQuery("SELECT name,type,moderated,topic,greeting,".
+						"password,maxusers,ops,voiced,id,time,logged,background,".
+						"logo,panic_free,long_name,shadow,hunt ".
+						"FROM {$prefix}rooms WHERE name='$room'");
 				$row = $db->Do_Fetch_Row($query);
 			}else{
 				$row[0] = "";
@@ -431,6 +434,7 @@
 				$this->room_data['panic_free'] = "";
 				$this->room_data['long_name'] = "";
 				$this->room_data['shadow'] = 0;
+				$this->room_data['hunt'] = 0;
 			}else{
 				// User is in a room!
 				$this->room_name = $row[0];
@@ -451,6 +455,7 @@
 				$this->room_data['panic_free'] = $row[14];
 				$this->room_data['long_name'] = $row[15];
 				$this->room_data['shadow'] = $row[16];
+				$this->room_data['hunt'] = $row[17];
 
 				// Replace special symbals in the greeting with values
 				$this->room_data['greeting'] = eregi_replace("%u",$x7s->username,$this->room_data['greeting']);

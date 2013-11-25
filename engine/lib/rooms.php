@@ -66,7 +66,7 @@
 	}
 	
 	// This function creates a new room
-	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$panic_free, $long_name){
+	function create_room($uid,$name,$type,$moded,$topic,$greet,$pass,$max,$panic_free, $long_name,$hunt){
 		global $prefix, $db;
 		$ops = "$uid";
 		$voice = "$uid";
@@ -75,8 +75,8 @@
 		room_modification($name);
 
 		$db->DoQuery("INSERT INTO {$prefix}rooms 
-		(id, name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, logo, panic_free, long_name, shadow)
-		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','0','$ops','$voice','1','','','$panic_free','$long_name', '0')");
+		(id, name, type, moderated, topic, greeting, password, maxusers, time, ops, voiced, logged, background, logo, panic_free, long_name, shadow, hunt)
+		VALUES(0, '$name','$type','$moded','$topic','$greet','$pass','$max','0','$ops','$voice','1','','','$panic_free','$long_name', '0', '$hunt')");
 		
 		//We also create the master key for the access
 		if($type==2){
@@ -100,7 +100,13 @@
 		include_once('./lib/alarms.php');
 		room_modification($room);
 
-		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',moderated='$new_settings[1]',topic='$new_settings[2]',greeting='$new_settings[3]',password='$new_settings[4]',maxusers='$new_settings[5]',background='$new_settings[6]',logo='$new_settings[7]', panic_free='$new_settings[8]', long_name='$new_settings[9]' WHERE name='$room'");
+		$db->DoQuery("UPDATE {$prefix}rooms SET type='$new_settings[0]',".
+				"moderated='$new_settings[1]',topic='$new_settings[2]',".
+				"greeting='$new_settings[3]',password='$new_settings[4]',".
+				"maxusers='$new_settings[5]',background='$new_settings[6]',".
+				"logo='$new_settings[7]', panic_free='$new_settings[8]',".
+				"long_name='$new_settings[9]',hunt='$new_settings[10]' ".
+				"WHERE name='$room'");
 		
 		//We also create the master key for the access
 		if($new_settings[0]==2){
