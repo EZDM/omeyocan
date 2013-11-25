@@ -708,6 +708,33 @@
           WHERE username='$x7s->username'");
 
 
+			// Set a random avatar
+			if($x7c->room_data['hunt']) {
+				$hunt_dir = '/images/random_hunt';
+				$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
+				$hunt_uri=dirname($_SERVER['PHP_SELF']).$hunt_dir;
+				$path = $basedir.$hunt_dir;
+
+				if ($dh = opendir($path)) {
+					while (($file = readdir($dh)) !== false) {
+						if (filetype($path.'/'.$file) != 'dir') {
+							$file_array[]=$file;
+						}
+					}
+				  sort($file_array);
+
+					// Reset at 4am.
+					$stable_seed = date("Ymd", time() + 14400);
+					// Use registration date as unique seed for the user
+					srand($x7s->reg_date + $stable_seed);
+					$avatar_index = rand(0, count($file_array) - 1);
+
+					$hunt_avatar = $hunt_uri.'/'.$file_array[$avatar_index];
+					$db->DoQuery("UPDATE {$prefix}users SET hunt_avatar = '$hunt_avatar'
+							WHERE username = '{$x7s->username}'");
+
+				}
+			}
       //Here we start with HTML
       echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
       echo "<html dir=\"$print->direction\"><head>
