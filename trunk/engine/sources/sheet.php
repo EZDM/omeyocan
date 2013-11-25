@@ -1340,7 +1340,18 @@ function sheet_page_main(){
 		<div class=\"indiv\" id=\"avatar\"><a class=\"dark_link\" onClick=\"javascript: hndl = window.open('index.php?act=mail&write&to=$row_user[username]','MsgCenter','location=no,menubar=no,resizable=no,status=no,toolbar=no,scrollbars=yes,width=488,height=650'); hndl.focus();\">
 		";
 
-	if($row_user['avatar']!='')
+	// Check if the user is in hunt mode.
+	$query = $db->DoQuery("SELECT r.hunt AS hunt FROM {$prefix}rooms r,
+			{$prefix}online o
+			WHERE r.name = o.room AND o.name = '$pg'");
+	$is_hunt = 0;
+	if ($row_hunt = $db->Do_Fetch_Assoc($query)) {
+		$is_hunt = $row_hunt['hunt'];
+	}
+
+	if($is_hunt)
+		$body .= "<img src=\"$row_user[hunt_avatar]\" width=200 height=200 />";
+	elseif($row_user['avatar']!='')
 		$body .= "<img src=\"$row_user[avatar]\" width=200 height=200 />";
 	else
 		$body .= "<img src=\"{$x7c->settings['default_avatar']}\" width=200 height=200 />";
