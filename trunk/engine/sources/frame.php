@@ -734,6 +734,10 @@
 							WHERE username = '{$x7s->username}'");
 
 				}
+
+				$parsed_msg = "* Hunter {$x7s->username} entered as &pound;$hunt_avatar;";
+        include_once("./lib/message.php");
+        send_message($parsed_msg,$x7c->room_name, 3);
 			}
       //Here we start with HTML
       echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
