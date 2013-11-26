@@ -710,7 +710,7 @@
 
 			// Set a random avatar
 			if($x7c->room_data['hunt']) {
-				$hunt_dir = '/images/random_hunt';
+				$hunt_dir = '/images/random_img';
 				$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 				$hunt_uri=dirname($_SERVER['PHP_SELF']).$hunt_dir;
 				$path = $basedir.$hunt_dir;
