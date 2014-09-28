@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Ospedale</title>
+    <LINK REL="SHORTCUT ICON" HREF="../favicon.ico">
+    <style type="text/css">
+      div{
+        background-color: transparent;
+        position: absolute;
+      }
+      body{
+        margin: 0;
+      }
+
+      #container{
+        width: 600px;
+        height: 376px;
+        background-image:url('../graphic/sub-base-fazione.jpg');
+      }
+
+			#top_floors{
+        left: 0px;
+        top: 120px;
+        width: 142px;
+        height: 56px;
+      }
+
+      #mid_floors{
+        left: 0px;
+        top: 173px;
+        width: 142px;
+        height: 56px;
+      }
+
+      #low_floors{
+        left: 0px;
+        top: 230px;
+        width: 142px;
+        height: 56px;
+      }
+
+      #outside{
+        left: 0px;
+        top: 285px;
+        width: 142px;
+        height: 56px;
+      }
+
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        function go_there(url){
+              opener.location.href=url;
+              window.close(self);
+        }
+    </script>
+
+  </head>
+  <body>
+      <div id="container">
+        <a href="#" onClick="go_there('../index.php?act=frame&room=FazioneTop')"><div id="top_floors"></div></a>
+        <a href="#" onClick="go_there('../index.php?act=frame&room=FazioneMid')"><div id="mid_floors"></div></a>
+        <a href="#" onClick="go_there('../index.php?act=frame&room=FazioneLow')"><div id="low_floors"></div></a>
+        <a href="#" onClick="go_there('../index.php?act=frame&room=FazioneOutside')"><div id="outside"></div></a>
+
+      </div>
+  </body>
+</html>
