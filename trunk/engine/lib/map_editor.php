@@ -123,18 +123,13 @@ If not, see <http://www.gnu.org/licenses/>
 		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 		$path=$basedir."/sources/";
 		$site_path=dirname($_SERVER['PHP_SELF'])."/sources/";
-		
-		if($dh = opendir($path)){
-			while (($file = readdir($dh)) !== false) {				
-				if($file[0]!="." && filetype($path.$file)!="dir" && eregi("sub.*\.html", $file)){
-					$link_selection_static .= "<option value=\"$site_path$file\">$file</option>";
-				}
-				
+
+		foreach (scandir($path, SCANDIR_SORT_ASCENDING) as $file) {				
+			if($file[0]!="." && filetype($path.$file)!="dir" && eregi("sub.*\.html", $file)){
+				$link_selection_static .= "<option value=\"$site_path$file\">$file</option>";
 			}
-			
-			closedir($dh);
 		}
-		
+
 		$basedir=dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']);
 		$path=$basedir."/graphic/map/";
 		
