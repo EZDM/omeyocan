@@ -263,6 +263,7 @@ function admincp_master(){
 
 				// Update settings
 				update_setting("news",$_POST['news']);
+				update_setting("floating_text",$_POST['floating_text']);
 
 				$body = $txt[343];
 
@@ -723,6 +724,10 @@ function admincp_master(){
 					<tr>
 					<td width=\"100\">$txt[262]: </td>
 					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"news\" value=\"{$def_settings['news']}\"></td>
+					</tr>
+					<tr>
+					<td width=\"100\">Testo in mappa: </td>
+					<td width=\"100\"><input type=\"text\" class=\"text_input\" name=\"floating_text\" value=\"{$def_settings['floating_text']}\"></td>
 					</tr>
 					<tr>
 					<td width=\"100\">$txt[380]: </td>
