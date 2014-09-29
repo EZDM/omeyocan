@@ -191,7 +191,7 @@ _gaq.push(['_trackPageview']);
 						listhash = '';
 						startfrom = 0;
 						newMail = 0;
-						function do_initial_efresh(){
+						function do_initial_refresh(){
 							// Create object
 							if(window.self.name == ''){
 								<?PHP
