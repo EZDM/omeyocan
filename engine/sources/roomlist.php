@@ -347,12 +347,13 @@ _gaq.push(['_trackPageview']);
 						// ENTER TEXT BELOW. CAN *NOT* INCLUDE NORMAL HTML CODE. 
 
 						var text='<?PHP echo addslashes(html_entity_decode($x7c->settings['floating_text'], ENT_QUOTES));?>'; 
+						text = ' ';
 
 						var delay=40; // SPEED OF TRAIL 
 						var Xoff=0; // PIXEL COUNT FROM THE LEFT OF THE CURSOR (- VALUES GO TO LEFT) 
 						var Yoff=-30; // PIXEL COUNT FROM THE TOP OF THE CURSOR (- VALUES GO UP) 
 						var txtw=14; // AMOUNT OF PIXEL SPACE EACH CHARACTER OCCUPIES 
-						var beghtml='<font id="floating_text"><b>'; // OPTIONAL HTML CODE THAT EFFECTS WHOLE TEXT STRING SUCH AS FONT COLOR, SIZE, ETC. 
+						var beghtml='<font  id="floating_text"><b>'; // OPTIONAL HTML CODE THAT EFFECTS WHOLE TEXT STRING SUCH AS FONT COLOR, SIZE, ETC. 
 						var endhtml='<\/b><\/font>'; // END HTML CODE. MOSTLY USED IF ABOVE SETTING IS USED. 
 
 						//********** NON MODIFICARE NULLA DA QUESTA RIGA IN AVANTI **********\\ 
@@ -362,7 +363,11 @@ _gaq.push(['_trackPageview']);
 						ie5 = (document.all && document.getElementById)? true : false; 
 						ns6 = (document.getElementById && navigator.appName.indexOf("Netscape")>=0 )? true: false; 
 						var txtA=new Array(); 
-						text=text.split(''); 
+						if (text.length > 0) {
+							text=text.split('');
+						} else {
+							text = new Array();
+						}
 						var x1=0; 
 						var y1=-1000; 
 						var t=''; 
