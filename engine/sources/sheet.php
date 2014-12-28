@@ -1242,7 +1242,7 @@ function sheet_page_main(){
 
 
 	$gender = $row_user['gender'] == 0 ? "M":"F";
-	$group = $row_user['user_group'];
+	$group = $row_user['base_group'];
 	$date = date("j/n/Y",$row_user['iscr']);
 
 

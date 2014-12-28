@@ -362,6 +362,7 @@
 
 			.citizen_banner {
 				opacity: 0.4;
+				height: 610px;
 			}
 
 			#register_table {
