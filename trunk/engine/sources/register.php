@@ -212,29 +212,24 @@
 				<table>
 				<tr>
 				  <td>
-					<a href="index.php?act=register&base_group=Tecnico">
-					<img src="./graphic/class_tech.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=Umano">
+					<img src="./graphic/adam_el.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 					</a></td>
 				  <td>
-					<a href="index.php?act=register&base_group=Diplomatico">
-					<img src="./graphic/class_dipl.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=NeoUmano">
+					<img src="./graphic/neu_el.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 				  <td>
-					<a href="index.php?act=register&base_group=Spia">
-					<img src="./graphic/class_spy.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=NephEl">
+					<img src="./graphic/neph_el.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 				  <td>
-					<a href="index.php?act=register&base_group=Assaltatore">
-					<img src="./graphic/class_assault.jpg" class="citizen_banner"
-					onMouseOver="javascript: over(this);"
-					onMouseOut="javascript: restore(this)"></a></td>
-				  <td>
-					<a href="index.php?act=register&base_group=Neutro">
-					<img src="./graphic/class_neutro.jpg" class="citizen_banner"
+					<a href="index.php?act=register&base_group=ElBeth">
+					<img src="./graphic/beth_el.jpg" class="citizen_banner"
 					onMouseOver="javascript: over(this);"
 					onMouseOut="javascript: restore(this)"></a></td>
 				</tr>
