@@ -1,69 +1,98 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Omeyocan</title>
-<LINK REL="SHORTCUT ICON" HREF="./engine/favicon.ico">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Omeyocan</title>
+    <LINK REL="SHORTCUT ICON" HREF="../favicon.ico">
+    <style type="text/css">
+      div{
+        background-color: transparent;
+      }
+      body{
+        margin: 0;
+      }
 
-<script language="JavaScript" type="text/JavaScript">
-<!--
-function apriPopupCentrata(nome, titolo, lar, alt, feat){
-	var wdt = screen.width;
-	var hgt = screen.height;
-	var x = Math.round( (wdt / 2) - (lar / 2) );
-	var y = Math.round( (hgt / 2) - (alt / 2) );
-	window.open(nome, titolo, 'width=' + lar + ',height=' + alt + ',left=' + x + ',screenX=' + x + ',top=' + y + ',screenY=' + y +	',' + feat);
-}
+      #container{
+        width: 100%;
+        height: 100%;
+				text-align: center;
+				background-color: black;
+      }
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-18911231-1']);
-  _gaq.push(['_trackPageview']);
+			#menu{
+				position: relative;
+				margin: 0 auto;
+				width: 992px;
+				height: 703px;
+        background-image:url('img/bg_home.jpg');
+			}
 
-  (function() {
-		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-//-->
-</script>
+			#entra{
+				position: absolute;
+        left: 450px;
+        top: 446px;
+        width: 205px;
+        height: 55px;
+				margin: 0;
+      }
 
-<style type="text/css">
-body {background-color: #000; background-image: url(img/bg_home.jpg); background-repeat:no-repeat; margin:0 auto; background-position:center top; background-attachment:fixed}
-.help { text-align: center;}
-a  {font-size:12px; font-family:Arial, Helvetica, sans-serif;}
-a:link {  color: #999 }
-a:hover {  color: #CCC; text-decoration:none; }
-a:visited {  color: #999 }
-a:acticve {  color: #999 }
-</style>
+			#rules{
+				position: absolute;
+        left: 0px;
+        bottom: 0px;
+        width: 556px;
+        height: 156px;
+				margin: 0;
+      }
+			#forum{
+				position: absolute;
+				right: 0px;
+        bottom: 0px;
+        width: 436px;
+        height: 156px;
+				margin: 0;
+      }
 
-</HEAD>
-<BODY bgcolor="#000000">
-<div style="width:100%; height: 610px; margin: 0 auto;">
-<div style="width:992px; height:576px; margin: 0 auto; margin-top:25px">
-<OBJECT
-    classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-	codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0"
-	WIDTH="992" HEIGHT="576">s
-	<PARAM NAME=movie VALUE="enter_def.swf">
-	<PARAM NAME=quality VALUE=high>
-	<PARAM NAME=bgcolor VALUE=#000000>
- 	<EMBED
-		src="enter_def.swf"
-		quality=high
-		bgcolor=#000000
-		WIDTH="992"
-		HEIGHT="576"
-		TYPE="application/x-shockwave-flash"
-		PLUGINSPAGE="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash">
-	</EMBED>
-</OBJECT>
-</div>
-</div>
-<div class="help">
-<a onClick="apriPopupCentrata('engine', 'main', 1028, 728);" href="#">Entra</a>
-<a href="manual/">Manuale</a>
-</div>
-</BODY>
-</HTML>
+    </style>
 
+    <script language="javascript" type="text/javascript">
+		function apriPopupCentrata(nome, titolo, lar, alt, feat){
+			var wdt = screen.width;
+			var hgt = screen.height;
+			var x = Math.round( (wdt / 2) - (lar / 2) );
+			var y = Math.round( (hgt / 2) - (alt / 2) );
+			window.open(nome, titolo, 'width=' + lar + ',height=' + alt + ',left=' + x + ',screenX=' + x + ',top=' + y + ',screenY=' + y +	',' + feat);
+		}
+
+		function over(element, img) {
+		
+			if (img)
+				element.style.backgroundImage="url('"+img+"')";
+			else
+				element.style.backgroundImage="";
+
+
+		}
+
+    </script>
+
+  </head>
+  <body>
+      <div id="container">
+				<div id="menu">
+					<a href="#" onClick="apriPopupCentrata('engine', 'main', 1028, 728);">
+					<div id="entra"></div></a>
+
+					<a href="manual/">
+						<div id="rules" onmouseover="over(this, 'img/home_l.jpg')"
+						onmouseout="over(this, null)"></div>
+					</a>
+					<a href="hole/">
+						<div id="forum" onmouseover="over(this, 'img/home_r.jpg')"
+						onmouseout="over(this, null)"></div>
+					</a>
+				</div>
+
+
+      </div>
+  </body>
+</html>
