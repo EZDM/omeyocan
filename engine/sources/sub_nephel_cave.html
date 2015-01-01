@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Ospedale</title>
+    <LINK REL="SHORTCUT ICON" HREF="../favicon.ico">
+    <style type="text/css">
+      div{
+        background-color: transparent;
+        position: absolute;
+      }
+      body{
+        margin: 0;
+      }
+
+      #container{
+        width: 600px;
+        height: 376px;
+        background-image:url('../graphic/sub-nephel-cave.jpg');
+      }
+
+			#esterno{
+        left: 0px;
+        top: 120px;
+        width:127px;
+        height: 55px;
+      }
+			#impuria{
+        left: 0px;
+        top: 177px;
+        width:127px;
+        height: 55px;
+      }
+			#pozza{
+        left: 0px;
+        top: 285px;
+        width:125px;
+        height: 55px;
+      }
+
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        function go_there(url){
+              opener.location.href=url;
+              window.close(self);
+        }
+    </script>
+
+  </head>
+  <body>
+      <div id="container">
+        <a href="#" onClick="go_there('../index.php?act=frame&room=NephElEsterno')">
+				<div id="esterno"></div></a>
+        <a href="#" onClick="go_there('../index.php?act=frame&room=NephElImpuria')">
+				<div id="impuria"></div></a>
+        <a href="#" onClick="go_there('../index.php?act=frame&room=NephElPozza')">
+				<div id="pozza"></div></a>
+
+      </div>
+  </body>
+</html>
