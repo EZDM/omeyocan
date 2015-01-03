@@ -28,29 +28,31 @@
 
 			#entra{
 				position: absolute;
-        left: 450px;
-        top: 446px;
-        width: 205px;
-        height: 55px;
-				margin: 0;
+        left: 350px;
+        top: 120px;
+        width: 380px;
+        height: 380px;
       }
 
 			#rules{
 				position: absolute;
         left: 0px;
         bottom: 0px;
-        width: 556px;
-        height: 156px;
+        width: 569px;
+        height: 163px;
 				margin: 0;
       }
 			#forum{
 				position: absolute;
 				right: 0px;
         bottom: 0px;
-        width: 436px;
-        height: 156px;
+        width: 423px;
+        height: 163px;
 				margin: 0;
       }
+			#animated{
+				display: none;
+			}
 
     </style>
 
@@ -69,9 +71,20 @@
 				element.style.backgroundImage="url('"+img+"')";
 			else
 				element.style.backgroundImage="";
-
-
 		}
+
+		function animate_home() {
+			el = document.getElementById("animated");
+			el.src="img/bg_home.gif";
+			el.style.display="block";
+		}
+		function restore_home() {
+			el = document.getElementById("animated");
+			el.style.display="none";
+			el.src="";
+		}
+
+
 
     </script>
 
@@ -79,8 +92,10 @@
   <body>
       <div id="container">
 				<div id="menu">
+				  <img src="img/bg_home.gif" id="animated" />
 					<a href="#" onClick="apriPopupCentrata('engine', 'main', 1028, 728);">
-					<div id="entra"></div></a>
+					<div id="entra" onmouseover="animate_home()"
+					onmouseout="restore_home()"></div></a>
 
 					<a href="manual/">
 						<div id="rules" onmouseover="over(this, 'img/home_l.jpg')"
