@@ -193,47 +193,127 @@
 		}else if(!isset($_GET['base_group'])) {
 			include_once('./sources/register_intro.php');
 			$body = '
-				<script type="text/javascript">
-			
-				function over(img, popup) {
-					img.style.opacity = 1;
+		    <script type="text/javascript">	
+
+				function over(id) {
+					el = document.getElementById(id);
+					el.style.display = "block";
 				}
 
-				function restore(img, popup){
-					img.style.opacity = 0.4;
+				function restore(id){
+					el = document.getElementById(id);
+					el.style.display = "none";
 				}
 				</script>
 
 				<div id="register_banner">
-				<div id="class_descr">
-				  '.$register_class.'
-				</div>
 				<div id="class_choice">
-				<table>
-				<tr>
-				  <td>
-					<a href="index.php?act=register&base_group=Umano">
-					<img src="./graphic/adam_el.jpg" class="citizen_banner"
-					onMouseOver="javascript: over(this);"
-					onMouseOut="javascript: restore(this)"></a></td>
-					</a></td>
-				  <td>
-					<a href="index.php?act=register&base_group=NeoUmano">
-					<img src="./graphic/neu_el.jpg" class="citizen_banner"
-					onMouseOver="javascript: over(this);"
-					onMouseOut="javascript: restore(this)"></a></td>
-				  <td>
-					<a href="index.php?act=register&base_group=NephEl">
-					<img src="./graphic/neph_el.jpg" class="citizen_banner"
-					onMouseOver="javascript: over(this);"
-					onMouseOut="javascript: restore(this)"></a></td>
-				  <td>
-					<a href="index.php?act=register&base_group=ElBeth">
-					<img src="./graphic/beth_el.jpg" class="citizen_banner"
-					onMouseOver="javascript: over(this);"
-					onMouseOut="javascript: restore(this)"></a></td>
-				</tr>
-				</table>
+					<a href="index.php?act=register&base_group=Umano" class="classlink">
+						<div class="class_container" onmouseover="over(\'human\')"
+						onmouseout="restore(\'human\')">
+							<div class="class_image">
+								<img src="./graphic/adam_el.jpg" class="citizen_banner">
+							</div>
+							<div class="class_descr" id="human">
+							Uomini, umani, adamiti o pi&#249; volgarmente chiamati scimmie,
+							non hanno particolari forze o debolezze, sono i pi&#249;
+							adattabili... da sempre. Possono far parte di una qualsiasi
+							gremio, gilda, corporazione o semplice aggregazione; tecnici,
+							soldati, esploratori o studiosi non importa: la loro innata
+							capacit&#224; di imparare e migrare li rende ottimi individui
+							in qualsiasi campo. Possono divenire espER o mutanti, cos&#236;
+							come possono imparare le arti arcane in minima parte. L&#39;umano
+							&#232; la scelta pi&#249; semplice da giocare se si &#232;
+							all&#39;inizio considerando che possono intraprendere carriere
+							multiple o cambiare la loro vita in corso.
+							</div>
+						</div>
+					</a>
+					<a href="index.php?act=register&base_group=NeoUmano" class="classlink">
+						<div class="class_container" onmouseover="over(\'neohuman\')"
+						onmouseout="restore(\'neohuman\')">
+							<div class="class_image">
+								<img src="./graphic/neu_el.jpg" class="citizen_banner">
+							</div>
+							<div class="class_descr" id="neohuman">
+							I neoUmani sono individui dotati di corpo umano e cervello 
+							positronico, non sono cyborgs ma possono diventarlo senza
+							controindicazioni grazie alla loro -Empatia Sintetica- innata
+							che gli permette di innestarsi arti o organi artificiali senza
+							ripercussioni negative: i loro cervelli positronici sono infatti
+							in grado di metabolizzare facilmente la presenza di parti non
+							umane nel loro corpo. Connessi mentalmente tra di loro attraverso
+							&quot;La Quiete&quot; sono individui pi&#249; pacati e meno
+							portati agli eccessi rispetto agli umani: imparano molto pi&#249;
+							in fretta ma hanno limitazioni che non gli permettono di
+							massimizzare le loro abilit&#224; e non possono divenire ne
+							mutanti, ne espER. Raramente alcuni hanno imparato, in piccola
+							parte, le arti arcane, sono guidati da una specie di Source
+							artificiale chiamata The Broken Admin che sembra detenere un
+							sacco di sapienza e che &#232; quella che resuscita i morti 
+							trapiantando loro il cervello positronico: si i neoUmani sono
+							tutti cadaveri rianimati artificialmente!
+							[Maggiori info in Manuale].
+							</div>
+						</div>
+					</a>
+					<a href="index.php?act=register&base_group=NephEl" class="classlink">
+						<div class="class_container" onmouseover="over(\'nephel\')"
+						onmouseout="restore(\'nephel\')">
+							<div class="class_image">
+								<img src="./graphic/neph_el.jpg" class="citizen_banner">
+							</div>
+							<div class="class_descr" id="nephel">
+							Demoni, mostri, orrori, diavoli, deva, djinn o quant&#39;altro,
+						  cosa siano davvero i discendenti dei Nephilim non si sa per certo:
+							queste creature dalle caratteristiche &quot;infernali&quot;
+							che spesso razziano in lungo e in largo utilizzando la loro
+							supremazia fisica e la loro discreta capacit&#224; di gestire le
+							energie del Quantum (anima?). Rosse aureole dietro al loro capo
+							vengono spesso sfoggiate con boria, hanno scarsa capacit&#224;
+							collaborativa e non possono far parte di alcuna gilda o gremio e
+							sono lenti ad apprendere a causa della loro ottusa tracotanza,
+							possono divenire espER ma non mutanti, i Neph El hanno anche la
+							insolita peculiarit&#224; di morire ogni volta che salgono di
+							livello, ognuna di queste morti per&#242; diviene anche una
+							resurrezione istantanea (vite di riserva) in caso di decesso
+							accidentale o di battaglia, una specie di immortalit&#224; nata
+							tra sofferenza e dolore, come biasimarli se poi amano agghindarsi
+							di ossa e abiti demonici o se spesso si li trova a sghignazzare
+							come folli demoni urlanti? *Tutte le variazioni di razza verranno
+							applicate dallo Staff una volta entrati in Land.
+							[Maggiori info in Manuale].
+							</div>
+						</div>
+					</a>
+					<a href="index.php?act=register&base_group=ElBeth" class="classlink">
+						<div class="class_container" onmouseover="over(\'bethel\')"
+						onmouseout="restore(\'bethel\')">
+							<div class="class_image">
+								<img src="./graphic/beth_el.jpg" class="citizen_banner">
+							</div>
+							<div class="class_descr" id="bethel">
+							I discendenti degli &quot;angeli&quot; &#232; una descrizione
+							volgare ma calzante: le loro origini sono tutt&#39;ora nebulose
+							ma si dice che quando un elohim si unisce con un umano ne nasca
+							poi un ibrido dotato di alcune caratteristiche
+							&quot;angeliche&quot;: solitamente dotati di corpi belli e
+							armoniosi ma intrisi di deformit&#224; che sottolinea
+							l&#39;impurit&#224; della loro discendenza. Hanno 6 dita per mano
+							(due pollici opponibili) e una facilit&#224; di manipolazione del
+							Quantum (anima?) eccezionale: le arti arcane non hanno segreti per
+							un El-Beth che possono quindi incanalare il Quantum stesso in
+							auree di energia bianco/azzurre volgarmente chiamate aureole, pur
+							potendo camminare preferiscono levitare a circa 15 cm da terra:
+							questo per differenziarsi bene dalle cosiddette altre &quot;razze
+							grezze&quot;. Non temono la morte perch&#232; tornano in vita
+							finch&#232; &#232; presente nei paraggi almeno un altro Beth-El
+							[giocatori o pNg presenti] *Tutte le variazioni di razza verranno
+							applicate dallo Staff una volta entrati in Land.
+							[Maggiori info in Manuale].
+							</div>
+						</div>
+					</a>
 				</div>
 				</div>
 				';
