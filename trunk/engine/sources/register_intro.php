@@ -18,7 +18,7 @@
 	nostra fisica... Che meraviglioso scenario!
   <br>
 	<br>
-	Ma le cose belle durano sempre poso e la calma di quel paesaggio insolito
+	Ma le cose belle durano sempre poco e la calma di quel paesaggio insolito
 	&#232; stata spezzata dal vostro arrivo.
 	Vi chiamano uomini, ma per noi siete solo scimmie: bestie ignoranti e buone
 	solo come concime o schiavi.
@@ -31,7 +31,8 @@
 	<br>
 	Chiunque tu sceglierai di essere sappi che la citt&#224; di Tharsis &#232;
 	una fortezza dove i signori nephilim si sono arroccati per sfuggire
-	all&#39;Eterno Conflitto; presto ci saranno altri scontri e altri spargimenti
+	all&#39;Eterno Conflitto e a te non &#232; consentito l&#39;accesso per ora;
+	presto ci saranno altri scontri e altri spargimenti
 	di sangue, scegliti un luogo in cui nasconderti o un signore da servire;
 	scimmia,  uomo o mezzo sangue che sia non c&#39;&#232; posto qui per te.
   <br>
