@@ -303,6 +303,7 @@
 				vertical-align: top;
 				padding: 5px;
 				color: white;
+				font-size: 10pt;
 			}
 			.msg_avatar{
 				border-bottom: 1px solid white;
@@ -733,6 +734,7 @@
 				top: 0;
 			}
       #register_intro{
+				font-size: 12pt;
         position: absolute;
 				z-index: 10;
         color: white;
