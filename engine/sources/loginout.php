@@ -306,7 +306,7 @@
       }
 
 			#register_banner {
-				position: absolute;
+				position: relative;
 				background: black;
 				top: 0px;
 				left: 0px;
@@ -314,28 +314,43 @@
 				width: 100%;
 				height: 100%;
 			}
-			#class_descr {
-        position:absolute;
-				background: black;
-				text-align: center;
-				width: 100%;
-        overflow: auto;
-				text-align: left;
-        height: 200px;
-				font-size: 10pt;
-				font-family: courier;
-				font-weight: bold;
-        top: 640px;
-			}
 			#class_choice {
-        position: absolute;
+        position: relative;
 				top: 0;
 				left: 0;
 				background: black;
 				text-align: center;
 				width: 100%;
 				height: 625px;
-        overflow: auto;
+			}
+			.class_container {
+				position: relative;
+				display: inline-block;
+				width: 247px;
+				height: 625px;
+			}
+			.class_image {
+				position: absolute;
+				width: 247px;
+				top: 0;
+				left: 0;
+			}
+			.class_descr {
+				position: absolute;
+				text-align: left;
+				display: none;
+				top: 0;
+				left: 0;
+				height: 100%;
+				font-size: 12pt;
+				overflow: auto;
+			}
+			.classlink,
+			.classlink:link,
+			.classlink:hover,
+			.classlink:active {
+				color: white;
+				text-decoration: none;
 			}
 
 			#citizen_popup, #uncitizen_popup {
