@@ -176,13 +176,7 @@
 						'.$register_intro.'<br>
 						<br>
 						<a href="index.php?act=register&disclaimer_done">
-							Prosegui
-						</a>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
+							Prosegui</a>
 						<br>
 						<br>
 						<br>
