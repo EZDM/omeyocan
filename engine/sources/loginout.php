@@ -172,7 +172,7 @@
 
   function logout_page(){
     srand(time()+microtime());
-    $num = rand(1,1);
+    $num = rand(1,25);
 
 
     if(isset($_GET['secret'])){
