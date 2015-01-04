@@ -184,7 +184,7 @@
     }
     else{
       $body = '<div id="logout">
-        <img src=./graphic/logout'.$num.'.jpg><br>
+        <img src=./graphic/logout'.$num.'.jpg class="logoutimg"><br><br>
         Logout eseguito.
         <a href="index.php">Clicca Qui</a> per accedere nuovamente.</div>';
     }
@@ -382,6 +382,10 @@
 
 			#register_table {
 				margin: 50px 50px;
+			}
+			
+			.logoutimg {
+				height: 650px;
 			}
 
     </style>
