@@ -342,7 +342,7 @@
 				top: 0;
 				left: 0;
 				height: 100%;
-				font-size: 12pt;
+				font-size: 10pt;
 				overflow: auto;
 			}
 			.classlink,
