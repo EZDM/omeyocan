@@ -1,9 +1,11 @@
 <?php
 
 $botguard_cookie_name = "botguard";
+$botguard_expire_time = 1000000;
 
 function get_cookie_value() {
-	return  md5("a;lsdkfj".floor(time()/100000));
+	global $botguard_expire_time;
+	return  md5("a;lsdkfj".floor(time()/$botguard_expire_time));
 }
 
 function verify_botguard() {
@@ -15,7 +17,7 @@ function verify_botguard() {
 }
 
 function verify_captcha() {
-	$captcha;
+	$captcha = false;
 	if(isset($_POST['g-recaptcha-response'])){
 		$captcha=$_POST['g-recaptcha-response'];
 	}
@@ -31,8 +33,9 @@ function verify_captcha() {
 		return false;
 	}
 
-	global $botguard_cookie_name;
-	setcookie($botguard_cookie_name, get_cookie_value(), time() + (86400 * 30), "/"); // 86400 = 1 day
+	global $botguard_cookie_name, $botguard_expire_time;
+	setcookie($botguard_cookie_name, get_cookie_value(),
+			time() + $botguard_expire_time, "/");
 	return true;
 }
 
