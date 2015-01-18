@@ -170,15 +170,10 @@
 			$body = '
 				<div id="register_banner">
 					  <div id="register_image">
-  						<img src="./graphic/choose_page.jpg">
+  						<img src="./graphic/choose_page.gif">
 						</div>
 						<div id="register_intro">
 						'.$register_intro.'<br>
-						<br>
-						<a href="index.php?act=register&disclaimer_done">
-							Prosegui</a>
-						<br>
-						<br>
 						</div>
 				</div>
 				';

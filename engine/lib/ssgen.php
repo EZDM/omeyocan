@@ -729,20 +729,17 @@
 			 color: white;
 			}
       #register_image {
-        position:absolute;
-				left: 0;
 				top: 0;
+				margin: auto;
 			}
       #register_intro{
 				font-size: 12pt;
-        position: absolute;
 				z-index: 10;
         color: white;
-				left: 528px;
+				width: 600px;
 				text-align: left;
-        width: 500px;
-        height: 700px;
 				overflow: auto;
+				margin: auto;
 			}
 		</style>";
 		
