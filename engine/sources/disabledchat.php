@@ -72,6 +72,7 @@
 				height: 723px;
 				background-image:url(\'./graphic/sfondodisabled.gif\');
 				background-repeat: no-repeat;
+				background-size: 100%;
 			}
 			#disableddiv {
 				position: absolute;
@@ -95,7 +96,11 @@
 		echo $body;
 
 
-		echo '			<br><br>
+		echo '	
+			Omeyocan.it è in manutenzion<br>
+			(che non si vede?)<br><br>
+			Torneremo presto
+			<br><br>
 			<a href="index.php?act=logout">Logout</a>
 			</div>
 			</div>
