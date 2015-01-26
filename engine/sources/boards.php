@@ -33,6 +33,7 @@
 
 		if($x7c->settings['panic']) {
 			$print->board_window("","","");
+			return;
 		}
 
 		udpate_unread();
@@ -60,8 +61,6 @@
 		}
 		else 
 			board_list();
-			
-		
 	}
 
 	function move_msg(){
