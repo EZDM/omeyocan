@@ -790,9 +790,11 @@ function admincp_master(){
 
 		if(isset($_POST['create'])){
 			// Create a group
-			$db->DoQuery("INSERT INTO {$prefix}permissions (id,usergroup) VALUES('0','{$_POST['create']}')");
-			// Edit the settings for this group
-			$_GET['edit'] = $_POST['create'];
+			if ($_POST['create'] != "") {
+				$db->DoQuery("INSERT INTO {$prefix}permissions (id,usergroup) VALUES('0','{$_POST['create']}')");
+				// Edit the settings for this group
+				$_GET['edit'] = $_POST['create'];
+			}
 		}
 
 		if(isset($_GET['edit'])){
