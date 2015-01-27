@@ -1252,7 +1252,7 @@ function admincp_master(){
 			}
 
 			// Display groups and settings edit form
-			$body .= "<div align=\"center\">
+			/*$body .= "<div align=\"center\">
 				<b>$txt[408]</b><br>
 				<form action=\"index.php?act=adminpanel&cp_page=groupmanager&defaults=1\" method=\"post\">
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -1273,6 +1273,16 @@ function admincp_master(){
 				</tr>
 				</table>
 				</form><Br><Br>
+				<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
+				<tr>
+				<td height=\"25\">&nbsp;$txt[123]</td>
+				<td width=\"33%\" height=\"25\">$txt[86]</td>
+				</tr>
+				</table>
+				<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"inside_table\">";
+			*/
+
+			$body .= "<div align=\"center\">
 				<table width=\"95%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"col_header\">
 				<tr>
 				<td height=\"25\">&nbsp;$txt[123]</td>
@@ -2620,8 +2630,13 @@ function admincp_master(){
 				$body .= "
 					<tr>
 					<td>&nbsp;<a onClick=\"opener.location.href='index.php?act=frame&room=$link_url'\">$room_info[5]</a>$lock</td>
-					<td width=\"33%\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> <a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a>
-					<a href=\"index.php?act=adminpanel&cp_page=rooms&invite=$link_url\">[Invita]</a>
+					<td width=\"33%\"><a href=\"index.php?act=roomcp&room=$link_url\">[$txt[459]]</a> ";
+
+				if($room_info[0] != "Mappa") {
+					$body .= "<a href=\"index.php?act=adminpanel&cp_page=rooms&delete=$link_url\">[$txt[175]]</a> ";
+				}
+				
+				$body .= "<a href=\"index.php?act=adminpanel&cp_page=rooms&invite=$link_url\">[Invita]</a>
 					</td>
 					</tr>
 					<tr><td colspan=\"3\"><hr></td></tr>
