@@ -185,7 +185,8 @@ _gaq.push(['_trackPageview']);
   <!-- IMMAGINE DELLA POLAROID (a seconda della stanza) -->
   <a onClick="<?PHP
 	echo popup_open(550, 500, 'index.php?act=roomdesc&room=Mappa','roomdesc'); ?>">
-      <img style="position:absolute; top:0px; left:834px;" src="./graphic/polaroid.jpg">
+      <img style="position:absolute; top:0px; left:834px;"
+			src="<?PHP echo $x7c->room_data['logo']?>">
   </a>
   <script language="javascript" type="text/javascript">
 						listhash = '';
