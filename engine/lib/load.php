@@ -404,15 +404,15 @@
 		function room_info($room){
 			global $db, $prefix, $x7s;
 			// It is this functions job to get room information
-			if($room != ""){
-				$query = $db->DoQuery("SELECT name,type,moderated,topic,greeting,".
-						"password,maxusers,ops,voiced,id,time,logged,background,".
-						"logo,panic_free,long_name,shadow,hunt ".
-						"FROM {$prefix}rooms WHERE name='$room'");
-				$row = $db->Do_Fetch_Row($query);
-			}else{
-				$row[0] = "";
+			if($room == ""){
+				$room = "Mappa";
 			}
+
+			$query = $db->DoQuery("SELECT name,type,moderated,topic,greeting,".
+					"password,maxusers,ops,voiced,id,time,logged,background,".
+					"logo,panic_free,long_name,shadow,hunt ".
+					"FROM {$prefix}rooms WHERE name='$room'");
+			$row = $db->Do_Fetch_Row($query);
 
 			if($room == "" || $row[0] == ""){
 				// User is not in a room.  Set all to null values

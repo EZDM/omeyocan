@@ -50,7 +50,7 @@
 ////////////////////////////////////////////////////////////////EOH
 ?><?PHP
 	
-	function print_disabled($body){
+	function print_disabled(){
 		global $print,$x7c,$x7s;
 		
 		echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
@@ -92,8 +92,6 @@
 			<div id="container">
 				<div id="innerdiv">
 					<div id="disableddiv">';
-
-		echo $body;
 
 
 		echo '	
