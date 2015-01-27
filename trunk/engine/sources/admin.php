@@ -2259,6 +2259,15 @@ function admincp_master(){
 				$body = "<div align=\"center\">$txt[463]<Br><a href=\"index.php?act=adminpanel&cp_page=users\">$txt[77]</a></div>";
 			}else{
 				// Get the default user group
+				$base_group_options = "";
+				$possible_groups = array('Umano', 'NeoUmano', 'NephEl', 'ElBeth');
+				foreach ($possible_groups as $cur_p_group){
+					if($cur_p_group == $def->profile['base_group'])
+						$base_group_options .= "<input type=\"radio\" name=\"basegroup\" value=\"$cur_p_group\" checked>$cur_p_group<br>";
+					else
+						$base_group_options .= "<input type=\"radio\" name=\"basegroup\" value=\"$cur_p_group\">$cur_p_group<br>";
+				}
+
 				$query = $db->DoQuery("SELECT usergroup FROM {$prefix}permissions 
 						WHERE gremios=0 ORDER BY usergroup");
 				$group_options = "";
@@ -2346,6 +2355,14 @@ function admincp_master(){
 					</tr>
 
 					<tr>
+					<td width=\"60\">Gruppo base: </td>
+					<td width=\"100\">{$base_group_options}</td>
+					</tr>
+					<tr>
+					<td width=\"60\"><hr></td>
+					<td width=\"100\"><hr></td>
+					</tr>
+					<tr>
 					<td width=\"60\">$txt[309]: </td>
 					<td width=\"100\">{$group_options}</td>
 					</tr>
@@ -2403,7 +2420,8 @@ function admincp_master(){
 							email='$_POST[email]',avatar='$_POST[avatar]',
 							name='$_POST[rname]',bio='$_POST[bio]',
 							username='$_POST[username]', m_invisible = '0', 
-							frozen='$frozen' WHERE username='$_GET[update]'");
+							frozen='$frozen', base_group='$_POST[basegroup]'
+							WHERE username='$_GET[update]'");
 
 					$db->DoQuery("DELETE FROM {$prefix}groups WHERE username='$_GET[update]'");
 					$error_group .= join_corp($_GET['update'], $base_group);
