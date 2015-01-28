@@ -70,9 +70,9 @@ function admincp_master(){
 	$check_page = $_GET['cp_page'];
 	if($check_page == "groupmanager")
 		$check_page = "groups";
-	if($x7c->permissions["admin_{$check_page}"] != 1)
+	if($x7c->permissions["admin_{$check_page}"] == 0)
 		$_GET['cp_page'] = "ad2";
-	if($x7c->permissions['admin_access'] != 1)
+	if($x7c->permissions['admin_access'] == 0)
 		$_GET['cp_page'] = "ad";
 
 	// Figure out which page this is
