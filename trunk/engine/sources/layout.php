@@ -145,7 +145,7 @@ function location_out(hoveritem) {
 			<div id="hintbtn" style="position: absolute; top: 672px; left: 283px;">
 			<a onClick="'.popup_open(446, 558, "index.php?act=hint", "hint").'"> 
 				<img src="./graphic/hint_button.gif" 
-				onMousemove="javascript: ShowPopup(event, this, \'Amypedia\');"
+				onMousemove="javascript: ShowPopup(event, this, \'Radio gorilla\');"
 				onMouseout="javascript: HidePopup(this);">
 			</a>
 			</div>';
