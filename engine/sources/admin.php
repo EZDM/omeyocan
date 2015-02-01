@@ -3036,7 +3036,6 @@ function admincp_master(){
 				<tr>
 				<td height=\"25\">Username</td>
 				<td width=\"33%\" height=\"25\"># Posts</td>
-				<td width=\"33%\" height=\"25\">Loto nero</td>
 				</tr>
 				</table>
 				<table align=\"center\" border=\"0\"  width=\"95%\" cellspacing=\"0\" ".
@@ -3055,23 +3054,9 @@ function admincp_master(){
 					$prev_time = $row_daily['time'];
 				}
 
-				$lotus = "no";
-				if ($row_daily['daily_lotus'] > 0)
-					$lotus = "yes";
-
-				$now = date("d/m/Y"); 
-				$last_punish = date("d/m/Y", $row_daily['last_punish']);
-				$punish_button = '';
-				if ($now != $last_punish && $lotus == "no") {
-					$punish_button = '<input type="button" class="button" value="-5PX"'.
-						'onClick="javascript: window.location=\'index.php?act=adminpanel'.
-						'&cp_page=logs&punish='.$row_daily['username'].'\'" />';
-				}
-
 				$body .= "<tr>
 					<td height=\"25\">$row_daily[username]</td>
 					<td width=\"33%\" height=\"25\">$row_daily[daily_post]</td>
-					<td width=\"33%\" height=\"25\">$lotus $punish_button</td>
 					</tr>";
 			}
 			$body .= "</table>";
