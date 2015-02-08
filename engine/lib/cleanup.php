@@ -217,7 +217,6 @@ function cleanup_messages(){
 				daily_lotus
 				FROM {$prefix}users 
 				WHERE daily_post > 0
-				AND base_group = '{$x7c->settings['usergroup_default']}'
 				ORDER BY username");
 
 		while ($row = $db->Do_Fetch_Assoc($query_daily)) {
