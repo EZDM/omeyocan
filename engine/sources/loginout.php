@@ -187,14 +187,6 @@
         <img src=./graphic/logout'.$num.'.jpg class="logoutimg"><br><br>
         Logout eseguito.
         <a href="index.php">Clicca Qui</a> per accedere nuovamente.</div>
-				<object> 
-				<param name="movie" value="/engine/images/flash/luoghi/Dora350.swf " width="1" height="1"> 
-				<param name="quality" value="high"> 
-				<param name="allowScriptAccess" value="sameDomain" /> 
-				<param name="allowFullScreen" value="True" /> 
-				<embed src="/engine/images/flash/luoghi/Dora350.swf " quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowScriptAccess="sameDomain" allowFullScreen="True" width="1" height="1"> 
-				</embed> 
-				</object>
 				';
     }
 
